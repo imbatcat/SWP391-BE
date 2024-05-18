@@ -262,9 +262,6 @@ GO
 BEGIN TRANSACTION;
 GO
 
-DROP TABLE [Departments];
-GO
-
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
 VALUES (N'20240518042604_InitialDb1', N'8.0.5');
 GO
