@@ -11,17 +11,10 @@ GO
 BEGIN TRANSACTION;
 GO
 
-CREATE TABLE [Departments] (
-    [DepId] int NOT NULL IDENTITY,
-    [DepName] nvarchar(30) NOT NULL,
-    CONSTRAINT [PK_Departments] PRIMARY KEY ([DepId])
-);
-GO
-
-CREATE TABLE [Kennels] (
-    [KennelId] int NOT NULL IDENTITY,
+CREATE TABLE [Cages] (
+    [CageId] int NOT NULL IDENTITY,
     [IsOccupied] bit NOT NULL,
-    CONSTRAINT [PK_Kennels] PRIMARY KEY ([KennelId])
+    CONSTRAINT [PK_Cages] PRIMARY KEY ([CageId])
 );
 GO
 
@@ -52,9 +45,9 @@ CREATE TABLE [Accounts] (
     [AccountId] char(10) NOT NULL,
     [Username] nvarchar(20) NOT NULL,
     [FullName] nvarchar(50) NOT NULL,
-    [Password] nvarchar(50) NOT NULL,
+    [Password] nvarchar(16) NOT NULL,
     [IsMale] bit NOT NULL,
-    [PhoneNumber] int NOT NULL,
+    [PhoneNumber] nvarchar(max) NOT NULL,
     [Email] nvarchar(max) NOT NULL,
     [DateOfBirth] date NOT NULL,
     [JoinDate] date NOT NULL,
@@ -156,10 +149,10 @@ CREATE TABLE [AdmissionRecords] (
     [MedicalRecordId] char(10) NULL,
     [VeterinarianAccountId] char(10) NOT NULL,
     [PetId] char(10) NULL,
-    [KennelId] int NULL,
+    [CageId] int NULL,
     CONSTRAINT [PK_AdmissionRecords] PRIMARY KEY ([AdmissionId]),
     CONSTRAINT [FK_AdmissionRecords_Accounts_VeterinarianAccountId] FOREIGN KEY ([VeterinarianAccountId]) REFERENCES [Accounts] ([AccountId]) ON DELETE CASCADE,
-    CONSTRAINT [FK_AdmissionRecords_Kennels_KennelId] FOREIGN KEY ([KennelId]) REFERENCES [Kennels] ([KennelId]),
+    CONSTRAINT [FK_AdmissionRecords_Cages_CageId] FOREIGN KEY ([CageId]) REFERENCES [Cages] ([CageId]),
     CONSTRAINT [FK_AdmissionRecords_MedicalRecords_MedicalRecordId] FOREIGN KEY ([MedicalRecordId]) REFERENCES [MedicalRecords] ([MedicalRecordId]),
     CONSTRAINT [FK_AdmissionRecords_Pets_PetId] FOREIGN KEY ([PetId]) REFERENCES [Pets] ([PetId])
 );
@@ -189,19 +182,19 @@ CREATE TABLE [PetHealthTracker] (
 );
 GO
 
-CREATE TABLE [ServiceServiceOrder] (
-    [ServiceOrdersServiceOrderId] char(10) NOT NULL,
-    [ServicesServiceId] char(10) NOT NULL,
-    CONSTRAINT [PK_ServiceServiceOrder] PRIMARY KEY ([ServiceOrdersServiceOrderId], [ServicesServiceId]),
-    CONSTRAINT [FK_ServiceServiceOrder_ServiceOrder_ServiceOrdersServiceOrderId] FOREIGN KEY ([ServiceOrdersServiceOrderId]) REFERENCES [ServiceOrder] ([ServiceOrderId]) ON DELETE CASCADE,
-    CONSTRAINT [FK_ServiceServiceOrder_Service_ServicesServiceId] FOREIGN KEY ([ServicesServiceId]) REFERENCES [Service] ([ServiceId]) ON DELETE CASCADE
+CREATE TABLE [ServiceOrderDetails] (
+    [ServiceOrderId] char(10) NOT NULL,
+    [ServiceId] char(10) NOT NULL,
+    CONSTRAINT [PK_ServiceOrderDetails] PRIMARY KEY ([ServiceOrderId], [ServiceId]),
+    CONSTRAINT [FK_ServiceOrderDetails_ServiceOrder_ServiceOrderId] FOREIGN KEY ([ServiceOrderId]) REFERENCES [ServiceOrder] ([ServiceOrderId]) ON DELETE CASCADE,
+    CONSTRAINT [FK_ServiceOrderDetails_Service_ServiceId] FOREIGN KEY ([ServiceId]) REFERENCES [Service] ([ServiceId]) ON DELETE CASCADE
 );
 GO
 
 CREATE INDEX [IX_Accounts_RoleId] ON [Accounts] ([RoleId]);
 GO
 
-CREATE INDEX [IX_AdmissionRecords_KennelId] ON [AdmissionRecords] ([KennelId]);
+CREATE INDEX [IX_AdmissionRecords_CageId] ON [AdmissionRecords] ([CageId]);
 GO
 
 CREATE INDEX [IX_AdmissionRecords_MedicalRecordId] ON [AdmissionRecords] ([MedicalRecordId]);
@@ -249,22 +242,13 @@ GO
 CREATE INDEX [IX_ServiceOrder_MedicalRecordId] ON [ServiceOrder] ([MedicalRecordId]);
 GO
 
-CREATE INDEX [IX_ServiceServiceOrder_ServicesServiceId] ON [ServiceServiceOrder] ([ServicesServiceId]);
+CREATE INDEX [IX_ServiceOrderDetails_ServiceId] ON [ServiceOrderDetails] ([ServiceId]);
 GO
 
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-VALUES (N'20240518040732_InitialDb', N'8.0.5');
+VALUES (N'20240520081049_InitialDb20_5', N'8.0.5');
 GO
 
 COMMIT;
 GO
 
-BEGIN TRANSACTION;
-GO
-
-INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-VALUES (N'20240518042604_InitialDb1', N'8.0.5');
-GO
-
-COMMIT;
-GO
