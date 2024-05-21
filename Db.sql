@@ -202,11 +202,11 @@ CREATE TABLE [Appointments] (
 GO
 INSERT INTO [dbo].[Appointments] (AppointmentId, AccountId, AppointmentDate, PetId, VeterinarianAccountId, TimeSlotId, AppointmentType, AppointmentNotes, BookingPrice)
 VALUES
-    ('AP00000001', 'AC00000001', '2024-03-24', 'PE00000001', 'VE00000000', 1, 'Regular Check-up', 'My pet is sneezing and watery eyes', 500000),
-    ('AP00000002', 'AC00000001', '2024-04-27', 'PE00000002', 'VE00000004', 2, 'Regular Check-up', 'My cat loss of appetite', 700000),
-    ('AP00000003', 'AC00000001', '2024-05-12', 'PE00000003', 'VE00000000', 3, 'Regular Check-up', 'I think my pet is stressed', 100000),
-    ('AP00000004', 'AC00000003', '2024-05-15', 'PE00000004', 'VE00000004', 4, 'Regular Check-up', 'Scratching, skin irritation', 1000000),
-    ('AP00000005', 'AC00000003', '2024-05-26', 'PE00000005', 'VE00000000', 5, 'Regular Check-up', 'Irregular bathroom habits, dehydration', 1000000);
+    ('AP00000001', 'AC00000001', '2024-03-24', 'PE00000001', 'VE00000000', 1, 'Deposit', 'My pet is sneezing and watery eyes', 500000),
+    ('AP00000002', 'AC00000001', '2024-04-27', 'PE00000002', 'VE00000004', 2, 'Deposit', 'My cat loss of appetite', 700000),
+    ('AP00000003', 'AC00000001', '2024-05-12', 'PE00000003', 'VE00000000', 3, 'Deposit', 'I think my pet is stressed', 100000),
+    ('AP00000004', 'AC00000003', '2024-05-15', 'PE00000004', 'VE00000004', 4, 'Deposit', 'Scratching, skin irritation', 1000000),
+    ('AP00000005', 'AC00000003', '2024-05-26', 'PE00000005', 'VE00000000', 5, 'Deposit', 'Irregular bathroom habits, dehydration', 1000000);
 GO
 
 CREATE TABLE [BookingPayments] (
