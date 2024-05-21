@@ -193,12 +193,12 @@ CREATE TABLE [ServicePayment] (
 );
 GO
 
-CREATE TABLE [ServiceServiceOrder] (
-    [ServiceOrdersServiceOrderId] char(10) NOT NULL,
-    [ServicesServiceId] int NOT NULL,
-    CONSTRAINT [PK_ServiceServiceOrder] PRIMARY KEY ([ServiceOrdersServiceOrderId], [ServicesServiceId]),
-    CONSTRAINT [FK_ServiceServiceOrder_ServiceOrder_ServiceOrdersServiceOrderId] FOREIGN KEY ([ServiceOrdersServiceOrderId]) REFERENCES [ServiceOrder] ([ServiceOrderId]) ON DELETE CASCADE,
-    CONSTRAINT [FK_ServiceServiceOrder_Service_ServicesServiceId] FOREIGN KEY ([ServicesServiceId]) REFERENCES [Service] ([ServiceId]) ON DELETE CASCADE
+CREATE TABLE [ServiceOrderDetails] (
+    [ServiceOrderId] char(10) NOT NULL,
+    [ServiceId] int NOT NULL,
+    CONSTRAINT [PK_ServiceOrderDetails] PRIMARY KEY ([ServiceOrderId], [ServiceId]),
+    CONSTRAINT [FK_ServiceOrderDetails_ServiceOrder_ServiceOrderId] FOREIGN KEY ([ServiceOrderId]) REFERENCES [ServiceOrder] ([ServiceOrderId]) ON DELETE CASCADE,
+    CONSTRAINT [FK_ServiceOrderDetails_Service_ServiceId] FOREIGN KEY ([ServiceId]) REFERENCES [Service] ([ServiceId]) ON DELETE CASCADE
 );
 GO
 
@@ -256,7 +256,7 @@ GO
 CREATE UNIQUE INDEX [IX_ServicePayment_ServiceOrderId] ON [ServicePayment] ([ServiceOrderId]);
 GO
 
-CREATE INDEX [IX_ServiceServiceOrder_ServicesServiceId] ON [ServiceServiceOrder] ([ServicesServiceId]);
+CREATE INDEX [IX_ServiceOrderDetails_ServiceId] ON [ServiceOrderDetails] ([ServiceId]);
 GO
 
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
