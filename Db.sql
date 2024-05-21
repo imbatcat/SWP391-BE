@@ -1,3 +1,4 @@
+
 CREATE DATABASE PetHealthCareSystem;
 GO
 USE PetHealthCareSystem;
@@ -222,11 +223,12 @@ GO
 
 INSERT INTO [dbo].[BookingPayments] (PaymentId, Price, PaymentMethod, PaymentDate, AppointmentId)
 VALUES
-    ('BP00000001', 1000, 'Momo', '2024-05-20', 'AP00000001'),
-    ('BP00000002', 2000, 'BankTransfer', '2024-05-14', 'AP00000002'),
-    ('BP00000003', 3000, 'Cash', '2024-05-10', 'AP00000003'),
-    ('BP00000004', 4000, 'Cash', '2023-09-08', 'AP00000004'),
-    ('BP00000005', 5000, 'Cash', '2024-02-11', 'AP00000005');
+    ('BP00000001', 500000, 'Momo', '2024-03-22', 'AP00000001'),
+	('BP00000002', 1000000, 'BankTransfer', '2024-04-27', 'AP00000002'),
+	('BP00000003', 500000, 'Cash', '2024-05-12', 'AP00000001'),
+	('BP00000004', 1000000, 'Cash', '2024-05-15', 'AP00000004'),
+	('BP00000005', 1000000, 'Cash', '2024-05-26', 'AP00000005'),
+	('BP00000006', 1000000, 'Cash', '2024-05-26', 'AP00000003');
 
 GO
 CREATE TABLE [MedicalRecords] (
