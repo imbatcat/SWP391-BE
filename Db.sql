@@ -131,9 +131,9 @@ INSERT INTO [dbo].[Accounts]
     (AccountId, Username, FullName, Password, IsMale, PhoneNumber, Email, DateOfBirth, JoinDate, IsDisabled, RoleId, Discriminator, ImgUrl, Experience, Description, Position, Department)
 VALUES
     ('VE00000000', 'thegoat3000', 'Tony Stark', '123456789', 1, '0937661777', 'tonystark@gmail.com', '1939-03-12', '2000-05-20', 0, 3, 'Veterinarian', 'https://sjkdlfj234.com/oij23lka/sdljf234jlk.html', 10, 'Handsome and straight', 'Senior', 'Surgery'),
-    ('AC00000001', 'user1', 'Gojo Satoru', '123456789', 1, '0937661771', 'user1@gmail.com', '1926-03-01', '2024-05-20', 0, 1, 'customer', null, null, null, null, null),
-    ('AC00000002', 'admin', 'John Wick', '123456789', 0, '0937661777', 'admin@gmail.com', '1929-03-01', '1960-05-20', 0, 2, 'admin', null, null, null, null, null),
-    ('AC00000003', 'user2', 'Nick Furry', '123456789', 1, '0937661777', 'user2@gmail.com', '1984-01-01', '2000-05-20', 0, 1, 'customer', null, null, null, null, null),
+    ('AC00000001', 'user1', 'Gojo Satoru', '123456789', 1, '0937661771', 'user1@gmail.com', '1926-03-01', '2024-05-20', 0, 1, 'Account', null, null, null, null, null),
+    ('AC00000002', 'admin', 'John Wick', '123456789', 0, '0937661777', 'admin@gmail.com', '1929-03-01', '1960-05-20', 0, 2, 'Account', null, null, null, null, null),
+    ('AC00000003', 'user2', 'Nick Furry', '123456789', 1, '0937661777', 'user2@gmail.com', '1984-01-01', '2000-05-20', 0, 1, 'Account', null, null, null, null, null),
     ('VE00000004', 'vet3', 'Peter Parker', '123456789', 0, '0937661777', 'vet3@gmail.com', '1984-01-01', '1999-05-20', 0, 3, 'Veterinarian', 'https://sjkdlfj234.com/oij23lka/sdljf234jlk.html', 10, 'Beautiful but gay', 'Junior', 'Surgery');
 
 GO
