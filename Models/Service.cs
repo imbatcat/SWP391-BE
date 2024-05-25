@@ -5,13 +5,6 @@ namespace PetHealthcareSystem.Models
 {
     public class Service
     {
-        public Service(int serviceId, double servicePrice, string serviceName)
-        {
-            ServiceId = serviceId;
-            ServicePrice = servicePrice;
-            ServiceName = serviceName;
-            ServiceOrders = new HashSet<ServiceOrder>();
-        }
         [Key]
         public int ServiceId { get; set; }
 

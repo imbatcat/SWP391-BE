@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetHealthcareSystem.Models;
-using PetHealthcareSystem.Services;
 
 namespace PetHealthcareSystem.Controllers
 {
@@ -15,25 +13,25 @@ namespace PetHealthcareSystem.Controllers
     [ApiController]
     public class ServicesController : ControllerBase
     {
-        private readonly HealthService _healthService;
+        private readonly PetHealthcareDbContext _context;
 
-        public ServicesController(HealthService healthService)
+        public ServicesController(PetHealthcareDbContext context)
         {
-            _healthService = healthService;
+            _context = context;
         }
 
         // GET: api/Services
         [HttpGet]
-        public IEnumerable<Service> GetService()
+        public async Task<ActionResult<List<Service>>> GetService()
         {
-            return _healthService.GetAllHealthService();
+            return await _context.Services.ToListAsync();
         }
 
         // GET: api/Services/5
         [HttpGet("{id}")]
-        public ActionResult<Service> GetServiceByCondition(int id)
+        public async Task<ActionResult<Service>> GetService(int id)
         {
-            var service = _healthService.GetHealthServiceByCondition(s => s.ServiceId == id);
+            var service = await _context.Services.FindAsync(id);
 
             if (service == null)
             {
@@ -45,36 +43,65 @@ namespace PetHealthcareSystem.Controllers
 
         // PUT: api/Services/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}/service")]
-        public IActionResult UpdateService(int id, double ServicePrice, String ServiceName)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutService(int id, Service service)
         {
-            _healthService.UpdateHealthService(id, ServicePrice, ServiceName);
-            return Ok();
+            if (id != service.ServiceId)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(service).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ServiceExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
         // POST: api/Services
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public ActionResult<Service> CreateService(int id, double ServicePrice, String ServiceName)
+        public async Task<ActionResult<Service>> PostService(Service service)
         {
-            _healthService.CreateHealthService(id, ServicePrice, ServiceName);
+            _context.Services.Add(service);
+            await _context.SaveChangesAsync();
 
-            return Ok();
+            return CreatedAtAction("GetService", new { id = service.ServiceId }, service);
         }
 
         // DELETE: api/Services/5
         [HttpDelete("{id}")]
-        public IActionResult DeleteService(int id)
+        public async Task<IActionResult> DeleteService(int id)
         {
-            _healthService.DeleteHealthService(id);
+            var service = await _context.Services.FindAsync(id);
+            if (service == null)
+            {
+                return NotFound();
+            }
+
+            _context.Services.Remove(service);
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
         private bool ServiceExists(int id)
         {
-            //return _context.Services.Any(e => e.ServiceId == id);
-            return true;
+            return _context.Services.Any(e => e.ServiceId == id);
         }
     }
 }
