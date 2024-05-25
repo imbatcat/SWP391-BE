@@ -16,7 +16,6 @@ namespace PetHealthcareSystem.Models
         [StringLength(250)]
         public string? FeedbackDetails { get; set; }
 
-        public string AccountId { get; set; }
         public Account? Account { get; set; }
 
     }
