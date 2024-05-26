@@ -13,19 +13,14 @@ namespace PetHealthcareSystem.Services
             _healthService = healthService;
         }
 
-        public void CreateHealthService(int id, double ServicePrice, string ServiceName)
+        public void CreateHealthService(Service healthService)
         {
-            _healthService.Create(new Service(id, ServicePrice, ServiceName));
-            SaveChanges();
+           _healthService.Create(healthService);
         }
 
-        public void DeleteHealthService(int id)
+        public void DeleteHealthService(Service healthService)
         {
-            Service? toDeleteService = _healthService.GetByCondition(d => d.Equals(id));
-            if (toDeleteService != null)
-            {
-                _healthService.Delete(toDeleteService);
-            }
+            _healthService.Delete(healthService);
         }
 
         public IEnumerable<Service> GetAllHealthService()
@@ -43,9 +38,9 @@ namespace PetHealthcareSystem.Services
             _healthService.SaveChanges();
         }
 
-        public void UpdateHealthService(int id, double ServicePrice, String ServiceName)
+        public void UpdateHealthService(Service healthService)
         {
-            _healthService.Update(new Service(id, ServicePrice, ServiceName));
+            _healthService.Update(healthService);
         }
     }
 }

@@ -45,28 +45,28 @@ namespace PetHealthcareSystem.Controllers
 
         // PUT: api/Services/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}/service")]
-        public IActionResult UpdateService(int id, double ServicePrice, String ServiceName)
+        [HttpPut("{id}")]
+        public IActionResult UpdateService(Service toUpdateService)
         {
-            _healthService.UpdateHealthService(id, ServicePrice, ServiceName);
-            return Ok();
+            _healthService.UpdateHealthService(toUpdateService);
+            return Ok(toUpdateService);
         }
 
         // POST: api/Services
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public ActionResult<Service> CreateService(int id, double ServicePrice, String ServiceName)
+        public ActionResult<Service> CreateService(Service toUpdateService)
         {
-            _healthService.CreateHealthService(id, ServicePrice, ServiceName);
+            _healthService.CreateHealthService(toUpdateService);
 
-            return Ok();
+            return Ok(toUpdateService);
         }
 
         // DELETE: api/Services/5
         [HttpDelete("{id}")]
-        public IActionResult DeleteService(int id)
+        public IActionResult DeleteService(Service toDeleteService)
         {
-            _healthService.DeleteHealthService(id);
+            _healthService.DeleteHealthService(toDeleteService);
 
             return NoContent();
         }

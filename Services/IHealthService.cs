@@ -8,8 +8,8 @@ namespace PetHealthcareSystem.Services
     {
         IEnumerable<Service> GetAllHealthService();
         Service? GetHealthServiceByCondition(Expression<Func<Service, bool>> expression);
-        void CreateHealthService(int id, double ServicePrice, string ServiceName);
-        void UpdateHealthService(int id, double ServicePrice, string ServiceName);
-        void DeleteHealthService(int id);
+        void CreateHealthService(Service healthService);
+        void UpdateHealthService(Service healthService);
+        void DeleteHealthService(Service healthService);
     }
 }
