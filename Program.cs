@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using PetHealthcareSystem._2._Repositories;
 using PetHealthcareSystem._3._Services;
+using PetHealthcareSystem.Repositories;
+using PetHealthcareSystem.Repositories.Interfaces;
+using PetHealthcareSystem.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -8,16 +11,15 @@ var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 // Add services to the container.
 builder.Services.AddDbContext<PetHealthcareDbContext>(
 option => option.UseSqlServer(
-        "Data Source=MEOMATLON\\SQLExpress; Database = PetHealthCareSystem;" +
-        "User ID=sa;Password=MukuroHoshimiya;Connect Timeout=30;" +
-        "Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;" +
-        "Multi Subnet Failover=False"));
+        "Data Source=Dixel\\DAOX;Initial Catalog=PetHealthCareSystem;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False"));
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<ICageRepository, CageRepository>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 
 builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<ICageService, CageService>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
