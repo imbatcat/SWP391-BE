@@ -52,7 +52,7 @@ namespace PetHealthcareSystem.APIs.Controllers
         public async Task<ActionResult<Feedback>> PostFeedback([FromBody] FeedbackDTO feedback)
         {
            
-            return CreatedAtAction("GetFeedback", new { id = feedback.GetHashCode() }, feedback);
+            return CreatedAtAction(nameof(PostFeedback), new { id = feedback.GetHashCode() }, feedback);
         }
 
         // DELETE: api/Feedbacks/5
