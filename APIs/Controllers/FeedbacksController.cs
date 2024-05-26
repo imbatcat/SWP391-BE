@@ -51,7 +51,7 @@ namespace PetHealthcareSystem.APIs.Controllers
         [HttpPost]
         public async Task<ActionResult<Feedback>> PostFeedback([FromBody] FeedbackDTO feedback)
         {
-           
+            _context.CreateFeedback(feedback);
             return CreatedAtAction(nameof(PostFeedback), new { id = feedback.GetHashCode() }, feedback);
         }
 
