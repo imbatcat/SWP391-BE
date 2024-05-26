@@ -1,5 +1,6 @@
 ﻿using Ardalis.Specification;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using PetHealthcareSystem.APIs.DTOS;
 using PetHealthcareSystem.Models;
 using PetHealthcareSystem.Repositories.Interfaces;
 using System.Linq.Expressions;
@@ -13,10 +14,15 @@ namespace PetHealthcareSystem.Services
             _healthService = healthService;
         }
 
-        public void CreateHealthService(Service healthService)
+        public void CreateHealthService(HealthServiceDTO healthService)
         {
-           _healthService.Create(healthService);
+            Service toCreateService = new Service { 
+                ServiceName = healthService.ServiceName,
+                ServicePrice = healthService.ServicePrice,
+            };
+            _healthService.Create(toCreateService);
         }
+
 
         public void DeleteHealthService(Service healthService)
         {
@@ -38,9 +44,15 @@ namespace PetHealthcareSystem.Services
             _healthService.SaveChanges();
         }
 
-        public void UpdateHealthService(Service healthService)
+        public void UpdateHealthService(int id,HealthServiceDTO healthService)
         {
-            _healthService.Update(healthService);
+            Service UpdateService = new Service
+            {
+                ServicePrice = healthService.ServicePrice,
+                ServiceId = id,
+                ServiceName = healthService.ServiceName,
+            };
+            _healthService.Update(UpdateService);
         }
     }
 }

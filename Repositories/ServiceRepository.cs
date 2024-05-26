@@ -46,7 +46,7 @@ namespace PetHealthcareSystem.Repositories
             var service = GetByCondition(e => e.ServiceId == entity.ServiceId);
             if (service != null)
             {
-                context.Entry(entity).State = EntityState.Modified;
+                
                 service.ServicePrice = entity.ServicePrice;
                 service.ServiceName = entity.ServiceName;
                 SaveChanges();
