@@ -6,5 +6,6 @@ namespace PetHealthcare.Server.Repositories.Interfaces
     {
         IEnumerable<Account> GetAccountsByRole(string role);
         IEnumerable<Account> GetAccountByRole(string role, string id);
+        IEnumerable<Pet> GetAccountPets(Account account);
     }
 }

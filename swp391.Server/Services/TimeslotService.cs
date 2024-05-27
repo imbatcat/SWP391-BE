@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace PetHealthcare.Server.Services
 {
-    public class Timeslot : ITimeSlotService
+    public class TimeslotService : ITimeSlotService
     {
         public void CreateTimeSlot(TimeslotDTO TimeSlot)
         {

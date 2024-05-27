@@ -25,14 +25,22 @@ namespace PetHealthcare.Server.APIs.Controllers
             return _context.GetAllAccounts();
         }
 
-        [HttpGet("/byRole/{role}")]
-        public IEnumerable<Account> GetAllAccountsByRole([FromBody] string role)
+        [HttpGet("/api/byRole/{role}")]
+        public IEnumerable<Account> GetAllAccountsByRole([FromBody] int role)
         {
             return null;
         }
 
-        [HttpGet("/byRole/{role}&{id}")]
-        public IEnumerable<Account> GetAccountByRole([FromBody] string role, [FromBody] string id)
+        [HttpGet("/api/pets/{id}")]
+        public IEnumerable<Pet> GetAccountPets([FromRoute] string id)
+        {
+            var account = _context.GetAccountByCondition(a => a.AccountId == id);
+            var list = _context.GetAccountPets(account);
+            return list; 
+        }
+
+        [HttpGet("/api/byRole/{role}&{id}")]
+        public Account GetAccountByRole([FromRoute] string role, [FromRoute] string id)
         {
             return null; 
         }
@@ -82,7 +90,14 @@ namespace PetHealthcare.Server.APIs.Controllers
         [HttpPost]
         public async Task<ActionResult<Account>> PostAccount([FromBody] AccountDTO accountDTO)
         {
-            _context.CreateAccount(accountDTO);
+            try
+            {
+                _context.CreateAccount(accountDTO);
+            } 
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             //try
             //{
             //    await _context.SaveChangesAsync();

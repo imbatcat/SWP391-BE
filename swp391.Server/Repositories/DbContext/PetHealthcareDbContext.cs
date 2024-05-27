@@ -21,8 +21,8 @@ public class PetHealthcareDbContext : DbContext
     //public DbSet<PetHealthTracker> PetHealthTracker { get; set; }
     public PetHealthcareDbContext(DbContextOptions<PetHealthcareDbContext> options) : base(options)
     {
-        //Database.Migrate();
-        Database.EnsureCreated();
+        Database.Migrate();
+        //Database.EnsureCreated();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

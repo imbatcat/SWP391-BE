@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace PetHealthcareSystem.Migrations
 {
     [DbContext(typeof(PetHealthcareDbContext))]
-    partial class PetHealthcareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240527083945_01")]
+    partial class _01
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -224,9 +227,6 @@ namespace PetHealthcareSystem.Migrations
 
                     b.HasKey("CageId");
 
-                    b.HasIndex("CageNumber")
-                        .IsUnique();
-
                     b.ToTable("Cages");
                 });
 
@@ -317,6 +317,7 @@ namespace PetHealthcareSystem.Migrations
                         .HasColumnType("char(11)");
 
                     b.Property<string>("AccountId")
+                        .IsRequired()
                         .HasColumnType("char(11)");
 
                     b.Property<string>("Description")
@@ -641,9 +642,13 @@ namespace PetHealthcareSystem.Migrations
 
             modelBuilder.Entity("PetHealthcare.Server.Models.Pet", b =>
                 {
-                    b.HasOne("PetHealthcare.Server.Models.Account", null)
+                    b.HasOne("PetHealthcare.Server.Models.Account", "Account")
                         .WithMany("Pets")
-                        .HasForeignKey("AccountId");
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Account");
                 });
 
             modelBuilder.Entity("PetHealthcare.Server.Models.ServiceOrder", b =>

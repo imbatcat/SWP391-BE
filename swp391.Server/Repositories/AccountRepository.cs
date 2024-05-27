@@ -28,6 +28,7 @@ namespace PetHealthcare.Server.Repositories
         public void Delete(Account entity)
         {
             context.Accounts.Remove(entity);
+            SaveChanges();
         }
 
         public IEnumerable<Account> GetAll()
@@ -65,6 +66,17 @@ namespace PetHealthcare.Server.Repositories
         public IEnumerable<Account> GetAccountByRole(string role, string id)
         {
             throw new NotImplementedException();
+        }
+
+        public IEnumerable<Pet> GetAccountPets(Account account)
+        {
+            context.Entry(account).Collection(a => a.Pets).Load();
+            if (account.Pets != null)
+            {
+                var pets = account.Pets;
+                return pets;
+            }
+            return null;
         }
     }
 }

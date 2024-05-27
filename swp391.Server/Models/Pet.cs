@@ -50,8 +50,10 @@ namespace PetHealthcare.Server.Models
         // Reference entity
         [Required]
         [DeleteBehavior(DeleteBehavior.Restrict)]
-        public Account Account { get; set; }
+        public virtual Account Account { get; set; }
 
         public virtual ICollection<AdmissionRecord> AdmissionRecords { get; set; }
+        
+        public virtual ICollection<MedicalRecord> MedicalRecords { get; set; }
     }
 }

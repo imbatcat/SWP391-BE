@@ -1,12 +1,19 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.Extensions.Options;
 using System.Text.Json.Serialization;
 
 namespace PetHealthcare.Server.Models
 {
+    [Index(nameof(Username), IsUnique = true)]
+    [Index(nameof(Email), IsUnique = true)]
     public class Account
     {
+        [NotMapped]
+        public string prefix { get; set; } = "AC";
+
         [Key]
         [Column(TypeName = "char(11)")]
         public string AccountId { get; set; }
@@ -33,6 +40,7 @@ namespace PetHealthcare.Server.Models
         public string PhoneNumber { get; set; }
 
         [DataType(DataType.EmailAddress)]
+        [EmailAddress(ErrorMessage = "Please enter a valid email address.")]
         [Required]
         public string Email { get; set; }
 
