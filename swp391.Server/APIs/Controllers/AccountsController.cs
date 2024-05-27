@@ -18,23 +18,28 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         // GET: api/Accounts
-        [HttpGet("")]
+        [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Account>))]
         public IEnumerable<Account> GetAccounts()
         {
             return _context.GetAllAccounts();
         }
 
-        [HttpGet("/byRole/{role}")]
-        public IEnumerable<Account> GetAllAccountsByRole([FromBody] string role)
+        [HttpGet("/byRole/{roleId}")]
+        public IEnumerable<Account> GetAllAccountsByRole([FromRoute] int roleId)
         {
-            return null;
+            return _context.GetAllAccountsByRole(roleId);
         }
 
-        [HttpGet("/byRole/{role}&{id}")]
-        public IEnumerable<Account> GetAccountByRole([FromBody] string role, [FromBody] string id)
+        [HttpGet("/byRole/{roleId}&{id}")]
+        public ActionResult<Account> GetAccountByRole([FromRoute] string roleId, [FromRoute] string id)
         {
-            return null; 
+            var checkAccount = _context.GetAccountByCondition(a => a.AccountId == id);
+            if (checkAccount == null)
+            {
+                return NotFound();
+            }
+            return Ok(checkAccount);
         }
 
         // GET: api/Accounts/5

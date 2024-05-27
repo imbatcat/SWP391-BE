@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
+using System.Collections;
 using System.Linq.Expressions;
 
 namespace PetHealthcare.Server.Repositories
@@ -56,15 +57,35 @@ namespace PetHealthcare.Server.Repositories
                 SaveChanges();
             }
         }
-
-        public IEnumerable<Account> GetAccountsByRole(string role)
+        public bool CheckRoleId(int roleId)
         {
-            throw new NotImplementedException();
+           return context.Roles.Any(r => r.RoleId == roleId);
+        }
+        public IEnumerable<Account> GetAccountsByRole(int roleId)
+        {
+            if(!CheckRoleId(roleId))
+            {
+                return null;
+            }
+            List<Account> accounts = new List<Account>();
+            foreach (Account acc in GetAll())
+            {
+                if (acc.RoleId == roleId)
+                {
+                    accounts.Add(acc);
+                }
+            }
+            return accounts;
         }
 
-        public IEnumerable<Account> GetAccountByRole(string role, string id)
+        public Account GetAccountByRole(int roleId, string id)
         {
-            throw new NotImplementedException();
+            var accounts = context.Accounts.FirstOrDefault(a => a.RoleId == roleId && a.AccountId.Equals(id));
+            if(accounts == null)
+            {
+                return null ;
+            }
+            return accounts;
         }
     }
 }

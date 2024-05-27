@@ -11,7 +11,7 @@ namespace PetHealthcare.Server.Services.Interfaces
         void CreateAccount(AccountDTO Account);
         void UpdateAccount(string id, AccountDTO Account);
         void DeleteAccount(Account Account);
-        IEnumerable<Account> GetAllAccountsByRole(string role);
-        IEnumerable<Account> GetAccountByRole(string role, string id);
+        IEnumerable<Account> GetAllAccountsByRole(int roleId);
+        Account GetAccountByRole(int roleId, string id);
     }
 }
