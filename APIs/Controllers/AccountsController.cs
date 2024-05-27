@@ -50,7 +50,7 @@ namespace PetHealthcareSystem.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAccount(string id, AccountDTO account)
         {
-            _context.UpdateAccount(account);
+            _context.UpdateAccount(id, account);
 
             //try
             //{

@@ -10,7 +10,7 @@ namespace PetHealthcareSystem._3._Services
         IEnumerable<Account> GetAllAccounts();
         Account? GetAccountByCondition(Expression<Func<Account, bool>> expression);
         void CreateAccount(AccountDTO Account);
-        void UpdateAccount(AccountDTO Account);
+        void UpdateAccount(string id, AccountDTO Account);
         void DeleteAccount(Account Account);
     }
 }

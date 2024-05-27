@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Plugins;
+using PetHealthcareSystem.APIs.DTOS;
 using PetHealthcareSystem.Models;
+using PetHealthcareSystem.Services;
 
 namespace PetHealthcareSystem.Controllers
 {
@@ -13,25 +17,25 @@ namespace PetHealthcareSystem.Controllers
     [ApiController]
     public class ServicesController : ControllerBase
     {
-        private readonly PetHealthcareDbContext _context;
+        private readonly HealthService _healthService;
 
-        public ServicesController(PetHealthcareDbContext context)
+        public ServicesController(HealthService healthService)
         {
-            _context = context;
+            _healthService = healthService;
         }
 
         // GET: api/Services
         [HttpGet]
-        public async Task<ActionResult<List<Service>>> GetService()
+        public IEnumerable<Service> GetService()
         {
-            return await _context.Services.ToListAsync();
+            return _healthService.GetAllHealthService();
         }
 
         // GET: api/Services/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Service>> GetService(int id)
+        public ActionResult<Service> GetServiceByCondition(int id)
         {
-            var service = await _context.Services.FindAsync(id);
+            var service = _healthService.GetHealthServiceByCondition(s => s.ServiceId == id);
 
             if (service == null)
             {
@@ -44,64 +48,38 @@ namespace PetHealthcareSystem.Controllers
         // PUT: api/Services/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutService(int id, Service service)
+        public IActionResult UpdateService([FromRoute] int id, [FromBody] HealthServiceDTO toUpdateService)
         {
-            if (id != service.ServiceId)
+            var service = _healthService.GetHealthServiceByCondition(s => s.ServiceId == id);
+            if (service == null)
             {
                 return BadRequest();
             }
-
-            _context.Entry(service).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ServiceExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            _healthService.UpdateHealthService(id, toUpdateService);
+            return Ok(toUpdateService);
         }
 
         // POST: api/Services
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Service>> PostService(Service service)
+        public ActionResult<Service> CreateService([FromBody] HealthServiceDTO toUpdateService)
         {
-            _context.Services.Add(service);
-            await _context.SaveChangesAsync();
+            _healthService.CreateHealthService(toUpdateService);
 
-            return CreatedAtAction("GetService", new { id = service.ServiceId }, service);
+            return Ok(toUpdateService);
         }
 
         // DELETE: api/Services/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteService(int id)
+        public IActionResult DeleteService([FromRoute] int id)
         {
-            var service = await _context.Services.FindAsync(id);
-            if (service == null)
+            var toDeleteService = _healthService.GetHealthServiceByCondition(s => s.ServiceId == id);
+            if(toDeleteService == null)
             {
-                return NotFound();
+                return NotFound(new {message ="Service not found"});
             }
-
-            _context.Services.Remove(service);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool ServiceExists(int id)
-        {
-            return _context.Services.Any(e => e.ServiceId == id);
+            _healthService.DeleteHealthService(toDeleteService);
+            return Ok(toDeleteService);
         }
     }
 }
