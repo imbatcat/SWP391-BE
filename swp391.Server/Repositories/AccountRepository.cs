@@ -14,7 +14,6 @@ namespace PetHealthcare.Server.Repositories
             this.context = context;
         }
 
-
         public void SaveChanges()
         {
             context.SaveChanges();
@@ -56,6 +55,16 @@ namespace PetHealthcare.Server.Repositories
                 account.Password = entity.Password;
                 SaveChanges();
             }
+        }
+
+        public IEnumerable<Account> GetAccountsByRole(string role)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Account> GetAccountByRole(string role, string id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging.Abstractions;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Services.Interfaces;
@@ -17,11 +18,23 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         // GET: api/Accounts
-        [HttpGet]
+        [HttpGet("")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Account>))]
         public IEnumerable<Account> GetAccounts()
         {
             return _context.GetAllAccounts();
+        }
+
+        [HttpGet("/byRole/{role}")]
+        public IEnumerable<Account> GetAllAccountsByRole([FromBody] string role)
+        {
+            return null;
+        }
+
+        [HttpGet("/byRole/{role}&{id}")]
+        public IEnumerable<Account> GetAccountByRole([FromBody] string role, [FromBody] string id)
+        {
+            return null; 
         }
 
         // GET: api/Accounts/5
