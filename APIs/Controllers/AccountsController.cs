@@ -31,6 +31,21 @@ namespace PetHealthcareSystem.Controllers
             return _context.GetAllAccounts();
         }
 
+<<<<<<< Updated upstream:APIs/Controllers/AccountsController.cs
+=======
+        [HttpGet("/byRole/{role}")]
+        public IEnumerable<Account> GetAllAccountsByRole([FromBody] string role)
+        {
+            return null;
+        }
+
+        [HttpGet("/byRole/{role}&{id}")]
+        public IEnumerable<Account> GetAccountByRole([FromRoute] string role, [FromRoute] string id)
+        {
+            return null; 
+        }
+
+>>>>>>> Stashed changes:swp391.Server/APIs/Controllers/AccountsController.cs
         // GET: api/Accounts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Account>> GetAccount([FromRoute] string id)
