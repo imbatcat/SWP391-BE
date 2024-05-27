@@ -45,10 +45,10 @@ namespace PetHealthcareSystem.Repositories
 
         public void Update(Cage entity)
         {
-            var cage = GetByCondition(e => e == entity);
+            var cage = GetByCondition(e => e.CageId == entity.CageId);
             if (cage != null)
             {
-                context.Entry(entity).State = EntityState.Modified;
+                context.Entry(cage).State = EntityState.Modified;
                 cage.IsOccupied = entity.IsOccupied;
                
                 SaveChanges();

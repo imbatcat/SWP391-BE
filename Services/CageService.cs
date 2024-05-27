@@ -42,11 +42,11 @@ namespace PetHealthcareSystem.Services
         }
 
 
-        public void UpdateCage(CageDTO Cage)
+        public void UpdateCage(int id, CageDTO Cage)
         {
             var _cage = new Cage
             {
-                CageNumber = Cage.CageNumber,
+                CageId = id,
                 IsOccupied = Cage.IsOccupied,
             };
             _cageService.Update(_cage);

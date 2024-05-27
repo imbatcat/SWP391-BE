@@ -10,7 +10,7 @@ namespace PetHealthcareSystem.Services
         IEnumerable<Cage> GetAllCages();
         Cage? GetCageByCondition(Expression<Func<Cage, bool>> expression);
         void CreateCage(CageDTO Account);
-        void UpdateCage(CageDTO Account);
+        void UpdateCage(int id, CageDTO Account);
         void DeleteCage(Cage Account);
     }
 }

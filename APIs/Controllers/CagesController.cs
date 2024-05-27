@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PetHealthcareSystem.APIs.DTOS;
 using PetHealthcareSystem.Models;
 using PetHealthcareSystem.Services;
 
@@ -40,14 +41,25 @@ namespace PetHealthcareSystem.APIs.Controllers
 
         // POST api/<CagesController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult Post([FromBody] CageDTO newCage)
         {
+            _context.CreateCage(newCage);
+
+            return CreatedAtAction(nameof(Post), newCage.GetHashCode(), newCage);
         }
 
         // PUT api/<CagesController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public ActionResult Put(int id, [FromBody] bool isOccupied)
         {
+            var cage = _context.GetCageByCondition(c => c.CageId == id);
+            if (cage == null)
+            {
+                return BadRequest("No such cage");
+            }
+            _context.UpdateCage(id, new DTOS.CageDTO { IsOccupied = isOccupied} );
+
+            return Ok();
         }
 
         // DELETE api/<CagesController>/5
