@@ -1,0 +1,3 @@
+- Pull origin
+- Go to 'swp391.client' in terminal and install packages with `npm i`
+- If using vsc, go to 'swp391.server' in terminal and type `dotnet run`. Else just F5 on vs.
