@@ -12,16 +12,16 @@ var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 // Add services to the container.
 builder.Services.AddDbContext<PetHealthcareDbContext>(
 option => option.UseSqlServer(
-        "Data Source=LAPTOP-8QVR89KA\\SQLEXPRESS02;Initial Catalog=PetHealthCareSystem;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False"));
+        "Data Source=MEOMATLON\\SQLEXPRESS;Initial Catalog=PetHealthCareSystem;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False"));
+//Repositories
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 
-
+//Services
 builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
 builder.Services.AddScoped<IAccountService, AccountService>();
-builder.Services.AddScoped<HealthService>();
 builder.Services.AddScoped<IHealthService,HealthService>();
-builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 
 builder.Services.AddCors(options =>
 {

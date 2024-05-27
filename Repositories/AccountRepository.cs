@@ -46,10 +46,10 @@ namespace PetHealthcareSystem._2._Repositories
         }
         public void Update(Account entity)
         {
-            var account = GetByCondition(e => e == entity);
+            var account = GetByCondition(e => e.AccountId == entity.AccountId);
             if (account != null)
             {
-                context.Entry(entity).State = EntityState.Modified;
+                context.Entry(account).State = EntityState.Modified;
                 account.FullName = entity.FullName;
                 account.Username = entity.Username;
                 account.Password = entity.Password;

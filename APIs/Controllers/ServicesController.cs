@@ -55,12 +55,6 @@ namespace PetHealthcareSystem.Controllers
             {
                 return BadRequest();
             }
-            Service updateService = new Service
-            {
-                ServicePrice = toUpdateService.ServicePrice,
-                ServiceId = id,
-                ServiceName = toUpdateService.ServiceName,
-            };
             _healthService.UpdateHealthService(id, toUpdateService);
             return Ok(toUpdateService);
         }
@@ -86,12 +80,6 @@ namespace PetHealthcareSystem.Controllers
             }
             _healthService.DeleteHealthService(toDeleteService);
             return Ok(toDeleteService);
-        }
-
-        private bool ServiceExists(int id)
-        {
-            //return _context.Services.Any(e => e.ServiceId == id);
-            return true;
         }
     }
 }
