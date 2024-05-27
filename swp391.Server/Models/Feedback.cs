@@ -15,6 +15,8 @@ namespace PetHealthcare.Server.Models
         [StringLength(250)]
         public string? FeedbackDetails { get; set; }
 
+        // Reference entities
+        public string AccountId { get; set; }
         public Account? Account { get; set; }
 
     }

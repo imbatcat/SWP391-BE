@@ -19,7 +19,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         // GET: api/Accounts
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Account>))]
-        public IEnumerable<Account> GetAccount()
+        public IEnumerable<Account> GetAccounts()
         {
             return _context.GetAllAccounts();
         }
@@ -37,24 +37,13 @@ namespace PetHealthcare.Server.APIs.Controllers
 
             return account;
         }
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Account>> LoginAccount([FromRoute] string id)
-        //{
-        //    var account = _context.GetAccountByCondition(a => a.AccountId == id);
 
-        //    if (account == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return account;
-        //}
         // PUT: api/Accounts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAccount(string id, AccountDTO account)
         {
-            _context.UpdateAccount(account);
+            _context.UpdateAccount(id, account);
 
             //try
             //{

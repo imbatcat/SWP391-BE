@@ -49,10 +49,11 @@ namespace PetHealthcare.Server.Services
             return _accountService.GetAll();
         }
 
-        public void UpdateAccount(AccountDTO Account)
+        public void UpdateAccount(string id, AccountDTO Account)
         {
             var _account = new Account
             {
+                AccountId = id,
                 FullName = Account.FullName,
                 Password = Account.Password,
                 Username = Account.UserName
