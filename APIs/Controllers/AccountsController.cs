@@ -26,7 +26,7 @@ namespace PetHealthcareSystem.Controllers
         // GET: api/Accounts
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Account>))]
-        public IEnumerable<Account> GetAccount()
+        public IEnumerable<Account> GetAccounts()
         {
             return _context.GetAllAccounts();
         }
