@@ -5,9 +5,9 @@ namespace PetHealthcare.Server.Services.Interfaces
 {
     public interface IFeedbackService
     {
-        IEnumerable<Feedback> GetAllFeedback();
-        Feedback? GetFeedbackByCondition(Expression<Func<Feedback, bool>> expression);
-        void CreateFeedback(FeedbackDTO Feedback);
+        Task<IEnumerable<Feedback>> GetAllFeedback();
+        Task<Feedback?>? GetFeedbackByCondition(Expression<Func<Feedback, bool>> expression);
+        Task CreateFeedback(FeedbackDTO Feedback);
         //void deleteFeedback(Feedback Feedback);
 
     }
