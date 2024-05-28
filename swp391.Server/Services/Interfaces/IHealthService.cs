@@ -7,9 +7,9 @@ namespace PetHealthcare.Server.Services.Interfaces
     public interface IHealthService
     {
         Task<IEnumerable<Service>> GetAllHealthService();
-        Service? GetHealthServiceByCondition(Expression<Func<Service, bool>> expression);
-        void CreateHealthService(HealthServiceDTO healthService);
-        void UpdateHealthService(int id, HealthServiceDTO healthService);
+        Task<Service?> GetHealthServiceByCondition(Expression<Func<Service, bool>> expression);
+        Task CreateHealthService(HealthServiceDTO healthService);
+        Task UpdateHealthService(int id, HealthServiceDTO healthService);
         void DeleteHealthService(Service healthService);
     }
 }

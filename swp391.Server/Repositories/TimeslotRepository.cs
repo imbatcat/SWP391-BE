@@ -62,5 +62,30 @@ namespace PetHealthcare.Server.Repositories
                 SaveChanges();
             }
         }
+
+        Task IRepositoryBase<TimeSlot>.Create(TimeSlot entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<IEnumerable<TimeSlot>> IRepositoryBase<TimeSlot>.GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<TimeSlot?> IRepositoryBase<TimeSlot>.GetByCondition(Expression<Func<TimeSlot, bool>> expression)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task IRepositoryBase<TimeSlot>.SaveChanges()
+        {
+            throw new NotImplementedException();
+        }
+
+        Task IRepositoryBase<TimeSlot>.Update(TimeSlot entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

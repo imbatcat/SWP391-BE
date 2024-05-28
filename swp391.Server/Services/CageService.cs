@@ -1,4 +1,5 @@
-﻿using PetHealthcare.Server.APIs.DTOS;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
 using PetHealthcare.Server.Services.Interfaces;
@@ -34,12 +35,12 @@ namespace PetHealthcare.Server.Services
 
         public Cage? GetCageByCondition(Expression<Func<Cage, bool>> expression)
         {
-            return _cageService.GetByCondition(expression);
+            return null;
         }
 
         public IEnumerable<Cage> GetAllCages()
         {
-            return _cageService.GetAll();
+            return null;
         }
 
 

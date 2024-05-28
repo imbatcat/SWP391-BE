@@ -35,12 +35,12 @@ namespace PetHealthcare.Server.Services
 
         public IEnumerable<TimeSlot> GetAllTimeSlots()
         {
-            return _timeSlotService.GetAll();
+            return null;
         }
 
         public TimeSlot? GetTimeSlotByCondition(Expression<Func<TimeSlot, bool>> expression)
         {
-            return _timeSlotService.GetByCondition(expression);
+            return null;
         }
 
         public void UpdateTimeSlot(int id, TimeslotDTO TimeSlot)

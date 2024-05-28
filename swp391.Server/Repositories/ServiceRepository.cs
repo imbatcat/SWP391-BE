@@ -12,11 +12,6 @@ namespace PetHealthcare.Server.Repositories
         {
             this.context = context;
         }
-        public void Create(Service entity)
-        {
-            context.Services.Add(entity);
-            SaveChanges();
-        }
 
         public void Delete(Service entity)
         {
@@ -30,19 +25,25 @@ namespace PetHealthcare.Server.Repositories
             return await context.Services.ToListAsync();
         }
 
-        public Service? GetByCondition(Expression<Func<Service, bool>> expression)
+        public async Task<Service?> GetByCondition(Expression<Func<Service, bool>> expression)
         {
-            return context.Services.FirstOrDefault(expression);
+            return await context.Services.FirstOrDefaultAsync(expression);
         }
 
-        public void SaveChanges()
+        public async Task Create(Service entity)
         {
-            context.SaveChanges();
+            await context.Services.AddAsync(entity);
+            await SaveChanges();
         }
 
-        public void Update(Service entity)
+        public async Task SaveChanges()
         {
-            var service = GetByCondition(e => e.ServiceId == entity.ServiceId);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task Update(Service entity)
+        {
+            var service = await GetByCondition(e => e.ServiceId == entity.ServiceId);
             if (service != null)
             {
                 // this line ensures efcore to update the table.
@@ -50,13 +51,8 @@ namespace PetHealthcare.Server.Repositories
 
                 service.ServicePrice = entity.ServicePrice;
                 service.ServiceName = entity.ServiceName;
-                SaveChanges();
+                await SaveChanges();
             }
-        }
-
-        IEnumerable<Service> IRepositoryBase<Service>.GetAll()
-        {
-            throw new NotImplementedException();
         }
     }
 }

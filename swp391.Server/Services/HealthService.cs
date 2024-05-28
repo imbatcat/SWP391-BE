@@ -15,15 +15,6 @@ namespace PetHealthcare.Server.Services
             _healthService = healthService;
         }
 
-        public void CreateHealthService(HealthServiceDTO healthService)
-        {
-            Service toCreateService = new Service
-            {
-                ServiceName = healthService.ServiceName,
-                ServicePrice = healthService.ServicePrice,
-            };
-            _healthService.Create(toCreateService);
-        }
 
 
         public void DeleteHealthService(Service healthService)
@@ -31,17 +22,33 @@ namespace PetHealthcare.Server.Services
             _healthService.Delete(healthService);
         }
 
-        public Service? GetHealthServiceByCondition(Expression<Func<Service, bool>> expression)
-        {
-            return _healthService.GetByCondition(expression);
-        }
-
         public void SaveChanges()
         {
             _healthService.SaveChanges();
         }
 
-        public void UpdateHealthService(int id, HealthServiceDTO healthService)
+
+        public async Task<IEnumerable<Service>> GetAllHealthService()
+        {
+            return await _healthService.GetAll();
+        }
+
+        public async Task<Service?> GetHealthServiceByCondition(Expression<Func<Service, bool>> expression)
+        {
+            return await _healthService.GetByCondition(expression);
+        }
+
+        public async Task CreateHealthService(HealthServiceDTO healthService)
+        {
+            Service toCreateService = new Service
+            {
+                ServiceName = healthService.ServiceName,
+                ServicePrice = healthService.ServicePrice,
+            };
+            await _healthService.Create(toCreateService);
+        }
+
+        public async Task UpdateHealthService(int id, HealthServiceDTO healthService)
         {
             Service UpdateService = new Service
             {
@@ -49,12 +56,8 @@ namespace PetHealthcare.Server.Services
                 ServiceId = id,
                 ServiceName = healthService.ServiceName,
             };
-            _healthService.Update(UpdateService);
+            await _healthService.Update(UpdateService);
         }
 
-        public async Task<IEnumerable<Service>> GetAllHealthService()
-        {
-            return await _healthService.GetAll();
-        }
     }
 }
