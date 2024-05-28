@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-
+import './Login.css'
 import {
   MDBBtn,
   MDBContainer,
@@ -9,7 +9,6 @@ import {
   MDBCardImage,
   MDBRow,
   MDBCol,
-  MDBIcon,
   MDBInput
 }
 from 'mdb-react-ui-kit';
@@ -21,8 +20,8 @@ function Login() {
       <MDBCard>
         <MDBRow className='g-0'>
 
-          <MDBCol md='6'>
-            <MDBCardImage src='' alt="login form" className='rounded-start w-100'/>
+          <MDBCol md='6' className='imgside'>
+            <h6 className='rounded-start w-100'></h6>
           </MDBCol>
 
           <MDBCol md='6'>
@@ -44,7 +43,6 @@ function Login() {
 
 
               <div className='d-flex flex-row mt-2' style={{justifyContent:'end'}}>
-                <MDBIcon fas icon="cubes fa-3x me-3" style={{ color: '#ff6219'}}/>
                <Link to="/"> <span className="h1 fw-bold mb-0" style={{fontSize:'20px', color:'black'}}>BACK</span></Link>
               </div>
 

@@ -1,11 +1,13 @@
-import React from 'react'
-import NavBar1 from '../NavBar/NavBar'
+
 import Hero from '../Hero/Hero'
+import Footer from '../Footer/Footer'
+import NavBar2 from '../NavBar/NavBar2'
 function Home () {
   return (
     <div>
-        <NavBar1/>
+        <NavBar2/>
         <Hero/>
+        <Footer/>
     </div>
   )
 }
