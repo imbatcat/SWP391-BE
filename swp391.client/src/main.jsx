@@ -6,6 +6,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './Component/Home/Home';
 import Login from './Component/Login/Login';
+import SignUp from './Component/SignUp/SignUp';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -15,6 +16,11 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login/> ,
+    errorElement: <div>404 Not Found</div>,
+  },
+  {
+    path: '/signup',
+    element: <SignUp/>,
     errorElement: <div>404 Not Found</div>,
   }
 ])

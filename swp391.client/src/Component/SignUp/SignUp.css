@@ -1,0 +1,15 @@
+.pageSignUp {
+    background-image: url(../../assets/images/dogpaw.png);
+    min-height: 93vh;
+    justify-content: center;
+
+  }
+
+  .card{
+    background-color: rgba(255, 255, 255, 0.897);
+  }
+  .page-container{
+    max-width: 800px;
+    min-height: 60vh;
+    
+  }
