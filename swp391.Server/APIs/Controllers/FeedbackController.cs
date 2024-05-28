@@ -49,18 +49,16 @@ namespace PetHealthcare.Server.APIs.Controllers
             return CreatedAtAction(nameof(PostFeedback), new { id = feedback.GetHashCode() }, feedback);
         }
 
-        // DELETE: api/Feedbacks/5
+        ////DELETE: api/Feedbacks/5
         //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteFeedback(int id)
+        //public async Task<IActionResult> DeleteFeedback([FromRoute]int id)
         //{
-        //    var feedback = await _context.Feedbacks.FindAsync(id);
+        //    var feedback = _context.GetFeedbackByCondition(e=>e.FeedbackId == id);
         //    if (feedback == null)
         //    {
         //        return NotFound();
         //    }
-
-        //    _context.Feedbacks.Remove(feedback);
-        //    await _context.SaveChangesAsync();
+        //    _context.deleteFeedback(feedback);
 
         //    return NoContent();
         //}

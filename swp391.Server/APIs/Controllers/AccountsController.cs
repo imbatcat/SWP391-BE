@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging.Abstractions;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
@@ -18,31 +18,28 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         // GET: api/Accounts
-        [HttpGet("")]
+        [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Account>))]
         public IEnumerable<Account> GetAccounts()
         {
             return _context.GetAllAccounts();
         }
 
-        [HttpGet("/api/byRole/{role}")]
-        public IEnumerable<Account> GetAllAccountsByRole([FromBody] int role)
+        [HttpGet("/byRole/{roleId}")]
+        public IEnumerable<Account> GetAllAccountsByRole([FromRoute] int roleId)
         {
-            return null;
+            return _context.GetAllAccountsByRole(roleId);
         }
 
-        [HttpGet("/api/pets/{id}")]
-        public IEnumerable<Pet> GetAccountPets([FromRoute] string id)
+        [HttpGet("/byRole/{roleId}&{id}")]
+        public ActionResult<Account> GetAccountByRole([FromRoute] string roleId, [FromRoute] string id)
         {
-            var account = _context.GetAccountByCondition(a => a.AccountId == id);
-            var list = _context.GetAccountPets(account);
-            return list; 
-        }
-
-        [HttpGet("/api/byRole/{role}&{id}")]
-        public Account GetAccountByRole([FromRoute] string role, [FromRoute] string id)
-        {
-            return null; 
+            var checkAccount = _context.GetAccountByCondition(a => a.AccountId == id);
+            if (checkAccount == null)
+            {
+                return NotFound();
+            }
+            return Ok(checkAccount);
         }
 
         // GET: api/Accounts/5
@@ -90,14 +87,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         [HttpPost]
         public async Task<ActionResult<Account>> PostAccount([FromBody] AccountDTO accountDTO)
         {
-            try
-            {
-                _context.CreateAccount(accountDTO);
-            } 
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            _context.CreateAccount(accountDTO);
             //try
             //{
             //    await _context.SaveChangesAsync();

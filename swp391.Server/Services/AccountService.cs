@@ -3,7 +3,6 @@ using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
 using PetHealthcare.Server.Services.Interfaces;
-using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 
 namespace PetHealthcare.Server.Services
@@ -19,13 +18,9 @@ namespace PetHealthcare.Server.Services
 
         public void CreateAccount(AccountDTO Account)
         {
-            var attr = new EmailAddressAttribute();
-            if (!attr.IsValid(Account.Email)) throw new ArgumentException("Invalid email");
-
             var _account = new Account
             {
-                AccountId = GenerateId(Account.RoleId),
-                RoleId = Account.RoleId,
+                AccountId = GenerateId(),
                 Username = Account.UserName,
                 FullName = Account.FullName,
                 Password = Account.Password,
@@ -49,14 +44,9 @@ namespace PetHealthcare.Server.Services
             return _accountService.GetByCondition(expression);
         }
 
-        public IEnumerable<Account> GetAccountByRole(string role, string id)
+        public Account GetAccountByRole(int roleId, string id)
         {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Pet> GetAccountPets(Account account)
-        {
-            return _accountService.GetAccountPets(account);
+            return _accountService.GetAccountByRole(roleId, id);
         }
 
         public IEnumerable<Account> GetAllAccounts()
@@ -64,9 +54,9 @@ namespace PetHealthcare.Server.Services
             return _accountService.GetAll();
         }
 
-        public IEnumerable<Account> GetAllAccountsByRole(string role)
+        public IEnumerable<Account> GetAllAccountsByRole(int roleId)
         {
-            throw new NotImplementedException();
+            return _accountService.GetAccountsByRole(roleId);
         }
 
         public void UpdateAccount(string id, AccountDTO Account)
@@ -81,24 +71,9 @@ namespace PetHealthcare.Server.Services
             _accountService.Update(_account);
         }
 
-        private string GenerateId(int roleId)
+        private string GenerateId()
         {
-            var prefix = "";
-            switch (roleId) {
-                case 1:
-                    prefix = "AC"; 
-                    break;
-                case 2:
-                    prefix = "AD";
-                    break;
-                case 3:
-                    prefix = "VT";
-                    break;
-                case 4:
-                    prefix = "ST";
-                    break;
-            }
-            prefix += "-";
+            var prefix = "AC-";
             string id = Nanoid.Generate(size: 8);
             return prefix + id;
 
