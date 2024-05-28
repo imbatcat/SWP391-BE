@@ -18,9 +18,9 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // GET: api/Roles
         [HttpGet]
-        public IEnumerable<Role> GetRole()
+        public async Task<IEnumerable<Role>> GetRole()
         {
-            return _context.GetAll();
+            return await _context.GetAll();
         }
 
         //// GET: api/Roles/5

@@ -58,5 +58,6 @@ namespace PetHealthcare.Server.Models
         public virtual ICollection<Feedback>? Feedbacks { get; set; }
 
         public virtual ICollection<Pet>? Pets { get; set; }
+        public virtual ICollection<MedicalRecord> MedicalRecords { get; set; }
     }
 }

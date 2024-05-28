@@ -1,4 +1,5 @@
-﻿using PetHealthcare.Server.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
 using System.Linq.Expressions;
 
@@ -13,10 +14,10 @@ namespace PetHealthcare.Server.Repositories
             this.context = context;
         }
 
-        public void Create(Feedback entity)
+        public async Task Create(Feedback entity)
         {
-            context.Feedbacks.Add(entity);
-            SaveChanges();
+           await context.Feedbacks.AddAsync(entity);
+           await SaveChanges();
         }
 
         public void Delete(Feedback entity)
@@ -24,29 +25,29 @@ namespace PetHealthcare.Server.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Feedback> GetAll()
+        public async Task<IEnumerable<Feedback>> GetAll()
         {
-            return context.Feedbacks.ToList();
+            return await context.Feedbacks.ToListAsync();
         }
 
-        public Feedback? GetByCondition(Expression<Func<Feedback, bool>> expression)
+        public async Task <Feedback?> GetByCondition(Expression<Func<Feedback, bool>> expression)
         {
-            return context.Feedbacks.LastOrDefault(expression);
+            return await context.Feedbacks.LastOrDefaultAsync(expression);
         }
 
-        public void SaveChanges()
+        public async Task SaveChanges()
         {
-            context.SaveChanges();
+           await context.SaveChangesAsync();
+        }
+        public async Task< Feedback?> GetFeedbackById(int id)
+        {
+            return await context.Feedbacks.LastOrDefaultAsync(a => a.FeedbackId == id);
+
         }
 
-        public void Update(Feedback entity)
+        Task IRepositoryBase<Feedback>.Update(Feedback entity)
         {
             throw new NotImplementedException();
-        }
-        public Feedback? GetFeedbackById(int id)
-        {
-            return context.Feedbacks.LastOrDefault(a => a.FeedbackId == id);
-
         }
     }
 }
