@@ -9,3 +9,11 @@
       height: 600px;
     }
   }
+  h2{
+    font-size: 15px;
+    color: black;
+    justify-content: center;
+    margin-left: 15px;
+    margin-top: 12px;
+  }
+

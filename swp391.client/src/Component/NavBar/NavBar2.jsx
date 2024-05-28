@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import './NavBar2.css'
 import {
   MDBContainer,
   MDBNavbar,
-  MDBNavbarBrand,
   MDBNavbarToggler,
   MDBIcon,
   MDBNavbarNav,
   MDBNavbarItem,
   MDBNavbarLink,
-  MDBBtn,
   MDBDropdown,
   MDBDropdownToggle,
   MDBDropdownMenu,
@@ -21,10 +20,10 @@ export default function App() {
   const [openBasic, setOpenBasic] = useState(false);
 
   return (
-    <MDBNavbar expand='lg' light bgColor='light'>
+    <MDBNavbar expand='lg' light bgColor='light' sticky>
       <MDBContainer fluid>
       <Link to="/"><h1 style={{color:'black'}}>Pet-ternary</h1></Link> 
-
+      <h2 >Purr-fectly Healthy, Woof-tastically Happy</h2>
         <MDBNavbarToggler
           aria-controls='navbarSupportedContent'
           aria-expanded='false'
@@ -52,7 +51,7 @@ export default function App() {
                   HealthCare System
                 </MDBDropdownToggle>
                 <MDBDropdownMenu>
-                  <MDBDropdownItem link='/action'>Action</MDBDropdownItem>
+                  <MDBDropdownItem link href='https://zalo.me/g/alobzv478'>Action</MDBDropdownItem>
                   <MDBDropdownItem link>Another action</MDBDropdownItem>
                   <MDBDropdownItem link>Something else here</MDBDropdownItem>
                 </MDBDropdownMenu>
@@ -65,9 +64,9 @@ export default function App() {
                   Contact Us
                 </MDBDropdownToggle>
                 <MDBDropdownMenu>
-                  <MDBDropdownItem link>Zalo</MDBDropdownItem>
-                  <MDBDropdownItem link>FaceBook</MDBDropdownItem>
-                  <MDBDropdownItem link>Phone Number</MDBDropdownItem>
+                  <MDBDropdownItem link href='https://zalo.me/g/alobzv478'>Zalo</MDBDropdownItem>
+                  <MDBDropdownItem link href='https://www.facebook.com/profile.php?id=100009406588322'>FaceBook</MDBDropdownItem>
+                  <MDBDropdownItem link>09321231232</MDBDropdownItem>
                 </MDBDropdownMenu>
               </MDBDropdown>
             </MDBNavbarItem>
