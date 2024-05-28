@@ -108,7 +108,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // DELETE: api/Pets/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePet(string id)
+        public async Task<IActionResult> DeletePet([FromRoute]string id)
         {
             var pet = _context.GetPetByCondition(a => a.PetId == id);
             if (pet == null)

@@ -44,9 +44,19 @@ namespace PetHealthcare.Server.Services
             return _accountService.GetByCondition(expression);
         }
 
+        public IEnumerable<Account> GetAccountByRole(string role, string id)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<Account> GetAllAccounts()
         {
             return _accountService.GetAll();
+        }
+
+        public IEnumerable<Account> GetAllAccountsByRole(string role)
+        {
+            throw new NotImplementedException();
         }
 
         public void UpdateAccount(string id, AccountDTO Account)

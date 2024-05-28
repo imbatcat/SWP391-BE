@@ -31,12 +31,6 @@ namespace PetHealthcare.Server.APIs.Controllers
             return null;
         }
 
-        [HttpGet("/byRole/{role}&{id}")]
-        public IEnumerable<Account> GetAccountByRole([FromBody] string role, [FromBody] string id)
-        {
-            return null; 
-        }
-
         // GET: api/Accounts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Account>> GetAccount([FromRoute] string id)
