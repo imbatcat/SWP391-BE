@@ -1,4 +1,5 @@
-﻿using PetHealthcare.Server.APIs.DTOS;
+﻿using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
 using PetHealthcare.Server.Services.Interfaces;
@@ -30,11 +31,6 @@ namespace PetHealthcare.Server.Services
             _healthService.Delete(healthService);
         }
 
-        public IEnumerable<Service> GetAllHealthService()
-        {
-            return _healthService.GetAll();
-        }
-
         public Service? GetHealthServiceByCondition(Expression<Func<Service, bool>> expression)
         {
             return _healthService.GetByCondition(expression);
@@ -54,6 +50,11 @@ namespace PetHealthcare.Server.Services
                 ServiceName = healthService.ServiceName,
             };
             _healthService.Update(UpdateService);
+        }
+
+        public async Task<IEnumerable<Service>> GetAllHealthService()
+        {
+            return await _healthService.GetAll();
         }
     }
 }

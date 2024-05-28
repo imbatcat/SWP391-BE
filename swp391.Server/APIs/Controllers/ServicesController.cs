@@ -20,14 +20,14 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // GET: api/Services
         [HttpGet]
-        public IEnumerable<Service> GetService()
+        public async Task<IEnumerable<Service>> GetService()
         {
-            return _healthService.GetAllHealthService();
+            return await _healthService.GetAllHealthService();
         }
 
         // GET: api/Services/5
         [HttpGet("{id}")]
-        public ActionResult<Service> GetServiceByCondition(int id)
+        public Task<ActionResult<Service>?> GetServiceByCondition(int id)
         {
             var service = _healthService.GetHealthServiceByCondition(s => s.ServiceId == id);
 

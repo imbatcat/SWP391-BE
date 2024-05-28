@@ -25,9 +25,9 @@ namespace PetHealthcare.Server.Repositories
             SaveChanges();
         }
 
-        public IEnumerable<Service> GetAll()
+        public async Task<IEnumerable<Service>> GetAll()
         {
-            return context.Services.ToList();
+            return await context.Services.ToListAsync();
         }
 
         public Service? GetByCondition(Expression<Func<Service, bool>> expression)
@@ -52,6 +52,11 @@ namespace PetHealthcare.Server.Repositories
                 service.ServiceName = entity.ServiceName;
                 SaveChanges();
             }
+        }
+
+        IEnumerable<Service> IRepositoryBase<Service>.GetAll()
+        {
+            throw new NotImplementedException();
         }
     }
 }
