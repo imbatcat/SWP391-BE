@@ -1,4 +1,5 @@
-﻿using PetHealthcare.Server.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
 using System.Linq.Expressions;
 
@@ -6,34 +7,60 @@ namespace PetHealthcare.Server.Repositories
 {
     public class TimeslotRepository : ITimeslotRepository
     {
+        private readonly PetHealthcareDbContext _context;
+
+        public TimeslotRepository(PetHealthcareDbContext context)
+        {
+            _context = context;
+        }
+
         public void Create(TimeSlot entity)
         {
-            throw new NotImplementedException();
+            _context.TimeSlots.Add(entity);
+            SaveChanges();
         }
 
         public void Delete(TimeSlot entity)
         {
-            throw new NotImplementedException();
+            _context.TimeSlots.Remove(entity);
         }
 
         public IEnumerable<TimeSlot> GetAll()
         {
-            throw new NotImplementedException();
+            return _context.TimeSlots.OrderBy(p => p.TimeSlotId).ToList();
         }
 
         public TimeSlot? GetByCondition(Expression<Func<TimeSlot, bool>> expression)
         {
-            throw new NotImplementedException();
+            return _context.TimeSlots.FirstOrDefault(expression);
+        }
+
+        public TimeSlot? GetSlotById(int timeId)
+        {
+            return _context.TimeSlots.FirstOrDefault(p => p.TimeSlotId == timeId); 
+        }
+
+        public IEnumerable<TimeSlot> GetSlots()
+        {
+            return _context.TimeSlots.OrderBy(p => p.TimeSlotId).ToList();
         }
 
         public void SaveChanges()
         {
-            throw new NotImplementedException();
+            _context.SaveChanges();
         }
 
         public void Update(TimeSlot entity)
         {
-            throw new NotImplementedException();
+            var timeSlot = GetByCondition(e => e.TimeSlotId == entity.TimeSlotId);
+            if (timeSlot != null)
+            {
+                _context.Entry(timeSlot).State = EntityState.Modified;
+                timeSlot.TimeSlotId = entity.TimeSlotId;
+                timeSlot.StartTime = entity.StartTime;
+                timeSlot.EndTime = entity.EndTime;
+                SaveChanges();
+            }
         }
     }
 }

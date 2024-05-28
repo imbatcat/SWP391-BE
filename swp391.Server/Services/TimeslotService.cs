@@ -1,5 +1,8 @@
-﻿using PetHealthcare.Server.APIs.DTOS;
+﻿using Microsoft.EntityFrameworkCore;
+using NanoidDotNet;
+using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
+using PetHealthcare.Server.Repositories.Interfaces;
 using PetHealthcare.Server.Services.Interfaces;
 using System.Linq.Expressions;
 
@@ -7,9 +10,22 @@ namespace PetHealthcare.Server.Services
 {
     public class TimeslotService : ITimeSlotService
     {
-        public void CreateTimeSlot(TimeslotDTO TimeSlot)
+        private readonly ITimeslotRepository _timeSlotService;
+
+        public TimeslotService(ITimeslotRepository timeSlotService)
         {
-            throw new NotImplementedException();
+            _timeSlotService = timeSlotService;
+        }
+        public void CreateTimeSlot(TimeslotDTO timeSlot)
+        {
+            var _timeSlot = new TimeSlot
+            {
+                TimeSlotId = GenerateId(),
+                StartTime = timeSlot.StartTime,
+                EndTime = timeSlot.EndTime,
+                
+            };
+            _timeSlotService.Create(_timeSlot);
         }
 
         public void DeleteTimeSlot(TimeSlot TimeSlot)
@@ -19,17 +35,28 @@ namespace PetHealthcare.Server.Services
 
         public IEnumerable<TimeSlot> GetAllTimeSlots()
         {
-            throw new NotImplementedException();
+            return _timeSlotService.GetAll();
         }
 
         public TimeSlot? GetTimeSlotByCondition(Expression<Func<TimeSlot, bool>> expression)
         {
-            throw new NotImplementedException();
+            return _timeSlotService.GetByCondition(expression);
         }
 
         public void UpdateTimeSlot(int id, TimeslotDTO TimeSlot)
         {
-            throw new NotImplementedException();
+            var _timeSlot = new TimeSlot
+            {
+                TimeSlotId = id,
+                StartTime = TimeSlot.StartTime,
+                EndTime = TimeSlot.EndTime,
+            };
+            _timeSlotService.Update(_timeSlot);
+        }
+        private int GenerateId()
+        {
+            string id = Nanoid.Generate(size: 8);
+            return id.GetHashCode();
         }
     }
 }
