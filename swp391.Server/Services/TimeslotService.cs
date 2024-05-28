@@ -8,11 +8,11 @@ using System.Linq.Expressions;
 
 namespace PetHealthcare.Server.Services
 {
-    public class Timeslot : ITimeSlotService
+    public class TimeslotService : ITimeSlotService
     {
         private readonly ITimeslotRepository _timeSlotService;
 
-        public Timeslot(ITimeslotRepository timeSlotService)
+        public TimeslotService(ITimeslotRepository timeSlotService)
         {
             _timeSlotService = timeSlotService;
         }
