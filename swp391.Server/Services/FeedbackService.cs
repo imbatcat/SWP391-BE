@@ -25,6 +25,11 @@ namespace PetHealthcare.Server.Services
 
         }
 
+        public void deleteFeedback(Feedback Feedback)
+        {
+           _feedbackService?.Delete(Feedback);
+        }
+
         public IEnumerable<Feedback> GetAllFeedback()
         {
             return _feedbackService.GetAll();

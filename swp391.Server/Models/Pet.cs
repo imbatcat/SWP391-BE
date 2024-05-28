@@ -51,7 +51,8 @@ namespace PetHealthcare.Server.Models
         [Required]
         [DeleteBehavior(DeleteBehavior.Restrict)]
         public Account Account { get; set; }
-
+        public string AccountId { get;  set; }
         public virtual ICollection<AdmissionRecord> AdmissionRecords { get; set; }
     }
 }
+

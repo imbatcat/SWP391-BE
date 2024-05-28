@@ -8,6 +8,7 @@ namespace PetHealthcare.Server.Services.Interfaces
         IEnumerable<Feedback> GetAllFeedback();
         Feedback? GetFeedbackByCondition(Expression<Func<Feedback, bool>> expression);
         void CreateFeedback(FeedbackDTO Feedback);
+        //void deleteFeedback(Feedback Feedback);
 
     }
 }
