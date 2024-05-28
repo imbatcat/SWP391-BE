@@ -36,27 +36,26 @@ namespace PetHealthcare.Server.Repositories
 
         public Pet? GetByCondition(Expression<Func<Pet, bool>> expression)
         {
-           return context.Pets.FirstOrDefault(expression);
+            return context.Pets.FirstOrDefault(expression);
         }
 
 
         public void Update(Pet entity)
         {
-            var pet=GetByCondition(e=>e.PetId==entity.PetId);
-            if(pet != null)
+            var pet = GetByCondition(e => e.PetId == entity.PetId);
+            if (pet != null)
             {
-                context.Entry(pet).State=EntityState.Modified;
-                pet.PetName=entity.PetName;
-                pet.PetBreed=entity.PetBreed;
-                pet.Description=entity.Description;
-                pet.PetAge=entity.PetAge;
-                pet.VaccinationHistory=entity.VaccinationHistory;
+                context.Entry(pet).State = EntityState.Modified;
+                pet.PetName = entity.PetName;
+                pet.Description = entity.Description;
+                pet.PetAge = entity.PetAge;
+                pet.VaccinationHistory = entity.VaccinationHistory;
                 SaveChanges();
             }
         }
         public Pet? GetPetById(string id)
         {
-            return context.Pets.FirstOrDefault(a=>a.PetId==id);
+            return context.Pets.FirstOrDefault(a => a.PetId == id);
         }
     }
 }

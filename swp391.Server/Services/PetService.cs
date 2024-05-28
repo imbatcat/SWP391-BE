@@ -54,6 +54,7 @@ namespace PetHealthcare.Server.Services
         {
             var _pet = new Pet
             {
+                PetId = id,
                 PetName = pet.PetName,
                 Description = pet.Description,
                 VaccinationHistory = pet.VaccinationHistory,
