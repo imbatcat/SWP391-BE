@@ -12,10 +12,10 @@ namespace PetHealthcare.Server.Repositories
         {
             this.context = context;
         }
-        public void Create(Cage entity)
+        public async Task Create(Cage entity)
         {
-            context.Cages.Add(entity);
-            SaveChanges();
+            await context.Cages.AddAsync(entity);
+            await SaveChanges();
         }
 
         public void Delete(Cage entity)
@@ -23,35 +23,41 @@ namespace PetHealthcare.Server.Repositories
             context.Cages.Remove(entity);
         }
 
-        public IEnumerable<Cage> GetAll()
+        public async Task<IEnumerable<Cage>> GetAll()
         {
-            return context.Cages.ToList();
+            return await context.Cages.ToListAsync();
         }
 
-        public Cage? GetByCondition(Expression<Func<Cage, bool>> expression)
+        public async Task<Cage?> GetByCondition(Expression<Func<Cage, bool>> expression)
         {
-            return context.Cages.FirstOrDefault(expression);
+            return await context.Cages.FirstOrDefaultAsync(expression);
         }
 
-        public Cage? GetCageById(int id)
+        public async Task<Cage?> GetCageByID(int Id)
         {
-            return context.Cages.FirstOrDefault(a => a.CageId == id);
+            return await context.Cages.FirstOrDefaultAsync(a => a.CageId == Id);
         }
 
-        public void SaveChanges()
+
+        public async Task<IEnumerable<Cage>> GetCages(int Id)
         {
-            context.SaveChanges();
+            return await context.Cages.OrderBy(p => p.CageId).ToListAsync();
         }
 
-        public void Update(Cage entity)
+        public async Task SaveChanges()
         {
-            var cage = GetByCondition(e => e.CageId == entity.CageId);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task Update(Cage entity)
+        {
+            var cage = await GetByCondition(e => e.CageId == entity.CageId);
             if (cage != null)
             {
                 context.Entry(cage).State = EntityState.Modified;
                 cage.IsOccupied = entity.IsOccupied;
 
-                SaveChanges();
+                await SaveChanges();
             }
         }
     }
