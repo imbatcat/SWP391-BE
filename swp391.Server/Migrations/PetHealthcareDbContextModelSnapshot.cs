@@ -200,6 +200,7 @@ namespace PetHealthcareSystem.Migrations
                     b.HasIndex("VeterinarianAccountId");
 
                     b.ToTable("Appointments");
+
                 });
 
             modelBuilder.Entity("PetHealthcareSystem.Models.Cage", b =>
@@ -219,6 +220,7 @@ namespace PetHealthcareSystem.Migrations
                     b.HasKey("CageId");
 
                     b.ToTable("Cages");
+
                 });
 
             modelBuilder.Entity("PetHealthcareSystem.Models.Feedback", b =>
