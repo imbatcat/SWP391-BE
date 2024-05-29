@@ -28,13 +28,15 @@ builder.Services.AddScoped<ICageService, CageService>();
 builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 builder.Services.AddScoped<IPetService, PetService>();
 builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-                      policy =>
-                      {
-                          policy.WithOrigins("http://localhost:5173").AllowAnyHeader().AllowAnyMethod();
-                      });
+    options.AddPolicy(
+        name: MyAllowSpecificOrigins,
+          policy =>
+          {
+              policy.WithOrigins("https://localhost:5173").AllowAnyHeader().AllowAnyMethod();
+          });
 });
 
 builder.Services.AddControllers()
@@ -56,6 +58,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseCors(MyAllowSpecificOrigins);
+
+app.UseRouting();
 
 app.UseHttpsRedirection();
 

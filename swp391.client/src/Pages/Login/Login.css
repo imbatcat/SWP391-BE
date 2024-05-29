@@ -1,6 +1,6 @@
 
 .imgside{
-    min-width:40vw;
+    min-width: 40vw;
     min-height: 68vh;
     background-image: url('../../assets/images/dogandcatlogin.png');
     display: flex;
