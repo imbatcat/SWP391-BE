@@ -33,7 +33,7 @@ function Login() {
 
               <MDBBtn className="mb-4 px-5" color='green' size='lg'>Login</MDBBtn>
               <a className="small text-muted" style={{textAlign:'end'}} href="#!">Forgot password?</a>
-              <p className="mb-5 pb-lg-2" style={{color: 'Black'}}>Don't have an account? 
+              <p className="mb-5 pb-lg-2" style={{color: 'Black'}}> Dont have an account? 
                 <Link to="/signup"><a href="#!" style={{color: '#393f81'}}>Register here</a></Link>
               </p>
 

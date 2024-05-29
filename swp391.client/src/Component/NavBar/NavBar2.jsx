@@ -36,9 +36,9 @@ export default function App() {
         <MDBCollapse navbar open={openBasic} style={{justifyContent:'end'}}>
           <MDBNavbarNav className='mr-auto mb-2 mb-lg-0'>
             <MDBNavbarItem>
-              <MDBNavbarLink active aria-current='page' href='/'>
+            <Link to="/"><MDBNavbarLink active aria-current='page'>
                 Home
-              </MDBNavbarLink>
+              </MDBNavbarLink></Link> 
             </MDBNavbarItem>
             <MDBNavbarItem>
               <Link to="/about"> <MDBNavbarLink>About Us</MDBNavbarLink></Link> 

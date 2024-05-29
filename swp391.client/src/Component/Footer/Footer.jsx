@@ -1,4 +1,6 @@
-import React from 'react';
+
+import './Footer.css'
+import { Link } from 'react-router-dom';
 import { MDBFooter, MDBContainer, MDBRow, MDBCol, MDBIcon } from 'mdb-react-ui-kit';
 
 export default function Footer() {
@@ -17,16 +19,10 @@ export default function Footer() {
             <MDBIcon color='secondary' fab icon='twitter' />
           </a>
           <a href='' className='me-4 text-reset'>
-            <MDBIcon color='secondary' fab icon='google' />
-          </a>
-          <a href='' className='me-4 text-reset'>
             <MDBIcon color='secondary' fab icon='instagram' />
           </a>
           <a href='' className='me-4 text-reset'>
             <MDBIcon color='secondary' fab icon='linkedin' />
-          </a>
-          <a href='' className='me-4 text-reset'>
-            <MDBIcon color='secondary' fab icon='github' />
           </a>
         </div>
       </section>
@@ -37,25 +33,23 @@ export default function Footer() {
             <MDBCol md='3' lg='4' xl='3' className='mx-auto mb-4'>
               <h6 className='text-uppercase fw-bold mb-4'>
                 <MDBIcon color='secondary' icon='gem' className='me-3' />
-                Company name
+                Pet-ternary
               </h6>
               <p>
-                Here you can use rows and columns to organize your footer content. Lorem ipsum dolor sit
-                amet, consectetur adipisicing elit.
+              We are a pet care clinic located in Leavenworth and 
+              have been helping (primarily) dogs and cats live happier and healthier since 2023.
               </p>
             </MDBCol>
 
             <MDBCol md='2' lg='2' xl='2' className='mx-auto mb-4'>
-              <h6 className='text-uppercase fw-bold mb-4'>Products</h6>
-              <p>
-                <a href='#!' className='text-reset'>
-                  Angular
-                </a>
+            <p>
+                <Link to='/'><a className='text-reset'> Home </a></Link>
               </p>
               <p>
-                <a href='#!' className='text-reset'>
-                  React
-                </a>
+                <Link to='/aboutUs'><a className='text-reset'> About Us </a></Link>
+              </p>
+              <p>
+              <Link to='/MakeAnAppointment'><a className='text-reset'> Make an Appointment </a></Link>
               </p>
               <p>
                 <a href='#!' className='text-reset'>
@@ -70,25 +64,25 @@ export default function Footer() {
             </MDBCol>
 
             <MDBCol md='3' lg='2' xl='2' className='mx-auto mb-4'>
-              <h6 className='text-uppercase fw-bold mb-4'>Useful links</h6>
+              <h6 className='text-uppercase fw-bold mb-4'>HOURS OF OPERATION</h6>
               <p>
                 <a href='#!' className='text-reset'>
-                  Pricing
+                Regular hours:
                 </a>
               </p>
               <p>
                 <a href='#!' className='text-reset'>
-                  Settings
+                Mon-Fri: 8:00-17h30
                 </a>
               </p>
               <p>
                 <a href='#!' className='text-reset'>
-                  Orders
+                Sat: 8:00-14:30
                 </a>
               </p>
               <p>
                 <a href='#!' className='text-reset'>
-                  Help
+                Emergencies 24/7
                 </a>
               </p>
             </MDBCol>
@@ -97,17 +91,17 @@ export default function Footer() {
               <h6 className='text-uppercase fw-bold mb-4'>Contact</h6>
               <p>
                 <MDBIcon color='secondary' icon='home' className='me-2' />
-                New York, NY 10012, US
+                1 Lê Duẩn, P.Bến Nghé, Q.1, HCMC
               </p>
               <p>
                 <MDBIcon color='secondary' icon='envelope' className='me-3' />
-                info@example.com
+                pet-ternary.vet2023@fpt.com.vn
               </p>
               <p>
-                <MDBIcon color='secondary' icon='phone' className='me-3' /> + 01 234 567 88
+                <MDBIcon color='secondary' icon='phone' className='me-3' /> + 84 9783327233
               </p>
               <p>
-                <MDBIcon color='secondary' icon='print' className='me-3' /> + 01 234 567 89
+                <MDBIcon color='secondary' icon='print' className='me-3' /> + 84 9783327233
               </p>
             </MDBCol>
           </MDBRow>
@@ -115,9 +109,9 @@ export default function Footer() {
       </section>
 
       <div className='text-center p-4' style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)' }}>
-        © 2021 Copyright:
+        © 2021 Copyright- 
         <a className='text-reset fw-bold'>
-          Pet-ternary
+          Pet-ternary- All Dogs & Cats Veterinary Hospital
         </a>
       </div>
     </MDBFooter>
