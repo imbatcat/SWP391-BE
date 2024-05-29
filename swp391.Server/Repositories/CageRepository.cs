@@ -60,5 +60,30 @@ namespace PetHealthcare.Server.Repositories
                 await SaveChanges();
             }
         }
+
+        Task IRepositoryBase<Cage>.Create(Cage entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<IEnumerable<Cage>> IRepositoryBase<Cage>.GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<Cage?> IRepositoryBase<Cage>.GetByCondition(Expression<Func<Cage, bool>> expression)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task IRepositoryBase<Cage>.SaveChanges()
+        {
+            throw new NotImplementedException();
+        }
+
+        Task IRepositoryBase<Cage>.Update(Cage entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

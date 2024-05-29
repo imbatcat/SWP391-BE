@@ -25,9 +25,9 @@ namespace PetHealthcare.Server.APIs.Controllers
         // GET: api/Pets
         [HttpGet("")]
         [ProducesResponseType(200,Type=typeof(IEnumerable<Pet>))]
-        public IEnumerable<Pet> GetPets()
+        public async Task <IEnumerable<Pet>> GetPets()
         {
-            return _context.GetAllPets();
+            return await _context.GetAllPets();
         }
         //[HttpGet]
         //public async Task<ActionResult<IEnumerable<Pet>>> GetPets()
@@ -39,7 +39,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Pet>> GetPet([FromRoute]string id)
         {
-            var pet = _context.GetPetByCondition(a=>a.PetId == id);
+            var pet = await _context.GetPetByCondition(a=>a.PetId == id);
 
             if (pet == null)
             {
@@ -54,7 +54,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPet(string id, PetDTO pet)
         {
-            _context.UpdatePet(id, pet);
+            await _context.UpdatePet(id, pet);
             //if (id != pet.PetId)
             //{
             //    return BadRequest();
@@ -86,7 +86,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         [HttpPost]
         public async Task<ActionResult<Pet>> PostPet([FromBody] PetDTO petDTO)
         {
-            _context.CreatePet(petDTO);
+            await   _context.CreatePet(petDTO);
             //try
             //{
             //    await _context.SaveChangesAsync();
@@ -110,7 +110,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePet([FromRoute]string id)
         {
-            var pet = _context.GetPetByCondition(a => a.PetId == id);
+            var pet = await _context.GetPetByCondition(a => a.PetId == id);
             if (pet == null)
             {
                 return NotFound();

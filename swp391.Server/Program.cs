@@ -7,13 +7,14 @@ using PetHealthcare.Server.Services.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-const string DataSrc = "", Password = "";
+const string DataSrc = "LAPTOP-8QVR89KA\\SQLEXPRESS02", Password = "12345";
 
 // Add services to the container.
 builder.Services.AddDbContext<PetHealthcareDbContext>(
 option => option.UseSqlServer(
         $"Data Source={DataSrc}; User = sa; Password = {Password}; Initial Catalog=PetHealthCareSystem;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False"));
 //Repositories
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<ICageRepository, CageRepository>();
 builder.Services.AddScoped<IFeedbackRepository, FeedbackRepository>();
@@ -28,6 +29,7 @@ builder.Services.AddScoped<ICageService, CageService>();
 builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 builder.Services.AddScoped<ITimeSlotService, TimeslotService>();
 builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
+builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
