@@ -12,7 +12,7 @@ const string DataSrc = "LAPTOP-8QVR89KA\\SQLEXPRESS02", Password = "12345";
 // Add services to the container.
 builder.Services.AddDbContext<PetHealthcareDbContext>(
 option => option.UseSqlServer(
-        $"Data Source={DataSrc}; User = sa; Password = {Password}; Initial Catalog=PetHealthCareSystem;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False"));
+        $"Data Source=Dixel\\DAOX;Initial Catalog=PetHealthCareSystem;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False"));
 //Repositories
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();

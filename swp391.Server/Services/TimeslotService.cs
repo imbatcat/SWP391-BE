@@ -20,7 +20,7 @@ namespace PetHealthcare.Server.Services
         {
             var _timeSlot = new TimeSlot
             {
-                TimeSlotId = GenerateId(),
+                
                 StartTime = timeSlot.StartTime,
                 EndTime = timeSlot.EndTime,
                 
@@ -52,13 +52,6 @@ namespace PetHealthcare.Server.Services
                 EndTime = TimeSlot.EndTime,
             };
             await _timeSlotService.Update(_timeSlot);
-        }
-
-
-        private int GenerateId()
-        {
-            string id = Nanoid.Generate(size: 8);
-            return id.GetHashCode();
         }
 
     }

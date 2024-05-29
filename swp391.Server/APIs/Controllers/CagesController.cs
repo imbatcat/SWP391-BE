@@ -21,9 +21,10 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // GET: api/<CagesController>
         [HttpGet]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<Cage>))]
         public async Task<IEnumerable<Cage>> GetCages()
         {
-            return await  _context.GetAllCages();
+            return await _context.GetAllCages();
         }
 
         // GET api/<CagesController>/5
@@ -51,15 +52,14 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // PUT api/<CagesController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<Cage>> Put(int id, [FromBody] bool isOccupied)
+        public async Task<ActionResult<Cage>> Put(int id, [FromBody] CageDTO CaGe)
         {
             var cage = await _context.GetCageByCondition(c => c.CageId == id);
             if (cage == null)
             {
                 return BadRequest("No such cage");
             }
-            await _context.UpdateCage(id, new CageDTO { IsOccupied = isOccupied });
-
+            await _context.UpdateCage(id, CaGe);
             return Ok();
         }
 

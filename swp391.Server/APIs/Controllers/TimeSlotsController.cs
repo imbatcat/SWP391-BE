@@ -58,5 +58,14 @@ namespace PetHealthcare.Server.APIs.Controllers
             await _context.UpdateTimeSlot(id, toUpdateTimeSlot);
             return Ok(toUpdateTimeSlot);
         }
+
+        // POST api/<CagesController>
+        [HttpPost]
+        public async Task<ActionResult<TimeSlot>> Post([FromBody] TimeslotDTO newCage)
+        {
+            await _context.CreateTimeSlot(newCage);
+
+            return CreatedAtAction(nameof(Post), newCage.GetHashCode(), newCage);
+        }
     }
 }
