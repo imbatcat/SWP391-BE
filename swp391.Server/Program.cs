@@ -7,7 +7,7 @@ using PetHealthcare.Server.Services.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-const string DataSrc = "LAPTOP-8QVR89KA\\SQLEXPRESS02", Password = "12345";
+const string DataSrc = "MSI", Password = "123456";
 
 // Add services to the container.
 builder.Services.AddDbContext<PetHealthcareDbContext>(
@@ -20,6 +20,8 @@ builder.Services.AddScoped<ICageRepository, CageRepository>();
 builder.Services.AddScoped<IFeedbackRepository, FeedbackRepository>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 builder.Services.AddScoped<ITimeslotRepository, TimeslotRepository>();
+builder.Services.AddScoped<IPetRepository, PetRepository>();
+builder.Services.AddScoped<IMedicalRecordRepository, MedicalRecordRepository>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 //Services
@@ -28,8 +30,10 @@ builder.Services.AddScoped<IHealthService, HealthService>();
 builder.Services.AddScoped<ICageService, CageService>();
 builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 builder.Services.AddScoped<ITimeSlotService, TimeslotService>();
-builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
+builder.Services.AddScoped<IPetService, PetService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IMedicalRecordService, MedicalRecordService>();
+builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
