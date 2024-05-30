@@ -41,7 +41,7 @@ export default function NavBar2() {
               </MDBNavbarLink></Link> 
             </MDBNavbarItem>
             <MDBNavbarItem>
-              <Link to="/about"> <MDBNavbarLink>About Us</MDBNavbarLink></Link> 
+              <Link to="/aboutUs"> <MDBNavbarLink>About Us</MDBNavbarLink></Link> 
              
             </MDBNavbarItem>
 

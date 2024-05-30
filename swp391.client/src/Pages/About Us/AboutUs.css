@@ -1,0 +1,20 @@
+.imgslider{
+    border-color: black;
+    border-radius: 20px;
+    background-color: black;
+    min-height: 30vh;
+    width: 70%;
+    display: flex;
+    margin: auto;
+    justify-content: center;
+    text-align: center;
+
+
+}
+
+.pb-3{
+    min-height: 50vh;
+    align-content: center;
+    
+   
+}

@@ -8,6 +8,7 @@ import Home from './Pages/Home/Home';
 import Login from './Pages/Login/Login';
 import App from './App';
 import SignUp from './Pages/SignUp/SignUp';
+import AboutUs from './Pages/About Us/AboutUs';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -22,6 +23,11 @@ const router = createBrowserRouter([
   {
     path: '/signUp',
     element: <SignUp/>,
+    errorElement: <div>404 Not Found</div>,
+  },
+  {
+    path: '/aboutUs',
+    element: <AboutUs/>,
     errorElement: <div>404 Not Found</div>,
   }
 ])
