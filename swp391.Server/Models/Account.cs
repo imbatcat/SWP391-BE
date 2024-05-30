@@ -9,6 +9,7 @@ namespace PetHealthcare.Server.Models
 {
     [Index(nameof(Username), IsUnique = true)]
     [Index(nameof(Email), IsUnique = true)]
+    [Index(nameof(PhoneNumber), IsUnique = true)]
     public class Account
     {
         [NotMapped]

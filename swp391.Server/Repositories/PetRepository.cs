@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
 using System.Linq.Expressions;
@@ -20,6 +21,7 @@ namespace PetHealthcare.Server.Repositories
         }
         public async Task Create(Pet entity)
         {
+
             await context.Pets.AddAsync(entity);
             await  SaveChanges();
         }
@@ -62,5 +64,7 @@ namespace PetHealthcare.Server.Repositories
         {
             return await context.Pets.Where(p => p.AccountId == id).ToListAsync();
         }
+
+
     }
 }

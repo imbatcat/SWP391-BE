@@ -86,15 +86,9 @@ namespace PetHealthcare.Server.Repositories
             return accounts;
         }
 
-        public IEnumerable<Pet> GetAccountPets(Account account)
+        public Task<Account?> LoginAccount(string username, string password)
         {
-            context.Entry(account).Collection(a => a.Pets).Load();
-            if (account.Pets != null)
-            {
-                var pets = account.Pets;
-                return pets;
-            }
-            return null;
+            throw new NotImplementedException();
         }
     }
 }

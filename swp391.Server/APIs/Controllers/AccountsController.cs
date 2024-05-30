@@ -54,7 +54,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         //    return _context.GetAccountPets(checkAccount);
         //}
 
-        [HttpGet("/api/account/pets/{id}")]
+        [HttpGet("/api/accounts/pets/{id}")]
         public async Task<IEnumerable<Pet>> GetAccountPets([FromRoute] string id)
         {
             return await _contextPet.GetAccountPets(id);
@@ -106,7 +106,13 @@ namespace PetHealthcare.Server.APIs.Controllers
         [HttpPost]
         public async Task<ActionResult<Account>> PostAccount([FromBody] AccountDTO accountDTO)
         {
-            await _context.CreateAccount(accountDTO);
+            try
+            {
+                await _context.CreateAccount(accountDTO);
+            } catch (BadHttpRequestException ex)
+            {
+                return (BadRequest(ex.Message));
+            }
             //try
             //{
             //    await _context.SaveChangesAsync();
@@ -126,6 +132,26 @@ namespace PetHealthcare.Server.APIs.Controllers
             return CreatedAtAction("GetAccount", new { id = accountDTO.GetHashCode() }, accountDTO);
         }
 
+        [HttpPost("/api/accounts/login")]
+        public async Task<ActionResult<Account>> LoginAccount([FromBody] string username, [FromBody] string password)
+        {
+            //try
+            //{
+            //    await _context.SaveChangesAsync();
+            //}
+            //catch (DbUpdateException)
+            //{
+            //    if (AccountExists(account.AccountId))
+            //    {
+            //        return Conflict();
+            //    }
+            //    else
+            //    {
+            //        throw;
+            //    }
+            //}
+            return null;
+        }
         // DELETE: api/Accounts/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAccount(string id)
