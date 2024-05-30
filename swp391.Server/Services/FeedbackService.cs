@@ -13,7 +13,7 @@ namespace PetHealthcare.Server.Services
         {
             _feedbackService = feedbackService;
         }
-        public void CreateFeedback(FeedbackDTO Feedback)
+        public async Task CreateFeedback(FeedbackDTO Feedback)
         {
             var newFeedback = new Feedback
             {
@@ -21,7 +21,7 @@ namespace PetHealthcare.Server.Services
                 FeedbackDetails = Feedback.FeedbackDetails,
                 AccountId = Feedback.AccountId
             };
-            _feedbackService.Create(newFeedback);
+           await _feedbackService.Create(newFeedback);
 
         }
 
@@ -30,14 +30,14 @@ namespace PetHealthcare.Server.Services
            _feedbackService?.Delete(Feedback);
         }
 
-        public IEnumerable<Feedback> GetAllFeedback()
+        public async Task< IEnumerable<Feedback>> GetAllFeedback()
         {
-            return _feedbackService.GetAll();
+            return await _feedbackService.GetAll();
         }
 
-        public Feedback? GetFeedbackByCondition(Expression<Func<Feedback, bool>> expression)
+        public async Task<Feedback?>  GetFeedbackByCondition(Expression<Func<Feedback, bool>> expression)
         {
-            return _feedbackService.GetByCondition(expression);
+            return await _feedbackService.GetByCondition(expression);
         }
     }
 }

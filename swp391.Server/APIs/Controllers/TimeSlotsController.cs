@@ -5,7 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
+using PetHealthcare.Server.Services;
+using PetHealthcare.Server.Services.Interfaces;
 
 namespace PetHealthcare.Server.APIs.Controllers
 {
@@ -13,95 +16,56 @@ namespace PetHealthcare.Server.APIs.Controllers
     [ApiController]
     public class TimeSlotsController : ControllerBase
     {
-        private readonly PetHealthcareDbContext _context;
+        private readonly ITimeSlotService _context;
 
-        public TimeSlotsController(PetHealthcareDbContext context)
+        public TimeSlotsController(ITimeSlotService context)
         {
             _context = context;
         }
 
-        // GET: api/TimeSlots
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<TimeSlot>>> GetTimeSlots()
+        // GET: api/Accounts
+        [HttpGet("")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<TimeSlot>))]
+        public async Task<IEnumerable<TimeSlot>> GetTimeSlots()
         {
-            return await _context.TimeSlots.ToListAsync();
+            return await _context.GetAllTimeSlots();
         }
 
-        // GET: api/TimeSlots/5
+        // GET: api/Services/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TimeSlot>> GetTimeSlot(int id)
+        public async Task<ActionResult<TimeSlot>> GetTimeSlotByCondition(int id)
         {
-            var timeSlot = await _context.TimeSlots.FindAsync(id);
+            var service = await _context.GetTimeSlotByCondition(p => p.TimeSlotId == id);
 
-            if (timeSlot == null)
+            if (service == null)
             {
                 return NotFound();
             }
 
-            return timeSlot;
+            return service;
         }
 
-        // PUT: api/TimeSlots/5
+        // PUT: api/Services/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTimeSlot(int id, TimeSlot timeSlot)
+        public async Task<IActionResult> UpdateTimeSlot([FromRoute] int id, [FromBody] TimeslotDTO toUpdateTimeSlot)
         {
-            if (id != timeSlot.TimeSlotId)
+            var service = await _context.GetTimeSlotByCondition(p => p.TimeSlotId == id);
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
-
-            _context.Entry(timeSlot).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TimeSlotExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            await _context.UpdateTimeSlot(id, toUpdateTimeSlot);
+            return Ok(toUpdateTimeSlot);
         }
 
-        // POST: api/TimeSlots
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // POST api/<CagesController>
         [HttpPost]
-        public async Task<ActionResult<TimeSlot>> PostTimeSlot(TimeSlot timeSlot)
+        public async Task<ActionResult<TimeSlot>> Post([FromBody] TimeslotDTO newCage)
         {
-            _context.TimeSlots.Add(timeSlot);
-            await _context.SaveChangesAsync();
+            await _context.CreateTimeSlot(newCage);
 
-            return CreatedAtAction("GetTimeSlot", new { id = timeSlot.TimeSlotId }, timeSlot);
-        }
-
-        // DELETE: api/TimeSlots/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTimeSlot(int id)
-        {
-            var timeSlot = await _context.TimeSlots.FindAsync(id);
-            if (timeSlot == null)
-            {
-                return NotFound();
-            }
-
-            _context.TimeSlots.Remove(timeSlot);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool TimeSlotExists(int id)
-        {
-            return _context.TimeSlots.Any(e => e.TimeSlotId == id);
+            return CreatedAtAction(nameof(Post), newCage.GetHashCode(), newCage);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using PetHealthcare.Server.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
 using System.Linq.Expressions;
 
@@ -6,34 +7,62 @@ namespace PetHealthcare.Server.Repositories
 {
     public class TimeslotRepository : ITimeslotRepository
     {
-        public void Create(TimeSlot entity)
+        private readonly PetHealthcareDbContext _context;
+
+        public TimeslotRepository(PetHealthcareDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+        }
+
+        public async Task Create(TimeSlot entity)
+        {
+            await _context.TimeSlots.AddAsync(entity);
+            await SaveChanges();
         }
 
         public void Delete(TimeSlot entity)
         {
-            throw new NotImplementedException();
+            _context.TimeSlots.Remove(entity);
         }
 
-        public IEnumerable<TimeSlot> GetAll()
+        public async Task<IEnumerable<TimeSlot>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _context.TimeSlots.OrderBy(p => p.TimeSlotId).ToListAsync();
         }
 
-        public TimeSlot? GetByCondition(Expression<Func<TimeSlot, bool>> expression)
+        public async Task<TimeSlot?> GetByCondition(Expression<Func<TimeSlot, bool>> expression)
         {
-            throw new NotImplementedException();
+            return await _context.TimeSlots.FirstOrDefaultAsync(expression);
         }
 
-        public void SaveChanges()
+        public async Task<TimeSlot?> GetSlotById(int timeId)
         {
-            throw new NotImplementedException();
+            return await _context.TimeSlots.FirstOrDefaultAsync(p => p.TimeSlotId == timeId); 
         }
 
-        public void Update(TimeSlot entity)
+        public async  Task<IEnumerable<TimeSlot>> GetSlots()
         {
-            throw new NotImplementedException();
+            return await _context.TimeSlots.OrderBy(p => p.TimeSlotId).ToListAsync();
         }
+
+        public async Task SaveChanges()
+        {
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task Update(TimeSlot entity)
+        {
+            var timeSlot = await GetByCondition(e => e.TimeSlotId == entity.TimeSlotId);
+            if (timeSlot != null)
+            {
+                _context.Entry(timeSlot).State = EntityState.Modified;
+                timeSlot.TimeSlotId = entity.TimeSlotId;
+                timeSlot.StartTime = entity.StartTime;
+                timeSlot.EndTime = entity.EndTime;
+                await SaveChanges();
+            }
+        }
+
+      
     }
 }
