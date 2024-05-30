@@ -3,6 +3,7 @@ using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
 using PetHealthcare.Server.Services.Interfaces;
+using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 
 namespace PetHealthcare.Server.Services
@@ -18,6 +19,9 @@ namespace PetHealthcare.Server.Services
 
         public void CreateAccount(AccountDTO Account)
         {
+            var emailAuth = new EmailAddressAttribute();
+            if (!emailAuth.IsValid(Account.Email)) throw new BadHttpRequestException("Invalid email");
+            
             var _account = new Account
             {
                 AccountId = GenerateId(),
@@ -47,6 +51,11 @@ namespace PetHealthcare.Server.Services
         public Account GetAccountByRole(int roleId, string id)
         {
             return _accountService.GetAccountByRole(roleId, id);
+        }
+
+        public IEnumerable<Pet> GetAccountPets(Account account)
+        {
+            return _accountService.GetAccountPets(account);
         }
 
         public IEnumerable<Account> GetAllAccounts()

@@ -40,6 +40,11 @@ namespace PetHealthcare.Server.Services
             _petService.Delete(pet);
         }
 
+        public IEnumerable<Pet> GetAccountPets(string id)
+        {
+            return _petService.GetAccountPets(id);
+        }
+
         public IEnumerable<Pet> GetAllPets()
         {
             return _petService.GetAll();

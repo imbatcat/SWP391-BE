@@ -11,10 +11,12 @@ namespace PetHealthcare.Server.APIs.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly IAccountService _context;
+        private readonly IPetService _contextPet;
 
-        public AccountsController(IAccountService context)
+        public AccountsController(IAccountService context, IPetService contextPet)
         {
             _context = context;
+            _contextPet = contextPet;
         }
 
         // GET: api/Accounts
@@ -25,13 +27,13 @@ namespace PetHealthcare.Server.APIs.Controllers
             return _context.GetAllAccounts();
         }
 
-        [HttpGet("/byRole/{roleId}")]
+        [HttpGet("/api/byRole/{roleId}")]
         public IEnumerable<Account> GetAllAccountsByRole([FromRoute] int roleId)
         {
             return _context.GetAllAccountsByRole(roleId);
         }
 
-        [HttpGet("/byRole/{roleId}&{id}")]
+        [HttpGet("/api/byRole/{roleId}&{id}")]
         public ActionResult<Account> GetAccountByRole([FromRoute] string roleId, [FromRoute] string id)
         {
             var checkAccount = _context.GetAccountByCondition(a => a.AccountId == id);
@@ -40,6 +42,23 @@ namespace PetHealthcare.Server.APIs.Controllers
                 return NotFound();
             }
             return Ok(checkAccount);
+        }
+
+        //[HttpGet("/api/account/pets/{id}")]
+        //public IEnumerable<Pet> GetAccountPets([FromRoute] string id)
+        //{
+        //    var checkAccount = _context.GetAccountByCondition(a => a.AccountId == id);
+        //    if (checkAccount == null)
+        //    {
+        //    }
+        //    return _context.GetAccountPets(checkAccount);
+        //}
+
+        [HttpGet("/api/account/pets/{id}")]
+        public IEnumerable<Pet> GetAccountPets([FromRoute] string id)
+        {
+            return _contextPet.GetAccountPets(id);
+
         }
 
         // GET: api/Accounts/5

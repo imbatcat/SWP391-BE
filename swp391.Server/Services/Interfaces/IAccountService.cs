@@ -13,5 +13,6 @@ namespace PetHealthcare.Server.Services.Interfaces
         void DeleteAccount(Account Account);
         IEnumerable<Account> GetAllAccountsByRole(int roleId);
         Account GetAccountByRole(int roleId, string id);
+        IEnumerable<Pet> GetAccountPets(Account account);
     }
 }

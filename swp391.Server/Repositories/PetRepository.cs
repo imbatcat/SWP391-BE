@@ -57,5 +57,10 @@ namespace PetHealthcare.Server.Repositories
         {
             return context.Pets.FirstOrDefault(a => a.PetId == id);
         }
+
+        public IEnumerable<Pet> GetAccountPets(string id)
+        {
+            return context.Pets.Where(p => p.AccountId == id).ToList();
+        }
     }
 }
