@@ -20,8 +20,17 @@ namespace PetHealthcare.Server.Repositories
         }
         public void Create(Pet entity)
         {
+<<<<<<< Updated upstream
             context.Pets.Add(entity);
             SaveChanges();
+=======
+            if(petExit(entity)) 
+            {
+                throw new InvalidOperationException("A pet with the same data has already exits");
+            }
+            await context.Pets.AddAsync(entity);
+            await  SaveChanges();
+>>>>>>> Stashed changes
         }
 
         public void Delete(Pet entity)
@@ -56,6 +65,10 @@ namespace PetHealthcare.Server.Repositories
         public Pet? GetPetById(string id)
         {
             return context.Pets.FirstOrDefault(a => a.PetId == id);
+        }
+        public bool petExit(Pet pet)
+        {
+            return context.Pets.Contains(pet);
         }
     }
 }

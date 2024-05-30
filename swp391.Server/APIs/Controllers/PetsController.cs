@@ -86,6 +86,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         [HttpPost]
         public async Task<ActionResult<Pet>> PostPet([FromBody] PetDTO petDTO)
         {
+<<<<<<< Updated upstream
             _context.CreatePet(petDTO);
             //try
             //{
@@ -104,6 +105,18 @@ namespace PetHealthcare.Server.APIs.Controllers
             //}
 
             return CreatedAtAction(nameof(PostPet), new { id = petDTO.GetHashCode() }, petDTO);
+=======
+            try
+            {
+                await _context.CreatePet(petDTO);
+                return CreatedAtAction(nameof(PostPet), new { id = petDTO.GetHashCode() }, petDTO);
+            }
+            catch(InvalidOperationException e)
+            {
+                return BadRequest(e.Message);
+            }
+           
+>>>>>>> Stashed changes
         }
 
         // DELETE: api/Pets/5
