@@ -132,26 +132,26 @@ namespace PetHealthcare.Server.APIs.Controllers
             return CreatedAtAction("GetAccount", new { id = accountDTO.GetHashCode() }, accountDTO);
         }
 
-        [HttpPost("/api/accounts/login")]
-        public async Task<ActionResult<Account>> LoginAccount([FromBody] string username, [FromBody] string password)
-        {
-            //try
-            //{
-            //    await _context.SaveChangesAsync();
-            //}
-            //catch (DbUpdateException)
-            //{
-            //    if (AccountExists(account.AccountId))
-            //    {
-            //        return Conflict();
-            //    }
-            //    else
-            //    {
-            //        throw;
-            //    }
-            //}
-            return null;
-        }
+        //[HttpPost("/api/accounts/login")]
+        //public async Task<ActionResult<Account>> LoginAccount([FromBody] string username, [FromBody] string password)
+        //{
+        //    //try
+        //    //{
+        //    //    await _context.SaveChangesAsync();
+        //    //}
+        //    //catch (DbUpdateException)
+        //    //{
+        //    //    if (AccountExists(account.AccountId))
+        //    //    {
+        //    //        return Conflict();
+        //    //    }
+        //    //    else
+        //    //    {
+        //    //        throw;
+        //    //    }
+        //    //}
+        //    return null;
+        //}
         // DELETE: api/Accounts/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAccount(string id)

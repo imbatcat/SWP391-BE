@@ -36,16 +36,20 @@ namespace PetHealthcare.Server.Models
 
         [Required]
         [DeleteBehavior(DeleteBehavior.Restrict)]
-        public MedicalRecord MedicalRecord { get; set; }
+        //public MedicalRecord MedicalRecord { get; set; }
+        public virtual ICollection<MedicalRecord> MedicalRecords { get; set; }
 
         [Required]
-        public Veterinarian Veterinarian { get; set; }
+        //public Veterinarian Veterinarian { get; set; }
+        public virtual ICollection<Veterinarian> Veterinarians { get; set; }
 
         [Required]
         [DeleteBehavior(DeleteBehavior.Restrict)]
         public Pet Pet { get; set; }
+        public string PetId { get; set; }
 
         [Required]
         public Cage Cage { get; set; }
+        public int CageId { get; set; }
     }
 }
