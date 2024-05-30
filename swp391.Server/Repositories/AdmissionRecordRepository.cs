@@ -47,8 +47,8 @@ namespace PetHealthcare.Server.Repositories
             {
                 _context.Entry(dickHead).State = EntityState.Modified;
                 dickHead.PetCurrentCondition = entity.PetCurrentCondition;
-                dickHead.PetId = entity.PetId;
-                dickHead.CageId = entity.CageId;
+                dickHead.DischargeDate = entity.DischargeDate;
+                dickHead.IsDischarged = entity.IsDischarged;
                 await SaveChanges();
             }
         }

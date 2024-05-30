@@ -18,15 +18,14 @@ namespace PetHealthcare.Server.Services
 
         public async Task CreateAdmissionRecord(AdmissionRecordDTO entity)
         {
-            var obj = new AdmissionRecord()
-            {
+            var obj = new AdmissionRecord() {
                 AdmissionId = GenerateId(),
-                AdmissionDate = entity.AdmissionDate,
+                AdmissionDate = DateOnly.FromDateTime(DateTime.Now),
                 DischargeDate = entity.DischargeDate,
                 IsDischarged = entity.IsDischarged,
-                PetCurrentCondition = entity.PetCurrentCondition,
-                CageId = entity.CageId,
-                PetId = entity.PetId,
+                PetCurrentCondition = entity.PetCurrentCondition, 
+                CageId = 0,
+                PetId = "sheesh",   
             };
             await _admissionRecordService.Create(obj);
         }
@@ -48,20 +47,20 @@ namespace PetHealthcare.Server.Services
 
         public async Task UpdateAdmissionRecord(string id, AdmissionRecordDTO entity)
         {
-            var dick = new AdmissionRecord()
+            var existingRecord = await _admissionRecordService.GetByCondition(a => a.AdmissionId == id);
+            if (existingRecord != null)
             {
-                AdmissionId = id,
-                DischargeDate = entity.DischargeDate,
-                PetCurrentCondition = entity.PetCurrentCondition,
-                IsDischarged = entity.IsDischarged,
-            };
-            await _admissionRecordService.Update(dick);
+                existingRecord.DischargeDate = entity.DischargeDate;
+                existingRecord.PetCurrentCondition = entity.PetCurrentCondition;
+                existingRecord.IsDischarged = entity.IsDischarged;                
+            }
+            await _admissionRecordService.Update(existingRecord);
         }
 
         private string GenerateId()
         {
             var ac = new AdmissionRecord();
-            var born = ac.Prefix;
+            var born  = ac.Prefix;
             string id = Nanoid.Generate(size: 8);
             return born + id;
         }

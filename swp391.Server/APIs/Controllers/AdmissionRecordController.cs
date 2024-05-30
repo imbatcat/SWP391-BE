@@ -5,6 +5,9 @@ using PetHealthcare.Server.Services.Interfaces;
 
 namespace PetHealthcare.Server.APIs.Controllers
 {
+
+    [Route("api/[controller]")]
+    [ApiController]
     public class AdmissionRecordController : ControllerBase
     {
         private readonly IAdmissionRecordService _context;
@@ -41,7 +44,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         [HttpPut("/api/UpdateAdmissionRecord/{id}")]
         public async Task<IActionResult> UpdateAdmissionRecord([FromRoute] string id, [FromBody] AdmissionRecordDTO toUpdate)
         {
-            var service = await _context.GetAdmissionRecordByCondition(p => p.AdmissionId.Equals(id, StringComparison.InvariantCultureIgnoreCase));
+            var service = await _context.GetAdmissionRecordByCondition(p => p.AdmissionId.Equals(id));
 
             if (!ModelState.IsValid)
             {
@@ -51,7 +54,7 @@ namespace PetHealthcare.Server.APIs.Controllers
             return Ok(toUpdate);
         }
 
-        [HttpPost]
+        [HttpPost("/api/CreateAdmissionRecord")]
         public async Task<ActionResult<AdmissionRecord>> CreateAdmissionRecord([FromBody] AdmissionRecordDTO _new)
         {
             await _context.CreateAdmissionRecord(_new);
