@@ -84,5 +84,10 @@ namespace PetHealthcare.Server.Repositories
             }
             return accounts;
         }
+
+        public Task<Account?> LoginAccount(string username, string password)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

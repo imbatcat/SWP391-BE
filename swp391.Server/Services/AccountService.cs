@@ -5,6 +5,7 @@ using PetHealthcare.Server.Repositories.Interfaces;
 using PetHealthcare.Server.Services.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
+using System.Security.Authentication;
 
 namespace PetHealthcare.Server.Services
 {
@@ -84,6 +85,14 @@ namespace PetHealthcare.Server.Services
             var prefix = "AC-";
             string id = Nanoid.Generate(size: 8);
             return prefix + id;
+        }
+
+        public async Task<Account?> LoginAccount(string username, string password)
+        {
+            // if get successfully return account, else throw 
+            // new InvalidCredentialsException exception (each for incorrect username and incorrect password)
+            //
+            return null;
         }
     }
 }
