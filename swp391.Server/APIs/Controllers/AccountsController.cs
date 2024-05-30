@@ -11,10 +11,12 @@ namespace PetHealthcare.Server.APIs.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly IAccountService _context;
+        private readonly IPetService _contextPet;
 
-        public AccountsController(IAccountService context)
+        public AccountsController(IAccountService context, IPetService contextPet)
         {
             _context = context;
+            _contextPet = contextPet;
         }
 
         // GET: api/Accounts
