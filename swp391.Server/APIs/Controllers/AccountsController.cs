@@ -55,9 +55,9 @@ namespace PetHealthcare.Server.APIs.Controllers
         //}
 
         [HttpGet("/api/account/pets/{id}")]
-        public IEnumerable<Pet> GetAccountPets([FromRoute] string id)
+        public async Task<IEnumerable<Pet>> GetAccountPets([FromRoute] string id)
         {
-            return _contextPet.GetAccountPets(id);
+            return await _contextPet.GetAccountPets(id);
 
         }
 
