@@ -2,6 +2,7 @@
 
 namespace PetHealthcare.Server.Models
 {
+    [Index(nameof(CageNumber) ,IsUnique = true)];
     public class Cage
     {
         [Key]
