@@ -54,6 +54,9 @@ namespace PetHealthcare.Server.Models
         public string AccountId { get;  set; }
 
         public virtual ICollection<AdmissionRecord> AdmissionRecords { get; set; }
+        
+        public virtual ICollection<MedicalRecord> MedicalRecords { get; set; }
+
     }
 }
 

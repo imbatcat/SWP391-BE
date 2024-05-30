@@ -22,21 +22,21 @@ namespace PetHealthcare.Server.APIs.Controllers
         // GET: api/Accounts
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Account>))]
-        public IEnumerable<Account> GetAccounts()
+        public async Task<IEnumerable<Account>> GetAccounts()
         {
-            return _context.GetAllAccounts();
+            return await _context.GetAllAccounts();
         }
 
         [HttpGet("/api/byRole/{roleId}")]
-        public IEnumerable<Account> GetAllAccountsByRole([FromRoute] int roleId)
+        public async Task<IEnumerable<Account>> GetAllAccountsByRole([FromRoute] int roleId)
         {
-            return _context.GetAllAccountsByRole(roleId);
+            return await _context.GetAllAccountsByRole(roleId);
         }
 
         [HttpGet("/api/byRole/{roleId}&{id}")]
-        public ActionResult<Account> GetAccountByRole([FromRoute] string roleId, [FromRoute] string id)
+        public async Task<ActionResult<Account>> GetAccountByRole([FromRoute] string roleId, [FromRoute] string id)
         {
-            var checkAccount = _context.GetAccountByCondition(a => a.AccountId == id);
+            var checkAccount = await _context.GetAccountByCondition(a => a.AccountId == id);
             if (checkAccount == null)
             {
                 return NotFound();
@@ -65,7 +65,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Account>> GetAccount([FromRoute] string id)
         {
-            var account = _context.GetAccountByCondition(a => a.AccountId == id);
+            var account = await _context.GetAccountByCondition(a => a.AccountId == id);
 
             if (account == null)
             {
@@ -80,7 +80,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAccount(string id, AccountDTO account)
         {
-            _context.UpdateAccount(id, account);
+            await _context.UpdateAccount(id, account);
 
             //try
             //{
@@ -106,7 +106,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         [HttpPost]
         public async Task<ActionResult<Account>> PostAccount([FromBody] AccountDTO accountDTO)
         {
-            _context.CreateAccount(accountDTO);
+            await _context.CreateAccount(accountDTO);
             //try
             //{
             //    await _context.SaveChangesAsync();
@@ -130,7 +130,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAccount(string id)
         {
-            var account = _context.GetAccountByCondition(a => a.AccountId == id);
+            var account = await _context.GetAccountByCondition(a => a.AccountId == id);
             if (account == null)
             {
                 return NotFound();

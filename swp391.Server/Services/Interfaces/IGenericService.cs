@@ -4,10 +4,10 @@ namespace PetHealthcare.Server.Services.Interfaces
 {
     public interface IGenericService<T>
     {
-        IEnumerable<T> GetAll();
-        T? GetByCondition(Expression<Func<T, bool>> expression);
-        void CreateAccount(T Entity);
-        void UpdateEntity(T Entity);
+        Task<IEnumerable<T>> GetAll();
+        Task< T?> GetByCondition(Expression<Func<T, bool>> expression);
+        Task CreateEntity(T Entity);
+        Task UpdateEntity(T Entity);
         void DeleteEntity(T Entity);
     }
 }

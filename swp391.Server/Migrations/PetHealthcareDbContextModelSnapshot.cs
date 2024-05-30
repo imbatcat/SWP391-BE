@@ -179,6 +179,7 @@ namespace PetHealthcareSystem.Migrations
                     b.HasIndex("VeterinarianAccountId");
 
                     b.ToTable("Appointments");
+
                 });
 
             modelBuilder.Entity("PetHealthcare.Server.Models.BookingPayment", b =>
@@ -228,6 +229,7 @@ namespace PetHealthcareSystem.Migrations
                         .IsUnique();
 
                     b.ToTable("Cages");
+
                 });
 
             modelBuilder.Entity("PetHealthcare.Server.Models.Feedback", b =>
