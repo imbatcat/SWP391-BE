@@ -24,6 +24,7 @@ namespace PetHealthcare.Server.Models
         public string PaymentMethod { get; set; }
 
         // Reference entities
+        [ForeignKey("ServiceOrderId")]
         public string ServiceOrderId { get; set; }
         public ServiceOrder ServiceOrder { get; set; }
     }

@@ -14,6 +14,7 @@ namespace PetHealthcare.Server.Models
         public string ServiceName { get; set; }
 
         // Reference entities
-        public virtual ICollection<ServiceOrder> ServiceOrders { get; set; }
+        //public virtual ICollection<ServiceOrder> ServiceOrders { get; set; }
+        public virtual ICollection<ServiceOrderDetails> ServiceOrderDetails { get; set; }
     }
 }
