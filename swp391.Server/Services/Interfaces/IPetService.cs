@@ -13,5 +13,7 @@ namespace PetHealthcare.Server.Services.Interfaces
         void DeletePet(Pet pet);
         string GenerateID();
         Task<IEnumerable<Pet>> GetAccountPets(string id);
+
+        Task<bool> ConfirmPetIdentity(string AccountId, PetDTO newPet);
     }
 }

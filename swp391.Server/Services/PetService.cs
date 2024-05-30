@@ -18,6 +18,8 @@ namespace PetHealthcare.Server.Services
         }
         public async Task CreatePet(PetDTO pet)
         {
+            var res = await ConfirmPetIdentity(pet.AccountId, pet);
+            // if false then throw new exception
             var _pet = new Pet
             {
                 PetId = GenerateID(),
@@ -71,6 +73,15 @@ namespace PetHealthcare.Server.Services
             var prefix = "PE-";
             string id = Nanoid.Generate(size: 8);
             return prefix + id;
+        }
+
+        public async Task<bool> ConfirmPetIdentity(string AccountId, PetDTO newPet)
+        {
+            // newPet's name, breed and isCat must not match any pets of this owner in the database
+
+            //get list of pet by accound id, then check if theres any pet in the database matches the 
+            //mentioned props of newPets, if yes then return false, true if otherwise. 
+            return false;
         }
     }
     

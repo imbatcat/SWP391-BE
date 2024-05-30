@@ -7,6 +7,5 @@ namespace PetHealthcare.Server.Repositories.Interfaces
     {
         Task<IEnumerable<Pet>> GetAccountPets(string id);
 
-        Task<bool> ConfirmPetIdentity(string AccountId, Pet newPet);
     }
 }

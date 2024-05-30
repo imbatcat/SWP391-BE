@@ -7,7 +7,7 @@ namespace PetHealthcare.Server.APIs.DTOS
         public string ImgUrl { get; set; }
         public string PetName { get; set; }
         public string PetBreed {  get; set; }
-        public int PetAge { get; set; }
+        public DateOnly PetAge { get; set; }
         public string? Description {  get; set; }
         public bool IsMale {  get; set; }
         public bool IsCat {  get; set; }

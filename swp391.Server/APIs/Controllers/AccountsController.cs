@@ -133,7 +133,6 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         [HttpPost("/api/accounts/login")]
-        
         public async Task<ActionResult<Account>> LoginAccount([FromBody] string username, [FromBody] string password)
         {
             //try
@@ -151,8 +150,7 @@ namespace PetHealthcare.Server.APIs.Controllers
             //        throw;
             //    }
             //}
-
-            return CreatedAtAction("GetAccount", new { id = accountDTO.GetHashCode() }, accountDTO);
+            return null;
         }
         // DELETE: api/Accounts/5
         [HttpDelete("{id}")]
