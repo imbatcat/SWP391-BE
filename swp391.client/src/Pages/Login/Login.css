@@ -1,7 +1,8 @@
 
 .imgside{
-    min-width: 40vw;
+    
     min-height: 68vh;
+    min-width: 20vw;
     background-image: url('../../assets/images/dogandcatlogin.png');
     display: flex;
     align-items: center;
@@ -10,4 +11,8 @@
 
 body{
   background-color: aliceblue;
+}
+
+.login-card{
+  background-color: black;
 }

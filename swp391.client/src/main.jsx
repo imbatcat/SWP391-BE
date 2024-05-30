@@ -4,8 +4,10 @@ import './index.css';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Home from './Component/Home/Home';
-import Login from './Component/Login/Login';
+import Home from './Pages/Home/Home';
+import Login from './Pages/Login/Login';
+import App from './App';
+import SignUp from './Pages/SignUp/SignUp';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -18,7 +20,7 @@ const router = createBrowserRouter([
     errorElement: <div>404 Not Found</div>,
   },
   {
-    path: '/signup',
+    path: '/signUp',
     element: <SignUp/>,
     errorElement: <div>404 Not Found</div>,
   }
@@ -27,7 +29,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <RouterProvider router={router}/>
-    {/*<App></App>*/}
+    <App></App>
   </React.StrictMode>,
 );
 
