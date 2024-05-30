@@ -104,7 +104,7 @@ namespace PetHealthcare.Server.APIs.Controllers
             //    }
             //}
 
-            return CreatedAtAction("GetAccount", new { id = accountDTO.GetHashCode() }, accountDTO);
+            return CreatedAtAction(nameof(PostAccount), new { id = accountDTO.GetHashCode() }, accountDTO);
         }
 
         // DELETE: api/Accounts/5

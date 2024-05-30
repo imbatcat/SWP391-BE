@@ -58,5 +58,11 @@ namespace PetHealthcare.Server.APIs.Controllers
             await _context.UpdateTimeSlot(id, toUpdateTimeSlot);
             return Ok(toUpdateTimeSlot);
         }
+        [HttpPost]
+        public async Task<IActionResult> PostTimeSlot([FromBody]TimeslotDTO timeslotDTO)
+        {
+            await _context.CreateTimeSlot(timeslotDTO);
+            return CreatedAtAction(nameof(TimeSlot), new {id=timeslotDTO.GetHashCode()},timeslotDTO);
+        }
     }
 }

@@ -4,6 +4,7 @@ using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
 using PetHealthcare.Server.Services.Interfaces;
+using System.Globalization;
 using System.Linq.Expressions;
 
 namespace PetHealthcare.Server.Services
@@ -18,13 +19,13 @@ namespace PetHealthcare.Server.Services
         }
         public async Task CreateTimeSlot(TimeslotDTO timeSlot)
         {
+           
             var _timeSlot = new TimeSlot
             {
-                TimeSlotId = GenerateId(),
-                StartTime = timeSlot.StartTime,
-                EndTime = timeSlot.EndTime,
+                StartTime = TimeOnly.Parse(timeSlot.StartTime),
+                EndTime = TimeOnly.Parse(timeSlot.EndTime)
                 
-            };
+            };  
             await _timeSlotService.Create(_timeSlot);
         }
 
@@ -43,23 +44,17 @@ namespace PetHealthcare.Server.Services
             return await _timeSlotService.GetByCondition(expression);
         }
 
-        public async Task UpdateTimeSlot(int id, TimeslotDTO TimeSlot)
+        public async Task UpdateTimeSlot(int id, TimeslotDTO timeSlot)
         {
             var _timeSlot = new TimeSlot
             {
                 TimeSlotId = id,
-                StartTime = TimeSlot.StartTime,
-                EndTime = TimeSlot.EndTime,
+                StartTime = TimeOnly.Parse(timeSlot.StartTime),
+                EndTime = TimeOnly.Parse(timeSlot.EndTime)
             };
             await _timeSlotService.Update(_timeSlot);
         }
 
-
-        private int GenerateId()
-        {
-            string id = Nanoid.Generate(size: 8);
-            return id.GetHashCode();
-        }
 
     }
 }
