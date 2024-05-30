@@ -22,8 +22,9 @@ namespace PetHealthcare.Server.Services
            
             var _timeSlot = new TimeSlot
             {
-                StartTime = TimeOnly.Parse(timeSlot.StartTime),
-                EndTime = TimeOnly.Parse(timeSlot.EndTime)
+                
+                StartTime = timeSlot.StartTime,
+                EndTime = timeSlot.EndTime,
                 
             };  
             await _timeSlotService.Create(_timeSlot);
@@ -54,7 +55,6 @@ namespace PetHealthcare.Server.Services
             };
             await _timeSlotService.Update(_timeSlot);
         }
-
 
     }
 }

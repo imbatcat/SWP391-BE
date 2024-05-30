@@ -48,6 +48,7 @@ namespace PetHealthcare.Server.Services
             var _cage = new Cage
             {
                 CageId = id,
+                CageNumber = Cage.CageNumber,
                 IsOccupied = Cage.IsOccupied,
             };
             await _cageService.Update(_cage);

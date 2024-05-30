@@ -25,7 +25,7 @@ namespace PetHealthcare.Server.Repositories
 
         public async Task<IEnumerable<Cage>> GetAll()
         {
-            return await context.Cages.ToListAsync();
+            return await context.Cages.OrderBy(p => p.CageId ).ToListAsync();
         }
 
         public async Task<Cage?> GetByCondition(Expression<Func<Cage, bool>> expression)
@@ -39,9 +39,14 @@ namespace PetHealthcare.Server.Repositories
         }
 
 
-        public async Task<IEnumerable<Cage>> GetCages(int Id)
+        public async Task<IEnumerable<Cage>> GetCages()
         {
             return await context.Cages.OrderBy(p => p.CageId).ToListAsync();
+        }
+
+        public Task<IEnumerable<Cage>> GetCages(int Id)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task SaveChanges()
@@ -55,35 +60,11 @@ namespace PetHealthcare.Server.Repositories
             if (cage != null)
             {
                 context.Entry(cage).State = EntityState.Modified;
+                cage.CageNumber = entity.CageNumber;
                 cage.IsOccupied = entity.IsOccupied;
-
                 await SaveChanges();
             }
         }
 
-        Task IRepositoryBase<Cage>.Create(Cage entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<IEnumerable<Cage>> IRepositoryBase<Cage>.GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<Cage?> IRepositoryBase<Cage>.GetByCondition(Expression<Func<Cage, bool>> expression)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task IRepositoryBase<Cage>.SaveChanges()
-        {
-            throw new NotImplementedException();
-        }
-
-        Task IRepositoryBase<Cage>.Update(Cage entity)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
