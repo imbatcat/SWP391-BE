@@ -12,5 +12,6 @@ namespace PetHealthcare.Server.Services.Interfaces
         Task UpdatePet(string id,PetDTO pet);
         void DeletePet(Pet pet);
         string GenerateID();
+        Task<IEnumerable<Pet>> GetAccountPets(string id);
     }
 }

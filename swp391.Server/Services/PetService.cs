@@ -40,10 +40,11 @@ namespace PetHealthcare.Server.Services
             _petService.Delete(pet);
         }
         public async Task< IEnumerable<Pet>> GetAllPets()
-        {
-            return await _petService.GetAll();
-        }
 
+        public Task<IEnumerable<Pet>> GetAccountPets(string id)
+        {
+            return _petService.GetAccountPets(id);
+        }
         public async Task< Pet?> GetPetByCondition(Expression<Func<Pet, bool>> expression)
         {
             return await _petService.GetByCondition(expression);
