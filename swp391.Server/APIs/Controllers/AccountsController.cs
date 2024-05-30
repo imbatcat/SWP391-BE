@@ -42,6 +42,23 @@ namespace PetHealthcare.Server.APIs.Controllers
             return Ok(checkAccount);
         }
 
+        //[HttpGet("/api/account/pets/{id}")]
+        //public IEnumerable<Pet> GetAccountPets([FromRoute] string id)
+        //{
+        //    var checkAccount = _context.GetAccountByCondition(a => a.AccountId == id);
+        //    if (checkAccount == null)
+        //    {
+        //    }
+        //    return _context.GetAccountPets(checkAccount);
+        //}
+
+        [HttpGet("/api/account/pets/{id}")]
+        public async Task<IEnumerable<Pet>> GetAccountPets([FromRoute] string id)
+        {
+            return await _contextPet.GetAccountPets(id);
+
+        }
+
         // GET: api/Accounts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Account>> GetAccount([FromRoute] string id)
