@@ -4,8 +4,8 @@ namespace PetHealthcare.Server.Repositories.Interfaces
 {
     public interface ITimeslotRepository : IRepositoryBase<TimeSlot>
     {
-        IEnumerable<TimeSlot> GetSlots();
-        TimeSlot GetSlotById(int timeId);
+        Task<IEnumerable<TimeSlot>> GetSlots();
+        Task<TimeSlot?> GetSlotById(int timeId);
 
     }
 }

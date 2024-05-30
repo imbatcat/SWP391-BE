@@ -16,16 +16,16 @@ namespace PetHealthcare.Server.Services
         {
             _timeSlotService = timeSlotService;
         }
-        public void CreateTimeSlot(TimeslotDTO timeSlot)
+        public async Task CreateTimeSlot(TimeslotDTO timeSlot)
         {
             var _timeSlot = new TimeSlot
             {
-                TimeSlotId = GenerateId(),
+                
                 StartTime = timeSlot.StartTime,
                 EndTime = timeSlot.EndTime,
                 
             };
-            _timeSlotService.Create(_timeSlot);
+            await _timeSlotService.Create(_timeSlot);
         }
 
         public void DeleteTimeSlot(TimeSlot TimeSlot)
@@ -33,17 +33,17 @@ namespace PetHealthcare.Server.Services
             throw new NotImplementedException();
         }
 
-        public IEnumerable<TimeSlot> GetAllTimeSlots()
+        public async Task<IEnumerable<TimeSlot>> GetAllTimeSlots()
         {
-            return _timeSlotService.GetAll();
+            return await _timeSlotService.GetAll();
         }
 
-        public TimeSlot? GetTimeSlotByCondition(Expression<Func<TimeSlot, bool>> expression)
+        public async Task<TimeSlot?> GetTimeSlotByCondition(Expression<Func<TimeSlot, bool>> expression)
         {
-            return _timeSlotService.GetByCondition(expression);
+            return await _timeSlotService.GetByCondition(expression);
         }
 
-        public void UpdateTimeSlot(int id, TimeslotDTO TimeSlot)
+        public async Task UpdateTimeSlot(int id, TimeslotDTO TimeSlot)
         {
             var _timeSlot = new TimeSlot
             {
@@ -51,12 +51,8 @@ namespace PetHealthcare.Server.Services
                 StartTime = TimeSlot.StartTime,
                 EndTime = TimeSlot.EndTime,
             };
-            _timeSlotService.Update(_timeSlot);
+            await _timeSlotService.Update(_timeSlot);
         }
-        private int GenerateId()
-        {
-            string id = Nanoid.Generate(size: 8);
-            return id.GetHashCode();
-        }
+
     }
 }
