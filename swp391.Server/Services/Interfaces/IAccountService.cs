@@ -1,20 +1,17 @@
 ﻿using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
-using PetHealthcare.Server.Repositories.Interfaces;
 using System.Linq.Expressions;
 
 namespace PetHealthcare.Server.Services.Interfaces
 {
-    public interface IAccountService 
+    public interface IAccountService
     {
-        Task<IEnumerable<Account>> GetAllAccounts();
-        Task<IEnumerable<Account>> GetAllAccountsByRole(int roleId);
-        Task<Account?> GetAccountByRole(int roleId, string id);
-        Task<Account?> GetAccountByCondition(Expression<Func<Account, bool>> expression);
-        Task CreateAccount(AccountDTO Account);
-        Task UpdateAccount(string id, AccountDTO Account);
+        IEnumerable<Account> GetAllAccounts();
+        Account? GetAccountByCondition(Expression<Func<Account, bool>> expression);
+        void CreateAccount(AccountDTO Account);
+        void UpdateAccount(string id, AccountDTO Account);
         void DeleteAccount(Account Account);
-
-        string GenerateId();
+        IEnumerable<Account> GetAllAccountsByRole(int roleId);
+        Account GetAccountByRole(int roleId, string id);
     }
 }

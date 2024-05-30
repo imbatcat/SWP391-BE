@@ -13,7 +13,7 @@ namespace PetHealthcare.Server.Services
             _entityService = entityService;
         }
 
-        public async Task CreateEntity(T Entity)
+        public void CreateAccount(T Entity)
         {
             throw new NotImplementedException();
         }
@@ -23,17 +23,17 @@ namespace PetHealthcare.Server.Services
             throw new NotImplementedException();
         }
 
-        public async Task< IEnumerable<T>> GetAll()
+        public IEnumerable<T> GetAll()
         {
-            return await _entityService.GetAll();
+            return _entityService.GetAll();
         }
 
-        public async Task< T?> GetByCondition(Expression<Func<T, bool>> expression)
+        public T? GetByCondition(Expression<Func<T, bool>> expression)
         {
             throw new NotImplementedException();
         }
 
-        public async Task UpdateEntity(T Entity)
+        public void UpdateEntity(T Entity)
         {
             throw new NotImplementedException();
         }

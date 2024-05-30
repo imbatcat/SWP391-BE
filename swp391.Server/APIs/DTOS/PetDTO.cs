@@ -4,6 +4,7 @@ namespace PetHealthcare.Server.APIs.DTOS
     public class PetDTO
     {
         //public string Prefix { get; }="PE";
+        public string PetId { get; set; }
         public string ImgUrl { get; set; }
         public string PetName { get; set; }
         public string PetBreed {  get; set; }

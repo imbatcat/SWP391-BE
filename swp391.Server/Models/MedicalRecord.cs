@@ -43,14 +43,12 @@ namespace PetHealthcare.Server.Models
         // Reference entities
         [Required]
         public Appointment Appointment { get; set; }
-        public string AppointmentId {  get; set; }
 
         //public Prescription? Prescription { get; set; }
 
         [Required]
         [DeleteBehavior(DeleteBehavior.Restrict)]
         public Pet Pet { get; set; }
-        public string PetId {  get; set; }
 
         public virtual ICollection<ServiceOrder>? ServiceOrders { get; set; }
 

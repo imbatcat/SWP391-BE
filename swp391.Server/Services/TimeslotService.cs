@@ -16,16 +16,16 @@ namespace PetHealthcare.Server.Services
         {
             _timeSlotService = timeSlotService;
         }
-        public async Task CreateTimeSlot(TimeslotDTO timeSlot)
+        public void CreateTimeSlot(TimeslotDTO timeSlot)
         {
             var _timeSlot = new TimeSlot
             {
-                
+                TimeSlotId = GenerateId(),
                 StartTime = timeSlot.StartTime,
                 EndTime = timeSlot.EndTime,
                 
             };
-            await _timeSlotService.Create(_timeSlot);
+            _timeSlotService.Create(_timeSlot);
         }
 
         public void DeleteTimeSlot(TimeSlot TimeSlot)
@@ -33,17 +33,17 @@ namespace PetHealthcare.Server.Services
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<TimeSlot>> GetAllTimeSlots()
+        public IEnumerable<TimeSlot> GetAllTimeSlots()
         {
-            return await _timeSlotService.GetAll();
+            return _timeSlotService.GetAll();
         }
 
-        public async Task<TimeSlot?> GetTimeSlotByCondition(Expression<Func<TimeSlot, bool>> expression)
+        public TimeSlot? GetTimeSlotByCondition(Expression<Func<TimeSlot, bool>> expression)
         {
-            return await _timeSlotService.GetByCondition(expression);
+            return _timeSlotService.GetByCondition(expression);
         }
 
-        public async Task UpdateTimeSlot(int id, TimeslotDTO TimeSlot)
+        public void UpdateTimeSlot(int id, TimeslotDTO TimeSlot)
         {
             var _timeSlot = new TimeSlot
             {
@@ -51,8 +51,12 @@ namespace PetHealthcare.Server.Services
                 StartTime = TimeSlot.StartTime,
                 EndTime = TimeSlot.EndTime,
             };
-            await _timeSlotService.Update(_timeSlot);
+            _timeSlotService.Update(_timeSlot);
         }
-
+        private int GenerateId()
+        {
+            string id = Nanoid.Generate(size: 8);
+            return id.GetHashCode();
+        }
     }
 }

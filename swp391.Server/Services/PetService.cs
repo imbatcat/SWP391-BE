@@ -16,7 +16,7 @@ namespace PetHealthcare.Server.Services
         {
             _petService = petService;
         }
-        public async Task CreatePet(PetDTO pet)
+        public void CreatePet(PetDTO pet)
         {
             var _pet = new Pet
             {
@@ -32,24 +32,25 @@ namespace PetHealthcare.Server.Services
                 IsDisabled=pet.IsDisable,
                 AccountId=pet.AccountId
             };
-            await _petService.Create(_pet);
+            _petService.Create(_pet);
         }
 
         public void DeletePet(Pet pet)
         {
             _petService.Delete(pet);
         }
-        public async Task< IEnumerable<Pet>> GetAllPets()
+
+        public IEnumerable<Pet> GetAllPets()
         {
-            return await _petService.GetAll();
+            return _petService.GetAll();
         }
 
-        public async Task< Pet?> GetPetByCondition(Expression<Func<Pet, bool>> expression)
+        public Pet? GetPetByCondition(Expression<Func<Pet, bool>> expression)
         {
-            return await _petService.GetByCondition(expression);
+            return _petService.GetByCondition(expression);
         }
 
-        public async Task UpdatePet(string id, PetDTO pet)
+        public void UpdatePet(string id, PetDTO pet)
         {
             var _pet = new Pet
             {
@@ -59,9 +60,9 @@ namespace PetHealthcare.Server.Services
                 VaccinationHistory = pet.VaccinationHistory,
                 IsDisabled = pet.IsDisable
             };
-            await _petService.Update(_pet);
+            _petService.Update(_pet);
         }
-        public string GenerateID()
+        private string GenerateID()
         {
             var prefix = "PE-";
             string id = Nanoid.Generate(size: 8);

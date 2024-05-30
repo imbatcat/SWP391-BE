@@ -16,7 +16,7 @@ namespace PetHealthcare.Server.Services
             _accountService = accountService;
         }
 
-        public async Task CreateAccount(AccountDTO Account)
+        public void CreateAccount(AccountDTO Account)
         {
             var _account = new Account
             {
@@ -30,40 +30,36 @@ namespace PetHealthcare.Server.Services
                 IsMale = Account.IsMale,
                 JoinDate = new DateOnly()
             };
-            await _accountService.Create(_account);
+            _accountService.Create(_account);
         }
+
 
         public void DeleteAccount(Account Account)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Account?> GetAccountByCondition(Expression<Func<Account, bool>> expression)
+        public Account? GetAccountByCondition(Expression<Func<Account, bool>> expression)
         {
-            return await _accountService.GetByCondition(expression);
+            return _accountService.GetByCondition(expression);
         }
 
-        public async Task<Account?> GetAccountByRole(int roleId, string id)
+        public Account GetAccountByRole(int roleId, string id)
         {
-            var accounts = await GetAccountByCondition(a => a.RoleId == roleId && a.AccountId.Equals(id));
-            if (accounts == null)
-            {
-                return null;
-            }
-            return accounts;
+            return _accountService.GetAccountByRole(roleId, id);
         }
 
-        public async Task<IEnumerable<Account>> GetAllAccounts()
+        public IEnumerable<Account> GetAllAccounts()
         {
-            return await _accountService.GetAll();
+            return _accountService.GetAll();
         }
 
-        public async Task<IEnumerable<Account>> GetAllAccountsByRole(int roleId)
+        public IEnumerable<Account> GetAllAccountsByRole(int roleId)
         {
-            return await _accountService.GetAccountsByRole(roleId);
+            return _accountService.GetAccountsByRole(roleId);
         }
 
-        public async Task UpdateAccount(string id, AccountDTO Account)
+        public void UpdateAccount(string id, AccountDTO Account)
         {
             var _account = new Account
             {
@@ -72,14 +68,15 @@ namespace PetHealthcare.Server.Services
                 Password = Account.Password,
                 Username = Account.UserName
             };
-            await _accountService.Update(_account);
+            _accountService.Update(_account);
         }
 
-        public string GenerateId()
+        private string GenerateId()
         {
             var prefix = "AC-";
             string id = Nanoid.Generate(size: 8);
             return prefix + id;
+
         }
     }
 }

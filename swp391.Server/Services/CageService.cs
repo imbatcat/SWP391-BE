@@ -15,7 +15,7 @@ namespace PetHealthcare.Server.Services
             _cageService = cageService;
         }
 
-        public async Task CreateCage(CageDTO Cage)
+        public void CreateCage(CageDTO Cage)
         {
             var _cage = new Cage
             {
@@ -23,7 +23,7 @@ namespace PetHealthcare.Server.Services
                 IsOccupied = Cage.IsOccupied,
 
             };
-            await _cageService.Create(_cage);
+            _cageService.Create(_cage);
         }
 
 
@@ -32,26 +32,25 @@ namespace PetHealthcare.Server.Services
             throw new NotImplementedException();
         }
 
-        public async Task<Cage?> GetCageByCondition(Expression<Func<Cage, bool>> expression)
+        public Cage? GetCageByCondition(Expression<Func<Cage, bool>> expression)
         {
-            return await _cageService.GetByCondition(expression);
+            return _cageService.GetByCondition(expression);
         }
 
-        public async Task<IEnumerable<Cage>> GetAllCages()
+        public IEnumerable<Cage> GetAllCages()
         {
-            return await _cageService.GetAll();
+            return _cageService.GetAll();
         }
 
 
-        public async Task UpdateCage(int id, CageDTO Cage)
+        public void UpdateCage(int id, CageDTO Cage)
         {
             var _cage = new Cage
             {
                 CageId = id,
-                CageNumber = Cage.CageNumber,
                 IsOccupied = Cage.IsOccupied,
             };
-            await _cageService.Update(_cage);
+            _cageService.Update(_cage);
         }
 
     }

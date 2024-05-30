@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PetHealthcare.Server.Repositories.Interfaces;
+﻿using PetHealthcare.Server.Repositories.Interfaces;
 using System.Linq.Expressions;
 
 namespace PetHealthcare.Server.Repositories
@@ -13,18 +12,18 @@ namespace PetHealthcare.Server.Repositories
             this.context = context;
         }
 
-        public async Task SaveChanges()
+        public void SaveChanges()
         {
-            await context.SaveChangesAsync();
+            context.SaveChanges();
         }
 
-        public async Task Create(T entity)
+        public void Create(T entity)
         {
             //var entityType = context.Model.FindEntityType(typeof(T));
             //var tableName = entityType.GetTableName();
 
-           await context.Set<T>().AddAsync(entity);
-           await SaveChanges();
+            context.Set<T>().Add(entity);
+            SaveChanges();
         }
 
         public void Delete(T entity)
@@ -32,24 +31,24 @@ namespace PetHealthcare.Server.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task< IEnumerable<T>> GetAll()
+        public IEnumerable<T> GetAll()
         {
             var list = context.Set<T>();
-            return await list.ToListAsync();
+            return list.ToList();
         }
 
-        public async Task< T?> GetByCondition(Expression<Func<T, bool>> expression)
+        public T? GetByCondition(Expression<Func<T, bool>> expression)
         {
-            return await context.Set<T>().FirstOrDefaultAsync(expression);
+            return context.Set<T>().FirstOrDefault(expression);
         }
 
-        public async Task Update(T entity)
+        public void Update(T entity)
         {
-            var T = await GetByCondition(e => e == entity);
+            var T = GetByCondition(e => e == entity);
             if (T != null)
             {
 
-                await SaveChanges();
+                SaveChanges();
             }
         }
     }

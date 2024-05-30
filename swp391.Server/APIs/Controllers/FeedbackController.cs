@@ -18,9 +18,9 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // GET: api/Feedbacks
         [HttpGet]
-        public async Task< IEnumerable<Feedback>> GetFeedbacks()
+        public IEnumerable<Feedback> GetFeedbacks()
         {
-            return await _context.GetAllFeedback();
+            return _context.GetAllFeedback();
         }
 
         //// GET: api/Feedbacks/5
@@ -45,7 +45,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         [HttpPost]
         public async Task<ActionResult<Feedback>> PostFeedback([FromBody] FeedbackDTO feedback)
         {
-           await _context.CreateFeedback(feedback);
+            _context.CreateFeedback(feedback);
             return CreatedAtAction(nameof(PostFeedback), new { id = feedback.GetHashCode() }, feedback);
         }
 

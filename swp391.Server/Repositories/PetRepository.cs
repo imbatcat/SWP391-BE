@@ -14,14 +14,14 @@ namespace PetHealthcare.Server.Repositories
             this.context = context;
         }
 
-        public async Task SaveChanges()
+        public void SaveChanges()
         {
-           await context.SaveChangesAsync();
+            context.SaveChanges();
         }
-        public async Task Create(Pet entity)
+        public void Create(Pet entity)
         {
-            await context.Pets.AddAsync(entity);
-            await  SaveChanges();
+            context.Pets.Add(entity);
+            SaveChanges();
         }
 
         public void Delete(Pet entity)
@@ -29,20 +29,20 @@ namespace PetHealthcare.Server.Repositories
             context.Pets.Remove(entity);
         }
 
-        public async Task< IEnumerable<Pet>> GetAll()
+        public IEnumerable<Pet> GetAll()
         {
-            return await context.Pets.ToListAsync();
+            return context.Pets.ToList();
         }
 
-        public async Task< Pet?> GetByCondition(Expression<Func<Pet, bool>> expression)
+        public Pet? GetByCondition(Expression<Func<Pet, bool>> expression)
         {
-            return await context.Pets.FirstOrDefaultAsync(expression);
+            return context.Pets.FirstOrDefault(expression);
         }
 
 
-        public async Task Update(Pet entity)
+        public void Update(Pet entity)
         {
-            var pet =await GetByCondition(e => e.PetId == entity.PetId);
+            var pet = GetByCondition(e => e.PetId == entity.PetId);
             if (pet != null)
             {
                 context.Entry(pet).State = EntityState.Modified;
@@ -50,7 +50,7 @@ namespace PetHealthcare.Server.Repositories
                 pet.Description = entity.Description;
                 pet.PetAge = entity.PetAge;
                 pet.VaccinationHistory = entity.VaccinationHistory;
-                await SaveChanges();
+                SaveChanges();
             }
         }
         public Pet? GetPetById(string id)

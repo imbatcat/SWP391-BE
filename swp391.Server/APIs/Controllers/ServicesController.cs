@@ -20,16 +20,16 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // GET: api/Services
         [HttpGet]
-        public async Task<IEnumerable<Service>> GetService()
+        public IEnumerable<Service> GetService()
         {
-            return await _healthService.GetAllHealthService();
+            return _healthService.GetAllHealthService();
         }
 
         // GET: api/Services/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Service>> GetServiceByCondition(int id)
+        public ActionResult<Service> GetServiceByCondition(int id)
         {
-            var service = await _healthService.GetHealthServiceByCondition(s => s.ServiceId == id);
+            var service = _healthService.GetHealthServiceByCondition(s => s.ServiceId == id);
 
             if (service == null)
             {
@@ -42,32 +42,32 @@ namespace PetHealthcare.Server.APIs.Controllers
         // PUT: api/Services/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateService([FromRoute] int id, [FromBody] HealthServiceDTO toUpdateService)
+        public IActionResult UpdateService([FromRoute] int id, [FromBody] HealthServiceDTO toUpdateService)
         {
-            var service = await _healthService.GetHealthServiceByCondition(s => s.ServiceId == id);
+            var service = _healthService.GetHealthServiceByCondition(s => s.ServiceId == id);
             if (service == null)
             {
                 return BadRequest();
             }
-            await _healthService.UpdateHealthService(id, toUpdateService);
+            _healthService.UpdateHealthService(id, toUpdateService);
             return Ok(toUpdateService);
         }
 
         // POST: api/Services
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Service>> CreateService([FromBody] HealthServiceDTO toCreateService)
+        public ActionResult<Service> CreateService([FromBody] HealthServiceDTO toUpdateService)
         {
-            await _healthService.CreateHealthService(toCreateService);
+            _healthService.CreateHealthService(toUpdateService);
 
-            return Ok(toCreateService);
+            return Ok(toUpdateService);
         }
 
         // DELETE: api/Services/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteService([FromRoute] int id)
+        public IActionResult DeleteService([FromRoute] int id)
         {
-            var toDeleteService = await _healthService.GetHealthServiceByCondition(s => s.ServiceId == id);
+            var toDeleteService = _healthService.GetHealthServiceByCondition(s => s.ServiceId == id);
             if (toDeleteService == null)
             {
                 return NotFound(new { message = "Service not found" });

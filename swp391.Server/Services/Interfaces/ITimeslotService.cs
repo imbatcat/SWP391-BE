@@ -6,10 +6,10 @@ namespace PetHealthcare.Server.Services.Interfaces
 {
     public interface ITimeSlotService
     {
-        Task<IEnumerable<TimeSlot>> GetAllTimeSlots();
-        Task<TimeSlot?> GetTimeSlotByCondition(Expression<Func<TimeSlot, bool>> expression);
-        Task CreateTimeSlot(TimeslotDTO TimeSlot);
-        Task UpdateTimeSlot(int id, TimeslotDTO TimeSlot);
+        IEnumerable<TimeSlot> GetAllTimeSlots();
+        TimeSlot? GetTimeSlotByCondition(Expression<Func<TimeSlot, bool>> expression);
+        void CreateTimeSlot(TimeslotDTO TimeSlot);
+        void UpdateTimeSlot(int id, TimeslotDTO TimeSlot);
         void DeleteTimeSlot(TimeSlot TimeSlot);
     }
 }

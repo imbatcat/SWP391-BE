@@ -4,11 +4,11 @@ namespace PetHealthcare.Server.Repositories.Interfaces
 {
     public interface IRepositoryBase<T>
     {
-        Task<IEnumerable<T>> GetAll();
-        Task<T?> GetByCondition(Expression<Func<T, bool>> expression);
-        Task Create(T entity);
-        Task Update(T entity);
+        IEnumerable<T> GetAll();
+        T? GetByCondition(Expression<Func<T, bool>> expression);
+        void Create(T entity);
+        void Update(T entity);
         void Delete(T entity);
-        Task SaveChanges();
+        void SaveChanges();
     }
 }

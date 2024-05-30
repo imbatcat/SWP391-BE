@@ -15,15 +15,15 @@ namespace PetHealthcare.Server.Repositories
             this.context = context;
         }
 
-        public async Task SaveChanges()
+        public void SaveChanges()
         {
-            await context.SaveChangesAsync();
+            context.SaveChanges();
         }
 
-        public async Task Create(Account entity)
+        public void Create(Account entity)
         {
-            await context.Accounts.AddAsync(entity);
-            await SaveChanges();
+            context.Accounts.Add(entity);
+            SaveChanges();
         }
 
         public void Delete(Account entity)
@@ -31,41 +31,44 @@ namespace PetHealthcare.Server.Repositories
             context.Accounts.Remove(entity);
         }
 
-        public async Task<IEnumerable<Account>> GetAll()
+        public IEnumerable<Account> GetAll()
         {
-            return await context.Accounts.ToListAsync();
+            return context.Accounts.ToList();
         }
 
-        public async Task<Account?> GetByCondition(Expression<Func<Account, bool>> expression)
+        public Account? GetByCondition(Expression<Func<Account, bool>> expression)
         {
-            return await context.Accounts.FirstOrDefaultAsync(expression);
+            return context.Accounts.FirstOrDefault(expression);
         }
 
-        public async Task Update(Account entity)
+        public Account? GetAccountById(string id)
         {
-            var account = await GetByCondition(e => e.AccountId == entity.AccountId);
+            return context.Accounts.FirstOrDefault(a => a.AccountId == id);
+        }
+        public void Update(Account entity)
+        {
+            var account = GetByCondition(e => e.AccountId == entity.AccountId);
             if (account != null)
             {
                 context.Entry(account).State = EntityState.Modified;
                 account.FullName = entity.FullName;
                 account.Username = entity.Username;
                 account.Password = entity.Password;
-                await SaveChanges();
+                SaveChanges();
             }
         }
         public bool CheckRoleId(int roleId)
         {
            return context.Roles.Any(r => r.RoleId == roleId);
         }
-        public async Task<IEnumerable<Account>> GetAccountsByRole(int roleId)
+        public IEnumerable<Account> GetAccountsByRole(int roleId)
         {
             if(!CheckRoleId(roleId))
             {
                 return null;
             }
-            var list = await GetAll();
             List<Account> accounts = new List<Account>();
-            foreach (Account acc in list)
+            foreach (Account acc in GetAll())
             {
                 if (acc.RoleId == roleId)
                 {
@@ -75,12 +78,12 @@ namespace PetHealthcare.Server.Repositories
             return accounts;
         }
 
-        public async Task<Account?> GetAccountByRole(int roleId, string id)
+        public Account GetAccountByRole(int roleId, string id)
         {
-            var accounts = await GetByCondition(a => a.RoleId == roleId && a.AccountId.Equals(id));
+            var accounts = context.Accounts.FirstOrDefault(a => a.RoleId == roleId && a.AccountId.Equals(id));
             if(accounts == null)
             {
-                return null;
+                return null ;
             }
             return accounts;
         }

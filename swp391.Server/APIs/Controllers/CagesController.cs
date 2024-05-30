@@ -21,17 +21,16 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // GET: api/<CagesController>
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Cage>))]
-        public async Task<IEnumerable<Cage>> GetCages()
+        public IEnumerable<Cage> GetCages()
         {
-            return await _context.GetAllCages();
+            return _context.GetAllCages();
         }
 
         // GET api/<CagesController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Cage>> GetCage([FromRoute] int id)
         {
-            var cage = await _context.GetCageByCondition(a => a.CageId == id);
+            var cage = _context.GetCageByCondition(a => a.CageId == id);
 
             if (cage == null)
             {
@@ -43,23 +42,24 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // POST api/<CagesController>
         [HttpPost]
-        public async Task<ActionResult<Cage>> Post([FromBody] CageDTO newCage)
+        public ActionResult Post([FromBody] CageDTO newCage)
         {
-            await _context.CreateCage(newCage);
+            _context.CreateCage(newCage);
 
             return CreatedAtAction(nameof(Post), newCage.GetHashCode(), newCage);
         }
 
         // PUT api/<CagesController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<Cage>> Put(int id, [FromBody] CageDTO CaGe)
+        public ActionResult Put(int id, [FromBody] bool isOccupied)
         {
-            var cage = await _context.GetCageByCondition(c => c.CageId == id);
+            var cage = _context.GetCageByCondition(c => c.CageId == id);
             if (cage == null)
             {
                 return BadRequest("No such cage");
             }
-            await _context.UpdateCage(id, CaGe);
+            _context.UpdateCage(id, new CageDTO { IsOccupied = isOccupied });
+
             return Ok();
         }
 
@@ -67,7 +67,6 @@ namespace PetHealthcare.Server.APIs.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-
         }
     }
 }

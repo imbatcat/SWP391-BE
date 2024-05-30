@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
-using PetHealthcare.Server.APIs.DTOS;
+﻿using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
 using PetHealthcare.Server.Services.Interfaces;
@@ -15,6 +14,15 @@ namespace PetHealthcare.Server.Services
             _healthService = healthService;
         }
 
+        public void CreateHealthService(HealthServiceDTO healthService)
+        {
+            Service toCreateService = new Service
+            {
+                ServiceName = healthService.ServiceName,
+                ServicePrice = healthService.ServicePrice,
+            };
+            _healthService.Create(toCreateService);
+        }
 
 
         public void DeleteHealthService(Service healthService)
@@ -22,33 +30,22 @@ namespace PetHealthcare.Server.Services
             _healthService.Delete(healthService);
         }
 
+        public IEnumerable<Service> GetAllHealthService()
+        {
+            return _healthService.GetAll();
+        }
+
+        public Service? GetHealthServiceByCondition(Expression<Func<Service, bool>> expression)
+        {
+            return _healthService.GetByCondition(expression);
+        }
+
         public void SaveChanges()
         {
             _healthService.SaveChanges();
         }
 
-
-        public async Task<IEnumerable<Service>> GetAllHealthService()
-        {
-            return await _healthService.GetAll();
-        }
-
-        public async Task<Service?> GetHealthServiceByCondition(Expression<Func<Service, bool>> expression)
-        {
-            return await _healthService.GetByCondition(expression);
-        }
-
-        public async Task CreateHealthService(HealthServiceDTO healthService)
-        {
-            Service toCreateService = new Service
-            {
-                ServiceName = healthService.ServiceName,
-                ServicePrice = healthService.ServicePrice,
-            };
-            await _healthService.Create(toCreateService);
-        }
-
-        public async Task UpdateHealthService(int id, HealthServiceDTO healthService)
+        public void UpdateHealthService(int id, HealthServiceDTO healthService)
         {
             Service UpdateService = new Service
             {
@@ -56,8 +53,7 @@ namespace PetHealthcare.Server.Services
                 ServiceId = id,
                 ServiceName = healthService.ServiceName,
             };
-            await _healthService.Update(UpdateService);
+            _healthService.Update(UpdateService);
         }
-
     }
 }

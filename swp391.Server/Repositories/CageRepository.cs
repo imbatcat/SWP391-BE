@@ -12,10 +12,10 @@ namespace PetHealthcare.Server.Repositories
         {
             this.context = context;
         }
-        public async Task Create(Cage entity)
+        public void Create(Cage entity)
         {
-            await context.Cages.AddAsync(entity);
-            await SaveChanges();
+            context.Cages.Add(entity);
+            SaveChanges();
         }
 
         public void Delete(Cage entity)
@@ -23,48 +23,36 @@ namespace PetHealthcare.Server.Repositories
             context.Cages.Remove(entity);
         }
 
-        public async Task<IEnumerable<Cage>> GetAll()
+        public IEnumerable<Cage> GetAll()
         {
-            return await context.Cages.OrderBy(p => p.CageId ).ToListAsync();
+            return context.Cages.ToList();
         }
 
-        public async Task<Cage?> GetByCondition(Expression<Func<Cage, bool>> expression)
+        public Cage? GetByCondition(Expression<Func<Cage, bool>> expression)
         {
-            return await context.Cages.FirstOrDefaultAsync(expression);
+            return context.Cages.FirstOrDefault(expression);
         }
 
-        public async Task<Cage?> GetCageByID(int Id)
+        public Cage? GetCageById(int id)
         {
-            return await context.Cages.FirstOrDefaultAsync(a => a.CageId == Id);
+            return context.Cages.FirstOrDefault(a => a.CageId == id);
         }
 
-
-        public async Task<IEnumerable<Cage>> GetCages()
+        public void SaveChanges()
         {
-            return await context.Cages.OrderBy(p => p.CageId).ToListAsync();
+            context.SaveChanges();
         }
 
-        public Task<IEnumerable<Cage>> GetCages(int Id)
+        public void Update(Cage entity)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task SaveChanges()
-        {
-            await context.SaveChangesAsync();
-        }
-
-        public async Task Update(Cage entity)
-        {
-            var cage = await GetByCondition(e => e.CageId == entity.CageId);
+            var cage = GetByCondition(e => e.CageId == entity.CageId);
             if (cage != null)
             {
                 context.Entry(cage).State = EntityState.Modified;
-                cage.CageNumber = entity.CageNumber;
                 cage.IsOccupied = entity.IsOccupied;
-                await SaveChanges();
+
+                SaveChanges();
             }
         }
-
     }
 }

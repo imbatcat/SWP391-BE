@@ -26,16 +26,16 @@ namespace PetHealthcare.Server.APIs.Controllers
         // GET: api/Accounts
         [HttpGet("")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<TimeSlot>))]
-        public async Task<IEnumerable<TimeSlot>> GetTimeSlots()
+        public IEnumerable<TimeSlot> GetTimeSlots()
         {
-            return await _context.GetAllTimeSlots();
+            return _context.GetAllTimeSlots();
         }
 
         // GET: api/Services/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TimeSlot>> GetTimeSlotByCondition(int id)
+        public ActionResult<TimeSlot> GetTimeSlotByCondition(int id)
         {
-            var service = await _context.GetTimeSlotByCondition(p => p.TimeSlotId == id);
+            var service = _context.GetTimeSlotByCondition(p => p.TimeSlotId == id);
 
             if (service == null)
             {
@@ -48,24 +48,15 @@ namespace PetHealthcare.Server.APIs.Controllers
         // PUT: api/Services/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTimeSlot([FromRoute] int id, [FromBody] TimeslotDTO toUpdateTimeSlot)
+        public IActionResult UpdateTimeSlot([FromRoute] int id, [FromBody] TimeslotDTO toUpdateTimeSlot)
         {
-            var service = await _context.GetTimeSlotByCondition(p => p.TimeSlotId == id);
+            var service = _context.GetTimeSlotByCondition(p => p.TimeSlotId == id);
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
-            await _context.UpdateTimeSlot(id, toUpdateTimeSlot);
+            _context.UpdateTimeSlot(id, toUpdateTimeSlot);
             return Ok(toUpdateTimeSlot);
-        }
-
-        // POST api/<CagesController>
-        [HttpPost]
-        public async Task<ActionResult<TimeSlot>> Post([FromBody] TimeslotDTO newCage)
-        {
-            await _context.CreateTimeSlot(newCage);
-
-            return CreatedAtAction(nameof(Post), newCage.GetHashCode(), newCage);
         }
     }
 }
