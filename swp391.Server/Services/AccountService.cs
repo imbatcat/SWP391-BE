@@ -57,11 +57,6 @@ namespace PetHealthcare.Server.Services
             return accounts;
         }
 
-        public Task<IEnumerable<Pet>> GetAccountPets(Account account)
-        {
-            return _accountService.GetAccountPets(account);
-        }
-
         public async Task<IEnumerable<Account>> GetAllAccounts()
         {
             return await _accountService.GetAll();
