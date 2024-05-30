@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using NanoidDotNet;
+﻿using NanoidDotNet;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
@@ -23,7 +22,7 @@ namespace PetHealthcare.Server.Services
             var _pet = new Pet
             {
                 PetId = GenerateID(),
-                ImgUrl =pet.ImgUrl,
+                ImgUrl = pet.ImgUrl,
                 PetName = pet.PetName,
                 PetBreed = pet.PetBreed,
                 PetAge = pet.PetAge,
@@ -31,8 +30,8 @@ namespace PetHealthcare.Server.Services
                 IsMale = pet.IsMale,
                 IsCat = pet.IsCat,
                 VaccinationHistory = pet.VaccinationHistory,
-                IsDisabled=pet.IsDisable,
-                AccountId=pet.AccountId
+                IsDisabled = pet.IsDisable,
+                AccountId = pet.AccountId
             };
             await _petService.Create(_pet);
         }
@@ -51,7 +50,7 @@ namespace PetHealthcare.Server.Services
             return await _petService.GetAccountPets(id);
         }
 
-        public async Task< Pet?> GetPetByCondition(Expression<Func<Pet, bool>> expression)
+        public async Task<Pet?> GetPetByCondition(Expression<Func<Pet, bool>> expression)
         {
             return await _petService.GetByCondition(expression);
         }
@@ -84,5 +83,5 @@ namespace PetHealthcare.Server.Services
             return false;
         }
     }
-    
+
 }

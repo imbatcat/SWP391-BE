@@ -5,7 +5,6 @@ using PetHealthcare.Server.Repositories.Interfaces;
 using PetHealthcare.Server.Services.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
-using System.Security.Authentication;
 
 namespace PetHealthcare.Server.Services
 {
@@ -22,7 +21,7 @@ namespace PetHealthcare.Server.Services
         {
             var emailAuth = new EmailAddressAttribute();
             if (!emailAuth.IsValid(Account.Email)) throw new BadHttpRequestException("Invalid email");
-            
+
             var _account = new Account
             {
                 AccountId = GenerateId(),

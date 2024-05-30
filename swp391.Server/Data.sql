@@ -58,9 +58,9 @@ INSERT INTO [dbo].[Accounts]
 VALUES
 ('VE-00000000', 'thegoat3000', 'Tony Stark', '123456789', 1, '0937661777', 'tonystark@gmail.com', '1939-03-12', '2000-05-20', 0, 3, 'Veterinarian', 'https://sjkdlfj234.com/oij23lka/sdljf234jlk.html', 10, 'Handsome and straight', 'Senior', 'Surgery'),
 ('AC-00000001', 'user1', 'Gojo Satoru', '123456789', 1, '0937661771', 'user1@gmail.com', '1926-03-01', '2024-05-20', 0, 1, 'Account', null, null, null, null, null),
-('AC-00000002', 'admin', 'John Wick', '123456789', 0, '0937661777', 'admin@gmail.com', '1929-03-01', '1960-05-20', 0, 2, 'Account', null, null, null, null, null),
-('AC-00000003', 'user2', 'Nick Furry', '123456789', 1, '0937661777', 'user2@gmail.com', '1984-01-01', '2000-05-20', 0, 1, 'Account', null, null, null, null, null),
-('VE-00000004', 'vet3', 'Peter Parker', '123456789', 0, '0937661777', 'vet3@gmail.com', '1984-01-01', '1999-05-20', 0, 3, 'Veterinarian', 'https://sjkdlfj234.com/oij23lka/sdljf234jlk.html', 10, 'Beautiful but gay', 'Junior', 'Surgery');
+('AC-00000002', 'admin', 'John Wick', '123456789', 0, '0937661778', 'admin@gmail.com', '1929-03-01', '1960-05-20', 0, 2, 'Account', null, null, null, null, null),
+('AC-00000003', 'user2', 'Nick Furry', '123456789', 1, '0937661707', 'user2@gmail.com', '1984-01-01', '2000-05-20', 0, 1, 'Account', null, null, null, null, null),
+('VE-00000004', 'vet3', 'Peter Parker', '123456789', 0, '0937661977', 'vet3@gmail.com', '1984-01-01', '1999-05-20', 0, 3, 'Veterinarian', 'https://sjkdlfj234.com/oij23lka/sdljf234jlk.html', 10, 'Beautiful but gay', 'Junior', 'Surgery');
 GO
 
 
@@ -77,11 +77,11 @@ GO
 
 INSERT INTO [dbo].[Pets] (PetId, ImgUrl, PetName, PetBreed, PetAge, Description, IsMale, IsCat, VaccinationHistory, IsDisabled, AccountId)
 VALUES
-('PE-00000001', N'https://example.com/pet1.jpg', N'Buddy', N'Golden Retriever', 3, N'Friendly and active', 1, 0, N'Rabies, Distemper', 0, 'AC-00000003'),
-('PE-00000002', N'https://example.com/pet2.jpg', N'Mittens', N'Siamese', 2, N'Quiet and affectionate', 0, 1, N'Rabies, Feline Leukemia', 0, 'AC-00000003'),
-('PE-00000003', N'https://example.com/pet3.jpg', N'Rex', N'German Shepherd', 5, N'Loyal and protective', 1, 0, N'Rabies, Distemper, Parvovirus', 1, 'AC-00000003'),
-('PE-00000004', N'https://example.com/pet4.jpg', N'Bella', N'Bulldog', 4, N'Gentle and calm', 0, 0, N'Rabies, Parvovirus', 0, 'AC-00000001'),
-('PE-00000005', N'https://example.com/pet5.jpg', N'Simba', N'Maine Coon', 1, N'Playful and sociable', 1, 1, N'Rabies, Feline Leukemia, FIV', 0, 'AC-00000001');
+('PE-00000001', N'https://example.com/pet1.jpg', N'Buddy', N'Golden Retriever','1929-03-01', N'Friendly and active', 1, 0, N'Rabies, Distemper', 0, 'AC-00000003'),
+('PE-00000002', N'https://example.com/pet2.jpg', N'Mittens', N'Siamese','1929-03-01', N'Quiet and affectionate', 0, 1, N'Rabies, Feline Leukemia', 0, 'AC-00000003'),
+('PE-00000003', N'https://example.com/pet3.jpg', N'Rex', N'German Shepherd','1929-03-01', N'Loyal and protective', 1, 0, N'Rabies, Distemper, Parvovirus', 1, 'AC-00000003'),
+('PE-00000004', N'https://example.com/pet4.jpg', N'Bella', N'Bulldog','1929-03-01', N'Gentle and calm', 0, 0, N'Rabies, Parvovirus', 0, 'AC-00000001'),
+('PE-00000005', N'https://example.com/pet5.jpg', N'Simba', N'Maine Coon','1929-03-01', N'Playful and sociable', 1, 1, N'Rabies, Feline Leukemia, FIV', 0, 'AC-00000001');
 GO
 
 INSERT INTO [dbo].[Appointments] (AppointmentId, AccountId, AppointmentDate, PetId, VeterinarianAccountId, TimeSlotId, AppointmentType, AppointmentNotes, BookingPrice)

@@ -2,8 +2,8 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.Extensions.Options;
 using System.Text.Json.Serialization;
+using IndexAttribute = Microsoft.EntityFrameworkCore.IndexAttribute;
 
 namespace PetHealthcare.Server.Models
 {

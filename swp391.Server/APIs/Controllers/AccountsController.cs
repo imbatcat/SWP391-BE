@@ -1,5 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging.Abstractions;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Services.Interfaces;
@@ -55,6 +55,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         //}
 
         [HttpGet("/api/accounts/pets/{id}")]
+        [Authorize]
         public async Task<IEnumerable<Pet>> GetAccountPets([FromRoute] string id)
         {
             return await _contextPet.GetAccountPets(id);
@@ -109,7 +110,8 @@ namespace PetHealthcare.Server.APIs.Controllers
             try
             {
                 await _context.CreateAccount(accountDTO);
-            } catch (BadHttpRequestException ex)
+            }
+            catch (BadHttpRequestException ex)
             {
                 return (BadRequest(ex.Message));
             }
@@ -133,7 +135,11 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         [HttpPost("/api/accounts/login")]
+<<<<<<< Updated upstream
         public async Task<ActionResult<Account>> LoginAccount()
+=======
+        public async Task<ActionResult<Account>> LoginAccount([FromBody] GuestDTO guest)
+>>>>>>> Stashed changes
         {
             //try
             //{

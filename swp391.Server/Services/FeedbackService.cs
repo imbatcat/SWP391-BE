@@ -1,7 +1,7 @@
-﻿using PetHealthcare.Server.Models;
+﻿using PetHealthcare.Server.APIs.DTOS;
+using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
 using PetHealthcare.Server.Services.Interfaces;
-using PetHealthcareSystem.APIs.DTOS;
 using System.Linq.Expressions;
 
 namespace PetHealthcare.Server.Services
@@ -21,21 +21,21 @@ namespace PetHealthcare.Server.Services
                 FeedbackDetails = Feedback.FeedbackDetails,
                 AccountId = Feedback.AccountId
             };
-           await _feedbackService.Create(newFeedback);
+            await _feedbackService.Create(newFeedback);
 
         }
 
         public void deleteFeedback(Feedback Feedback)
         {
-           _feedbackService?.Delete(Feedback);
+            _feedbackService?.Delete(Feedback);
         }
 
-        public async Task< IEnumerable<Feedback>> GetAllFeedback()
+        public async Task<IEnumerable<Feedback>> GetAllFeedback()
         {
             return await _feedbackService.GetAll();
         }
 
-        public async Task<Feedback?>  GetFeedbackByCondition(Expression<Func<Feedback, bool>> expression)
+        public async Task<Feedback?> GetFeedbackByCondition(Expression<Func<Feedback, bool>> expression)
         {
             return await _feedbackService.GetByCondition(expression);
         }

@@ -1,11 +1,10 @@
 ﻿using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
-using PetHealthcare.Server.Repositories.Interfaces;
 using System.Linq.Expressions;
 
 namespace PetHealthcare.Server.Services.Interfaces
 {
-    public interface IAccountService 
+    public interface IAccountService
     {
         Task<IEnumerable<Account>> GetAllAccounts();
         Task<IEnumerable<Account>> GetAllAccountsByRole(int roleId);

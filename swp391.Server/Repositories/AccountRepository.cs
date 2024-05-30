@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
-using System.Collections;
 using System.Linq.Expressions;
 
 namespace PetHealthcare.Server.Repositories
@@ -56,11 +55,11 @@ namespace PetHealthcare.Server.Repositories
         }
         public bool CheckRoleId(int roleId)
         {
-           return context.Roles.Any(r => r.RoleId == roleId);
+            return context.Roles.Any(r => r.RoleId == roleId);
         }
         public async Task<IEnumerable<Account>> GetAccountsByRole(int roleId)
         {
-            if(!CheckRoleId(roleId))
+            if (!CheckRoleId(roleId))
             {
                 return null;
             }
@@ -79,7 +78,7 @@ namespace PetHealthcare.Server.Repositories
         public async Task<Account?> GetAccountByRole(int roleId, string id)
         {
             var accounts = await GetByCondition(a => a.RoleId == roleId && a.AccountId.Equals(id));
-            if(accounts == null)
+            if (accounts == null)
             {
                 return null;
             }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PetHealthcare.Server.Models
 {
-    [Index(nameof(CageNumber) ,IsUnique = true)]
+    [Index(nameof(CageNumber), IsUnique = true)]
     public class Cage
     {
         [Key]
