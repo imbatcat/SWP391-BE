@@ -20,8 +20,15 @@ namespace PetHealthcare.Server.Repositories
         }
         public async Task Create(Pet entity)
         {
-            await context.Pets.AddAsync(entity);
-            await  SaveChanges();
+            if (!petExit(entity))
+            {
+                await context.Pets.AddAsync(entity);
+                await SaveChanges();
+            }
+            else
+            {
+                throw new InvalidOperationException("A pet with the same data already exited.");
+            }
         }
 
         public void Delete(Pet entity)
@@ -56,6 +63,16 @@ namespace PetHealthcare.Server.Repositories
         public Pet? GetPetById(string id)
         {
             return context.Pets.FirstOrDefault(a => a.PetId == id);
+        }
+        public bool petExit(Pet pet)
+        {
+            return context.Pets.Any(p => p.PetName == pet.PetName &&
+             p.PetBreed == pet.PetBreed &&
+             p.Description == pet.Description &&
+             p.IsMale == pet.IsMale &&
+             p.IsCat == pet.IsCat &&
+             p.VaccinationHistory == pet.VaccinationHistory &&
+             p.AccountId == pet.AccountId);
         }
     }
 }

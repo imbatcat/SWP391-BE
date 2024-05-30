@@ -86,24 +86,14 @@ namespace PetHealthcare.Server.APIs.Controllers
         [HttpPost]
         public async Task<ActionResult<Pet>> PostPet([FromBody] PetDTO petDTO)
         {
-            await   _context.CreatePet(petDTO);
-            //try
-            //{
-            //    await _context.SaveChangesAsync();
-            //}
-            //catch (DbUpdateException)
-            //{
-            //    if (PetExists(pet.PetId))
-            //    {
-            //        return Conflict();
-            //    }
-            //    else
-            //    {
-            //        throw;
-            //    }
-            //}
-
-            return CreatedAtAction(nameof(PostPet), new { id = petDTO.GetHashCode() }, petDTO);
+            try
+            {
+                await _context.CreatePet(petDTO);
+                return CreatedAtAction(nameof(PostPet), new { id = petDTO.GetHashCode() }, petDTO);
+            }catch (InvalidOperationException e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         // DELETE: api/Pets/5

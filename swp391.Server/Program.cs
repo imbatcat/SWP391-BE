@@ -8,7 +8,7 @@ using PetHealthcare.Server.Services.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-const string DataSrc = "LAPTOP-8QVR89KA\\SQLEXPRESS02", Password = "12345";
+const string DataSrc = "MSI", Password = "123456";
 
 // Add services to the container.
 builder.Services.AddDbContext<PetHealthcareDbContext>(
