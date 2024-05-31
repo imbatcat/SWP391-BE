@@ -9,7 +9,7 @@ namespace PetHealthcare.Server.Models
     public class AdmissionRecord
     {
         [NotMapped]
-        public string Prefix { get; } = "AR";
+        public string Prefix { get; } = "AR-";
 
         [Key]
         [Column(TypeName = "char(11)")]
