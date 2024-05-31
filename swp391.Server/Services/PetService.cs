@@ -10,12 +10,12 @@ namespace PetHealthcare.Server.Services
 {
     public class PetService : IPetService
     {
-        private readonly IPetService _context;
         private readonly IPetRepository _petService;
         public PetService(IPetRepository petService)
         {
             _petService = petService;
         }
+    
         public async Task CreatePet(PetDTO pet)
         {
             var _pet = new Pet
@@ -32,7 +32,15 @@ namespace PetHealthcare.Server.Services
                 IsDisabled=pet.IsDisable,
                 AccountId=pet.AccountId
             };
-            await _petService.Create(_pet);
+            var checkPet = await _petService.petExist(_pet);
+            if (!checkPet)
+            {
+                await _petService.Create(_pet);
+            }
+            else
+            {
+                throw new BadHttpRequestException("An exited pet already had these values.");
+            }
         }
 
         public void DeletePet(Pet pet)
@@ -59,7 +67,16 @@ namespace PetHealthcare.Server.Services
                 VaccinationHistory = pet.VaccinationHistory,
                 IsDisabled = pet.IsDisable
             };
-            await _petService.Update(_pet);
+            var checkPet=await _petService.petExist(_pet);
+            if(!checkPet) 
+            { 
+                await _petService.Update(_pet);
+            }
+            else 
+            {
+                throw new BadHttpRequestException("An exited pet already had these values.");
+            }
+            
         }
         public string GenerateID()
         {
@@ -67,6 +84,7 @@ namespace PetHealthcare.Server.Services
             string id = Nanoid.Generate(size: 8);
             return prefix + id;
         }
+        
     }
     
 }
