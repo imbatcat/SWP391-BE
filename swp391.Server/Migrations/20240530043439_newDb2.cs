@@ -10,8 +10,8 @@ namespace PetHealthcareSystem.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "ServiceServiceOrder");
+            //migrationBuilder.DropTable(
+            //    name: "ServiceServiceOrder");
 
             migrationBuilder.CreateTable(
                 name: "ServiceOrderDetails",

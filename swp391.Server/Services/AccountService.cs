@@ -17,7 +17,6 @@ namespace PetHealthcare.Server.Services
         {
             _accountService = accountService;
         }
-
         public async Task CreateAccount(AccountDTO Account)
         {
             var emailAuth = new EmailAddressAttribute();

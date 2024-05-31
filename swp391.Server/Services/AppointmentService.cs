@@ -3,6 +3,8 @@ using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
 using PetHealthcare.Server.Services.Interfaces;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq.Expressions;
 
 namespace PetHealthcare.Server.Services
@@ -54,6 +56,11 @@ namespace PetHealthcare.Server.Services
             return await _appointmentRepository.GetByCondition(expression);
         }
 
+        public bool isVetIdValid(string VetId)
+        {
+            return _appointmentRepository.isInputtedVetIdValid(VetId);
+        }
+
         public async Task UpdateAppointment(string id, AppointmentDTO appointment)
         {
             Appointment UpdateAppointment = new Appointment
@@ -61,11 +68,10 @@ namespace PetHealthcare.Server.Services
                 AppointmentDate = appointment.AppointmentDate,
                 AppointmentNotes = appointment.AppointmentNotes,
                 BookingPrice = appointment.BookingPrice,
-                PetId = appointment.PetId,
-                AppointmentId = id,
                 VeterinarianAccountId = appointment.VeterinarianAccountId,
                 TimeSlotId = appointment.TimeSlotId,
                 AppointmentType = appointment.AppointmentType,
+                AppointmentId = id
             };
             await _appointmentRepository.Update(UpdateAppointment);
         }

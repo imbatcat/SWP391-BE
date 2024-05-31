@@ -33,7 +33,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
             if (service == null)
             {
-                return NotFound();
+                return NotFound(new {message = "Service not found"});
             }
 
             return service;
@@ -47,7 +47,7 @@ namespace PetHealthcare.Server.APIs.Controllers
             var service = await _healthService.GetHealthServiceByCondition(s => s.ServiceId == id);
             if (service == null)
             {
-                return BadRequest();
+                return BadRequest( new {message = "update fail"});
             }
             await _healthService.UpdateHealthService(id, toUpdateService);
             return Ok(toUpdateService);
@@ -58,6 +58,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         [HttpPost]
         public async Task<ActionResult<Service>> CreateService([FromBody] HealthServiceDTO toCreateService)
         {
+
             await _healthService.CreateHealthService(toCreateService);
 
             return Ok(toCreateService);

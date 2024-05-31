@@ -18,7 +18,15 @@ namespace PetHealthcare.Server.Repositories.DbContext
             await context.Appointments.AddAsync(entity);
             await SaveChanges();
         }
-
+        public bool isInputtedVetIdValid (string id) 
+        {
+            if(context.Accounts.Find(id) != null)
+            {
+                if(id.StartsWith('V')) 
+                { return true; }
+            }
+            return false;
+        }
         public void Delete(Appointment entity)
         {
             context.Appointments.Remove(entity);
