@@ -17,7 +17,7 @@ namespace PetHealthcare.Server.Services
             _admissionRecordService = AdmissionRecordService;
         }
 
-        public async Task CreateAdmissionRecord(AdmissionRecordDTO entity)
+        public async Task CreateAdmissionRecord(AdmissionRecordRegisterDTO entity)
         {
             //bool res = await ConfirmAdmissionRecordIdentity(entity.MedicalRecordId, entity);
             //var res1 = await ConfirmAdmissionRecordIdentity(entity.MedicalRecordId, entity);
@@ -29,9 +29,9 @@ namespace PetHealthcare.Server.Services
                 DischargeDate = entity.DischargeDate,
                 IsDischarged = entity.IsDischarged,
                 PetCurrentCondition = entity.PetCurrentCondition, 
-                CageId = 2 ,//entity.CageId,
-                PetId = "PE-00000005",//entity.PetId,   
-                MedicalRecordId = "ME-00000005",//entity.MedicalRecordId,
+                CageId = (int)entity.CageId,
+                PetId = entity.PetId,  
+                MedicalRecordId = entity.MedicalRecordId,
                 VeterinarianAccountId = "VE-00000004",
             };
             await _admissionRecordService.Create(obj);
