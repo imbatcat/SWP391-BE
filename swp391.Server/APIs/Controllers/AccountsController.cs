@@ -133,7 +133,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         [HttpPost("/api/accounts/login")]
-        public async Task<ActionResult<Account>> LoginAccount([FromBody] string username, [FromBody] string password)
+        public async Task<ActionResult<Account>> LoginAccount()
         {
             //try
             //{
