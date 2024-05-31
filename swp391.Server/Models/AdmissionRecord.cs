@@ -36,12 +36,11 @@ namespace PetHealthcare.Server.Models
 
         [Required]
         [DeleteBehavior(DeleteBehavior.Restrict)]
-        //public MedicalRecord MedicalRecord { get; set; }
-        public virtual ICollection<MedicalRecord> MedicalRecords { get; set; }
+        public MedicalRecord MedicalRecord { get; set; }
+        public string? MedicalRecordId { get; set; }
 
         [Required]
-        //public Veterinarian Veterinarian { get; set; }
-        public virtual ICollection<Veterinarian> Veterinarians { get; set; }
+        public Veterinarian Veterinarian { get; set; }
 
         [Required]
         [DeleteBehavior(DeleteBehavior.Restrict)]

@@ -11,5 +11,7 @@ namespace PetHealthcare.Server.Services.Interfaces
         Task CreateAdmissionRecord(AdmissionRecordDTO entity);
         Task UpdateAdmissionRecord(string id, AdmissionRecordDTO entity);
         void DeleteAdmissionRecord(AdmissionRecord entity);
+
+        //Task<bool> ConfirmAdmissionRecordIdentity(string Id, AdmissionRecordDTO newPet);
     }
 }
