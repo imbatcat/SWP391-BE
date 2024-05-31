@@ -21,8 +21,8 @@ namespace PetHealthcare.Server.Services
             var _timeSlot = new TimeSlot
             {
                 
-                StartTime = timeSlot.StartTime,
-                EndTime = timeSlot.EndTime,
+                StartTime = ParseTime(timeSlot.StartTime),
+                EndTime = ParseTime(timeSlot.EndTime),
                 
             };
             await _timeSlotService.Create(_timeSlot);
@@ -48,10 +48,22 @@ namespace PetHealthcare.Server.Services
             var _timeSlot = new TimeSlot
             {
                 TimeSlotId = id,
-                StartTime = TimeSlot.StartTime,
-                EndTime = TimeSlot.EndTime,
+                StartTime = ParseTime(TimeSlot.StartTime),
+                EndTime = ParseTime(TimeSlot.EndTime),
             };
             await _timeSlotService.Update(_timeSlot);
+        }
+
+        private static TimeOnly ParseTime(string input)
+        {
+            if (TimeOnly.TryParse(input, out TimeOnly time))
+            {
+                return time;
+            }
+            else
+            {
+                throw new FormatException("Invalid time format.");
+            }
         }
 
     }
