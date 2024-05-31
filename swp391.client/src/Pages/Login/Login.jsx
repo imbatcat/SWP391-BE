@@ -8,11 +8,22 @@ import {
   MDBCardBody,
   MDBRow,
   MDBCol,
-  MDBInput
+  MDBInput,
+  MDBModal,
+  MDBModalBody,
+  MDBModalContent,
+  MDBModalDialog,
+  MDBModalHeader,
+  MDBModalTitle
 }
 from 'mdb-react-ui-kit';
-
+import { useState } from 'react';
+import ForgotPassForm from '../../Component/ForgotPass/ForgotPassForm';
 function Login() {
+    const [basicModal, setBasicModal] = useState(false);
+
+    const toggleOpen = () => setBasicModal(!basicModal);
+
   return (
       <MDBContainer className="my-5 d-10 justify-content-center">
           <MDBCard className='login-card'>
@@ -27,8 +38,26 @@ function Login() {
                           <MDBInput wrapperClass='mb-4' label='Password' id='formControlLg' type='password' size="lg" />
 
                           <MDBBtn className="mb-4 px-5" color='blue' size='lg'>Login</MDBBtn>
-                          <a className="small text-muted" style={{ textAlign: 'end' }} href="#!">Forgot password?</a>
-                          <p className="mb-5 pb-lg-2" style={{ color: 'Black' }}>Don't have an accounts
+
+                          <a className="small text-muted" style={{ textAlign: 'end' }} onClick={toggleOpen}>Forgot password?</a>
+                          <MDBModal open={basicModal} onClose={() => setBasicModal(false)} tabIndex='-1'>
+                            <MDBModalDialog>
+                                <MDBModalContent>
+                                  <MDBModalHeader >
+                                    <MDBModalTitle>
+                                    <h6>Forgot your account’s password?</h6>
+                                     <h3 style={{fontSize:'20px'}}>Enter your email address and we’ll send you a recovery link.</h3>
+                                     </MDBModalTitle>
+                                        <MDBBtn className='btn-close' color='none' onClick={toggleOpen}></MDBBtn>
+                                    </MDBModalHeader>
+                            <MDBModalBody>
+                            <ForgotPassForm/>
+                            </MDBModalBody>
+                        </MDBModalContent>
+                            </MDBModalDialog>
+                            </MDBModal>
+
+                          <p className="mb-5 pb-lg-2" style={{ color: 'Black' }}>Don't have an accounts ?
                           <Link to="/signUp"><a style={{ color: '#393f81' }}>Register here</a></Link>
                           </p>
 

@@ -7,8 +7,8 @@ import {
     MDBModalHeader,
     MDBModalTitle
 } from 'mdb-react-ui-kit';
-import React, { useState } from 'react';
-import AppointmentForm from '../AppointmentForm';
+import { useState } from 'react';
+import AppointmentForm from '../Modals/AppointmentForm';
 
 function AppointmentModal() {
     const [basicModal, setBasicModal] = useState(false);
@@ -22,7 +22,7 @@ function AppointmentModal() {
                 <MDBModalDialog>
                     <MDBModalContent>
                         <MDBModalHeader >
-                            <MDBModalTitle>Create Appointment</MDBModalTitle>
+                            <MDBModalTitle>Appointment Information</MDBModalTitle>
                             <MDBBtn className='btn-close' color='none' onClick={toggleOpen}></MDBBtn>
                         </MDBModalHeader>
                         <MDBModalBody>

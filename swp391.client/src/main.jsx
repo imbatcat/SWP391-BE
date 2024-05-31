@@ -9,6 +9,9 @@ import Login from './Pages/Login/Login';
 import App from './App';
 import SignUp from './Pages/SignUp/SignUp';
 import AboutUs from './Pages/About Us/AboutUs';
+import Appointment from './Pages/Appointment/Appointment';
+import OTPInput from './Pages/OTP Input/OTPInput';
+import PasswordResetForm from './Pages/SetNewPass/PasswordResetForm';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -29,7 +32,22 @@ const router = createBrowserRouter([
     path: '/aboutUs',
     element: <AboutUs/>,
     errorElement: <div>404 Not Found</div>,
-  }
+  },
+  {
+    path: '/appointment',
+    element: <Appointment/>,
+    errorElement: <div>404 Not Found</div>,
+  },
+  {
+    path: '/otp',
+    element: <OTPInput/>,
+    errorElement: <div>404 Not Found</div>,
+  },
+  {
+    path: '/setnewpw',
+    element: <PasswordResetForm/>,
+    errorElement: <div>404 Not Found</div>,
+  },
 ])
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

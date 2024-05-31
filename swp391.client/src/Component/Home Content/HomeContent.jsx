@@ -8,10 +8,21 @@ import {
   MDBCardBody,
   MDBRow,
   MDBCol,
+  MDBModal,
+  MDBModalBody,
+  MDBModalContent,
+  MDBModalDialog,
+  MDBModalHeader,
+  MDBModalTitle
 }
 from 'mdb-react-ui-kit';
-
+import { useState } from 'react';
+import AppointmentForm from '../Modals/AppointmentForm';
 function HomeContent() {
+  const [basicModal, setBasicModal] = useState(false);
+
+  const toggleOpen = () => setBasicModal(!basicModal);
+
   return (
     
 
@@ -48,7 +59,23 @@ function HomeContent() {
               <div className="WN-Content">2. Meet with a doctor for an initial exam.</div>
               <div className="WN-Content">3. Put a plan together for your pet.</div>
               <div className='WN-Content-btn'>
-                <MDBBtn className="mb-4 px-5" color='green' style={{width:'200px', margin:'auto', alignContent:'center'}}>Login</MDBBtn>
+                  <MDBBtn className="mb-4 px-5" color='muted' onClick={toggleOpen} style={{ color:'black', width:'240px', margin:'auto', alignContent:'center'}}>           
+                  Make an Appointment
+                  </MDBBtn>
+                  <MDBModal open={basicModal} onClose={() => setBasicModal(false)} tabIndex='-1'>
+                  <MDBModalDialog>
+                    <MDBModalContent>
+                        <MDBModalHeader >
+                            <MDBModalTitle>Appointment Information</MDBModalTitle>
+                            <MDBBtn className='btn-close' color='none' onClick={toggleOpen}></MDBBtn>
+                        </MDBModalHeader>
+                        <MDBModalBody>
+                            <AppointmentForm></AppointmentForm>
+                        </MDBModalBody>
+                    </MDBModalContent>
+                </MDBModalDialog>
+            </MDBModal>
+                
               </div>
               
 

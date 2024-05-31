@@ -5,7 +5,6 @@ import {
     MDBInput,
     MDBRow
 } from 'mdb-react-ui-kit';
-import React from 'react';
 
 function AppointmentForm() {
   return (

@@ -48,12 +48,12 @@ export default function NavBar2() {
             <MDBNavbarItem>
               <MDBDropdown>
                 <MDBDropdownToggle tag='a' className='nav-link' role='button'>
-                  HealthCare System
+                  Appointment
                 </MDBDropdownToggle>
                 <MDBDropdownMenu>
-                  <MDBDropdownItem link href='https://zalo.me/g/alobzv478'>Action</MDBDropdownItem>
-                  <MDBDropdownItem link>Another action</MDBDropdownItem>
-                  <MDBDropdownItem link>Something else here</MDBDropdownItem>
+                  <MDBDropdownItem link>My Appointment</MDBDropdownItem>
+                  <MDBDropdownItem link>Make an Appointment</MDBDropdownItem>
+                  
                 </MDBDropdownMenu>
               </MDBDropdown>
             </MDBNavbarItem>
