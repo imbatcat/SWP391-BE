@@ -31,8 +31,8 @@ namespace PetHealthcare.Server.Services
                 PetCurrentCondition = entity.PetCurrentCondition, 
                 CageId = 2 ,//entity.CageId,
                 PetId = "PE-00000005",//entity.PetId,   
-                MedicalRecordId = "ME-00000005"//entity.MedicalRecordId,
-                //VeterinarianAccountId = "VE-00000004",
+                MedicalRecordId = "ME-00000005",//entity.MedicalRecordId,
+                VeterinarianAccountId = "VE-00000004",
             };
             await _admissionRecordService.Create(obj);
         }

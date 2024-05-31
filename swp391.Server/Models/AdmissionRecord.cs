@@ -41,6 +41,7 @@ namespace PetHealthcare.Server.Models
 
         [Required]
         public Veterinarian Veterinarian { get; set; }
+        public string? VeterinarianAccountId { get; set; }
 
         [Required]
         [DeleteBehavior(DeleteBehavior.Restrict)]
