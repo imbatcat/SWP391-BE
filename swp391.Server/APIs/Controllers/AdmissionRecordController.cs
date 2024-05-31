@@ -55,7 +55,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         [HttpPost("/api/CreateAdmissionRecord")]
-        public async Task<ActionResult<AdmissionRecord>> CreateAdmissionRecord([FromBody] AdmissionRecordDTO _new)
+        public async Task<ActionResult<AdmissionRecord>> CreateAdmissionRecord([FromBody] AdmissionRecordRegisterDTO _new)
         {
             await _context.CreateAdmissionRecord(_new);
 

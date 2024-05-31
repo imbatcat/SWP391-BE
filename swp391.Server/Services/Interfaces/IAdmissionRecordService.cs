@@ -8,7 +8,7 @@ namespace PetHealthcare.Server.Services.Interfaces
     {
         Task<IEnumerable<AdmissionRecord>> GetAll();
         Task<AdmissionRecord?> GetAdmissionRecordByCondition(Expression<Func<AdmissionRecord, bool>> expression);
-        Task CreateAdmissionRecord(AdmissionRecordDTO entity);
+        Task CreateAdmissionRecord(AdmissionRecordRegisterDTO entity);
         Task UpdateAdmissionRecord(string id, AdmissionRecordDTO entity);
         void DeleteAdmissionRecord(AdmissionRecord entity);
 
