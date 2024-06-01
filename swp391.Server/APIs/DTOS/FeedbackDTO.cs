@@ -1,4 +1,4 @@
-﻿namespace PetHealthcareSystem.APIs.DTOS
+﻿namespace PetHealthcare.Server.APIs.DTOS
 {
     public class FeedbackDTO
     {

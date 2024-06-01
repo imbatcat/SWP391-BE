@@ -16,20 +16,20 @@ namespace PetHealthcare.Server.Services
         }
         public async Task CreateMedicalRecord(MedicalRecordDTO medicalRecord)
         {
-            var medicalRec=new MedicalRecord 
+            var medicalRec = new MedicalRecord
             {
-                MedicalRecordId=GenerateID(),
-                DateCreated=medicalRecord.DataCreated,
-                PetWeight=medicalRecord.PetWeight,
-                Symptoms=medicalRecord.Symptoms,
-                Allergies=medicalRecord.Allergies,
-                Diagnosis=medicalRecord.Diagnosis,
-                AdditionalNotes=medicalRecord.AdditionallNotes,
-                FollowUpAppointmentDate =DateOnly.FromDateTime(medicalRecord.FollowUpAppointmentDate??DateTime.Now),
-                FollowUpAppointmentNotes=medicalRecord.FollowUpAppointmentNotes,
-                DrugPrescriptions=medicalRecord.DrugPrescription,
-                AppointmentId=medicalRecord.AppointmentId,
-                PetId=medicalRecord.PetId
+                MedicalRecordId = GenerateID(),
+                DateCreated = medicalRecord.DataCreated,
+                PetWeight = medicalRecord.PetWeight,
+                Symptoms = medicalRecord.Symptoms,
+                Allergies = medicalRecord.Allergies,
+                Diagnosis = medicalRecord.Diagnosis,
+                AdditionalNotes = medicalRecord.AdditionallNotes,
+                FollowUpAppointmentDate = DateOnly.FromDateTime(medicalRecord.FollowUpAppointmentDate ?? DateTime.Now),
+                FollowUpAppointmentNotes = medicalRecord.FollowUpAppointmentNotes,
+                DrugPrescriptions = medicalRecord.DrugPrescription,
+                AppointmentId = medicalRecord.AppointmentId,
+                PetId = medicalRecord.PetId
             };
             await medRecService.Create(medicalRec);
         }

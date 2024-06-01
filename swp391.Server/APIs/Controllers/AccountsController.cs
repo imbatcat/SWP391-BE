@@ -1,5 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging.Abstractions;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Services.Interfaces;
@@ -106,13 +106,20 @@ namespace PetHealthcare.Server.APIs.Controllers
         [HttpPost]
         public async Task<ActionResult<Account>> PostAccount([FromBody] AccountDTO accountDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Bad input");
+            }
             try
             {
-                await _context.CreateAccount(accountDTO);
-            } catch (BadHttpRequestException ex)
+                var result = await _context.CreateAccount(accountDTO);
+            }
+            catch (BadHttpRequestException ex)
             {
                 return (BadRequest(ex.Message));
             }
+           return CreatedAtAction(
+                    "GetAccount", new { id = accountDTO.GetHashCode() }, accountDTO);
             //try
             //{
             //    await _context.SaveChangesAsync();
@@ -129,11 +136,10 @@ namespace PetHealthcare.Server.APIs.Controllers
             //    }
             //}
 
-            return CreatedAtAction("GetAccount", new { id = accountDTO.GetHashCode() }, accountDTO);
         }
 
         [HttpPost("/api/accounts/login")]
-        public async Task<ActionResult<Account>> LoginAccount()
+        public async Task<ActionResult<Account>> LoginAccount([FromBody] GuestDTO guest)
         {
             //try
             //{

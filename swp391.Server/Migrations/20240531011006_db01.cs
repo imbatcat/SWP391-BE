@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace PetHealthcareSystem.Migrations
+namespace PetHealthcare.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class newDb1 : Migration
+    public partial class db01 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

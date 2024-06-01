@@ -44,7 +44,7 @@ namespace PetHealthcare.Server.Services
             _appointmentRepository.Delete(appointment);
         }
 
-        
+
 
         public async Task<IEnumerable<Appointment>> GetAllAppointment()
         {

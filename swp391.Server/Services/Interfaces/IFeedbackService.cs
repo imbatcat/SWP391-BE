@@ -1,5 +1,5 @@
-﻿using PetHealthcare.Server.Models;
-using PetHealthcareSystem.APIs.DTOS;
+﻿using PetHealthcare.Server.APIs.DTOS;
+using PetHealthcare.Server.Models;
 using System.Linq.Expressions;
 namespace PetHealthcare.Server.Services.Interfaces
 {

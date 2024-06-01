@@ -1,10 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
 using System.Linq.Expressions;
 
-namespace PetHealthcare.Server.Repositories.DbContext
+namespace PetHealthcare.Server.Repositories
 {
     public class AppointmentRepository : IAppointmentRepository
     {

@@ -23,12 +23,12 @@ namespace PetHealthcare.Server.Services
             throw new NotImplementedException();
         }
 
-        public async Task< IEnumerable<T>> GetAll()
+        public async Task<IEnumerable<T>> GetAll()
         {
             return await _entityService.GetAll();
         }
 
-        public async Task< T?> GetByCondition(Expression<Func<T, bool>> expression)
+        public async Task<T?> GetByCondition(Expression<Func<T, bool>> expression)
         {
             throw new NotImplementedException();
         }

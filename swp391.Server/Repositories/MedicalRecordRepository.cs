@@ -40,8 +40,8 @@ namespace PetHealthcare.Server.Repositories
 
         public async Task Update(MedicalRecord entity)
         {
-            var medicalRecord= await GetByCondition(e=>e.MedicalRecordId==entity.MedicalRecordId);
-            if(medicalRecord != null)
+            var medicalRecord = await GetByCondition(e => e.MedicalRecordId == entity.MedicalRecordId);
+            if (medicalRecord != null)
             {
                 _medRec.Entry(medicalRecord).State = EntityState.Modified;
                 medicalRecord.PetWeight = entity.PetWeight;

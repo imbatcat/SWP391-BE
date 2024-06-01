@@ -18,13 +18,13 @@ public class PetHealthcareDbContext : DbContext
     public DbSet<Role> Roles { get; set; }
     public DbSet<Service> Services { get; set; }
     public DbSet<ServiceOrderDetails> ServiceOrderDetails { get; set; }
-    
+
 
     //public DbSet<PetHealthTracker> PetHealthTracker { get; set; }
     public PetHealthcareDbContext(DbContextOptions<PetHealthcareDbContext> options) : base(options)
     {
-        //Database.Migrate();
-        Database.EnsureCreated();
+        Database.Migrate();
+        //Database.EnsureCreated();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

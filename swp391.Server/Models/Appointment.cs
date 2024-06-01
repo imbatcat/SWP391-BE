@@ -31,12 +31,12 @@ namespace PetHealthcare.Server.Models
         [ForeignKey("AccountId")]
         [DeleteBehavior(DeleteBehavior.Restrict)]
         public Account Account { get; set; }
-        public string AccountId {  get; set; }
+        public string AccountId { get; set; }
 
         [ForeignKey("PetId")]
         [DeleteBehavior(DeleteBehavior.Restrict)]
         public Pet Pet { get; set; }
-        public string PetId {  get; set; }
+        public string PetId { get; set; }
 
         [ForeignKey("VeterinarianAccountId")]
         public Veterinarian Veterinarian { get; set; }
@@ -44,7 +44,7 @@ namespace PetHealthcare.Server.Models
 
         [ForeignKey("TimeSlotId")]
         public TimeSlot TimeSlot { get; set; }
-        public int TimeSlotId {  get; set; }
+        public int TimeSlotId { get; set; }
         public virtual ICollection<BookingPayment> BookingPayments { get; set; }
 
     }

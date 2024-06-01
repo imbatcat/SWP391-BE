@@ -16,8 +16,8 @@ namespace PetHealthcare.Server.Repositories
 
         public async Task Create(Feedback entity)
         {
-           await context.Feedbacks.AddAsync(entity);
-           await SaveChanges();
+            await context.Feedbacks.AddAsync(entity);
+            await SaveChanges();
         }
 
         public void Delete(Feedback entity)
@@ -30,16 +30,16 @@ namespace PetHealthcare.Server.Repositories
             return await context.Feedbacks.ToListAsync();
         }
 
-        public async Task <Feedback?> GetByCondition(Expression<Func<Feedback, bool>> expression)
+        public async Task<Feedback?> GetByCondition(Expression<Func<Feedback, bool>> expression)
         {
             return await context.Feedbacks.LastOrDefaultAsync(expression);
         }
 
         public async Task SaveChanges()
         {
-           await context.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
-        public async Task< Feedback?> GetFeedbackById(int id)
+        public async Task<Feedback?> GetFeedbackById(int id)
         {
             return await context.Feedbacks.LastOrDefaultAsync(a => a.FeedbackId == id);
 
