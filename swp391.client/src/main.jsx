@@ -12,6 +12,7 @@ import AboutUs from './Pages/About Us/AboutUs';
 import Appointment from './Pages/Appointment/Appointment';
 import OTPInput from './Pages/OTP Input/OTPInput';
 import PasswordResetForm from './Pages/SetNewPass/PasswordResetForm';
+import PetList from './Pages/My Pet List/PetList';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -48,6 +49,11 @@ const router = createBrowserRouter([
     element: <PasswordResetForm/>,
     errorElement: <div>404 Not Found</div>,
   },
+  {
+    path: '/petList',
+    element: <PetList/>,
+    errorElement: <div>404 Not Found</div>,
+  }
 ])
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

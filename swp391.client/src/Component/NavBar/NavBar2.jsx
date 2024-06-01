@@ -38,11 +38,15 @@ export default function NavBar2() {
             <MDBNavbarItem>
             <Link to="/"><MDBNavbarLink active aria-current='page'>
                 Home
-              </MDBNavbarLink></Link> 
+              </MDBNavbarLink>
+            </Link> 
+            
             </MDBNavbarItem>
             <MDBNavbarItem>
-              <Link to="/aboutUs"> <MDBNavbarLink>About Us</MDBNavbarLink></Link> 
-             
+              <Link to="/petList"> <MDBNavbarLink>My Pet List</MDBNavbarLink></Link>    
+            </MDBNavbarItem>
+            <MDBNavbarItem>
+              <Link to="/aboutUs"> <MDBNavbarLink>About Us</MDBNavbarLink></Link>    
             </MDBNavbarItem>
 
             <MDBNavbarItem>
