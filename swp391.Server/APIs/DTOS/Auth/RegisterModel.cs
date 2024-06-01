@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PetHealthcare.Server.APIs.DTOS
+namespace PetHealthcare.Server.APIs.DTOS.Auth
 {
     public class RegisterModel
     {
+        public string Username { get; set; }
+
         [Required]
         [EmailAddress]
         public string Email { get; set; }

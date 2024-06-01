@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PetHealthcare.Server.Repositories.DbContext;
 
@@ -11,9 +12,11 @@ using PetHealthcare.Server.Repositories.DbContext;
 namespace PetHealthcare.Server.Migrations.ApplicationDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240531162837_db002")]
+    partial class db002
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -149,6 +152,10 @@ namespace PetHealthcare.Server.Migrations.ApplicationDb
                         .HasColumnType("int");
 
                     b.Property<string>("AccountFullname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AccountId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

@@ -1,4 +1,5 @@
-﻿using PetHealthcare.Server.APIs.DTOS;
+﻿using Microsoft.AspNetCore.Identity;
+using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using System.Linq.Expressions;
 
@@ -10,7 +11,7 @@ namespace PetHealthcare.Server.Services.Interfaces
         Task<IEnumerable<Account>> GetAllAccountsByRole(int roleId);
         Task<Account?> GetAccountByRole(int roleId, string id);
         Task<Account?> GetAccountByCondition(Expression<Func<Account, bool>> expression);
-        Task CreateAccount(AccountDTO Account);
+        Task<Account?> CreateAccount(AccountDTO Account);
         Task UpdateAccount(string id, AccountDTO Account);
         void DeleteAccount(Account Account);
         Task<Account?> LoginAccount(string username, string password);

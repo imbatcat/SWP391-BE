@@ -35,12 +35,10 @@ namespace PetHealthcare.Server.Models
         [Required]
         public bool IsMale { get; set; }
 
-        [DataType(DataType.PhoneNumber)]
-        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Not a valid phone number")]
+        [DataType(DataType.PhoneNumber, ErrorMessage = "Not a valid phone number")]
         [Required]
         public string PhoneNumber { get; set; }
 
-        [DataType(DataType.EmailAddress)]
         [EmailAddress(ErrorMessage = "Please enter a valid email address.")]
         [Required]
         public string Email { get; set; }

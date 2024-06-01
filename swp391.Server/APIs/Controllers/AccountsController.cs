@@ -55,7 +55,6 @@ namespace PetHealthcare.Server.APIs.Controllers
         //}
 
         [HttpGet("/api/accounts/pets/{id}")]
-        [Authorize]
         public async Task<IEnumerable<Pet>> GetAccountPets([FromRoute] string id)
         {
             return await _contextPet.GetAccountPets(id);
@@ -107,14 +106,20 @@ namespace PetHealthcare.Server.APIs.Controllers
         [HttpPost]
         public async Task<ActionResult<Account>> PostAccount([FromBody] AccountDTO accountDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Bad input");
+            }
             try
             {
-                await _context.CreateAccount(accountDTO);
+                var result = await _context.CreateAccount(accountDTO);
             }
             catch (BadHttpRequestException ex)
             {
                 return (BadRequest(ex.Message));
             }
+           return CreatedAtAction(
+                    "GetAccount", new { id = accountDTO.GetHashCode() }, accountDTO);
             //try
             //{
             //    await _context.SaveChangesAsync();
@@ -131,15 +136,10 @@ namespace PetHealthcare.Server.APIs.Controllers
             //    }
             //}
 
-            return CreatedAtAction("GetAccount", new { id = accountDTO.GetHashCode() }, accountDTO);
         }
 
         [HttpPost("/api/accounts/login")]
-<<<<<<< Updated upstream
-        public async Task<ActionResult<Account>> LoginAccount()
-=======
         public async Task<ActionResult<Account>> LoginAccount([FromBody] GuestDTO guest)
->>>>>>> Stashed changes
         {
             //try
             //{
