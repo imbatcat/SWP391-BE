@@ -1,5 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging.Abstractions;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Services.Interfaces;
@@ -11,10 +11,12 @@ namespace PetHealthcare.Server.APIs.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly IAccountService _context;
+        private readonly IPetService _contextPet;
 
-        public AccountsController(IAccountService context)
+        public AccountsController(IAccountService context, IPetService contextPet)
         {
             _context = context;
+            _contextPet = contextPet;
         }
 
         // GET: api/Accounts
@@ -40,6 +42,23 @@ namespace PetHealthcare.Server.APIs.Controllers
                 return NotFound();
             }
             return Ok(checkAccount);
+        }
+
+        //[HttpGet("/api/account/pets/{id}")]
+        //public IEnumerable<Pet> GetAccountPets([FromRoute] string id)
+        //{
+        //    var checkAccount = _context.GetAccountByCondition(a => a.AccountId == id);
+        //    if (checkAccount == null)
+        //    {
+        //    }
+        //    return _context.GetAccountPets(checkAccount);
+        //}
+
+        [HttpGet("/api/accounts/pets/{id}")]
+        public async Task<IEnumerable<Pet>> GetAccountPets([FromRoute] string id)
+        {
+            return await _contextPet.GetAccountPets(id);
+
         }
 
         // GET: api/Accounts/5
@@ -87,7 +106,20 @@ namespace PetHealthcare.Server.APIs.Controllers
         [HttpPost]
         public async Task<ActionResult<Account>> PostAccount([FromBody] AccountDTO accountDTO)
         {
-            await _context.CreateAccount(accountDTO);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Bad input");
+            }
+            try
+            {
+                var result = await _context.CreateAccount(accountDTO);
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return (BadRequest(ex.Message));
+            }
+           return CreatedAtAction(
+                    "GetAccount", new { id = accountDTO.GetHashCode() }, accountDTO);
             //try
             //{
             //    await _context.SaveChangesAsync();
@@ -104,9 +136,28 @@ namespace PetHealthcare.Server.APIs.Controllers
             //    }
             //}
 
-            return CreatedAtAction("GetAccount", new { id = accountDTO.GetHashCode() }, accountDTO);
         }
 
+        [HttpPost("/api/accounts/login")]
+        public async Task<ActionResult<Account>> LoginAccount([FromBody] GuestDTO guest)
+        {
+            //try
+            //{
+            //    await _context.SaveChangesAsync();
+            //}
+            //catch (DbUpdateException)
+            //{
+            //    if (AccountExists(account.AccountId))
+            //    {
+            //        return Conflict();
+            //    }
+            //    else
+            //    {
+            //        throw;
+            //    }
+            //}
+            return null;
+        }
         // DELETE: api/Accounts/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAccount(string id)

@@ -25,7 +25,7 @@ namespace PetHealthcare.Server.Repositories
 
         public async Task<IEnumerable<Cage>> GetAll()
         {
-            return await context.Cages.OrderBy(p => p.CageId ).ToListAsync();
+            return await context.Cages.OrderBy(p => p.CageId).ToListAsync();
         }
 
         public async Task<Cage?> GetByCondition(Expression<Func<Cage, bool>> expression)

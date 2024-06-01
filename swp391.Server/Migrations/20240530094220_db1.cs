@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace PetHealthcareSystem.Migrations
+namespace PetHealthcare.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class db : Migration
+    public partial class db1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -74,8 +75,8 @@ namespace PetHealthcareSystem.Migrations
                     FullName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false),
                     IsMale = table.Column<bool>(type: "bit", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false),
                     JoinDate = table.Column<DateOnly>(type: "date", nullable: false),
                     IsDisabled = table.Column<bool>(type: "bit", nullable: false),
@@ -106,7 +107,7 @@ namespace PetHealthcareSystem.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Ratings = table.Column<int>(type: "int", nullable: false),
                     FeedbackDetails = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
-                    AccountId = table.Column<string>(type: "char(11)", nullable: true)
+                    AccountId = table.Column<string>(type: "char(11)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -115,7 +116,8 @@ namespace PetHealthcareSystem.Migrations
                         name: "FK_Feedbacks_Accounts_AccountId",
                         column: x => x.AccountId,
                         principalTable: "Accounts",
-                        principalColumn: "AccountId");
+                        principalColumn: "AccountId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -126,7 +128,7 @@ namespace PetHealthcareSystem.Migrations
                     ImgUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PetName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     PetBreed = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    PetAge = table.Column<int>(type: "int", nullable: false),
+                    PetAge = table.Column<DateOnly>(type: "date", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     IsMale = table.Column<bool>(type: "bit", nullable: false),
                     IsCat = table.Column<bool>(type: "bit", nullable: false),
@@ -308,6 +310,30 @@ namespace PetHealthcareSystem.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ServiceOrderDetails",
+                columns: table => new
+                {
+                    ServiceId = table.Column<int>(type: "int", nullable: false),
+                    ServiceOrderId = table.Column<string>(type: "char(11)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ServiceOrderDetails", x => new { x.ServiceId, x.ServiceOrderId });
+                    table.ForeignKey(
+                        name: "FK_ServiceOrderDetails_ServiceOrders_ServiceOrderId",
+                        column: x => x.ServiceOrderId,
+                        principalTable: "ServiceOrders",
+                        principalColumn: "ServiceOrderId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ServiceOrderDetails_Services_ServiceId",
+                        column: x => x.ServiceId,
+                        principalTable: "Services",
+                        principalColumn: "ServiceId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ServicePayments",
                 columns: table => new
                 {
@@ -328,34 +354,28 @@ namespace PetHealthcareSystem.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "ServiceOrderDetails",
-                columns: table => new
-                {
-                    ServiceOrderId = table.Column<string>(type: "char(11)", nullable: false),
-                    ServiceId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ServiceOrderDetails", x => new { x.ServiceOrderId, x.ServiceId });
-                    table.ForeignKey(
-                        name: "FK_ServiceOrderDetails_ServiceOrders_ServiceOrderId",
-                        column: x => x.ServiceOrderId,
-                        principalTable: "ServiceOrders",
-                        principalColumn: "ServiceOrderId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ServiceOrderDetails_Services_ServiceId",
-                        column: x => x.ServiceId,
-                        principalTable: "Services",
-                        principalColumn: "ServiceId",
-                        onDelete: ReferentialAction.Cascade);
-                });
+            migrationBuilder.CreateIndex(
+                name: "IX_Accounts_Email",
+                table: "Accounts",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Accounts_PhoneNumber",
+                table: "Accounts",
+                column: "PhoneNumber",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Accounts_RoleId",
                 table: "Accounts",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Accounts_Username",
+                table: "Accounts",
+                column: "Username",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AdmissionRecords_CageId",
@@ -403,6 +423,12 @@ namespace PetHealthcareSystem.Migrations
                 column: "AppointmentId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Cages_CageNumber",
+                table: "Cages",
+                column: "CageNumber",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Feedbacks_AccountId",
                 table: "Feedbacks",
                 column: "AccountId");
@@ -423,6 +449,11 @@ namespace PetHealthcareSystem.Migrations
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ServiceOrderDetails_ServiceOrderId",
+                table: "ServiceOrderDetails",
+                column: "ServiceOrderId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ServiceOrders_MedicalRecordId",
                 table: "ServiceOrders",
                 column: "MedicalRecordId");
@@ -432,11 +463,6 @@ namespace PetHealthcareSystem.Migrations
                 table: "ServicePayments",
                 column: "ServiceOrderId",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ServiceOrderDetails_ServiceId",
-                table: "ServiceOrderDetails",
-                column: "ServiceId");
         }
 
         /// <inheritdoc />
@@ -452,19 +478,19 @@ namespace PetHealthcareSystem.Migrations
                 name: "Feedbacks");
 
             migrationBuilder.DropTable(
-                name: "ServicePayments");
+                name: "ServiceOrderDetails");
 
             migrationBuilder.DropTable(
-                name: "ServiceOrderDetails");
+                name: "ServicePayments");
 
             migrationBuilder.DropTable(
                 name: "Cages");
 
             migrationBuilder.DropTable(
-                name: "ServiceOrders");
+                name: "Services");
 
             migrationBuilder.DropTable(
-                name: "Services");
+                name: "ServiceOrders");
 
             migrationBuilder.DropTable(
                 name: "MedicalRecords");

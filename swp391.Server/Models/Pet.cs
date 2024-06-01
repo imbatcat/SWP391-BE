@@ -26,7 +26,7 @@ namespace PetHealthcare.Server.Models
         public string PetBreed { get; set; }
 
         [Required]
-        public int PetAge { get; set; }
+        public DateOnly PetAge { get; set; }
 
         [StringLength(100)]
         public string? Description { get; set; }
@@ -51,10 +51,10 @@ namespace PetHealthcare.Server.Models
         [Required]
         [DeleteBehavior(DeleteBehavior.Restrict)]
         public Account Account { get; set; }
-        public string AccountId { get;  set; }
+        public string AccountId { get; set; }
 
         public virtual ICollection<AdmissionRecord> AdmissionRecords { get; set; }
-        
+
         public virtual ICollection<MedicalRecord> MedicalRecords { get; set; }
 
     }

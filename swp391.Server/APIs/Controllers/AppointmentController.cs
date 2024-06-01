@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
-using PetHealthcare.Server.Repositories.Interfaces;
-using PetHealthcare.Server.Services;
 using PetHealthcare.Server.Services.Interfaces;
 
 namespace PetHealthcare.Server.APIs.Controllers
@@ -33,7 +32,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
             if (appointment == null)
             {
-                return NotFound();
+                return NotFound(new {message = "Appointment not found"});
             }
 
             return appointment;
@@ -47,7 +46,12 @@ namespace PetHealthcare.Server.APIs.Controllers
             var appointment = await _appointment.GetAppointmentByCondition(a => a.AppointmentId.Equals(id));
             if (appointment == null)
             {
-                return BadRequest();
+                return NotFound(new {message ="Update fail, appointment not found"});
+            } else if(!_appointment.isVetIdValid(toUpdateAppointment.VeterinarianAccountId)) { 
+                return BadRequest(new {message = "Invalid foreign key VetId"});
+            } else if(toUpdateAppointment.BookingPrice <= 0)
+            {
+                return BadRequest(new {message = "Price must be higher than 0"});
             }
             await _appointment.UpdateAppointment(id, toUpdateAppointment);
             return Ok(toUpdateAppointment);

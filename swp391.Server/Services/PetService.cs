@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using NanoidDotNet;
+﻿using NanoidDotNet;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
@@ -18,10 +17,12 @@ namespace PetHealthcare.Server.Services
         }
         public async Task CreatePet(PetDTO pet)
         {
+            var res = await ConfirmPetIdentity(pet.AccountId, pet);
+            // if false then throw new exception
             var _pet = new Pet
             {
                 PetId = GenerateID(),
-                ImgUrl =pet.ImgUrl,
+                ImgUrl = pet.ImgUrl,
                 PetName = pet.PetName,
                 PetBreed = pet.PetBreed,
                 PetAge = pet.PetAge,
@@ -29,8 +30,8 @@ namespace PetHealthcare.Server.Services
                 IsMale = pet.IsMale,
                 IsCat = pet.IsCat,
                 VaccinationHistory = pet.VaccinationHistory,
-                IsDisabled=pet.IsDisable,
-                AccountId=pet.AccountId
+                IsDisabled = pet.IsDisable,
+                AccountId = pet.AccountId
             };
             await _petService.Create(_pet);
         }
@@ -39,12 +40,17 @@ namespace PetHealthcare.Server.Services
         {
             _petService.Delete(pet);
         }
-        public async Task< IEnumerable<Pet>> GetAllPets()
+        public async Task<IEnumerable<Pet>> GetAllPets()
         {
             return await _petService.GetAll();
         }
 
-        public async Task< Pet?> GetPetByCondition(Expression<Func<Pet, bool>> expression)
+        public async Task<IEnumerable<Pet>> GetAccountPets(string id)
+        {
+            return await _petService.GetAccountPets(id);
+        }
+
+        public async Task<Pet?> GetPetByCondition(Expression<Func<Pet, bool>> expression)
         {
             return await _petService.GetByCondition(expression);
         }
@@ -67,6 +73,15 @@ namespace PetHealthcare.Server.Services
             string id = Nanoid.Generate(size: 8);
             return prefix + id;
         }
+
+        public async Task<bool> ConfirmPetIdentity(string AccountId, PetDTO newPet)
+        {
+            // newPet's name, breed and isCat must not match any pets of this owner in the database
+
+            //get list of pet by accound id, then check if theres any pet in the database matches the 
+            //mentioned props of newPets, if yes then return false, true if otherwise. 
+            return false;
+        }
     }
-    
+
 }

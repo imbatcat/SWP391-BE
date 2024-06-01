@@ -26,10 +26,11 @@ namespace PetHealthcare.Server.Models
 
         // Reference entities
         [Required]
+        public string MedicalRecordId { get; set; }
         public MedicalRecord MedicalRecord { get; set; }
 
-        //public virtual ICollection<ServiceOrderDetail> ServiceOrderDetails { get; set; }
-        public virtual ICollection<Service> Services { get; set; }
+        public virtual ICollection<ServiceOrderDetails> ServiceOrderDetails { get; set; }
+        //public virtual ICollection<Service> Services { get; set; }
 
         public ServicePayment ServicePayment { get; set; }
     }
