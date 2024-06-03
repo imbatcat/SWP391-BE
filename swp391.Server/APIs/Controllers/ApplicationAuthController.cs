@@ -2,12 +2,19 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.WebUtilities;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.APIs.DTOS.Auth;
 using PetHealthcare.Server.Models.ApplicationModels;
+using PetHealthcare.Server.Services;
 using PetHealthcare.Server.Services.Interfaces;
+using System.Text.Encodings.Web;
+using System.Text;
+using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 [Authorize]
 [ApiController]
@@ -16,12 +23,16 @@ public class ApplicationAuthController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly IEmailSender _emailService;
     private readonly IAccountService _context;
+    private readonly AuthenticationService _authenticationService;
 
-    public ApplicationAuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IAccountService context)
+    public ApplicationAuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailService, IAccountService context)
     {
+        _authenticationService = new AuthenticationService(userManager, signInManager, emailService);
         _userManager = userManager;
         _signInManager = signInManager;
+        _emailService = emailService;
         _context = context;
     }
 
@@ -41,7 +52,7 @@ public class ApplicationAuthController : ControllerBase
             if (result.Succeeded)
             {
                 await _context.CreateAccount(registerAccount);
-                await _signInManager.SignInAsync(user, isPersistent: false);
+                await _authenticationService.SendConfirmationEmail(user.Id, user.Email);
                 return Ok(new { message = "User registered successfully" });
             }
 
@@ -79,5 +90,24 @@ public class ApplicationAuthController : ControllerBase
         await _signInManager.SignOutAsync();
         return Ok("User logged off");
     }
-    // Other custom endpoints (login, logout, etc.)
+
+    [HttpGet("confirmemail")]
+    public async Task<bool> ConfirmEmail([FromQuery] string userId, [FromQuery] string token)
+    {
+        byte[] base64EncodedBytes = Convert.FromBase64String(token);
+        string code = Encoding.UTF8.GetString(base64EncodedBytes);
+        var user = await _userManager.FindByIdAsync(userId);
+
+        var result = await _userManager.ConfirmEmailAsync(user, code);
+        return (result.Succeeded);
+    }
+
+    [HttpPost("sendconfirmemail")]
+    public async Task<IActionResult> SendConfirmEmail([FromBody] ConfirmReqUser user)
+    {
+        await _authenticationService.SendConfirmationEmail(user.UserId, user.Email);
+        return Ok();
+    }
+
+
 }
