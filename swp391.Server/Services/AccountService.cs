@@ -101,7 +101,7 @@ namespace PetHealthcare.Server.Services
             return prefix + id;
         }
 
-        public async Task<Account?> LoginAccount(string username, string password)
+        public async Task<Account?> LoginAccount()
         {
             // if get successfully return account, else throw 
             // new InvalidCredentialsException exception (each for incorrect username and incorrect password)

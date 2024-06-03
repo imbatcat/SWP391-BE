@@ -12,6 +12,7 @@ namespace PetHealthcare.Server.Services.Interfaces
         Task UpdateAppointment(string id, AppointmentDTO appointment);
         void DeleteAppointment(Appointment appointment);
 
+        bool isVetIdValid(string id);
         string GenerateId();
     }
 }

@@ -1,0 +1,37 @@
+.hero-container{
+    width: 100%;
+    min-height: 85vh;
+    background-image: url('../../assets/images/dc.png');
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-text{
+    color: black;
+    text-align: center;
+    max-width: 800px;
+    background-color: rgba(166, 164, 165, 0.3);
+    border-radius: 30px;
+    border: none;
+}
+
+.hero-text h1{
+    font-size: 60px;
+    font-weight: 600;
+    margin-top: 20px;
+}
+
+.hero-text p{
+    max-width: 700px;
+    margin: 10px auto 20px;
+    line-height: 1.4 ;
+}
+.hero-text button{
+    margin-bottom: 20px;
+}
+
+.btn{
+    background-color: rgba(255, 255, 255, 0.905);
+    
+}

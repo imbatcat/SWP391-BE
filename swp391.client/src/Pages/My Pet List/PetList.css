@@ -1,0 +1,42 @@
+.orchid-display{
+    margin-top: 30px;
+    align-items: center;
+    margin-left: 30px;
+    margin-right: 30px;
+  }
+  
+  .orchid-display-list{
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(240px,1fr));
+    margin-top: 30px;
+    gap: 30px;
+    row-gap: 50px;
+  }
+  .orchid-item{
+    width: 100%;
+    margin: auto;
+    border-radius: 15px;
+    box-shadow: 0px 0px 10px #00000015;
+    transition: 0.3s;
+    animation: fadeIn 1s;
+  }
+  
+  .orchid-item-image{
+    width: 100%;
+    border-radius: 15px 15px 0px 0px;
+  }
+  .orchid-info{
+    padding: 20px;
+  }
+  .orchid-name-rating{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .orchid-name-rating p{
+    font-size: 20px;
+    font-weight: 500;
+  }
+  
+  
