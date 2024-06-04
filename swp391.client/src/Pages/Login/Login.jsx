@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Login.css'
 import {
   MDBBtn,
@@ -19,7 +19,6 @@ import { useState } from 'react';
 import ForgotPassForm from '../../Component/ForgotPass/ForgotPassForm';
 import toast, { Toaster } from 'react-hot-toast';
 import 'react-toastify/dist/ReactToastify.css';
-import { redirect } from "react-router-dom";
 
 async function fetchData(setData) {
   try {
@@ -44,6 +43,7 @@ async function fetchData(setData) {
 
 async function loginapi(username, passwd, rememberMe, setLoginSuccess) {
   try {
+    
     const response = await fetch('https://localhost:7206/api/ApplicationAuth/login', {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
       headers: {
@@ -58,19 +58,22 @@ async function loginapi(username, passwd, rememberMe, setLoginSuccess) {
         }
       ) // body data type must match "Content-Type" header
     });
+
+   
     if (!response.ok) {
       throw new Error("Error fetching data");
     }
       toast.success('Login successful!');
       setLoginSuccess(true);
       console.log('ok');
+      navigate('/');
     
     
   } catch (error) {
     toast.error('Login failed!');
     setLoginSuccess(false);
-    
     console.error(error.message);
+    
   }
 }
 
@@ -79,7 +82,8 @@ function Login() {
   const [loginSuccess, setLoginSuccess] = useState(false);
   const [userName, setUserName] = useState('');
   const [password, setPassWord] = useState('');
-
+  const navigate = useNavigate();
+ 
   const toggleOpen = () => setBasicModal(!basicModal);
 
   const handleOnChangeUsername = (e) => {
@@ -91,7 +95,7 @@ function Login() {
   }
 
   const handleLoginClick = () => {
-    loginapi(userName, password, true, setLoginSuccess);
+    loginapi(userName, password, true, setLoginSuccess, navigate);
   }
 
   return (
@@ -112,7 +116,7 @@ function Login() {
                           <MDBInput wrapperClass='mb-4' label='Email address' id='formControlLg' onChange={(e) => handleOnChangeUsername(e)} value={userName} type='email' size="lg" />
                           <MDBInput wrapperClass='mb-4' label='Password' id='formControlLg' onChange={(e) => handleOnChangePassWord(e)} value={password} type='password' size="lg" />
 
-                          <MDBBtn className="mb-4 px-5" color='blue' size='lg' onClick={() => loginapi(userName, password, true, setLoginSuccess)}>Login</MDBBtn>
+                          <MDBBtn className="mb-4 px-5" color='blue' size='lg' onClick={handleLoginClick}>Login</MDBBtn>
 
                           <a className="small text-muted" style={{ textAlign: 'end' }} onClick={toggleOpen}>Forgot password?</a>
                           <MDBModal open={basicModal} onClose={() => setBasicModal(false)} tabIndex='-1'>
