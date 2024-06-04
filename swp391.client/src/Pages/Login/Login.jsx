@@ -17,7 +17,7 @@ import {
 } from 'mdb-react-ui-kit';
 import { useState } from 'react';
 import ForgotPassForm from '../../Component/ForgotPass/ForgotPassForm';
-import { ToastContainer, toast } from 'react-toastify';
+import toast, { Toaster } from 'react-hot-toast';
 import 'react-toastify/dist/ReactToastify.css';
 
 async function fetchData(setData) {
@@ -60,12 +60,14 @@ async function loginapi(username, passwd, rememberMe, setLoginSuccess) {
     if (!response.ok) {
       throw new Error("Error fetching data");
     }
-    setLoginSuccess(true);
     toast.success('Login successful!');
+    setLoginSuccess(true);
+    
     console.log('ok');
   } catch (error) {
-    setLoginSuccess(false);
     toast.error('Login failed!');
+    setLoginSuccess(false);
+    
     console.error(error.message);
   }
 }
@@ -97,7 +99,12 @@ function Login() {
                   <MDBCol md='6' className='imgside'></MDBCol>
                   <MDBCol md='6' >
                       <MDBCardBody className='d-flex flex-column' >
-
+                          <div>
+                          <Toaster
+                           position="top-right"
+                            reverseOrder={false}
+                          />
+                          </div>
                           <h5 className="fw-bold my-5 pb-2" style={{ letterSpacing: '1px', textAlign: 'center', fontSize: '30px' }}>Sign into your account</h5>
 
                           <MDBInput wrapperClass='mb-4' label='Email address' id='formControlLg' onChange={(e) => handleOnChangeUsername(e)} value={userName} type='email' size="lg" />
