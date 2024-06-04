@@ -19,6 +19,7 @@ import { useState } from 'react';
 import ForgotPassForm from '../../Component/ForgotPass/ForgotPassForm';
 import toast, { Toaster } from 'react-hot-toast';
 import 'react-toastify/dist/ReactToastify.css';
+import { redirect } from "react-router-dom";
 
 async function fetchData(setData) {
   try {
@@ -60,10 +61,11 @@ async function loginapi(username, passwd, rememberMe, setLoginSuccess) {
     if (!response.ok) {
       throw new Error("Error fetching data");
     }
-    toast.success('Login successful!');
-    setLoginSuccess(true);
+      toast.success('Login successful!');
+      setLoginSuccess(true);
+      console.log('ok');
     
-    console.log('ok');
+    
   } catch (error) {
     toast.error('Login failed!');
     setLoginSuccess(false);
