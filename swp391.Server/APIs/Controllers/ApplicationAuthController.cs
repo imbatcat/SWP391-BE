@@ -14,8 +14,9 @@ using PetHealthcare.Server.Services;
 using PetHealthcare.Server.Services.Interfaces;
 using System.Text.Encodings.Web;
 using System.Text;
-using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 using PetHealthcare.Server.Services.AuthInterfaces;
+using NuGet.Common;
+using PetHealthcare.Server.Helpers;
 
 [Authorize]
 [ApiController]
@@ -41,7 +42,7 @@ public class ApplicationAuthController : ControllerBase
 
     [AllowAnonymous]
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] AccountDTO registerAccount, [FromQuery] string role)
+    public async Task<IActionResult> Register([FromBody] AccountDTO registerAccount)
     {
         if (ModelState.IsValid)
         {
@@ -55,6 +56,7 @@ public class ApplicationAuthController : ControllerBase
             try
             {
                 var account = await _context.CreateAccount(registerAccount);
+                var role = Helpers.GetRole(registerAccount.RoleId);
                 var result = await _userManager.CreateAsync(user, registerAccount.Password);
                 if (result.Succeeded)
                 {
@@ -134,6 +136,37 @@ public class ApplicationAuthController : ControllerBase
         return Ok();
     }
 
+    
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> SendForgotPasswordEmail([FromBody] ConfirmReqUser user)
+    {
+        await _authenticationService.SendForgotPasswordEmail(user.UserId, user.Email);
+        return Ok();
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword([FromBody] RequestResetPassword entity)
+    {
+        var user = await _userManager.FindByIdAsync(entity.UserId);
+        IdentityResult result;
+        try
+        {
+            byte[] base64EncodedBytes = Convert.FromBase64String(entity.Token);
+            string code = Encoding.UTF8.GetString(base64EncodedBytes);
+            result = await _userManager.ResetPasswordAsync(user, code, entity.NewPassword);
+        }
+        catch (FormatException)
+        {
+            result = IdentityResult.Failed(_userManager.ErrorDescriber.InvalidToken());
+        }
+
+        if (!result.Succeeded)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok();
+    }
     [AllowAnonymous]
     //[Authorize(Roles = ("Admin"))]
     [HttpGet("setrole")]

@@ -59,8 +59,6 @@ async function loginapi(username, passwd, rememberMe) {
         if (!response.ok) {
             throw new Error("Error fetching data");
         }
-        //const json = await response.json();
-        //setToken(json); // Ensure setData is correctly referenced
         console.log('ok');
     } catch (error) {
         console.error(error.message);

@@ -1,15 +1,10 @@
-function onSignIn(googleUser) {
-    var profile = googleUser.getBasicProfile();
-    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-    console.log('Name: ' + profile.getName());
-    console.log('Image URL: ' + profile.getImageUrl());
-    console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-}
-
-function GoogleLogin() {
+import { GoogleLogin } from '@react-oauth/google';
+function GglLogin() {
   return (
-      <div className="g-signin2" data-onsuccess="onSignIn">helo</div>
+      <div>
+          <GoogleLogin></GoogleLogin>
+      </div>
   );
 }
 
-export default GoogleLogin;
+export default GglLogin;

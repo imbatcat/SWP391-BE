@@ -31,17 +31,40 @@ namespace PetHealthcare.Server.Services
 
             return code;
         }
+
+        public async Task<string> GenerateForgotPasswordToken(ApplicationUser user, string email)
+        {
+            var code = await _userManager.GeneratePasswordResetTokenAsync(user); 
+            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+            
+            return code;
+        }
+
         public async Task SendConfirmationEmail(string userId, string userEmail)
         {
             var user = await _userManager.FindByIdAsync(userId);
             var token = await GenerateConfirmationToken(user, userEmail);
-            Console.WriteLine(token);
+            //Console.WriteLine(token);
             var confirmationLink = $"https://localhost:5173/account-confirm?userId={userId}&token={token}";
             MailMessage message = new MailMessage();
             await _emailService.SendEmailAsync(
                 userEmail,
                 "Confirm Your Email Address",
                 $"<p>Please confirm your email address by clicking <a href='{confirmationLink}'>here</a>. 100% reliable no scam.</p>");
+        }
+
+        public async Task SendForgotPasswordEmail(string userId, string userEmail)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            var token = await GenerateForgotPasswordToken(user, userEmail);
+            //Console.WriteLine(token);
+            var confirmationLink = $"https://localhost:5173/reset-password?userId={userId}&token={token}";
+            MailMessage message = new MailMessage();
+            await _emailService.SendEmailAsync(
+                userEmail,
+                "Password reset",
+                $"<p>Reset your password by clicking <a href='{confirmationLink}'>here</a>. 100% reliable no scam.</p>");
+
         }
     }
 }

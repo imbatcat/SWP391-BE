@@ -3,12 +3,51 @@ import { Link } from 'react-router-dom';
 
 
 const PasswordResetForm = () => {
-  const [password1, setPassword1] = useState('');
-  const [password2, setPassword2] = useState('');
-  const [message, setMessage] = useState('');
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const [pwdLength1, setPwdLength1] = useState('');
-  const [pwdLength2, setPwdLength2] = useState('');
+    const navigate = useNavigate();
+    const query = useQuery();
+    const [confirmationResult, setConfirmationResult] = useState(null);
+
+    const [password1, setPassword1] = useState('');
+    const [password2, setPassword2] = useState('');
+    const [message, setMessage] = useState('');
+    const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+    const [pwdLength1, setPwdLength1] = useState('');
+    const [pwdLength2, setPwdLength2] = useState('');
+
+    useEffect(() => {
+        const userId = query.get('userId');
+        const token = query.get('token');
+
+        if (userId && token) {
+            resetPassword(userId, token, password1);
+        }
+    }, [query]);
+
+    const resetPassword = async (userId, token, password1) => {
+        try {
+            const response = await fetch(`https://localhost:7206/api/ApplicationAuth/reset-password`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify(
+                    {
+                        "UserId": userId,
+                        "Token": token,
+                        "NewPassword": password1
+                    }
+                ),
+            });
+            if (response.ok) {
+                navigate('/');
+            }
+        } catch (error) {
+            console.error('Error resetting password:', error);
+        }
+ 
+    };
+
 
   const validate = () => {
     let pwdLength1 = '';

@@ -12,9 +12,10 @@ import AboutUs from './Pages/About Us/AboutUs';
 import Appointment from './Pages/Appointment/Appointment';
 import OTPInput from './Pages/OTP Input/OTPInput';
 import PasswordResetForm from './Pages/SetNewPass/PasswordResetForm';
-import PetList from './Pages/My Pet List/PetList';
+import PetList from './Pages/MyPetList/PetList';
 import ConfirmEmail from './Pages/ConfirmEmail';
-import GoogleLogin from './Pages/GoogleLogin';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import GglLogin from './Pages/GoogleLogin';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -47,7 +48,7 @@ const router = createBrowserRouter([
     errorElement: <div>404 Not Found</div>,
   },
   {
-    path: '/setnewpw',
+    path: '/reset-password',
     element: <PasswordResetForm/>,
     errorElement: <div>404 Not Found</div>,
   },
@@ -63,16 +64,18 @@ const router = createBrowserRouter([
     },
     {
         path: '/google',
-        element: <GoogleLogin />,
+        element: <GglLogin />,
         errorElement: <div>404 Not Found</div>,
     },
 ])
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <RouterProvider router={router}/>
-    {/*<App></App>*/}
-  </React.StrictMode>,
+    <GoogleOAuthProvider clientId="">
+      <React.StrictMode>
+        <RouterProvider router={router}/>
+        {/*<App></App>*/}
+        </React.StrictMode>
+    </GoogleOAuthProvider >
 );
 
 // If you want to start measuring performance in your app, pass a function
