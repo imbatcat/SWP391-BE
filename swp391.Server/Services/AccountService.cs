@@ -48,7 +48,16 @@ namespace PetHealthcare.Server.Services
                 JoinDate = new DateOnly()
             };
 
-            await _accountService.Create(_account);
+            try
+            {
+                await _accountService.Create(_account);
+            } catch (BadHttpRequestException ex)
+            {
+                throw new BadHttpRequestException(
+                    ex.Message,
+                    ex.StatusCode,
+                    ex.InnerException);
+            }
             return _account;
         }
 

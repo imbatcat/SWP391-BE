@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <PackageReference Include="FluentEmail.Smtp" Version="3.0.2" />
-    <PackageReference Include="MailKit" Version="4.6.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.6" />
@@ -45,7 +44,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Helpers\" />
     <Folder Include="Migrations\ApplicationDb\" />
   </ItemGroup>
 

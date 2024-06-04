@@ -15,6 +15,7 @@ using PetHealthcare.Server.Services.Interfaces;
 using System.Text.Encodings.Web;
 using System.Text;
 using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
+using PetHealthcare.Server.Services.AuthInterfaces;
 
 [Authorize]
 [ApiController]
@@ -23,22 +24,24 @@ public class ApplicationAuthController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly RoleManager<ApplicationRole> _roleManager;
     private readonly IEmailSender _emailService;
     private readonly IAccountService _context;
-    private readonly AuthenticationService _authenticationService;
+    private readonly IAuthenticationService _authenticationService;
 
-    public ApplicationAuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailService, IAccountService context)
+    public ApplicationAuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager, IEmailSender emailService, IAccountService context, IAuthenticationService authenticationService)
     {
-        _authenticationService = new AuthenticationService(userManager, signInManager, emailService);
         _userManager = userManager;
         _signInManager = signInManager;
+        _roleManager = roleManager;
         _emailService = emailService;
         _context = context;
+        _authenticationService = authenticationService;
     }
 
     [AllowAnonymous]
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] AccountDTO registerAccount)
+    public async Task<IActionResult> Register([FromBody] AccountDTO registerAccount, [FromQuery] string role)
     {
         if (ModelState.IsValid)
         {
@@ -48,17 +51,24 @@ public class ApplicationAuthController : ControllerBase
                 Email = registerAccount.Email,
                 AccountFullname = registerAccount.FullName,
             };
-            var result = await _userManager.CreateAsync(user, registerAccount.Password);
-            if (result.Succeeded)
-            {
-                await _context.CreateAccount(registerAccount);
-                await _authenticationService.SendConfirmationEmail(user.Id, user.Email);
-                return Ok(new { message = "User registered successfully" });
-            }
 
-            foreach (var error in result.Errors)
+            try
             {
-                ModelState.AddModelError(string.Empty, error.Description);
+                var account = await _context.CreateAccount(registerAccount);
+                var result = await _userManager.CreateAsync(user, registerAccount.Password);
+                if (result.Succeeded)
+                {
+                    await _authenticationService.SendConfirmationEmail(user.Id, user.Email);
+                    await _userManager.AddToRoleAsync(user, role);
+                    return Ok(new { message = "User registered successfully" });
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            } catch (BadHttpRequestException ex)
+            {
+                return BadRequest(ex);
             }
         }
 
@@ -73,6 +83,15 @@ public class ApplicationAuthController : ControllerBase
         {
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+            var user = await _userManager.FindByNameAsync(registerAccount.UserName);
+            if (user == null)
+            {
+                return BadRequest("No such username");
+            }
+            if (!user.EmailConfirmed)
+            {
+                return BadRequest("Account is not confirmed");
+            }
             var result = await _signInManager.PasswordSignInAsync(registerAccount.UserName, registerAccount.Password, registerAccount.RememberMe, lockoutOnFailure: false);
             if (result.Succeeded)
             {
@@ -91,17 +110,23 @@ public class ApplicationAuthController : ControllerBase
         return Ok("User logged off");
     }
 
+    [AllowAnonymous]
     [HttpGet("confirmemail")]
-    public async Task<bool> ConfirmEmail([FromQuery] string userId, [FromQuery] string token)
+    public async Task<IActionResult> ConfirmEmail([FromQuery] string userId, [FromQuery] string token)
     {
         byte[] base64EncodedBytes = Convert.FromBase64String(token);
         string code = Encoding.UTF8.GetString(base64EncodedBytes);
         var user = await _userManager.FindByIdAsync(userId);
 
         var result = await _userManager.ConfirmEmailAsync(user, code);
-        return (result.Succeeded);
+        if (result.Succeeded)
+        {
+            await _signInManager.SignInAsync(user, isPersistent: false);
+        }
+        return Ok();
     }
 
+    [AllowAnonymous]
     [HttpPost("sendconfirmemail")]
     public async Task<IActionResult> SendConfirmEmail([FromBody] ConfirmReqUser user)
     {
@@ -109,5 +134,21 @@ public class ApplicationAuthController : ControllerBase
         return Ok();
     }
 
+    [AllowAnonymous]
+    //[Authorize(Roles = ("Admin"))]
+    [HttpGet("setrole")]
+    public async Task<IActionResult> SetRole([FromQuery] string userName, [FromQuery] string role)
+    {
+        try
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            await _userManager.AddToRoleAsync(user, role);
 
+        } catch (Exception e)
+        {
+            return BadRequest(e);
+        }
+
+        return Ok();
+    }
 }

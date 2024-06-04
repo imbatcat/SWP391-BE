@@ -21,8 +21,18 @@ namespace PetHealthcare.Server.Repositories
 
         public async Task Create(Account entity)
         {
-            await context.Accounts.AddAsync(entity);
-            await SaveChanges();
+            try
+            {
+                await context.Accounts.AddAsync(entity);
+                await SaveChanges();
+
+            } catch (DbUpdateException ex)
+            {
+                throw new BadHttpRequestException(
+                    ex.Message,
+                    ex.InnerException);
+            }
+
         }
 
         public void Delete(Account entity)

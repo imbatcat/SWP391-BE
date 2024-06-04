@@ -7,6 +7,7 @@ using PetHealthcare.Server.Services.Interfaces;
 namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin")]
     [ApiController]
     public class AccountsController : ControllerBase
     {

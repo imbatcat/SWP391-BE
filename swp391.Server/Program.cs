@@ -9,7 +9,9 @@ using PetHealthcare.Server.Repositories.Interfaces;
 using PetHealthcare.Server.Services;
 using PetHealthcare.Server.Services.Interfaces;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Authentication;
+using PetHealthcare.Server.Helpers;
+using Microsoft.Extensions.DependencyInjection;
+using PetHealthcare.Server.Services.AuthInterfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -55,6 +57,7 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IMedicalRecordService, MedicalRecordService>();
 builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
 builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 #endregion
 
 
@@ -82,9 +85,11 @@ builder.Services.AddControllers()
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddAuthentication();
-builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
 
-builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
+builder.Services.AddIdentityApiEndpoints<ApplicationUser>(
+    options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<ApplicationRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 
@@ -92,6 +97,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen().AddSwaggerGenNewtonsoftSupport();
 
 var app = builder.Build();
+DataSeeder.SeedRoles();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

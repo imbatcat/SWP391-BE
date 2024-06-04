@@ -2,13 +2,14 @@
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.WebUtilities;
 using PetHealthcare.Server.Models.ApplicationModels;
+using PetHealthcare.Server.Services.AuthInterfaces;
 using PetHealthcare.Server.Services.Interfaces;
 using System.Net.Mail;
 using System.Text;
 
 namespace PetHealthcare.Server.Services
 {
-    public class AuthenticationService
+    public class AuthenticationService : IAuthenticationService
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -35,7 +36,7 @@ namespace PetHealthcare.Server.Services
             var user = await _userManager.FindByIdAsync(userId);
             var token = await GenerateConfirmationToken(user, userEmail);
             Console.WriteLine(token);
-            var confirmationLink = $"https://localhost:7206/api/ApplicationAuth/confirmemail?userId={userId}&token={token}";
+            var confirmationLink = $"https://localhost:5173/account-confirm?userId={userId}&token={token}";
             MailMessage message = new MailMessage();
             await _emailService.SendEmailAsync(
                 userEmail,

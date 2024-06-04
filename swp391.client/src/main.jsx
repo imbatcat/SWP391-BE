@@ -12,7 +12,9 @@ import AboutUs from './Pages/About Us/AboutUs';
 import Appointment from './Pages/Appointment/Appointment';
 import OTPInput from './Pages/OTP Input/OTPInput';
 import PasswordResetForm from './Pages/SetNewPass/PasswordResetForm';
-import PetList from './Pages/MyPetList/PetList';
+import PetList from './Pages/My Pet List/PetList';
+import ConfirmEmail from './Pages/ConfirmEmail';
+import GoogleLogin from './Pages/GoogleLogin';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -53,7 +55,17 @@ const router = createBrowserRouter([
     path: '/petList',
     element: <PetList/>,
     errorElement: <div>404 Not Found</div>,
-  }
+    },
+    {
+        path: '/account-confirm',
+        element: <ConfirmEmail />,
+        errorElement: <div>404 Not Found</div>,
+    },
+    {
+        path: '/google',
+        element: <GoogleLogin />,
+        errorElement: <div>404 Not Found</div>,
+    },
 ])
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
