@@ -13,7 +13,7 @@ using PetHealthcare.Server.Services.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-const string DataSrc = "MEOMATLON\\SQLEXPRESS", Password = "MukuroHoshimiya";
+const string DataSrc = "MIB\\MINHLUONG", Password = "12345";
 
 // Add services to the container.
 builder.Services.AddDbContext<PetHealthcareDbContext>(
