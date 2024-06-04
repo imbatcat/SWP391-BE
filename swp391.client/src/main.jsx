@@ -12,7 +12,7 @@ import AboutUs from './Pages/About Us/AboutUs';
 import Appointment from './Pages/Appointment/Appointment';
 import OTPInput from './Pages/OTP Input/OTPInput';
 import PasswordResetForm from './Pages/SetNewPass/PasswordResetForm';
-import PetList from './Pages/My Pet List/PetList';
+import PetList from './Pages/MyPetList/PetList';
 const router = createBrowserRouter([
   {
     path: '/',
