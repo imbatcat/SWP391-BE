@@ -19,9 +19,6 @@ namespace PetHealthcare.Server.Services
 
         public async Task CreateAdmissionRecord(AdmissionRecordRegisterDTO entity)
         {
-            //bool res = await ConfirmAdmissionRecordIdentity(entity.MedicalRecordId, entity);
-            //var res1 = await ConfirmAdmissionRecordIdentity(entity.MedicalRecordId, entity);
-            //var res2 = await ConfirmAdmissionRecordIdentity(entity.MedicalRecordId, entity);
 
             var obj = new AdmissionRecord() {
                 AdmissionId = GenerateId(),
@@ -29,10 +26,10 @@ namespace PetHealthcare.Server.Services
                 DischargeDate = entity.DischargeDate,
                 IsDischarged = entity.IsDischarged,
                 PetCurrentCondition = entity.PetCurrentCondition, 
-                CageId = (int)entity.CageId,
+                CageId = Convert.ToInt32(entity.CageId),
                 PetId = entity.PetId,  
                 MedicalRecordId = entity.MedicalRecordId,
-                VeterinarianAccountId = "VE-00000004",
+                VeterinarianAccountId = entity.VeterianrianId,
             };
             await _admissionRecordService.Create(obj);
         }
@@ -42,7 +39,7 @@ namespace PetHealthcare.Server.Services
             _admissionRecordService.Delete(entity);
         }
 
-        public async Task<AdmissionRecord?> GetAdmissionRecordByCondition(Expression<Func<AdmissionRecord, bool>> expression)
+        public async Task<AdmissionRecord?> GetAdmissionRecordByPetName(Expression<Func<AdmissionRecord, bool>> expression)
         {
             return await _admissionRecordService.GetByCondition(expression);
         }

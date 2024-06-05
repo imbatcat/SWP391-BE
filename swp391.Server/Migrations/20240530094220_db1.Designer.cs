@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace PetHealthcareSystem.Migrations
+namespace PetHealthcare.Server.Migrations
 {
     [DbContext(typeof(PetHealthcareDbContext))]
-    [Migration("20240530054352_db1")]
+    [Migration("20240530094220_db1")]
     partial class db1
     {
         /// <inheritdoc />

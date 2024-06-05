@@ -23,8 +23,8 @@ namespace PetHealthcare.Server.Repositories
             //var entityType = context.Model.FindEntityType(typeof(T));
             //var tableName = entityType.GetTableName();
 
-           await context.Set<T>().AddAsync(entity);
-           await SaveChanges();
+            await context.Set<T>().AddAsync(entity);
+            await SaveChanges();
         }
 
         public void Delete(T entity)
@@ -32,13 +32,13 @@ namespace PetHealthcare.Server.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task< IEnumerable<T>> GetAll()
+        public async Task<IEnumerable<T>> GetAll()
         {
             var list = context.Set<T>();
             return await list.ToListAsync();
         }
 
-        public async Task< T?> GetByCondition(Expression<Func<T, bool>> expression)
+        public async Task<T?> GetByCondition(Expression<Func<T, bool>> expression)
         {
             return await context.Set<T>().FirstOrDefaultAsync(expression);
         }

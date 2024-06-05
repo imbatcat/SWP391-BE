@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Services.Interfaces;
-using PetHealthcareSystem.APIs.DTOS;
 
 namespace PetHealthcare.Server.APIs.Controllers
 {
@@ -18,7 +18,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // GET: api/Feedbacks
         [HttpGet]
-        public async Task< IEnumerable<Feedback>> GetFeedbacks()
+        public async Task<IEnumerable<Feedback>> GetFeedbacks()
         {
             return await _context.GetAllFeedback();
         }
@@ -45,7 +45,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         [HttpPost]
         public async Task<ActionResult<Feedback>> PostFeedback([FromBody] FeedbackDTO feedback)
         {
-           await _context.CreateFeedback(feedback);
+            await _context.CreateFeedback(feedback);
             return CreatedAtAction(nameof(PostFeedback), new { id = feedback.GetHashCode() }, feedback);
         }
 

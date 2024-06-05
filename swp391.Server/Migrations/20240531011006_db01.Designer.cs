@@ -8,18 +8,18 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace PetHealthcareSystem.Migrations
+namespace PetHealthcare.Server.Migrations
 {
     [DbContext(typeof(PetHealthcareDbContext))]
-    [Migration("20240530040306_newDb")]
-    partial class newDb
+    [Migration("20240531011006_db01")]
+    partial class db01
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.5")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -62,7 +62,7 @@ namespace PetHealthcareSystem.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
@@ -75,6 +75,9 @@ namespace PetHealthcareSystem.Migrations
                     b.HasKey("AccountId");
 
                     b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("PhoneNumber")
                         .IsUnique();
 
                     b.HasIndex("RoleId");
@@ -340,8 +343,8 @@ namespace PetHealthcareSystem.Migrations
                     b.Property<bool>("IsMale")
                         .HasColumnType("bit");
 
-                    b.Property<int>("PetAge")
-                        .HasColumnType("int");
+                    b.Property<DateOnly>("PetAge")
+                        .HasColumnType("date");
 
                     b.Property<string>("PetBreed")
                         .IsRequired()
@@ -430,6 +433,21 @@ namespace PetHealthcareSystem.Migrations
                     b.ToTable("ServiceOrders");
                 });
 
+            modelBuilder.Entity("PetHealthcare.Server.Models.ServiceOrderDetails", b =>
+                {
+                    b.Property<int>("ServiceId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ServiceOrderId")
+                        .HasColumnType("char(11)");
+
+                    b.HasKey("ServiceId", "ServiceOrderId");
+
+                    b.HasIndex("ServiceOrderId");
+
+                    b.ToTable("ServiceOrderDetails");
+                });
+
             modelBuilder.Entity("PetHealthcare.Server.Models.ServicePayment", b =>
                 {
                     b.Property<string>("ServicePaymentId")
@@ -475,21 +493,6 @@ namespace PetHealthcareSystem.Migrations
                     b.HasKey("TimeSlotId");
 
                     b.ToTable("TimeSlots");
-                });
-
-            modelBuilder.Entity("ServiceServiceOrder", b =>
-                {
-                    b.Property<string>("ServiceOrdersServiceOrderId")
-                        .HasColumnType("char(11)");
-
-                    b.Property<int>("ServicesServiceId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ServiceOrdersServiceOrderId", "ServicesServiceId");
-
-                    b.HasIndex("ServicesServiceId");
-
-                    b.ToTable("ServiceServiceOrder");
                 });
 
             modelBuilder.Entity("PetHealthcare.Server.Models.Veterinarian", b =>
@@ -665,6 +668,25 @@ namespace PetHealthcareSystem.Migrations
                     b.Navigation("MedicalRecord");
                 });
 
+            modelBuilder.Entity("PetHealthcare.Server.Models.ServiceOrderDetails", b =>
+                {
+                    b.HasOne("PetHealthcare.Server.Models.Service", "Service")
+                        .WithMany("ServiceOrderDetails")
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PetHealthcare.Server.Models.ServiceOrder", "ServiceOrder")
+                        .WithMany("ServiceOrderDetails")
+                        .HasForeignKey("ServiceOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Service");
+
+                    b.Navigation("ServiceOrder");
+                });
+
             modelBuilder.Entity("PetHealthcare.Server.Models.ServicePayment", b =>
                 {
                     b.HasOne("PetHealthcare.Server.Models.ServiceOrder", "ServiceOrder")
@@ -674,21 +696,6 @@ namespace PetHealthcareSystem.Migrations
                         .IsRequired();
 
                     b.Navigation("ServiceOrder");
-                });
-
-            modelBuilder.Entity("ServiceServiceOrder", b =>
-                {
-                    b.HasOne("PetHealthcare.Server.Models.ServiceOrder", null)
-                        .WithMany()
-                        .HasForeignKey("ServiceOrdersServiceOrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PetHealthcare.Server.Models.Service", null)
-                        .WithMany()
-                        .HasForeignKey("ServicesServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("PetHealthcare.Server.Models.Account", b =>
@@ -724,8 +731,15 @@ namespace PetHealthcareSystem.Migrations
                     b.Navigation("MedicalRecords");
                 });
 
+            modelBuilder.Entity("PetHealthcare.Server.Models.Service", b =>
+                {
+                    b.Navigation("ServiceOrderDetails");
+                });
+
             modelBuilder.Entity("PetHealthcare.Server.Models.ServiceOrder", b =>
                 {
+                    b.Navigation("ServiceOrderDetails");
+
                     b.Navigation("ServicePayment")
                         .IsRequired();
                 });

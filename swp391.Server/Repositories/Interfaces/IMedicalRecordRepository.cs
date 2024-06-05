@@ -2,7 +2,7 @@
 
 namespace PetHealthcare.Server.Repositories.Interfaces
 {
-    public interface IMedicalRecordRepository: IRepositoryBase<MedicalRecord>
+    public interface IMedicalRecordRepository : IRepositoryBase<MedicalRecord>
     {
     }
 }

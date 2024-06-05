@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using NanoidDotNet;
-using PetHealthcare.Server.APIs.DTOS;
+﻿using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
 using PetHealthcare.Server.Services.Interfaces;

@@ -43,7 +43,7 @@ namespace PetHealthcare.Server.Repositories
         public async Task Update(Role entity)
         {
             var role = await GetByCondition(e => e.RoleId == entity.RoleId);
- 
+
             if (role != null)
             {
                 // this line ensures efcore to update the table.

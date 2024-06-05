@@ -13,5 +13,7 @@
         public required int? CageId { get; set; }
 
         public required string? MedicalRecordId { get; set; }
+
+        public required string? VeterianrianId { get; set; }
     }
 }

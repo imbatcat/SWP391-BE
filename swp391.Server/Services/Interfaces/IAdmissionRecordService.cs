@@ -7,7 +7,7 @@ namespace PetHealthcare.Server.Services.Interfaces
     public interface IAdmissionRecordService
     {
         Task<IEnumerable<AdmissionRecord>> GetAll();
-        Task<AdmissionRecord?> GetAdmissionRecordByCondition(Expression<Func<AdmissionRecord, bool>> expression);
+        Task<AdmissionRecord?> GetAdmissionRecordByPetName(Expression<Func<AdmissionRecord, bool>> expression);
         Task CreateAdmissionRecord(AdmissionRecordRegisterDTO entity);
         Task UpdateAdmissionRecord(string id, AdmissionRecordDTO entity);
         void DeleteAdmissionRecord(AdmissionRecord entity);

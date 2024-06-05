@@ -11,14 +11,17 @@ namespace PetHealthcare.Server.APIs.Controllers
     public class AdmissionRecordController : ControllerBase
     {
         private readonly IAdmissionRecordService _context;
+        private readonly IPetService _petContext;
 
-        public AdmissionRecordController(IAdmissionRecordService context)
+
+        public AdmissionRecordController(IAdmissionRecordService context, IPetService petContext)
         {
+            _petContext = petContext;
             _context = context;
         }
 
         // GET: api/Accounts
-        [HttpGet("/api/GetAllAdmissionRecords")]
+        [HttpGet("/api/AdmissionRecord")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<AdmissionRecord>))]
         public async Task<IEnumerable<AdmissionRecord>> GetAllAdmissionRecords()
         {
@@ -26,25 +29,25 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         // GET: api/Services/5
-        [HttpGet("/api/GetAdmissionRecordByCondition/{id}")]
-        public async Task<ActionResult<AdmissionRecord>> GetAdmissionRecordByCondition([FromRoute] string id)
+        [HttpGet("/api/AdmissionRecord/{name}")]
+        public async Task<ActionResult<AdmissionRecord>> GetAdmissionRecordByCondition([FromRoute] string name)   //----Get Addmission Record by name
         {
-            var service = await _context.GetAdmissionRecordByCondition(a => a.AdmissionId == id);
+            var service = await _petContext.GetPetByName(a => a.PetName == name );
 
             if (service == null)
             {
                 return NotFound();
             }
-
+            
             return service;
         }
 
         // PUT: api/Services/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("/api/UpdateAdmissionRecord/{id}")]
+        [HttpPut("/api/AdmissionRecord/{id}")]
         public async Task<IActionResult> UpdateAdmissionRecord([FromRoute] string id, [FromBody] AdmissionRecordDTO toUpdate)
         {
-            var service = await _context.GetAdmissionRecordByCondition(p => p.AdmissionId.Equals(id));
+            var service = await _context.GetAdmissionRecordByPetName(p => p.AdmissionId.Equals(id));
 
             if (!ModelState.IsValid)
             {
@@ -54,7 +57,7 @@ namespace PetHealthcare.Server.APIs.Controllers
             return Ok(toUpdate);
         }
 
-        [HttpPost("/api/CreateAdmissionRecord")]
+        [HttpPost("/api/AdmissionRecord")]
         public async Task<ActionResult<AdmissionRecord>> CreateAdmissionRecord([FromBody] AdmissionRecordRegisterDTO _new)
         {
             await _context.CreateAdmissionRecord(_new);
