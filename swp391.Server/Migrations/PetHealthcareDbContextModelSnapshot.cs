@@ -95,7 +95,7 @@ namespace PetHealthcare.Server.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("char(11)");
 
-                    b.Property<DateOnly>("AdmissionDate")
+                    b.Property<DateOnly?>("AdmissionDate")
                         .HasColumnType("date");
 
                     b.Property<int>("CageId")

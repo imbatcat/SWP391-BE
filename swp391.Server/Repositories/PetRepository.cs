@@ -8,10 +8,11 @@ namespace PetHealthcare.Server.Repositories
     public class PetRepository : IPetRepository
     {
         private readonly PetHealthcareDbContext context;
-
-        public PetRepository(PetHealthcareDbContext context)
+        private readonly MedicalRecordRepository medicalRecordRepository;
+        public PetRepository(PetHealthcareDbContext context, MedicalRecordRepository medicalRecordRepository)
         {
             this.context = context;
+            this.medicalRecordRepository = medicalRecordRepository;
         }
 
         public async Task SaveChanges()
@@ -58,12 +59,35 @@ namespace PetHealthcare.Server.Repositories
         {
             return context.Pets.FirstOrDefault(a => a.PetId == id);
         }
-
-        public async Task<IEnumerable<Pet>> GetAccountPets(string id)
+        public async Task<bool> petExist(Pet pet)
         {
-            return await context.Pets.Where(p => p.AccountId == id).ToListAsync();
+            return await context.Pets.AnyAsync(
+             p => p.PetName == pet.PetName &&
+             p.PetBreed == pet.PetBreed &&
+             p.IsMale == pet.IsMale &&
+             p.IsCat == pet.IsCat &&
+             p.AccountId == pet.AccountId);
         }
-
-
+        public bool CheckMedicalRecord(string medRecId)
+        {
+            return context.MedicalRecords.Any(m=>m.PetId == medRecId);
+        }
+        public async Task<IEnumerable<MedicalRecord>> GetMedicalRecordsByPet(string petId)
+        {
+            if(!CheckMedicalRecord(petId))
+            {
+                return null;
+            }
+            var list = await medicalRecordRepository.GetAll();
+            List<MedicalRecord> medicalRecords= new List<MedicalRecord>();
+            foreach(MedicalRecord medRec in list)
+            {
+                if(medRec.PetId == petId)
+                {
+                    medicalRecords.Add(medRec);
+                }
+            }
+            return medicalRecords;
+        }
     }
 }

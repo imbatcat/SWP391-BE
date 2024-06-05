@@ -2,6 +2,7 @@
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
 using PetHealthcare.Server.Services.Interfaces;
+using System.Globalization;
 using System.Linq.Expressions;
 
 namespace PetHealthcare.Server.Services
@@ -16,13 +17,14 @@ namespace PetHealthcare.Server.Services
         }
         public async Task CreateTimeSlot(TimeslotDTO timeSlot)
         {
+           
             var _timeSlot = new TimeSlot
             {
-
-                StartTime = timeSlot.StartTime,
-                EndTime = timeSlot.EndTime,
-
-            };
+                
+                StartTime = ParseTime(timeSlot.StartTime),
+                EndTime = ParseTime(timeSlot.EndTime),
+                
+            };  
             await _timeSlotService.Create(_timeSlot);
         }
 
@@ -41,15 +43,27 @@ namespace PetHealthcare.Server.Services
             return await _timeSlotService.GetByCondition(expression);
         }
 
-        public async Task UpdateTimeSlot(int id, TimeslotDTO TimeSlot)
+        public async Task UpdateTimeSlot(int id, TimeslotDTO timeSlot)
         {
             var _timeSlot = new TimeSlot
             {
                 TimeSlotId = id,
-                StartTime = TimeSlot.StartTime,
-                EndTime = TimeSlot.EndTime,
+                StartTime = ParseTime(timeSlot.StartTime),
+                EndTime = ParseTime(timeSlot.EndTime),
             };
             await _timeSlotService.Update(_timeSlot);
+        }
+         
+        private static TimeOnly ParseTime(string input)
+        {
+            if (TimeOnly.TryParse(input, out TimeOnly time))
+            {
+                return time;
+            }
+            else
+            {
+                throw new FormatException("Invalid time format.");
+            }
         }
 
     }

@@ -19,14 +19,13 @@ const string DataSrc = "LAPTOP-8QVR89KA\\SQLEXPRESS02", Password = "12345";
 builder.Services.AddDbContext<PetHealthcareDbContext>(
 option => option.UseSqlServer(
         $"Data Source={DataSrc}; User = sa; Password ={Password};Initial Catalog=PetHealthCareSystem;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False"));
-
-
 builder.Services.AddDbContext<ApplicationDbContext>(
 option => option.UseSqlServer(
-        $"Data Source={DataSrc}; User = sa; Password ={Password};Initial Catalog=PetHealthCareSystemAuth;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False"));
+        $"Data Source={DataSrc}; User = sa; Password ={Password};Initial Catalog=PetHealthCareAuth;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False"));
 
+builder.Services.AddScoped<MedicalRecordRepository>();
 
-
+//Repositories
 #region Repositories
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
@@ -36,8 +35,9 @@ builder.Services.AddScoped<IFeedbackRepository, FeedbackRepository>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 builder.Services.AddScoped<IPetRepository, PetRepository>();
 builder.Services.AddScoped<ITimeslotRepository, TimeslotRepository>();
-builder.Services.AddScoped<IPetRepository, PetRepository>();
 builder.Services.AddScoped<IMedicalRecordRepository, MedicalRecordRepository>();
+builder.Services.AddScoped<IPetRepository, PetRepository>();
+builder.Services.AddScoped<IAdmissionRecordRepository, AdmissionRecordRepository>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 #endregion
 
@@ -49,9 +49,11 @@ builder.Services.AddScoped<IPetService, PetService>();
 builder.Services.AddScoped<ICageService, CageService>();
 builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 builder.Services.AddScoped<ITimeSlotService, TimeslotService>();
+builder.Services.AddScoped<IMedicalRecordService, MedicalRecordService>();
 builder.Services.AddScoped<IPetService, PetService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IMedicalRecordService, MedicalRecordService>();
+builder.Services.AddScoped<IAdmissionRecordService, AdmissionRecordService>();
 builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
 #endregion
 
