@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
 
 const PasswordResetForm = () => {
     const navigate = useNavigate();
@@ -49,38 +48,38 @@ const PasswordResetForm = () => {
     };
 
 
-  const validate = () => {
-    let pwdLength1 = '';
-    let pwdLength2 = '';
+  useEffect(() => {
+    const validate = () => {
+      let pwdLength1 = '';
+      let pwdLength2 = '';
 
-    if (password1.length < 6) {
-      pwdLength1 = 'Minimum 6 characters';
-    }
+      if (password1.length < 6) {
+        pwdLength1 = 'Minimum 6 characters';
+      }
 
-    if (password2.length < 6) {
-      pwdLength2 = 'Minimum 6 characters';
-    }
+      if (password2.length < 6) {
+        pwdLength2 = 'Minimum 6 characters';
+      }
 
-    if (password1.length >= 6 && password2.length >= 6) {
-      check();
-    }else {
-      setIsButtonDisabled(true);
-      setMessage('');
-    }
+      setPwdLength1(pwdLength1);
+      setPwdLength2(pwdLength2);
 
-    setPwdLength1(pwdLength1);
-    setPwdLength2(pwdLength2);
-  };
+      if (password1.length >= 6 && password2.length >= 6) {
+        if (password1 === password2) {
+          setIsButtonDisabled(false);
+          setMessage('Password Matched');
+        } else {
+          setIsButtonDisabled(true);
+          setMessage('Password not matching');
+        }
+      } else {
+        setIsButtonDisabled(true);
+        setMessage('');
+      }
+    };
 
-  const check = () => {
-    if (password1 === password2) {
-      setIsButtonDisabled(false);
-      setMessage('Password Matched');
-    } else {
-      setIsButtonDisabled(true);
-      setMessage('Password not matching');
-    }
-  };
+    validate();
+  }, [password1, password2]);
 
   return (
     <div className="container-fluid bg-body-tertiary d-block">
@@ -88,48 +87,40 @@ const PasswordResetForm = () => {
         <div className="col-12 col-md-6 col-lg-4" style={{ minWidth: '500px' }}>
           <div className="card bg-white mb-5 mt-5 border-0" style={{ boxShadow: '0 12px 15px rgba(0, 0, 0, 0.02)' }}>
             <div className="card-body p-5 text-center">
-            <form action="/users/updatePassword" method="PUT">
-              <h4>Reset your Password</h4>
-              <p>Your code was sent to you via email</p>
+              <form action="/users/updatePassword" method="PUT">
+                <h4>Reset your Password</h4>
+                <p>Your code was sent to you via email</p>
 
-          <div className="input-container">
-           <input
-            className="input-field"
-            id="password-1"
-            type="password"
-            placeholder="Type your new password"
-            name="password"
-            value={password1}
-            onChange={(e) => {
-              setPassword1(e.target.value);
-              validate();
-            }}
-          />
-        </div>
-        <span id="pwd-length-1">{pwdLength1}</span>
+                <div className="input-container">
+                  <input
+                    className="input-field"
+                    id="password-1"
+                    type="password"
+                    placeholder="Type your new password"
+                    name="password"
+                    value={password1}
+                    onChange={(e) => setPassword1(e.target.value)}
+                  />
+                </div>
+                <span id="pwd-length-1">{pwdLength1}</span>
 
-
-        <div className="input-container">
-           <input
-            className="input-field"
-            id="password-2"
-            type="password"
-            placeholder="Re-type your new password"
-            name="confirmPassword"
-            value={password2}
-            onChange={(e) => {
-              setPassword2(e.target.value);
-              validate();
-            }}
-          />
-        </div>
-        <span id="pwd-length-2">{pwdLength2}</span>
-        <span id="message" style={{ color: password1 === password2 ? 'green' : 'red' }}>{message}</span>
-        <div>
-        <button className="btn" id="formSubmit" type="submit" disabled={isButtonDisabled} 
-            style={{ backgroundColor: isButtonDisabled ? 'grey' : 'blue', color:'black' }}>Submit</button>
-        </div>
-           
+                <div className="input-container">
+                  <input
+                    className="input-field"
+                    id="password-2"
+                    type="password"
+                    placeholder="Re-type your new password"
+                    name="confirmPassword"
+                    value={password2}
+                    onChange={(e) => setPassword2(e.target.value)}
+                  />
+                </div>
+                <span id="pwd-length-2">{pwdLength2}</span>
+                <span id="message" style={{ color: password1 === password2 ? 'green' : 'red' }}>{message}</span>
+                <div>
+                  <button className="btn" id="formSubmit" type="submit" disabled={isButtonDisabled} 
+                    style={{ backgroundColor: isButtonDisabled ? 'grey' : 'pink' }}>Submit</button>
+                </div>
               </form>
             </div>
           </div>
@@ -138,6 +129,7 @@ const PasswordResetForm = () => {
     </div>
   );
 };
+
 //     <div style={{ maxWidth: '500px', margin: 'auto' }}>
 //       <form action="/users/updatePassword" method="PUT">
 //         <center>

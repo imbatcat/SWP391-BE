@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import './Login.css'
 import {
@@ -15,68 +14,82 @@ import {
   MDBModalDialog,
   MDBModalHeader,
   MDBModalTitle
-}
-from 'mdb-react-ui-kit';
+} from 'mdb-react-ui-kit';
 import { useState } from 'react';
 import ForgotPassForm from '../../Component/ForgotPass/ForgotPassForm';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 async function fetchData(setData) {
-    try {
-        const response = await fetch('https://localhost:7206/api/Accounts', {
-            method: 'GET', // *GET, POST, PUT, DELETE, etc.
-            credentials: 'include',
-            headers: {
-                // 'Content-Type': 'application/x-www-form-urlencoded',
-            }
-// body data type must match "Content-Type" header
-        });
-        if (!response.ok) {
-            throw new Error("Error fetching data");
-        }
-        const json = await response.json();
-        setData(json); // Ensure setData is correctly referenced
-        console.log(json);
-    } catch (error) {
-        console.error(error.message);
+  try {
+    const response = await fetch('https://localhost:7206/api/Accounts', {
+      method: 'GET', // *GET, POST, PUT, DELETE, etc.
+      credentials: 'include',
+      headers: {
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      }
+      // body data type must match "Content-Type" header
+    });
+    if (!response.ok) {
+      throw new Error("Error fetching data");
     }
+    const json = await response.json();
+    setData(json); // Ensure setData is correctly referenced
+    console.log(json);
+  } catch (error) {
+    console.error(error.message);
+  }
 }
 
-async function loginapi(username, passwd, rememberMe) {
-    try {
-        const response = await fetch('https://localhost:7206/api/ApplicationAuth/login', {
-            method: 'POST', // *GET, POST, PUT, DELETE, etc.
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: 'include',
-            body: JSON.stringify(
-                {
-                    "userName": username,
-                    "password": passwd,
-                    "rememberMe": rememberMe
-                }
-            ) // body data type must match "Content-Type" header
-        });
-        if (!response.ok) {
-            throw new Error("Error fetching data");
+async function loginapi(username, passwd, rememberMe, setLoginSuccess) {
+  try {
+    const response = await fetch('https://localhost:7206/api/ApplicationAuth/login', {
+      method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify(
+        {
+          "userName": username,
+          "password": passwd,
+          "rememberMe": rememberMe
         }
-        console.log('ok');
-    } catch (error) {
-        console.error(error.message);
+      ) // body data type must match "Content-Type" header
+    });
+    if (!response.ok) {
+      throw new Error("Error fetching data");
     }
+    setLoginSuccess(true);
+    toast.success('Login successful!');
+    console.log('ok');
+  } catch (error) {
+    setLoginSuccess(false);
+    toast.error('Login failed!');
+    console.error(error.message);
+  }
 }
 
 function Login() {
-    const [basicModal, setBasicModal] = useState(false);
+  const [basicModal, setBasicModal] = useState(false);
+  const [loginSuccess, setLoginSuccess] = useState(false);
+  const [userName, setUserName] = useState('');
+  const [password, setPassWord] = useState('');
 
-    const toggleOpen = () => setBasicModal(!basicModal);
-    const [userName, setUserName] = useState(null);
-    const  handleOnChangeUsername = (e) => {
-        setUserName(e.target.value);
-    }
-    const [password, setPassWord] = useState(null);
-    const  handleOnChangePassWord = (e) => {
-        setPassWord(e.target.value);
-    }
+  const toggleOpen = () => setBasicModal(!basicModal);
+
+  const handleOnChangeUsername = (e) => {
+    setUserName(e.target.value);
+  }
+
+  const handleOnChangePassWord = (e) => {
+    setPassWord(e.target.value);
+  }
+
+  const handleLoginClick = () => {
+    loginapi(userName, password, true, setLoginSuccess);
+  }
+
   return (
       <MDBContainer className="my-5 d-10 justify-content-center">
           <MDBCard className='login-card'>
@@ -90,7 +103,7 @@ function Login() {
                           <MDBInput wrapperClass='mb-4' label='Email address' id='formControlLg' onChange={(e) => handleOnChangeUsername(e)} value={userName} type='email' size="lg" />
                           <MDBInput wrapperClass='mb-4' label='Password' id='formControlLg' onChange={(e) => handleOnChangePassWord(e)} value={password} type='password' size="lg" />
 
-                          <MDBBtn className="mb-4 px-5" color='blue' size='lg' onClick={() => loginapi(userName,password,true)}>Login</MDBBtn>
+                          <MDBBtn className="mb-4 px-5" color='blue' size='lg' onClick={() => loginapi(userName, password, true, setLoginSuccess)}>Login</MDBBtn>
 
                           <a className="small text-muted" style={{ textAlign: 'end' }} onClick={toggleOpen}>Forgot password?</a>
                           <MDBModal open={basicModal} onClose={() => setBasicModal(false)} tabIndex='-1'>
