@@ -29,11 +29,11 @@ namespace PetHealthcare.Server.APIs.Controllers
         {
             return await _context.GetAllPets();
         }
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Pet>>> GetPets()
-        //{
-        //    return await _context.Pets.ToListAsync();
-        //}
+        [HttpGet("/api/medRecByPet/{petId}")]
+        public async Task<IEnumerable<MedicalRecord>> GetMedicalRecordsByPet([FromRoute]string petId)
+        {
+            return await _context.GetMedicalRecordsByPet(petId);
+        }
 
         // GET: api/Pets/5
         [HttpGet("{id}")]
@@ -45,7 +45,6 @@ namespace PetHealthcare.Server.APIs.Controllers
             {
                 return NotFound();
             }
-
             return pet;
         }
 

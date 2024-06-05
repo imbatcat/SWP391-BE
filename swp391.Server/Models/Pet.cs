@@ -26,7 +26,7 @@ namespace PetHealthcare.Server.Models
         public string PetBreed { get; set; }
 
         [Required]
-        public int PetAge { get; set; }
+        public DateOnly PetAge { get; set; }
 
         [StringLength(100)]
         public string? Description { get; set; }

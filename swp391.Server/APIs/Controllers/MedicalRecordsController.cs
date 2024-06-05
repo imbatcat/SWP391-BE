@@ -44,36 +44,14 @@ namespace PetHealthcare.Server.APIs.Controllers
             return medicalRecord;
         }
 
-        // PUT: api/MedicalRecords/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutMedicalRecord(string id, MedicalRecord medicalRecord)
-        //{
-        //    if (id != medicalRecord.MedicalRecordId)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(medicalRecord).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!MedicalRecordExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
+        //PUT: api/MedicalRecords/5
+         //To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutMedicalRecord(string id, MedicalRecordDTO medicalRecord)
+        {
+            await _context.UpdateMedicalRecord(id, medicalRecord);
+            return NoContent();
+        }
 
         // POST: api/MedicalRecords
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

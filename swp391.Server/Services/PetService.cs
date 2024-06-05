@@ -84,7 +84,10 @@ namespace PetHealthcare.Server.Services
             string id = Nanoid.Generate(size: 8);
             return prefix + id;
         }
-        
+        public async Task<IEnumerable<MedicalRecord>> GetMedicalRecordsByPet(string petId)
+        {
+            return await _petService.GetMedicalRecordsByPet(petId);
+        }
     }
     
 }
