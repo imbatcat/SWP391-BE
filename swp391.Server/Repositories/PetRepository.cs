@@ -17,7 +17,7 @@ namespace PetHealthcare.Server.Repositories
 
         public async Task SaveChanges()
         {
-           await context.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
         public async Task Create(Pet entity)
         {
@@ -30,12 +30,12 @@ namespace PetHealthcare.Server.Repositories
             context.Pets.Remove(entity);
         }
 
-        public async Task< IEnumerable<Pet>> GetAll()
+        public async Task<IEnumerable<Pet>> GetAll()
         {
             return await context.Pets.ToListAsync();
         }
 
-        public async Task< Pet?> GetByCondition(Expression<Func<Pet, bool>> expression)
+        public async Task<Pet?> GetByCondition(Expression<Func<Pet, bool>> expression)
         {
             return await context.Pets.FirstOrDefaultAsync(expression);
         }
@@ -43,7 +43,7 @@ namespace PetHealthcare.Server.Repositories
 
         public async Task Update(Pet entity)
         {
-            var pet =await GetByCondition(e => e.PetId == entity.PetId);
+            var pet = await GetByCondition(e => e.PetId == entity.PetId);
             if (pet != null)
             {
                 context.Entry(pet).State = EntityState.Modified;

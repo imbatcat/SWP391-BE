@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
-using PetHealthcare.Server.Services;
 using PetHealthcare.Server.Services.Interfaces;
 
 namespace PetHealthcare.Server.APIs.Controllers

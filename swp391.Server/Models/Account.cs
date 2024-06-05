@@ -1,12 +1,20 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using IndexAttribute = Microsoft.EntityFrameworkCore.IndexAttribute;
 
 namespace PetHealthcare.Server.Models
 {
+    [Index(nameof(Username), IsUnique = true)]
+    [Index(nameof(Email), IsUnique = true)]
+    [Index(nameof(PhoneNumber), IsUnique = true)]
     public class Account
     {
+        [NotMapped]
+        public string prefix { get; set; } = "AC";
+
         [Key]
         [Column(TypeName = "char(11)")]
         public string AccountId { get; set; }
@@ -27,12 +35,11 @@ namespace PetHealthcare.Server.Models
         [Required]
         public bool IsMale { get; set; }
 
-        [DataType(DataType.PhoneNumber)]
-        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Not a valid phone number")]
+        [DataType(DataType.PhoneNumber, ErrorMessage = "Not a valid phone number")]
         [Required]
         public string PhoneNumber { get; set; }
 
-        [DataType(DataType.EmailAddress)]
+        [EmailAddress(ErrorMessage = "Please enter a valid email address.")]
         [Required]
         public string Email { get; set; }
 

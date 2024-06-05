@@ -60,7 +60,7 @@ namespace PetHealthcare.Server.APIs.Controllers
                 return BadRequest("No such cage");
             }
             await _context.UpdateCage(id, CaGe);
-            return Ok();
+            return Ok(CaGe);
         }
 
         // DELETE api/<CagesController>/5

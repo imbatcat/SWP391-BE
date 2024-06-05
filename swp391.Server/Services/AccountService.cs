@@ -1,8 +1,12 @@
-﻿using NanoidDotNet;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
+using NanoidDotNet;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
+using PetHealthcare.Server.Models.ApplicationModels;
 using PetHealthcare.Server.Repositories.Interfaces;
 using PetHealthcare.Server.Services.Interfaces;
+using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 
 namespace PetHealthcare.Server.Services
@@ -10,14 +14,26 @@ namespace PetHealthcare.Server.Services
     public class AccountService : IAccountService
     {
         private readonly IAccountRepository _accountService;
+        //private readonly UserManager<ApplicationUser> _userManager;
+        //private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public AccountService(IAccountRepository accountService)
+        //public AccountService(IAccountRepository accountService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager) 
+        //{
+        //    _accountService = accountService;
+        //    _userManager = userManager;
+        //    _signInManager = signInManager;
+        //}
+
+        public AccountService(IAccountRepository service)
         {
-            _accountService = accountService;
+            _accountService = service; 
         }
 
-        public async Task CreateAccount(AccountDTO Account)
+        public async Task<Account?> CreateAccount(AccountDTO Account)
         {
+            //var emailAuth = new EmailAddressAttribute();
+            //if (!emailAuth.IsValid(Account.Email)) throw new BadHttpRequestException("Invalid email");
+
             var _account = new Account
             {
                 AccountId = GenerateId(),
@@ -27,10 +43,13 @@ namespace PetHealthcare.Server.Services
                 DateOfBirth = Account.DateOfBirth,
                 Email = Account.Email,
                 PhoneNumber = Account.PhoneNumber,
+                RoleId = Account.RoleId,
                 IsMale = Account.IsMale,
                 JoinDate = new DateOnly()
             };
+
             await _accountService.Create(_account);
+            return _account;
         }
 
         public void DeleteAccount(Account Account)
@@ -80,6 +99,14 @@ namespace PetHealthcare.Server.Services
             var prefix = "AC-";
             string id = Nanoid.Generate(size: 8);
             return prefix + id;
+        }
+
+        public async Task<Account?> LoginAccount()
+        {
+            // if get successfully return account, else throw 
+            // new InvalidCredentialsException exception (each for incorrect username and incorrect password)
+            //
+            return null;
         }
     }
 }

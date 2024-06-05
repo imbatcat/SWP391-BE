@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using NanoidDotNet;
+﻿using NanoidDotNet;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
@@ -11,17 +10,22 @@ namespace PetHealthcare.Server.Services
     public class PetService : IPetService
     {
         private readonly IPetRepository _petService;
-        public PetService(IPetRepository petService)
+        private readonly IAdmissionRecordRepository _admissionRecordRepository;
+
+        public PetService(IPetRepository petService, IAdmissionRecordRepository admissionRecordRepository)
         {
             _petService = petService;
+            _admissionRecordRepository = admissionRecordRepository;
         }
-    
+
         public async Task CreatePet(PetDTO pet)
         {
+            var res = await ConfirmPetIdentity(pet.AccountId, pet);
+            // if false then throw new exception
             var _pet = new Pet
             {
                 PetId = GenerateID(),
-                ImgUrl =pet.ImgUrl,
+                ImgUrl = pet.ImgUrl,
                 PetName = pet.PetName,
                 PetBreed = pet.PetBreed,
                 PetAge = pet.PetAge,
@@ -29,8 +33,8 @@ namespace PetHealthcare.Server.Services
                 IsMale = pet.IsMale,
                 IsCat = pet.IsCat,
                 VaccinationHistory = pet.VaccinationHistory,
-                IsDisabled=pet.IsDisable,
-                AccountId=pet.AccountId
+                IsDisabled = pet.IsDisable,
+                AccountId = pet.AccountId
             };
             var checkPet = await _petService.petExist(_pet);
             if (!checkPet)
@@ -47,14 +51,42 @@ namespace PetHealthcare.Server.Services
         {
             _petService.Delete(pet);
         }
-        public async Task< IEnumerable<Pet>> GetAllPets()
+        public async Task<IEnumerable<Pet>> GetAllPets()
         {
             return await _petService.GetAll();
         }
 
-        public async Task< Pet?> GetPetByCondition(Expression<Func<Pet, bool>> expression)
+        public async Task<IEnumerable<Pet>> GetAccountPets(string id)
+        {
+            return null;
+            //return await _petService.GetAccountPets(id);
+        }
+
+        public async Task<Pet?> GetPetByCondition(Expression<Func<Pet, bool>> expression)
         {
             return await _petService.GetByCondition(expression);
+        }
+
+        //private async Task<IEnumerable<AdmissionRecord>> GetAllAdmissionRecord() //----Long
+        //{
+            
+        //    return _admissionRecords;
+        //}
+
+        public async Task<AdmissionRecord?> GetPetByName(Expression<Func<Pet, bool>> expression) 
+        {
+            var _admissionRecords = await _admissionRecordRepository.GetAll();
+            var born = await _petService.GetByCondition(expression);  //----Long
+            AdmissionRecord save;
+            foreach (var item in _admissionRecords)
+            {
+
+                if (item.PetId.Equals(born.PetId))
+                {
+                    return save = item; 
+                }
+            }
+            return null;
         }
 
         public async Task UpdatePet(string id, PetDTO pet)
@@ -88,6 +120,11 @@ namespace PetHealthcare.Server.Services
         {
             return await _petService.GetMedicalRecordsByPet(petId);
         }
+
+        public Task<bool> ConfirmPetIdentity(string AccountId, PetDTO newPet)
+        {
+            throw new NotImplementedException();
+        }
     }
-    
+
 }

@@ -9,7 +9,7 @@ namespace PetHealthcare.Server.Models
     public class AdmissionRecord
     {
         [NotMapped]
-        public string Prefix { get; } = "AR";
+        public string Prefix { get; } = "AR-";
 
         [Key]
         [Column(TypeName = "char(11)")]
@@ -18,7 +18,7 @@ namespace PetHealthcare.Server.Models
 
         [JsonConverter(typeof(DateOnlyConverter))]
         [DataType(DataType.Date)]
-        public DateOnly AdmissionDate { get; set; }
+        public DateOnly? AdmissionDate { get; set; }
 
         [JsonConverter(typeof(DateOnlyConverter))]
         [DataType(DataType.Date)]
@@ -37,15 +37,19 @@ namespace PetHealthcare.Server.Models
         [Required]
         [DeleteBehavior(DeleteBehavior.Restrict)]
         public MedicalRecord MedicalRecord { get; set; }
+        public string? MedicalRecordId { get; set; }
 
         [Required]
         public Veterinarian Veterinarian { get; set; }
+        public string? VeterinarianAccountId { get; set; }
 
         [Required]
         [DeleteBehavior(DeleteBehavior.Restrict)]
         public Pet Pet { get; set; }
+        public string? PetId { get; set; }
 
         [Required]
         public Cage Cage { get; set; }
+        public int CageId { get; set; }
     }
 }

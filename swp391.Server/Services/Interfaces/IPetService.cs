@@ -10,8 +10,14 @@ namespace PetHealthcare.Server.Services.Interfaces
         Task< Pet?> GetPetByCondition(Expression<Func<Pet, bool>> expression);
         Task<IEnumerable<MedicalRecord>> GetMedicalRecordsByPet(string petId);
         Task CreatePet(PetDTO pet);
-        Task UpdatePet(string id,PetDTO pet);
+        Task UpdatePet(string id, PetDTO pet);
         void DeletePet(Pet pet);
+        Task<IEnumerable<Pet>> GetAccountPets(string id);
         string GenerateID();
+
+        Task<bool> ConfirmPetIdentity(string AccountId, PetDTO newPet);
+
+
+        Task<AdmissionRecord?> GetPetByName(Expression<Func<Pet, bool>> expression); //----Long
     }
 }

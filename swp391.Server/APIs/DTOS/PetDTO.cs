@@ -1,5 +1,4 @@
-﻿using PetHealthcare.Server.Models;
-namespace PetHealthcare.Server.APIs.DTOS
+﻿namespace PetHealthcare.Server.APIs.DTOS
 {
     public class PetDTO
     {

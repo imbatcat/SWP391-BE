@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Services.Interfaces;
@@ -24,8 +18,8 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // GET: api/Pets
         [HttpGet("")]
-        [ProducesResponseType(200,Type=typeof(IEnumerable<Pet>))]
-        public async Task <IEnumerable<Pet>> GetPets()
+        [ProducesResponseType(200, Type = typeof(IEnumerable<Pet>))]
+        public async Task<IEnumerable<Pet>> GetPets()
         {
             return await _context.GetAllPets();
         }
@@ -37,9 +31,9 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // GET: api/Pets/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Pet>> GetPet([FromRoute]string id)
+        public async Task<ActionResult<Pet>> GetPet([FromRoute] string id)
         {
-            var pet = await _context.GetPetByCondition(a=>a.PetId == id);
+            var pet = await _context.GetPetByCondition(a => a.PetId == id);
 
             if (pet == null)
             {
@@ -85,19 +79,29 @@ namespace PetHealthcare.Server.APIs.Controllers
         [HttpPost]
         public async Task<ActionResult<Pet>> PostPet([FromBody] PetDTO petDTO)
         {
-            try
-            {
-                await _context.CreatePet(petDTO);
-                return CreatedAtAction(nameof(PostPet), new { id = petDTO.GetHashCode() }, petDTO);
-            }catch (InvalidOperationException e)
-            {
-                return BadRequest(e.Message);
-            }
+            await _context.CreatePet(petDTO);
+            //try
+            //{
+            //    await _context.SaveChangesAsync();
+            //}
+            //catch (DbUpdateException)
+            //{
+            //    if (PetExists(pet.PetId))
+            //    {
+            //        return Conflict();
+            //    }
+            //    else
+            //    {
+            //        throw;
+            //    }
+            //}
+
+            return CreatedAtAction(nameof(PostPet), new { id = petDTO.GetHashCode() }, petDTO);
         }
 
         // DELETE: api/Pets/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePet([FromRoute]string id)
+        public async Task<IActionResult> DeletePet([FromRoute] string id)
         {
             var pet = await _context.GetPetByCondition(a => a.PetId == id);
             if (pet == null)

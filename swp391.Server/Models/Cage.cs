@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace PetHealthcare.Server.Models
 {
+    [Index(nameof(CageNumber), IsUnique = true)]
     public class Cage
     {
         [Key]

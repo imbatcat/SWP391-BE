@@ -37,10 +37,10 @@ namespace PetHealthcare.Server.Repositories
 
         public async Task<TimeSlot?> GetSlotById(int timeId)
         {
-            return await _context.TimeSlots.FirstOrDefaultAsync(p => p.TimeSlotId == timeId); 
+            return await _context.TimeSlots.FirstOrDefaultAsync(p => p.TimeSlotId == timeId);
         }
 
-        public async  Task<IEnumerable<TimeSlot>> GetSlots()
+        public async Task<IEnumerable<TimeSlot>> GetSlots()
         {
             return await _context.TimeSlots.OrderBy(p => p.TimeSlotId).ToListAsync();
         }
@@ -63,6 +63,6 @@ namespace PetHealthcare.Server.Repositories
             }
         }
 
-      
+
     }
 }
