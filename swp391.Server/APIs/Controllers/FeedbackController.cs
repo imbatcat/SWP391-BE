@@ -22,7 +22,11 @@ namespace PetHealthcare.Server.APIs.Controllers
         {
             return await _context.GetAllFeedback();
         }
-
+        [HttpGet("/api/feedBackByName/{UserName}")]
+        public async Task<IEnumerable<Feedback>> GetFeedbacksByUserName([FromRoute]string UserName)
+        {
+            return await _context.GetFeedbacksByUserName(UserName);
+        }
         //// GET: api/Feedbacks/5
         //[HttpGet("{id}")]
         //public async Task<ActionResult<Feedback>> GetFeedback(int id)

@@ -13,7 +13,7 @@ using PetHealthcare.Server.Services.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-const string DataSrc = "MEOMATLON\\SQLEXPRESS", Password = "MukuroHoshimiya";
+const string DataSrc = "MSI", Password = "123456";
 
 // Add services to the container.
 builder.Services.AddDbContext<PetHealthcareDbContext>(
@@ -22,7 +22,6 @@ option => option.UseSqlServer(
 builder.Services.AddDbContext<ApplicationDbContext>(
 option => option.UseSqlServer(
         $"Data Source={DataSrc}; User = sa; Password ={Password};Initial Catalog=PetHealthCareSystemAuth;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False"));
-
 //Repositories
 #region Repositories
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
@@ -33,6 +32,8 @@ builder.Services.AddScoped<IFeedbackRepository, FeedbackRepository>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 builder.Services.AddScoped<IPetRepository, PetRepository>();
 builder.Services.AddScoped<ITimeslotRepository, TimeslotRepository>();
+builder.Services.AddScoped<IMedicalRecordRepository, MedicalRecordRepository>();
+builder.Services.AddScoped<IAdmissionRecordRepository, AdmissionRecordRepository>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 #endregion
 
