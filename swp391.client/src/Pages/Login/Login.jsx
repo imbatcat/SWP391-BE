@@ -2,27 +2,25 @@ import { Link, useNavigate } from 'react-router-dom';
 import './usePasswordToggle.css'
 import './Login.css'
 import {
-  MDBBtn,
-  MDBContainer,
-  MDBCard,
-  MDBCardBody,
-  MDBRow,
-  MDBCol,
-  MDBInput,
-  MDBModal,
-  MDBModalBody,
-  MDBModalContent,
-  MDBModalDialog,
-  MDBModalHeader,
-  MDBModalTitle,
-  MDBIcon
+    MDBBtn,
+    MDBContainer,
+    MDBCard,
+    MDBCardBody,
+    MDBRow,
+    MDBCol,
+    MDBInput,
+    MDBModal,
+    MDBModalBody,
+    MDBModalContent,
+    MDBModalDialog,
+    MDBModalHeader,
+    MDBModalTitle
 } from 'mdb-react-ui-kit';
 import { useState } from 'react';
 import ForgotPassForm from '../../Component/ForgotPass/ForgotPassForm';
-import toast, { Toaster } from 'react-hot-toast';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import usePasswordToggle from './usePasswordToggle';
-import MainLayout from '../../Layouts/MainLayout';
 
 async function fetchData(setData) {
   try {
@@ -95,21 +93,20 @@ function Login() {
     setUserName(e.target.value);
   }
 
-  const handleOnChangePassWord = (e) => {
-    setPassWord(e.target.value);
-  }
-
-  const handleLoginClick = () => {
-    if(!userName || !password){
-      toast.error("Email/Password is required");
-      return;
+    const handleOnChangePassWord = (e) => {
+        setPassWord(e.target.value);
     }
-    loginapi(userName, password, true, setLoginSuccess, navigate);
-  }
+
+    //const handleLoginClick = () => {
+    //    if (!userName || !password) {
+    //        toast.error("Email/Password is required");
+    //        return;
+    //    }
+    //    loginapi(userName, password, true, setLoginSuccess, navigate);
+    //}
 
   return (
-    <MainLayout>
-        <MDBContainer className="my-5 d-10 justify-content-center">
+      <MDBContainer className="my-5 d-10 justify-content-center">
           <MDBCard className='login-card'>
               <MDBRow className='g-0' >
                   <MDBCol md='6' className='imgside'></MDBCol>
@@ -121,68 +118,50 @@ function Login() {
                             reverseOrder={false}
                           />
                           </div>
-                          <h5 className="fw-bold my-5 pb-2" style={{ letterSpacing: '1px', textAlign: 'center', fontSize: '3vw' }}>Sign into your account</h5>
+                          <h5 className="fw-bold my-5 pb-2" style={{ letterSpacing: '1px', textAlign: 'center', fontSize: '30px' }}>Sign into your account</h5>
 
-                          <MDBInput wrapperClass='mb-4' label='Email address' id='formControlLg' 
-                                    onChange={(e) => handleOnChangeUsername(e)} 
-                                    value={userName} 
-                                    type='email' 
-                                    size="lg"                                    
-                          />
-                        <div className='password-input-container'>
-                          <MDBInput wrapperClass='mb-4' label='Password' id='formControlLg' 
-                                    onChange={(e) => handleOnChangePassWord(e)} 
-                                    value={password} 
-                                    type={PasswordInputType} 
-                                    size="lg"                                    
-                          />
-                          <span className='password-toggle-icon'>
-                            {ToggleIcon}
-                          </span>
-                        </div>
-  
+                            <MDBInput wrapperClass='mb-4' label='Username' id='formControlLg' onChange={(e) => handleOnChangeUsername(e)} value={userName} type='email' size="lg" />
+                            <MDBInput wrapperClass='mb-4' label='Password' id='formControlLg' onChange={(e) => handleOnChangePassWord(e)} value={password} type='password' size="lg" />
 
-                          <MDBBtn className="mb-4 px-5" color='blue' size='lg' onClick={handleLoginClick}>Login</MDBBtn>
+                            <MDBBtn className="mb-4 px-5" color='blue' size='lg' onClick={() => loginapi(userName, password, true, navigate)}>Login</MDBBtn>
 
-                          <a className="small text-muted" style={{ textAlign: 'end' }} onClick={toggleOpen}>Forgot password?</a>
-                          <MDBModal open={basicModal} onClose={() => setBasicModal(false)} tabIndex='-1'>
-                            <MDBModalDialog>
-                                <MDBModalContent>
-                                  <MDBModalHeader >
-                                    <MDBModalTitle>
-                                    <h6>Forgot your account’s password?</h6>
-                                     <h3 style={{fontSize:'20px'}}>Enter your email address and we’ll send you a recovery link.</h3>
-                                     </MDBModalTitle>
-                                        <MDBBtn className='btn-close' color='none' onClick={toggleOpen}></MDBBtn>
-                                    </MDBModalHeader>
-                            <MDBModalBody>
-                            <ForgotPassForm/>
-                            </MDBModalBody>
-                        </MDBModalContent>
-                            </MDBModalDialog>
+                            <a className="small text-muted" style={{ textAlign: 'end' }} onClick={toggleOpen}>Forgot password?</a>
+                            <MDBModal open={basicModal} onClose={() => setBasicModal(false)} tabIndex='-1'>
+                                <MDBModalDialog>
+                                    <MDBModalContent>
+                                        <MDBModalHeader >
+                                            <MDBModalTitle>
+                                                <h6>Forgot your account’s password?</h6>
+                                                <h3 style={{ fontSize: '20px' }}>Enter your email address and we’ll send you a recovery link.</h3>
+                                            </MDBModalTitle>
+                                            <MDBBtn className='btn-close' color='none' onClick={toggleOpen}></MDBBtn>
+                                        </MDBModalHeader>
+                                        <MDBModalBody>
+                                            <ForgotPassForm />
+                                        </MDBModalBody>
+                                    </MDBModalContent>
+                                </MDBModalDialog>
                             </MDBModal>
 
-                          <p className="mb-5 pb-lg-2" style={{ color: 'Black' }}>Don't have an accounts ?
-                          <Link to="/signUp"><a style={{ color: '#393f81' }}>Register here</a></Link>
-                          </p>
+                            <p className="mb-5 pb-lg-2" style={{ color: 'Black' }}>Dont have an accounts ?
+                                <Link to="/signUp"><a style={{ color: '#393f81' }}>Register here</a></Link>
+                            </p>
 
-                          <div className='d-flex flex-row justify-content-start'>
-                              <a href="#!" className="small text-muted me-1">Terms of use.</a>
-                              <a href="#!" className="small text-muted">Privacy policy</a>
-                          </div>
+                            <div className='d-flex flex-row justify-content-start'>
+                                <a href="#!" className="small text-muted me-1">Terms of use.</a>
+                                <a href="#!" className="small text-muted">Privacy policy</a>
+                            </div>
 
 
-                          <div className='d-flex flex-row mt-2' style={{ justifyContent: 'end' }}>
-                              <Link to="/"> <span className="h1 fw-bold mb-0" style={{ fontSize: '20px', color: 'black' }}>BACK</span></Link>
-                          </div>
+                            <div className='d-flex flex-row mt-2' style={{ justifyContent: 'end' }}>
+                                <Link to="/"> <span className="h1 fw-bold mb-0" style={{ fontSize: '20px', color: 'black' }}>BACK</span></Link>
+                            </div>
 
                       </MDBCardBody>
                   </MDBCol>
               </MDBRow>
           </MDBCard>
-      </MDBContainer> 
-    </MainLayout>
-      
+      </MDBContainer>
   );
 }
 

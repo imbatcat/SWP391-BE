@@ -7,6 +7,7 @@ using PetHealthcare.Server.Services.Interfaces;
 namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin")]
     [ApiController]
     public class AccountsController : ControllerBase
     {
@@ -43,16 +44,6 @@ namespace PetHealthcare.Server.APIs.Controllers
             }
             return Ok(checkAccount);
         }
-
-        //[HttpGet("/api/account/pets/{id}")]
-        //public IEnumerable<Pet> GetAccountPets([FromRoute] string id)
-        //{
-        //    var checkAccount = _context.GetAccountByCondition(a => a.AccountId == id);
-        //    if (checkAccount == null)
-        //    {
-        //    }
-        //    return _context.GetAccountPets(checkAccount);
-        //}
 
         [HttpGet("/api/accounts/pets/{id}")]
         public async Task<IEnumerable<Pet>> GetAccountPets([FromRoute] string id)
@@ -118,46 +109,11 @@ namespace PetHealthcare.Server.APIs.Controllers
             {
                 return (BadRequest(ex.Message));
             }
-           return CreatedAtAction(
-                    "GetAccount", new { id = accountDTO.GetHashCode() }, accountDTO);
-            //try
-            //{
-            //    await _context.SaveChangesAsync();
-            //}
-            //catch (DbUpdateException)
-            //{
-            //    if (AccountExists(account.AccountId))
-            //    {
-            //        return Conflict();
-            //    }
-            //    else
-            //    {
-            //        throw;
-            //    }
-            //}
+            return CreatedAtAction(
+                     "GetAccount", new { id = accountDTO.GetHashCode() }, accountDTO);
 
         }
 
-        [HttpPost("/api/accounts/login")]
-        public async Task<ActionResult<Account>> LoginAccount([FromBody] GuestDTO guest)
-        {
-            //try
-            //{
-            //    await _context.SaveChangesAsync();
-            //}
-            //catch (DbUpdateException)
-            //{
-            //    if (AccountExists(account.AccountId))
-            //    {
-            //        return Conflict();
-            //    }
-            //    else
-            //    {
-            //        throw;
-            //    }
-            //}
-            return null;
-        }
         // DELETE: api/Accounts/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAccount(string id)

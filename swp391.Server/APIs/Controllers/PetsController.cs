@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Services.Interfaces;
@@ -6,6 +7,7 @@ using PetHealthcare.Server.Services.Interfaces;
 namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(Roles = "User, Staff")]
     [ApiController]
     public class PetsController : ControllerBase
     {
@@ -18,6 +20,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // GET: api/Pets
         [HttpGet("")]
+        [Authorize(Roles = "Staff")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Pet>))]
         public async Task<IEnumerable<Pet>> GetPets()
         {
@@ -46,6 +49,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         // PUT: api/Pets/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> PutPet(string id, PetDTO pet)
         {
             await _context.UpdatePet(id, pet);
