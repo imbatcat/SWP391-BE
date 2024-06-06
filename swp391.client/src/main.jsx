@@ -13,6 +13,7 @@ import Appointment from './Pages/Appointment/Appointment';
 import OTPInput from './Pages/OTP Input/OTPInput';
 import PasswordResetForm from './Pages/SetNewPass/PasswordResetForm';
 import PetList from './Pages/MyPetList/PetList';
+import SideNav from './Component/SideNav/SideNav';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -31,7 +32,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/aboutUs',
-    element: <AboutUs/>,
+    element: <SideNav/>,
     errorElement: <div>404 Not Found</div>,
   },
   {

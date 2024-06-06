@@ -22,6 +22,7 @@ import ForgotPassForm from '../../Component/ForgotPass/ForgotPassForm';
 import toast, { Toaster } from 'react-hot-toast';
 import 'react-toastify/dist/ReactToastify.css';
 import usePasswordToggle from './usePasswordToggle';
+import MainLayout from '../../Layouts/MainLayout';
 
 async function fetchData(setData) {
   try {
@@ -107,7 +108,8 @@ function Login() {
   }
 
   return (
-      <MDBContainer className="my-5 d-10 justify-content-center">
+    <MainLayout>
+        <MDBContainer className="my-5 d-10 justify-content-center">
           <MDBCard className='login-card'>
               <MDBRow className='g-0' >
                   <MDBCol md='6' className='imgside'></MDBCol>
@@ -119,7 +121,7 @@ function Login() {
                             reverseOrder={false}
                           />
                           </div>
-                          <h5 className="fw-bold my-5 pb-2" style={{ letterSpacing: '1px', textAlign: 'center', fontSize: '30px' }}>Sign into your account</h5>
+                          <h5 className="fw-bold my-5 pb-2" style={{ letterSpacing: '1px', textAlign: 'center', fontSize: '3vw' }}>Sign into your account</h5>
 
                           <MDBInput wrapperClass='mb-4' label='Email address' id='formControlLg' 
                                     onChange={(e) => handleOnChangeUsername(e)} 
@@ -178,7 +180,9 @@ function Login() {
                   </MDBCol>
               </MDBRow>
           </MDBCard>
-      </MDBContainer>
+      </MDBContainer> 
+    </MainLayout>
+      
   );
 }
 

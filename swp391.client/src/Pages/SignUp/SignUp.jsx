@@ -11,9 +11,11 @@ import {
   MDBRadio
 }
 from 'mdb-react-ui-kit';
+import MainLayout from '../../Layouts/MainLayout';
 
 function SignUp() {
   return (
+    <MainLayout>
     <body className='pageSignUp'>
     <MDBContainer fluid className='page-container'>
 
@@ -83,7 +85,9 @@ function SignUp() {
 
       </MDBRow>
     </MDBContainer>
-    </body>
+      </body>
+    </MainLayout>
+    
   );
 }
 
