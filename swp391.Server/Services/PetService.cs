@@ -66,13 +66,6 @@ namespace PetHealthcare.Server.Services
         {
             return await _petService.GetByCondition(expression);
         }
-
-        //private async Task<IEnumerable<AdmissionRecord>> GetAllAdmissionRecord() //----Long
-        //{
-            
-        //    return _admissionRecords;
-        //}
-
         public async Task<AdmissionRecord?> GetPetByName(Expression<Func<Pet, bool>> expression) 
         {
             var _admissionRecords = await _admissionRecordRepository.GetAll();
@@ -124,6 +117,11 @@ namespace PetHealthcare.Server.Services
         public Task<bool> ConfirmPetIdentity(string AccountId, PetDTO newPet)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<AdmissionRecord>> GetAdmissionRecordsByPet(string petId)
+        {
+            return await _petService.GetAdmissionRecordsByPet(petId);
         }
     }
 

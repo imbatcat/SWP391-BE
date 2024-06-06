@@ -28,7 +28,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         {
             return await _context.GetMedicalRecordsByPet(petId);
         }
-
+        [HttpGet("api/")]
         // GET: api/Pets/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Pet>> GetPet([FromRoute] string id)
@@ -40,6 +40,11 @@ namespace PetHealthcare.Server.APIs.Controllers
                 return NotFound();
             }
             return pet;
+        }
+        [HttpGet("/api/admRecByPet/{petId}")]
+        public async Task<IEnumerable<AdmissionRecord>> GetAdmissionRecordsByPet([FromRoute]string petId)
+        {
+            return await _context.GetAdmissionRecordsByPet(petId);
         }
 
         // PUT: api/Pets/5
@@ -71,7 +76,7 @@ namespace PetHealthcare.Server.APIs.Controllers
             //    }
             //}
 
-            return NoContent();
+            return Ok(pet);
         }
 
         // POST: api/Pets

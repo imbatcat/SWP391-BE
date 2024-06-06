@@ -9,10 +9,12 @@ namespace PetHealthcare.Server.Repositories
     {
         private readonly PetHealthcareDbContext context;
         private readonly MedicalRecordRepository medicalRecordRepository;
-        public PetRepository(PetHealthcareDbContext context, MedicalRecordRepository medicalRecordRepository)
+        private readonly AdmissionRecordRepository admissionRecordRepository;
+        public PetRepository(PetHealthcareDbContext context, MedicalRecordRepository medicalRecordRepository, AdmissionRecordRepository admissionRecordRepository)
         {
             this.context = context;
             this.medicalRecordRepository = medicalRecordRepository;
+            this.admissionRecordRepository = admissionRecordRepository;
         }
 
         public async Task SaveChanges()
@@ -88,6 +90,27 @@ namespace PetHealthcare.Server.Repositories
                 }
             }
             return medicalRecords;
+        }
+        public bool CheckAdmissionRecord(string admissionRecId)
+        {
+            return context.AdmissionRecords.Any(a=>a.PetId == admissionRecId);
+        }
+        public async Task<IEnumerable<AdmissionRecord>> GetAdmissionRecordsByPet(string petId)
+        {
+            if(!CheckAdmissionRecord(petId))
+            {
+                return null;
+            }
+            var list= await admissionRecordRepository.GetAll();
+            List<AdmissionRecord> admissionRecords= new List<AdmissionRecord>();
+            foreach(AdmissionRecord admRec in list)
+            {
+                if(admRec.PetId == petId)
+                {
+                    admissionRecords.Add(admRec);
+                }
+            }
+            return admissionRecords;
         }
     }
 }

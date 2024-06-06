@@ -24,7 +24,7 @@ option => option.UseSqlServer(
         $"Data Source={DataSrc}; User = sa; Password ={Password};Initial Catalog=PetHealthCareSystemAuth;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False"));
 
 builder.Services.AddScoped<MedicalRecordRepository>();
-
+builder.Services.AddScoped<AdmissionRecordRepository>();
 //Repositories
 #region Repositories
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
@@ -87,6 +87,7 @@ builder.Services.AddControllers()
     {
         options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+        options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
     }
     );
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -118,5 +119,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 //app.MapIdentityApi<ApplicationUser>();
-
 app.Run();
