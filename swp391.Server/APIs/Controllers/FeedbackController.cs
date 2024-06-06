@@ -41,8 +41,6 @@ namespace PetHealthcare.Server.APIs.Controllers
         //    return feedback;
         //}
 
-        // PUT: api/Feedbacks/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 
         // POST: api/Feedbacks
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
