@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using PetHealthcare.Server.APIs.DTOS;
+using PetHealthcare.Server.APIs.DTOS.AppointmentDTOs;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Services.Interfaces;
 
@@ -37,7 +38,34 @@ namespace PetHealthcare.Server.APIs.Controllers
 
             return appointment;
         }
-
+        [HttpGet("AppointmentList/{accountId}")]
+        public async Task<IEnumerable<ResAppListForCustomer>> GetCustomerAppointmentList([FromRoute] string accountId)
+        {
+            return await _appointment.getAllCustomerAppList(accountId);
+        }
+        [HttpGet("AppointmentList/AppointmentHistory/{accountId}")]
+        public async Task<IEnumerable<ResAppListForCustomer>> GetCustomerAppointmentHistory([FromRoute] string accountId)
+        {
+            return await _appointment.getAllCustomerAppHistory(accountId);
+        }
+        [HttpGet("AppointmentList/{accountId}/{typeOfSorting}/{orderBy}")]
+        public async Task<ActionResult<IEnumerable<ResAppListForCustomer>>> GetSortedListByDate(string accountId, string typeOfSorting, string orderBy)
+        {
+            if (!typeOfSorting.Equals("history", StringComparison.OrdinalIgnoreCase)
+                &&
+               !typeOfSorting.Equals("current", StringComparison.OrdinalIgnoreCase))
+            {
+                return BadRequest(new { message = "typeOfSorting must be current or history" });
+            }
+            if (!orderBy.Equals("asc", StringComparison.OrdinalIgnoreCase)
+                &&
+               !orderBy.Equals("desc", StringComparison.OrdinalIgnoreCase))
+            {
+                return BadRequest(new { message = "orderBy must be asc or desc" });
+            }
+            var sortedAppointment = await _appointment.SortAppointmentByDate(accountId, typeOfSorting, orderBy);
+            return Ok(sortedAppointment);
+        }
         // PUT: api/Services/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

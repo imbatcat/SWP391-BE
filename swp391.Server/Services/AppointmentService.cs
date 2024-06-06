@@ -1,5 +1,6 @@
 ﻿using NanoidDotNet;
 using PetHealthcare.Server.APIs.DTOS;
+using PetHealthcare.Server.APIs.DTOS.AppointmentDTOs;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
 using PetHealthcare.Server.Services.Interfaces;
@@ -75,5 +76,84 @@ namespace PetHealthcare.Server.Services
             };
             await _appointmentRepository.Update(UpdateAppointment);
         }
+
+        public async Task<IEnumerable<ResAppListForCustomer>> getAllCustomerAppList(string id) //get future appointment
+        {
+            Debug.WriteLine(id);
+            IEnumerable<Appointment> appointmentsList = await _appointmentRepository.GetAll();
+            List<ResAppListForCustomer> resAppListForCustomers = new List<ResAppListForCustomer>();
+            foreach (Appointment appointment in appointmentsList)
+            {
+                DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
+
+                if (appointment.AccountId.Equals(id) && appointment.AppointmentDate.CompareTo(currentDate) >= 0)
+                {
+                    resAppListForCustomers.Add(new ResAppListForCustomer
+                    {
+                        AppointmentDate = appointment.AppointmentDate,
+                        BookingPrice = appointment.BookingPrice,
+                        PetName = appointment.Pet.PetName,
+                        VeterinarianName = appointment.Veterinarian.FullName,
+                        TimeSlot = appointment.TimeSlot.StartTime.ToString("h:mm") + " - " + appointment.TimeSlot.EndTime.ToString("h:mm"),
+                    });
+                }
+            }
+            return resAppListForCustomers;
+        }
+
+        public async Task<IEnumerable<ResAppListForCustomer>> getAllCustomerAppHistory(string id)
+        {
+            IEnumerable<Appointment> appointmentsList = await _appointmentRepository.GetAll();
+            List<ResAppListForCustomer> resAppListForCustomers = new List<ResAppListForCustomer>();
+            foreach (Appointment appointment in appointmentsList)
+            {
+                DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
+                if (appointment.AccountId.Equals(id) && appointment.AppointmentDate.CompareTo(currentDate) < 0)
+                {
+                    resAppListForCustomers.Add(new ResAppListForCustomer
+                    {
+                        AppointmentDate = appointment.AppointmentDate,
+                        BookingPrice = appointment.BookingPrice,
+                        PetName = appointment.Pet.PetName,
+                        VeterinarianName = appointment.Veterinarian.FullName,
+                        TimeSlot = appointment.TimeSlot.StartTime.ToString("h:mm") + " - " + appointment.TimeSlot.EndTime.ToString("h:mm"),
+                    });
+                }
+            }
+            return resAppListForCustomers;
+        }
+
+        public async Task<IEnumerable<ResAppListForCustomer>> SortAppointmentByDate(string id, string SortList, string SortOrder)
+        {
+            IEnumerable<ResAppListForCustomer> SortedList = new List<ResAppListForCustomer>();
+            if (SortList.Equals("history", StringComparison.OrdinalIgnoreCase))
+            {
+                IEnumerable<ResAppListForCustomer> allAppointment = await getAllCustomerAppHistory(id);
+                if (SortOrder.Equals("asc", StringComparison.OrdinalIgnoreCase))
+                {
+                    SortedList = allAppointment.OrderBy(a => a.AppointmentDate);
+
+                }
+                else if (SortOrder.Equals("desc", StringComparison.OrdinalIgnoreCase))
+                {
+                    SortedList = allAppointment.OrderByDescending(a => a.AppointmentDate);
+                }
+            }
+            else if (SortList.Equals("current", StringComparison.OrdinalIgnoreCase))
+            {
+                IEnumerable<ResAppListForCustomer> allAppointment = await getAllCustomerAppList(id);
+                if (SortOrder.Equals("asc", StringComparison.OrdinalIgnoreCase))
+                {
+                    SortedList = allAppointment.OrderBy(a => a.AppointmentDate);
+
+                }
+                else if (SortOrder.Equals("desc", StringComparison.OrdinalIgnoreCase))
+                {
+                    SortedList = allAppointment.OrderByDescending(a => a.AppointmentDate);
+                }
+            }
+            return SortedList;
+        }
     }
+
 }
