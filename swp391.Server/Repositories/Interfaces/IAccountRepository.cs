@@ -1,4 +1,5 @@
-﻿using PetHealthcare.Server.Models;
+﻿using PetHealthcare.Server.APIs.DTOS;
+using PetHealthcare.Server.Models;
 
 namespace PetHealthcare.Server.Repositories.Interfaces
 {
@@ -6,6 +7,6 @@ namespace PetHealthcare.Server.Repositories.Interfaces
     {
         Task<IEnumerable<Account>> GetAccountsByRole(int roleId);
         Task<Account?> GetAccountByRole(int roleId, string id);
-        Task<Account?> LoginAccount(string username, string password);
+        Task<bool> SetAccountIsDisabled(RequestAccountDisable account);
     }
 }

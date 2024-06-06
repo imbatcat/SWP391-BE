@@ -18,7 +18,7 @@ import {
 } from 'mdb-react-ui-kit';
 import { useState } from 'react';
 import ForgotPassForm from '../../Component/ForgotPass/ForgotPassForm';
-import toast, { Toaster } from 'react-hot-toast';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '../../Context/AuthProvider';
 
@@ -68,13 +68,13 @@ function Login() {
         setPassWord(e.target.value);
     }
 
-  const handleLoginClick = () => {
-    if(!userName || !password){
-      toast.error("Email/Password is required");
-      return;
-    }
-    loginapi(userName, password, true, setLoginSuccess, navigate);
-  }
+    //const handleLoginClick = () => {
+    //    if (!userName || !password) {
+    //        toast.error("Email/Password is required");
+    //        return;
+    //    }
+    //    loginapi(userName, password, true, setLoginSuccess, navigate);
+    //}
 
     return (
         <MDBContainer className="my-5 d-10 justify-content-center">

@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Build.Execution;
 using Microsoft.EntityFrameworkCore;
 using PetHealthcare.Server.Models;
@@ -9,13 +8,19 @@ using PetHealthcare.Server.Repositories.DbContext;
 using PetHealthcare.Server.Repositories.Interfaces;
 using PetHealthcare.Server.Services;
 using PetHealthcare.Server.Services.Interfaces;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using PetHealthcare.Server.Helpers;
+using Microsoft.Extensions.DependencyInjection;
+using PetHealthcare.Server.Services.AuthInterfaces;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-
-const string DataSrc = "MIB\\MINHLUONG", Password = "12345";
+var config = builder.Configuration;
+const string DataSrc = "MEOMATLON\\SQLEXPRESS", Password = "MukuroHoshimiya";
 
 // Add services to the container.
+#region DBcontext
 builder.Services.AddDbContext<PetHealthcareDbContext>(
 option => option.UseSqlServer(
         $"Data Source={DataSrc}; User = sa; Password ={Password};Initial Catalog=PetHealthCareSystem;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False"));
@@ -24,8 +29,7 @@ option => option.UseSqlServer(
 builder.Services.AddDbContext<ApplicationDbContext>(
 option => option.UseSqlServer(
         $"Data Source={DataSrc}; User = sa; Password ={Password};Initial Catalog=PetHealthCareSystemAuth;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False"));
-
-
+#endregion
 
 #region Repositories
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
@@ -53,28 +57,8 @@ builder.Services.AddScoped<IPetService, PetService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IMedicalRecordService, MedicalRecordService>();
 builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(
-        name: MyAllowSpecificOrigins,
-          policy =>
-          {
-              policy.WithOrigins("https://localhost:5173").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
-          });
-});
-#endregion
-
-#region Cookie config
-builder.Services.ConfigureApplicationCookie(options =>
-{
-    options.Cookie.HttpOnly = true;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    options.Cookie.SameSite = SameSiteMode.Strict;
-    options.Cookie.Name = "AspNetLogin";
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
-    options.SlidingExpiration = true;
-});
+builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 #endregion
 
 #region Cors
@@ -90,6 +74,8 @@ builder.Services.AddCors(options =>
                       });
 });
 #endregion
+
+#region Swagger
 builder.Services.AddControllers()
     .AddNewtonsoftJson(options =>
     {
@@ -98,18 +84,43 @@ builder.Services.AddControllers()
     }
     );
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-
-builder.Services.AddAuthentication();
-builder.Services.AddAuthentication();
-
-builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
-
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen().AddSwaggerGenNewtonsoftSupport();
+#endregion
+
+#region Cookie config
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SameSite = SameSiteMode.Strict;
+    options.Cookie.Name = "AspNetLogin";
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    options.SlidingExpiration = true;
+});
+#endregion
+
+#region Identity
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
+
+builder.Services.AddIdentityApiEndpoints<ApplicationUser>(
+    options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<ApplicationRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+{
+    options.TokenLifespan = TimeSpan.FromHours(24);
+});
+#endregion 
+
+
 
 var app = builder.Build();
+
+//Role seeding
+DataSeeder.SeedRoles();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
