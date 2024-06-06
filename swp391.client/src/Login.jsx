@@ -1,5 +1,4 @@
 import { Link, useNavigate } from 'react-router-dom';
-import './usePasswordToggle.css'
 import './Login.css'
 import {
   MDBBtn,
@@ -14,14 +13,12 @@ import {
   MDBModalContent,
   MDBModalDialog,
   MDBModalHeader,
-  MDBModalTitle,
-  MDBIcon
+  MDBModalTitle
 } from 'mdb-react-ui-kit';
 import { useState } from 'react';
 import ForgotPassForm from '../../Component/ForgotPass/ForgotPassForm';
 import toast, { Toaster } from 'react-hot-toast';
 import 'react-toastify/dist/ReactToastify.css';
-import usePasswordToggle from './usePasswordToggle';
 
 async function fetchData(setData) {
   try {
@@ -44,7 +41,7 @@ async function fetchData(setData) {
   }
 }
 
-async function loginapi(username, passwd, rememberMe, setLoginSuccess, navigate) {
+async function loginapi(username, passwd, rememberMe, setLoginSuccess) {
   try {
     
     const response = await fetch('https://localhost:7206/api/ApplicationAuth/login', {
@@ -66,7 +63,6 @@ async function loginapi(username, passwd, rememberMe, setLoginSuccess, navigate)
     if (!response.ok) {
       throw new Error("Error fetching data");
     }
-      
       toast.success('Login successful!');
       setLoginSuccess(true);
       console.log('ok');
@@ -86,8 +82,8 @@ function Login() {
   const [loginSuccess, setLoginSuccess] = useState(false);
   const [userName, setUserName] = useState('');
   const [password, setPassWord] = useState('');
-  const [PasswordInputType, ToggleIcon] = usePasswordToggle();
   const navigate = useNavigate();
+ 
   const toggleOpen = () => setBasicModal(!basicModal);
 
   const handleOnChangeUsername = (e) => {
@@ -99,10 +95,6 @@ function Login() {
   }
 
   const handleLoginClick = () => {
-    if(!userName || !password){
-      toast.error("Email/Password is required");
-      return;
-    }
     loginapi(userName, password, true, setLoginSuccess, navigate);
   }
 
@@ -121,24 +113,8 @@ function Login() {
                           </div>
                           <h5 className="fw-bold my-5 pb-2" style={{ letterSpacing: '1px', textAlign: 'center', fontSize: '30px' }}>Sign into your account</h5>
 
-                          <MDBInput wrapperClass='mb-4' label='Email address' id='formControlLg' 
-                                    onChange={(e) => handleOnChangeUsername(e)} 
-                                    value={userName} 
-                                    type='email' 
-                                    size="lg"                                    
-                          />
-                        <div className='password-input-container'>
-                          <MDBInput wrapperClass='mb-4' label='Password' id='formControlLg' 
-                                    onChange={(e) => handleOnChangePassWord(e)} 
-                                    value={password} 
-                                    type={PasswordInputType} 
-                                    size="lg"                                    
-                          />
-                          <span className='password-toggle-icon'>
-                            {ToggleIcon}
-                          </span>
-                        </div>
-  
+                          <MDBInput wrapperClass='mb-4' label='Email address' id='formControlLg' onChange={(e) => handleOnChangeUsername(e)} value={userName} type='email' size="lg" />
+                          <MDBInput wrapperClass='mb-4' label='Password' id='formControlLg' onChange={(e) => handleOnChangePassWord(e)} value={password} type='password' size="lg" />
 
                           <MDBBtn className="mb-4 px-5" color='blue' size='lg' onClick={handleLoginClick}>Login</MDBBtn>
 
