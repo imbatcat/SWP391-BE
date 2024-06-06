@@ -32,7 +32,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         [HttpGet("/api/AdmissionRecord/{name}")]
         public async Task<ActionResult<ARSearchPetNameDTO>> GetAdmissionRecordByCondition([FromRoute] string name)   //----Get Addmission Record by name
         {
-            var service = await _petContext.GetPetByName(a => a.PetName == name );
+            var service = await _petContext.GetPetByName(a => a.PetName == name);
             ARSearchPetNameDTO born;
 
             if (service == null)

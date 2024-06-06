@@ -13,7 +13,7 @@ using PetHealthcare.Server.Services.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-const string DataSrc = "LAPTOP-8QVR89KA\\SQLEXPRESS02", Password = "12345";
+const string DataSrc = "", Password = "";
 
 // Add services to the container.
 builder.Services.AddDbContext<PetHealthcareDbContext>(
@@ -21,7 +21,7 @@ option => option.UseSqlServer(
         $"Data Source={DataSrc}; User = sa; Password ={Password};Initial Catalog=PetHealthCareSystem;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False"));
 builder.Services.AddDbContext<ApplicationDbContext>(
 option => option.UseSqlServer(
-        $"Data Source={DataSrc}; User = sa; Password ={Password};Initial Catalog=PetHealthCareAuth;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False"));
+        $"Data Source={DataSrc}; User = sa; Password ={Password};Initial Catalog=PetHealthCareSystemAuth;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False"));
 
 builder.Services.AddScoped<MedicalRecordRepository>();
 
@@ -92,7 +92,7 @@ builder.Services.AddControllers()
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddAuthentication();
-builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
 
 builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -116,7 +116,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers().RequireAuthorization();
+app.MapControllers();
 //app.MapIdentityApi<ApplicationUser>();
 
 app.Run();
