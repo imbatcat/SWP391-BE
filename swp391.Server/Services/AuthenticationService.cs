@@ -36,7 +36,6 @@ namespace PetHealthcare.Server.Services
         {
             var code = await _userManager.GeneratePasswordResetTokenAsync(user); 
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            
             return code;
         }
 
@@ -53,12 +52,14 @@ namespace PetHealthcare.Server.Services
                 $"<p>Please confirm your email address by clicking <a href='{confirmationLink}'>here</a>. 100% reliable no scam.</p>");
         }
 
-        public async Task SendForgotPasswordEmail(string userId, string userEmail)
+        public async Task SendForgotPasswordEmail(ApplicationUser user, string userEmail)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            if (await _userManager.GetEmailAsync(user) != userEmail) 
+                throw new BadHttpRequestException("Input email does not match with user's");
             var token = await GenerateForgotPasswordToken(user, userEmail);
+
             //Console.WriteLine(token);
-            var confirmationLink = $"https://localhost:5173/reset-password?userId={userId}&token={token}";
+            var confirmationLink = $"https://localhost:5173/reset-password?userId={user.Id}&token={token}";
             MailMessage message = new MailMessage();
             await _emailService.SendEmailAsync(
                 userEmail,

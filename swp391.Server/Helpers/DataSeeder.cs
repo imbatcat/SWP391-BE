@@ -25,7 +25,7 @@ namespace PetHealthcare.Server.Helpers
                 {
                     ("Admin", "ADMIN"),
                     ("Staff", "STAFF"),
-                    ("User", "USER"),
+                    ("Customer", "Customer"),
                     ("Vet", "VET"),
                     ("Guest", "GUEST")
                 };

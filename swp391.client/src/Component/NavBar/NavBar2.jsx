@@ -83,6 +83,9 @@ export default function NavBar2() {
             <MDBNavbarItem>
             <Link to="/login"><button  className='btn'>Sign In</button></Link> 
             </MDBNavbarItem>
+              <MDBNavbarItem>
+                  <Link to="/signUp"><button className='btn'>Register</button></Link>
+              </MDBNavbarItem>
           </MDBNavbarNav>
             
           

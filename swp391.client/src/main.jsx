@@ -16,46 +16,47 @@ import PetList from './Pages/MyPetList/PetList';
 import ConfirmEmail from './Pages/ConfirmEmail';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import GglLogin from './Pages/GoogleLogin';
+import { ToastContainer } from 'react-toastify';
 const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Home/>,
-  errorElement: <div>404 Not Found</div>,
-  },
-  {
-    path: '/login',
-    element: <Login/> ,
-    errorElement: <div>404 Not Found</div>,
-  },
-  {
-    path: '/signUp',
-    element: <SignUp/>,
-    errorElement: <div>404 Not Found</div>,
-  },
-  {
-    path: '/aboutUs',
-    element: <AboutUs/>,
-    errorElement: <div>404 Not Found</div>,
-  },
-  {
-    path: '/appointment',
-    element: <Appointment/>,
-    errorElement: <div>404 Not Found</div>,
-  },
-  {
-    path: '/otp',
-    element: <OTPInput/>,
-    errorElement: <div>404 Not Found</div>,
-  },
-  {
-    path: '/reset-password',
-    element: <PasswordResetForm/>,
-    errorElement: <div>404 Not Found</div>,
-  },
-  {
-    path: '/petList',
-    element: <PetList/>,
-    errorElement: <div>404 Not Found</div>,
+    {
+        path: '/',
+        element: <Home />,
+        errorElement: <div>404 Not Found</div>,
+    },
+    {
+        path: '/login',
+        element: <Login />,
+        errorElement: <div>404 Not Found</div>,
+    },
+    {
+        path: '/signUp',
+        element: <SignUp />,
+        errorElement: <div>404 Not Found</div>,
+    },
+    {
+        path: '/aboutUs',
+        element: <AboutUs />,
+        errorElement: <div>404 Not Found</div>,
+    },
+    {
+        path: '/appointment',
+        element: <Appointment />,
+        errorElement: <div>404 Not Found</div>,
+    },
+    {
+        path: '/otp',
+        element: <OTPInput />,
+        errorElement: <div>404 Not Found</div>,
+    },
+    {
+        path: '/reset-password',
+        element: <PasswordResetForm />,
+        errorElement: <div>404 Not Found</div>,
+    },
+    {
+        path: '/petList',
+        element: <PetList />,
+        errorElement: <div>404 Not Found</div>,
     },
     {
         path: '/account-confirm',
@@ -70,12 +71,11 @@ const router = createBrowserRouter([
 ])
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <GoogleOAuthProvider clientId="">
-      <React.StrictMode>
-        <RouterProvider router={router}/>
+    <React.StrictMode>
+        <RouterProvider router={router} />
+        <ToastContainer></ToastContainer>
         {/*<App></App>*/}
-        </React.StrictMode>
-    </GoogleOAuthProvider >
+    </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

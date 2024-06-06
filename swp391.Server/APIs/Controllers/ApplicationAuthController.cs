@@ -27,7 +27,7 @@ public class ApplicationAuthController : ControllerBase
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly RoleManager<ApplicationRole> _roleManager;
     private readonly IEmailSender _emailService;
-    private readonly IAccountService _context;
+    private readonly IAccountService _accountService;
     private readonly IAuthenticationService _authenticationService;
 
     public ApplicationAuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager, IEmailSender emailService, IAccountService context, IAuthenticationService authenticationService)
@@ -36,7 +36,7 @@ public class ApplicationAuthController : ControllerBase
         _signInManager = signInManager;
         _roleManager = roleManager;
         _emailService = emailService;
-        _context = context;
+        _accountService = context;
         _authenticationService = authenticationService;
     }
 
@@ -55,7 +55,7 @@ public class ApplicationAuthController : ControllerBase
 
             try
             {
-                var account = await _context.CreateAccount(registerAccount);
+                var account = await _accountService.CreateAccount(registerAccount);
                 var role = Helpers.GetRole(registerAccount.RoleId);
                 var result = await _userManager.CreateAsync(user, registerAccount.Password);
                 if (result.Succeeded)
@@ -68,7 +68,8 @@ public class ApplicationAuthController : ControllerBase
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
-            } catch (BadHttpRequestException ex)
+            }
+            catch (BadHttpRequestException ex)
             {
                 return BadRequest(ex);
             }
@@ -79,13 +80,13 @@ public class ApplicationAuthController : ControllerBase
 
     [HttpPost("login")]
     [AllowAnonymous]
-    public async Task<ActionResult> Login([FromBody] LoginModel registerAccount)
+    public async Task<ActionResult> Login([FromBody] LoginModel loginAccount)
     {
         if (ModelState.IsValid)
         {
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-            var user = await _userManager.FindByNameAsync(registerAccount.UserName);
+            var user = await _userManager.FindByNameAsync(loginAccount.UserName);
             if (user == null)
             {
                 return BadRequest("No such username");
@@ -94,7 +95,7 @@ public class ApplicationAuthController : ControllerBase
             {
                 return BadRequest("Account is not confirmed");
             }
-            var result = await _signInManager.PasswordSignInAsync(registerAccount.UserName, registerAccount.Password, registerAccount.RememberMe, lockoutOnFailure: false);
+            var result = await _signInManager.PasswordSignInAsync(loginAccount.UserName, loginAccount.Password, loginAccount.RememberMe, lockoutOnFailure: false);
             if (result.Succeeded)
             {
                 return Ok();
@@ -102,7 +103,7 @@ public class ApplicationAuthController : ControllerBase
         }
 
         // If we got this far, something failed, redisplay form
-        return BadRequest("Check username and password");
+        return BadRequest("Incorrect password");
     }
 
     [HttpPost("logout")]
@@ -123,6 +124,11 @@ public class ApplicationAuthController : ControllerBase
         var result = await _userManager.ConfirmEmailAsync(user, code);
         if (result.Succeeded)
         {
+            await _accountService.SetAccountIsDisabled(new RequestAccountDisable
+            {
+                username = user.UserName,
+                IsDisabled = false
+            });
             await _signInManager.SignInAsync(user, isPersistent: false);
         }
         return Ok();
@@ -136,14 +142,29 @@ public class ApplicationAuthController : ControllerBase
         return Ok();
     }
 
-    
+    [AllowAnonymous]
     [HttpPost("forgot-password")]
-    public async Task<IActionResult> SendForgotPasswordEmail([FromBody] ConfirmReqUser user)
+    public async Task<IActionResult> SendForgotPasswordEmail([FromBody] PasswordReqUser user)
     {
-        await _authenticationService.SendForgotPasswordEmail(user.UserId, user.Email);
+        try
+        {
+
+            var _user = await _userManager.FindByEmailAsync(user.Email);
+            if (!(await _userManager.IsEmailConfirmedAsync(_user)))
+            {
+                return BadRequest("Account is not activated");
+            }
+            await _authenticationService.SendForgotPasswordEmail(_user, user.Email);
+
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
         return Ok();
     }
 
+    [AllowAnonymous]
     [HttpPost("reset-password")]
     public async Task<IActionResult> ResetPassword([FromBody] RequestResetPassword entity)
     {
@@ -177,7 +198,8 @@ public class ApplicationAuthController : ControllerBase
             var user = await _userManager.FindByNameAsync(userName);
             await _userManager.AddToRoleAsync(user, role);
 
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             return BadRequest(e);
         }
