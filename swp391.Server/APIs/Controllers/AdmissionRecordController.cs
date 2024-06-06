@@ -30,16 +30,20 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // GET: api/Services/5
         [HttpGet("/api/AdmissionRecord/{name}")]
-        public async Task<ActionResult<AdmissionRecord>> GetAdmissionRecordByCondition([FromRoute] string name)   //----Get Addmission Record by name
+        public async Task<ActionResult<ARSearchPetNameDTO>> GetAdmissionRecordByCondition([FromRoute] string name)   //----Get Addmission Record by name
         {
             var service = await _petContext.GetPetByName(a => a.PetName == name );
+            ARSearchPetNameDTO born;
 
             if (service == null)
             {
                 return NotFound();
+            } else
+            {
+                 born = new ARSearchPetNameDTO(service.AdmissionId,service.AdmissionDate,service.DischargeDate,service.IsDischarged,service.PetCurrentCondition,service.MedicalRecordId,service.VeterinarianAccountId,service.PetId,service.CageId);
             }
             
-            return service;
+            return born;
         }
 
         // PUT: api/Services/5
