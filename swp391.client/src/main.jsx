@@ -4,6 +4,7 @@ import './index.css';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { AuthProvider } from "./Context/AuthProvider";
 import Login from './Pages/Login/Login';
 import App from './App';
 import Home from './Pages/Home/Home'
@@ -14,7 +15,6 @@ import OTPInput from './Pages/OTP Input/OTPInput';
 import PasswordResetForm from './Pages/SetNewPass/PasswordResetForm';
 import PetList from './Pages/MyPetList/PetList';
 import ConfirmEmail from './Pages/ConfirmEmail';
-import { GoogleOAuthProvider } from '@react-oauth/google';
 import GglLogin from './Pages/GoogleLogin';
 import { ToastContainer } from 'react-toastify';
 const router = createBrowserRouter([
@@ -71,11 +71,13 @@ const router = createBrowserRouter([
 ])
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <React.StrictMode>
-        <RouterProvider router={router} />
-        <ToastContainer></ToastContainer>
-        {/*<App></App>*/}
-    </React.StrictMode>
+    <AuthProvider>
+        <React.StrictMode>
+            <RouterProvider router={router} />
+            <ToastContainer></ToastContainer>
+        </React.StrictMode>
+    </AuthProvider>
+
 );
 
 // If you want to start measuring performance in your app, pass a function

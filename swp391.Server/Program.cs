@@ -101,14 +101,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 #endregion
 
 #region Identity
-builder.Services.AddAuthentication()
-    .AddGoogle(options =>
-    {
-        IConfigurationSection googleAuthNSection =
-        config.GetSection("Authentication:Google");
-        options.ClientId = googleAuthNSection["ClientId"];
-        options.ClientSecret = googleAuthNSection["ClientSecret"];
-    });
+builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 
 builder.Services.AddIdentityApiEndpoints<ApplicationUser>(
@@ -118,7 +111,7 @@ builder.Services.AddIdentityApiEndpoints<ApplicationUser>(
 
 builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
 {
-    options.TokenLifespan = TimeSpan.FromHours(24); 
+    options.TokenLifespan = TimeSpan.FromHours(24);
 });
 #endregion 
 
