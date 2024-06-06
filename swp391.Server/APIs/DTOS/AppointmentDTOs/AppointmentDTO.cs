@@ -1,4 +1,4 @@
-﻿namespace PetHealthcare.Server.APIs.DTOS
+﻿namespace PetHealthcare.Server.APIs.DTOS.AppointmentDTOs
 {
     public class AppointmentDTO
     {

@@ -53,6 +53,7 @@ builder.Services.AddScoped<IPetService, PetService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IMedicalRecordService, MedicalRecordService>();
 builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
+builder.Services.AddScoped<IVnPayService, VnPayService>();
 #endregion
 
 #region Cookie config
@@ -90,7 +91,7 @@ builder.Services.AddControllers()
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddAuthentication();
-builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
 
 builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -116,5 +117,9 @@ app.UseAuthorization();
 
 app.MapControllers().RequireAuthorization();
 //app.MapIdentityApi<ApplicationUser>();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=VNPay}/{action=Index}/{id?}");
 
 app.Run();

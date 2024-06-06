@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, } from 'react';
 import { nanoid } from 'nanoid'
 
 import './App.css';
@@ -68,7 +68,7 @@ async function logout() {
 }
 async function signup(id) {
     try {
-        var now = new Date();
+/*        var now = new Date();*/
         console.log('rutkre' + id);
         const response = await fetch('https://localhost:7206/api/ApplicationAuth/register', {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -96,16 +96,32 @@ async function signup(id) {
     }
 }
 function App() {
-    const [data, setData] = useState([]);
-    const [token, setToken] = useState(null);
+    //const [data, setData] = useState([]);
+    //const [token, setToken] = useState(null);
+
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search)
+            
+        fetch("http://localhost:7206/VNPayAPI/PaymentCallback", {
+            method: "POST",
+            headers: {
+                "Content- Type": "application / x - www - form - urlencoded"
+            },
+            body: params.toString()
+        })
+        console.log(params);
+        },[])
+
     const id = nanoid(2);
     return (
-        <div>
-            <button onClick={() => fetchData(setData)}>Fetch data</button>
+        <><div>
+            <button onClick={() => fetchData()}>Fetch data</button>
             <button onClick={() => signup(id)}>signup</button>
             <button onClick={() => login()}>login</button>
             <button onClick={() => logout()}>logout</button>
-        </div>
+        </div><div>
+                Hello world
+            </div></>
     );
 }
 
