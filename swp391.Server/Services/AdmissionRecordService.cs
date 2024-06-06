@@ -20,14 +20,15 @@ namespace PetHealthcare.Server.Services
         public async Task CreateAdmissionRecord(AdmissionRecordRegisterDTO entity)
         {
 
-            var obj = new AdmissionRecord() {
+            var obj = new AdmissionRecord()
+            {
                 AdmissionId = GenerateId(),
                 AdmissionDate = DateOnly.FromDateTime(DateTime.Now),
                 DischargeDate = entity.DischargeDate,
                 IsDischarged = entity.IsDischarged,
-                PetCurrentCondition = entity.PetCurrentCondition, 
+                PetCurrentCondition = entity.PetCurrentCondition,
                 CageId = Convert.ToInt32(entity.CageId),
-                PetId = entity.PetId,  
+                PetId = entity.PetId,
                 MedicalRecordId = entity.MedicalRecordId,
                 VeterinarianAccountId = entity.VeterianrianId,
             };
@@ -56,7 +57,7 @@ namespace PetHealthcare.Server.Services
             {
                 existingRecord.DischargeDate = entity.DischargeDate;
                 existingRecord.PetCurrentCondition = entity.PetCurrentCondition;
-                existingRecord.IsDischarged = entity.IsDischarged;                
+                existingRecord.IsDischarged = entity.IsDischarged;
             }
             await _admissionRecordService.Update(existingRecord);
         }
@@ -64,18 +65,9 @@ namespace PetHealthcare.Server.Services
         private string GenerateId()
         {
             var ac = new AdmissionRecord();
-            var born  = ac.Prefix;
+            var born = ac.Prefix;
             string id = Nanoid.Generate(size: 8);
             return born + id;
         }
-
-        //public async Task<bool> ConfirmAdmissionRecordIdentity(string Id, AdmissionRecordDTO newPet)
-        //{
-        //    // newPet's name, breed and isCat must not match any pets of this owner in the database
-
-        //    //get list of pet by accound id, then check if theres any pet in the database matches the 
-        //    //mentioned props of newPets, if yes then return false, true if otherwise. 
-        //    return false;
-        //}
     }
 }
