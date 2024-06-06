@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
 using System.Linq.Expressions;
@@ -21,14 +22,24 @@ namespace PetHealthcare.Server.Repositories
 
         public async Task Create(Account entity)
         {
-            await context.Accounts.AddAsync(entity);
-            await SaveChanges();
+            try
+            {
+                await context.Accounts.AddAsync(entity);
+                await SaveChanges();
+
+            } catch (DbUpdateException ex)
+            {
+                throw new BadHttpRequestException(
+                    ex.Message,
+                    ex.InnerException);
+            }
+
         }
 
-        public void Delete(Account entity)
+        public async void Delete(Account entity)
         {
             context.Accounts.Remove(entity);
-            SaveChanges();
+            await SaveChanges();
         }
 
         public async Task<IEnumerable<Account>> GetAll()
@@ -85,9 +96,17 @@ namespace PetHealthcare.Server.Repositories
             return accounts;
         }
 
-        public Task<Account?> LoginAccount(string username, string password)
+        public async Task<bool> SetAccountIsDisabled(RequestAccountDisable entity)
         {
-            throw new NotImplementedException();
+            var account = await GetByCondition(e => e.Username == entity.username);
+            if (account != null)
+            {
+                context.Entry(account).State = EntityState.Modified;
+                account.IsDisabled = entity.IsDisabled;
+                await SaveChanges();
+                return true;
+            }
+            return false;
         }
     }
 }
