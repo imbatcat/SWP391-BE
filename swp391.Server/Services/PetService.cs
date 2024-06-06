@@ -10,12 +10,12 @@ namespace PetHealthcare.Server.Services
     public class PetService : IPetService
     {
         private readonly IPetRepository _petService;
-        private readonly IAdmissionRecordRepository _admissionRecordRepository;
+        private readonly IAdmissionRecordRepository _admissionRecordService;
 
-        public PetService(IPetRepository petService, IAdmissionRecordRepository admissionRecordRepository)
+        public PetService(IPetRepository petService, IAdmissionRecordRepository admissionRecordService)
         {
             _petService = petService;
-            _admissionRecordRepository = admissionRecordRepository;
+            _admissionRecordService = admissionRecordService;
         }
 
         public async Task CreatePet(PetDTO pet)
@@ -66,9 +66,9 @@ namespace PetHealthcare.Server.Services
         {
             return await _petService.GetByCondition(expression);
         }
-        public async Task<AdmissionRecord?> GetPetByName(Expression<Func<Pet, bool>> expression) 
+        public async Task<AdmissionRecord?> GetPetByName(Expression<Func<Pet, bool>> expression)
         {
-            var _admissionRecords = await _admissionRecordRepository.GetAll();
+            var _admissionRecords = await _admissionRecordService.GetAll();
             var born = await _petService.GetByCondition(expression);  //----Long
             AdmissionRecord save;
             foreach (var item in _admissionRecords)
@@ -76,7 +76,7 @@ namespace PetHealthcare.Server.Services
 
                 if (item.PetId.Equals(born.PetId))
                 {
-                    return save = item; 
+                    return save = item;
                 }
             }
             return null;
@@ -92,16 +92,16 @@ namespace PetHealthcare.Server.Services
                 VaccinationHistory = pet.VaccinationHistory,
                 IsDisabled = pet.IsDisable
             };
-            var checkPet=await _petService.petExist(_pet);
-            if(!checkPet) 
-            { 
+            var checkPet = await _petService.petExist(_pet);
+            if (!checkPet)
+            {
                 await _petService.Update(_pet);
             }
-            else 
+            else
             {
                 throw new BadHttpRequestException("An exited pet already had these values.");
             }
-            
+
         }
         public string GenerateID()
         {

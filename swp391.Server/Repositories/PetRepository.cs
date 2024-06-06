@@ -8,13 +8,9 @@ namespace PetHealthcare.Server.Repositories
     public class PetRepository : IPetRepository
     {
         private readonly PetHealthcareDbContext context;
-        private readonly MedicalRecordRepository medicalRecordRepository;
-        private readonly AdmissionRecordRepository admissionRecordRepository;
-        public PetRepository(PetHealthcareDbContext context, MedicalRecordRepository medicalRecordRepository, AdmissionRecordRepository admissionRecordRepository)
+        public PetRepository(PetHealthcareDbContext context)
         {
             this.context = context;
-            this.medicalRecordRepository = medicalRecordRepository;
-            this.admissionRecordRepository = admissionRecordRepository;
         }
 
         public async Task SaveChanges()
@@ -72,19 +68,19 @@ namespace PetHealthcare.Server.Repositories
         }
         public bool CheckMedicalRecord(string medRecId)
         {
-            return context.MedicalRecords.Any(m=>m.PetId == medRecId);
+            return context.MedicalRecords.Any(m => m.PetId == medRecId);
         }
         public async Task<IEnumerable<MedicalRecord>> GetMedicalRecordsByPet(string petId)
         {
-            if(!CheckMedicalRecord(petId))
+            if (!CheckMedicalRecord(petId))
             {
                 return null;
             }
-            var list = await medicalRecordRepository.GetAll();
-            List<MedicalRecord> medicalRecords= new List<MedicalRecord>();
-            foreach(MedicalRecord medRec in list)
+            var list = await context.MedicalRecords.ToListAsync();
+            List<MedicalRecord> medicalRecords = new List<MedicalRecord>();
+            foreach (MedicalRecord medRec in list)
             {
-                if(medRec.PetId == petId)
+                if (medRec.PetId == petId)
                 {
                     medicalRecords.Add(medRec);
                 }
@@ -93,19 +89,19 @@ namespace PetHealthcare.Server.Repositories
         }
         public bool CheckAdmissionRecord(string admissionRecId)
         {
-            return context.AdmissionRecords.Any(a=>a.PetId == admissionRecId);
+            return context.AdmissionRecords.Any(a => a.PetId == admissionRecId);
         }
         public async Task<IEnumerable<AdmissionRecord>> GetAdmissionRecordsByPet(string petId)
         {
-            if(!CheckAdmissionRecord(petId))
+            if (!CheckAdmissionRecord(petId))
             {
                 return null;
             }
-            var list= await admissionRecordRepository.GetAll();
-            List<AdmissionRecord> admissionRecords= new List<AdmissionRecord>();
-            foreach(AdmissionRecord admRec in list)
+            var list = await context.AdmissionRecords.ToListAsync();
+            List<AdmissionRecord> admissionRecords = new List<AdmissionRecord>();
+            foreach (AdmissionRecord admRec in list)
             {
-                if(admRec.PetId == petId)
+                if (admRec.PetId == petId)
                 {
                     admissionRecords.Add(admRec);
                 }
