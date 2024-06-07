@@ -12,7 +12,7 @@ export const Accounts=[
 
     },
     {
-        fullName: 'Luong The Minh',
+        fullName: 'Luong The Minh AD',
         email: 'minhltse182480@fpt.edu.vn',
         username: 'MinhLuong',
         password:'12345',
@@ -24,7 +24,7 @@ export const Accounts=[
 
     },
     {
-        fullName: 'Luong The Minh',
+        fullName: 'Luong The Minh Vet',
         email: 'minhltse182480@fpt.edu.vn',
         username: 'MinhLuong',
         password:'12345',

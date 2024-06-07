@@ -12,26 +12,26 @@ export const SideNavData = [
         cName: 'nav-text'
       },
       {
-        title: 'Reports',
-        path: '/reports',
+        title: 'Users',
+        path: '/adminAccount',
         icon: <IoIcons.IoIosPaper />,
         cName: 'nav-text'
       },
       {
-        title: 'Products',
-        path: '/products',
+        title: 'Pets',
+        path: '/petsManage',
         icon: <FaIcons.FaCartPlus />,
         cName: 'nav-text'
       },
       {
-        title: 'Team',
-        path: '/team',
+        title: 'Veternary',
+        path: '/vetAccount',
         icon: <IoIcons.IoMdPeople />,
         cName: 'nav-text'
       },
       {
-        title: 'Messages',
-        path: '/messages',
+        title: 'Appointments',
+        path: '/appointmentManage',
         icon: <FaIcons.FaEnvelopeOpenText />,
         cName: 'nav-text'
       },
