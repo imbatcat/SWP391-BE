@@ -18,7 +18,13 @@ import ConfirmEmail from './Pages/ConfirmEmail';
 import GglLogin from './Pages/GoogleLogin';
 
 import { ToastContainer } from 'react-toastify';
+import UserProfile from './Pages/Profile/UserProfile';
+import { UserProvider } from './Context/UserContext';
 import AdminAccount from './Pages/AdminPages/adminAccount';
+import VetAccount from './Pages/AdminPages/VetAccount';
+import AppointmentManage from './Pages/AdminPages/AppointmentManage';
+import UsersAccount from './Pages/AdminPages/UsersAccount';
+
 const router = createBrowserRouter([
     {
         path: '/',
@@ -36,7 +42,7 @@ const router = createBrowserRouter([
         errorElement: <div>404 Not Found</div>,
     },
     {
-       path: '/aboutUs',
+       path: '/adminAccount',
        element: <AdminAccount/>,
        errorElement: <div>404 Not Found</div>,
     },
@@ -56,7 +62,7 @@ const router = createBrowserRouter([
         errorElement: <div>404 Not Found</div>,
     },
     {
-        path: '/petList',
+        path: '/user/petList',
         element: <PetList />,
         errorElement: <div>404 Not Found</div>,
     },
@@ -70,14 +76,41 @@ const router = createBrowserRouter([
         element: <GglLogin />,
         errorElement: <div>404 Not Found</div>,
     },
+    {
+        path: '/user/profile',
+        element: <UserProfile></UserProfile>,
+        errorElement: <div>404 Not Found</div>,
+    },
+    {
+        path: '/vetAccount',
+        element: <VetAccount/>,
+        errorElement: <div>404 Not Found</div>,
+    },
+    {
+        path: '/appointmentManage',
+        element: <AppointmentManage/>,
+        errorElement: <div>404 Not Found</div>,
+    },
+    {
+        path: '/usersAccount',
+        element: <UsersAccount/>,
+        errorElement: <div>404 Not Found</div>,
+    },
+    {
+        path: '/usersAccount',
+        element: <UsersAccount/>,
+        errorElement: <div>404 Not Found</div>,
+    }
 ])
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <AuthProvider>
-        <React.StrictMode>
-            <RouterProvider router={router} />
-            <ToastContainer></ToastContainer>
-        </React.StrictMode>
+        <UserProvider>
+            <React.StrictMode>
+                <RouterProvider router={router} />
+                <ToastContainer></ToastContainer>
+            </React.StrictMode>
+        </UserProvider>
     </AuthProvider>
 
 );

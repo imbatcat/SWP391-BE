@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './NavBar2.css'
 import {
     MDBContainer,
@@ -16,10 +16,33 @@ import {
     MDBCollapse,
 } from 'mdb-react-ui-kit';
 import { useAuth } from '../../Context/AuthProvider';
+import { useUser } from '../../Context/UserContext';
 
 export default function NavBar2() {
     const [isAuthenticated, setIsAuthenticated] = useAuth();
+    const [user, setUser] = useUser();
     const [openBasic, setOpenBasic] = useState(false);
+    const navigate = useNavigate();
+    const logout = async () => {
+        try {
+            const response = await fetch(`https://localhost:7206/api/ApplicationAuth/logout`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            setIsAuthenticated(false);
+            localStorage.removeItem("user");
+            navigate('/');
+        } catch (error) {
+            toast.error('Error logging ou!');
+            console.error(error.message);
+        }
+    };
 
     return (
         <MDBNavbar expand='lg' light bgColor='light' sticky>
@@ -44,9 +67,11 @@ export default function NavBar2() {
                             </Link>
 
                         </MDBNavbarItem>
-                       
                         <MDBNavbarItem>
-                            <Link to="/aboutUs"> <MDBNavbarLink>About Us</MDBNavbarLink></Link>
+                            <Link to="/petList"> <MDBNavbarLink>My Pet List</MDBNavbarLink></Link>
+                        </MDBNavbarItem>
+                        <MDBNavbarItem>
+                            <Link to="/adminAccount"> <MDBNavbarLink>Admin</MDBNavbarLink></Link>
                         </MDBNavbarItem>
 
                         <MDBNavbarItem>
@@ -81,19 +106,13 @@ export default function NavBar2() {
 
                         {isAuthenticated ? (
                             <>
-                            <MDBNavbarItem>
-                            <MDBDropdown>
-                                <MDBDropdownToggle tag='a' className='nav-link' role='button'>
-                                Profile
-                                </MDBDropdownToggle>
-                                <MDBDropdownMenu>
-                                    <MDBDropdownItem link href='https://zalo.me/g/alobzv478'>Zalo</MDBDropdownItem>
-                                    <MDBDropdownItem link href='https://www.facebook.com/profile.php?id=100009406588322'>FaceBook</MDBDropdownItem>
-                                    <MDBDropdownItem link>09321231232</MDBDropdownItem>
-                                </MDBDropdownMenu>
-                            </MDBDropdown>
-                               
-                                    <Link to="/profile"></Link>
+                                <MDBNavbarItem>
+                                    <Link to="/user/profile">
+                                        <button className="btn">Profile</button>
+                                    </Link>
+                                </MDBNavbarItem>
+                                <MDBNavbarItem>
+                                    <button className="btn" onClick={() => logout()}>Logout</button>
                                 </MDBNavbarItem>
                             </>
                         ) : (
@@ -111,7 +130,7 @@ export default function NavBar2() {
 
 
                 </MDBCollapse>
-            </MDBContainer>
-        </MDBNavbar>
+            </MDBContainer >
+        </MDBNavbar >
     );
 }
