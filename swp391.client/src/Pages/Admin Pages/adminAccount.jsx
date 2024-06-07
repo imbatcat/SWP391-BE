@@ -1,31 +1,36 @@
 
 import { MDBBadge, MDBBtn, MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit'
 import SideNav from '../../Component/SideNav/SideNav'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function AdminAccount() {
   const [accounts, setAccounts] = useState([]);
-  async function fetchData() {
-    try {
-      const response = await fetch('https://localhost:7206/api/Accounts', {
-        method: 'GET', // *GET, POST, PUT, DELETE, etc.
-        credentials: 'include',
-        headers: {
-          // 'Content-Type': 'application/x-www-form-urlencoded',
-        }
-        // body data type must match "Content-Type" header
-      });
-      if (!response.ok) {
-        throw new Error("Error fetching data");
-      }
-      const Accounts = await response.json();
-      setAccounts(Accounts); // Ensure setAccounts is correctly referenced
-      console.log(Accounts);
-    } catch (error) {
-      console.error(error.message);
-    }
-  }
   
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch('https://localhost:7206/api/Accounts', {
+          method: 'GET', // *GET, POST, PUT, DELETE, etc.
+          credentials: 'include',
+          headers: {
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          }
+          // body data type must match "Content-Type" header
+        });
+        if (!response.ok) {
+          throw new Error("Error fetching data");
+        }
+        const data = await response.json();
+        setAccounts(data); // Ensure setAccounts is correctly referenced
+        console.log(data);
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+
+    fetchData();
+  }, []);
+
   return (
     <div>
       <SideNav/>

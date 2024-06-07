@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Identity;
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var config = builder.Configuration;
-const string DataSrc = "", Password = "";
+const string DataSrc = "MIB\\MINHLUONG", Password = "12345";
 
 // Add services to the container.
 #region DBcontext
