@@ -174,18 +174,6 @@ function VetAccount() {
                 />
             </MDBCol>
             <MDBCol>
-              <MDBInput
-                  type="select"
-                  label="Gender"
-                  name="isMale"
-                  value={selectedAccount.isMale ? "Male" : "Female"}
-                  onChange={(e) => handleInputChange({ target: { name: "isMale", value: e.target.value === "Male" } })}
-                >
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                </MDBInput>
-            </MDBCol>
-            <MDBCol>
                 <MDBCheckbox label="Is male"></MDBCheckbox>
             </MDBCol>
 
@@ -195,21 +183,21 @@ function VetAccount() {
                
                 
                 
-
                 <MDBInput
                   type="select"
-                  label="Status"
-                  name="isDisabled"
-                  value={selectedAccount.isDisabled ? "Disabled" : "Active"}
-                  onChange={(e) => handleInputChange({ target: { name: "isDisabled", value: e.target.value === "Disabled" } })}
+                  label="Gender"
+                  name="isMale"
+                  value={selectedAccount.isMale ? "Male" : "Female"}
+                  onChange={(e) => handleInputChange({ target: { name: "isMale", value: e.target.value === "Male" } })}
                 >
-                  <option value="Active">Active</option>
-                  <option value="Disabled">Disabled</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
                 </MDBInput>
+
               </MDBModalBody>
               <MDBModalFooter>
                 <MDBBtn color='secondary' onClick={toggleOpen}>Close</MDBBtn>
-                <MDBBtn color='primary' onClick={handleSaveChanges}>Save changes</MDBBtn>
+                <MDBBtn color='success' style={{color:'black'}} onClick={handleSaveChanges}>Save changes</MDBBtn>
               </MDBModalFooter>
             </MDBModalContent>
           </MDBModalDialog>
