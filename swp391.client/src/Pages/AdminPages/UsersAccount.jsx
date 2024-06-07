@@ -83,7 +83,7 @@ function VetAccount() {
           </tr>
         </MDBTableHead>
         <MDBTableBody>
-          {accounts.filter(acc => acc.roleId === 3).map((acc) => (
+          {accounts.filter(acc => acc.roleId === 1).map((acc) => (
             <tr key={acc.id}>
               <td>
                 <div className='d-flex align-items-center'>
@@ -113,7 +113,7 @@ function VetAccount() {
                   {acc.isDisabled ? "Disabled" : "Active"}
                 </MDBBadge>
               </td>
-              <td>Veterinary</td>
+              <td>User</td>
               <td>
                 <MDBBtn color='link' rounded size='sm' onClick={() => toggleOpen(acc)}>
                   Edit

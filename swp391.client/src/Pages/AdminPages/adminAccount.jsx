@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { MDBBadge, MDBBtn, MDBTable, MDBTableBody, MDBTableHead, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBInput, MDBModalDialog, MDBModalContent, MDBModalTitle } from 'mdb-react-ui-kit';
+import { MDBBadge, MDBBtn, MDBTable, MDBTableBody, MDBTableHead, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBInput, MDBModalDialog, MDBModalContent, MDBModalTitle, MDBCol, MDBRow, MDBCheckbox } from 'mdb-react-ui-kit';
 import SideNav from '../../Component/SideNav/SideNav';
 
 function VetAccount() {
   const [accounts, setAccounts] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState(null);
-  const [centredModal, setCentredModal] = useState(false);
+  const [basicModal, setBasicModal] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -33,7 +33,7 @@ function VetAccount() {
 
   const toggleOpen = (account = null) => {
     setSelectedAccount(account);
-    setCentredModal(!centredModal);
+    setBasicModal(!basicModal);
   };
 
   const handleInputChange = (e) => {
@@ -83,7 +83,7 @@ function VetAccount() {
           </tr>
         </MDBTableHead>
         <MDBTableBody>
-          {accounts.filter(acc => acc.roleId === 3).map((acc) => (
+          {accounts.filter(acc => acc.roleId === 1).map((acc) => (
             <tr key={acc.id}>
               <td>
                 <div className='d-flex align-items-center'>
@@ -113,7 +113,7 @@ function VetAccount() {
                   {acc.isDisabled ? "Disabled" : "Active"}
                 </MDBBadge>
               </td>
-              <td>Veterinary</td>
+              <td>User</td>
               <td>
                 <MDBBtn color='link' rounded size='sm' onClick={() => toggleOpen(acc)}>
                   Edit
@@ -125,7 +125,7 @@ function VetAccount() {
       </MDBTable>
 
       {selectedAccount && (
-        <MDBModal isOpen={centredModal} toggle={toggleOpen}>
+        <MDBModal open={basicModal} onClose={() => setBasicModal(false)} tabIndex='-1'>
           <MDBModalDialog centered>
             <MDBModalContent>
               <MDBModalHeader>
@@ -133,31 +133,48 @@ function VetAccount() {
                 <MDBBtn className='btn-close' color='none' onClick={toggleOpen}></MDBBtn>
               </MDBModalHeader>
               <MDBModalBody>
-                <MDBInput
+              <form>
+              <MDBRow className='mb-4'>
+            <MDBCol>
+            <MDBInput
                   label="Full Name"
                   name="fullName"
                   value={selectedAccount.fullName}
                   onChange={handleInputChange}
                 />
-                <MDBInput
+            </MDBCol>
+            <MDBCol>
+            <MDBInput
                   label="Username"
                   name="username"
                   value={selectedAccount.username}
                   onChange={handleInputChange}
                 />
-                <MDBInput
+            </MDBCol>
+        </MDBRow>
+        <MDBRow className='mb-4'>
+          <MDBCol>
+            <MDBInput
                   label="Email"
                   name="email"
                   value={selectedAccount.email}
                   onChange={handleInputChange}
                 />
-                <MDBInput
+          </MDBCol>
+        
+        </MDBRow>
+        
+        <MDBRow className='mb-4'>
+            <MDBCol>
+            <MDBInput
                   label="Phone Number"
                   name="phoneNumber"
                   value={selectedAccount.phoneNumber}
                   onChange={handleInputChange}
                 />
-                <MDBInput
+            </MDBCol>
+            <MDBCol>
+              <MDBInput
                   type="select"
                   label="Gender"
                   name="isMale"
@@ -167,6 +184,18 @@ function VetAccount() {
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                 </MDBInput>
+            </MDBCol>
+            <MDBCol>
+                <MDBCheckbox label="Is male"></MDBCheckbox>
+            </MDBCol>
+
+        </MDBRow>
+              </form>
+                
+               
+                
+                
+
                 <MDBInput
                   type="select"
                   label="Status"
