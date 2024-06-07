@@ -44,9 +44,7 @@ export default function NavBar2() {
                             </Link>
 
                         </MDBNavbarItem>
-                        <MDBNavbarItem>
-                            <Link to="/petList"> <MDBNavbarLink>My Pet List</MDBNavbarLink></Link>
-                        </MDBNavbarItem>
+                       
                         <MDBNavbarItem>
                             <Link to="/aboutUs"> <MDBNavbarLink>About Us</MDBNavbarLink></Link>
                         </MDBNavbarItem>
@@ -76,16 +74,26 @@ export default function NavBar2() {
                                 </MDBDropdownMenu>
                             </MDBDropdown>
                         </MDBNavbarItem>
-
                         <MDBNavbarItem>
-                            <MDBNavbarLink disabled href='#' tabIndex={-1} aria-disabled='true'>
-                            </MDBNavbarLink>
+                            <Link to="/petList"> <MDBNavbarLink>My Pet List</MDBNavbarLink></Link>
                         </MDBNavbarItem>
+
 
                         {isAuthenticated ? (
                             <>
-                                <MDBNavbarItem>
-                                    <Link to="/profile"><button className='btn'>Profile</button></Link>
+                            <MDBNavbarItem>
+                            <MDBDropdown>
+                                <MDBDropdownToggle tag='a' className='nav-link' role='button'>
+                                Profile
+                                </MDBDropdownToggle>
+                                <MDBDropdownMenu>
+                                    <MDBDropdownItem link href='https://zalo.me/g/alobzv478'>Zalo</MDBDropdownItem>
+                                    <MDBDropdownItem link href='https://www.facebook.com/profile.php?id=100009406588322'>FaceBook</MDBDropdownItem>
+                                    <MDBDropdownItem link>09321231232</MDBDropdownItem>
+                                </MDBDropdownMenu>
+                            </MDBDropdown>
+                               
+                                    <Link to="/profile"></Link>
                                 </MDBNavbarItem>
                             </>
                         ) : (

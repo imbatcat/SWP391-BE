@@ -1,38 +1,53 @@
 export const Accounts=[
     {
-        fullname: 'Luong The Minh',
+        fullName: 'Luong The Minh',
         email: 'minhltse182480@fpt.edu.vn',
         username: 'MinhLuong',
         password:'12345',
         isMale: true,
-        roleId: 0,
-        phonennumber:'0703308389',
-        dob:'30/12/2004'
+        roleId: 1,
+        phoneNumber:'0703308389',
+        dateOfBirth:'30/12/2004',
+        isDisabled: false,
+
+    },
+    {
+        fullName: 'Luong The Minh',
+        email: 'minhltse182480@fpt.edu.vn',
+        username: 'MinhLuong',
+        password:'12345',
+        isMale: true,
+        roleId: 2,
+        phoneNumber:'0703308389',
+        dateOfBirth:'30/12/2004',
+        isDisabled: false,
+
+    },
+    {
+        fullName: 'Luong The Minh',
+        email: 'minhltse182480@fpt.edu.vn',
+        username: 'MinhLuong',
+        password:'12345',
+        isMale: true,
+        roleId: 3,
+        phoneNumber:'0703308389',
+        dateOfBirth:'30/12/2004',
+        isDisabled: false,
+
+    },
+    {
+        fullName: 'Luong The Minh',
+        email: 'minhltse182480@fpt.edu.vn',
+        username: 'MinhLuong',
+        password:'12345',
+        isMale: false,
+        roleId: 1,
+        phoneNumber:'0703308389',
+        dateOfBirth:'30/12/2004',
+        isDisabled: true,
 
     },
 
-    {
-        fullname: 'Luong The Minh',
-        email: 'minhltse182480@fpt.edu.vn',
-        username: 'MinhLuong',
-        password:'12345',
-        isMale: true,
-        roleId: 0,
-        phonennumber:'0703308389',
-        dob:'30/12/2004'
-
-    },
-
-    {
-        fullname: 'Luong The Minh',
-        email: 'minhltse182480@fpt.edu.vn',
-        username: 'MinhLuong',
-        password:'12345',
-        isMale: true,
-        roleId: 0,
-        phonennumber:'0703308389',
-        dob:'30/12/2004'
-
-    }
+    
 
 ]
