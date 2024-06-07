@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { MDBBadge, MDBBtn, MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
 import SideNav from '../../Component/SideNav/SideNav';
+import { Accounts } from './AccountData';
 
 function AdminAccount() {
   const [accounts, setAccounts] = useState([]);
@@ -44,8 +45,8 @@ function AdminAccount() {
           </tr>
         </MDBTableHead>
         <MDBTableBody>
-          {accounts.map((Acc) => (
-            <tr key={Acc.userName}>
+          {Accounts.map((Acc) => (
+            <tr key={Acc.id}>
               <td>
                 <div className='d-flex align-items-center'>
                   <img
@@ -55,8 +56,8 @@ function AdminAccount() {
                     className='rounded-circle'
                   />
                   <div className='ms-3'>
-                    <p className='fw-bold mb-1'>{Acc.fullName}</p>
-                    <p className='text-muted mb-0'>{Acc.email}</p>
+                    <p className='fw-bold mb-1'>{Acc.fullname}</p>
+                    <p className='text-muted mb-0'>{Acc.username}</p>
                   </div>
                 </div>
               </td>
@@ -64,14 +65,14 @@ function AdminAccount() {
                 <p className='fw-normal mb-1'>{Acc.email}</p>
               </td>
               <td>
-                <p className='fw-normal mb-1'>{Acc.phoneNumber}</p>
+                <p className='fw-normal mb-1'>{Acc.phonennumber}</p>
               </td>
               <td>
                 <MDBBadge color='success' pill>
                   {Acc.isMale ? "Male" : "Female"}
                 </MDBBadge>
               </td>
-              <td>{Acc.roleId === 0 ? "Admin" : "User"}</td>
+              <td>{Acc.roleId === 1 ? "Admin" : "User"}</td>
               <td>
                 <MDBBtn color='link' rounded size='sm'>
                   Edit

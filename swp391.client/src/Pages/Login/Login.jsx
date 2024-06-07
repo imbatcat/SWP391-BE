@@ -43,10 +43,10 @@ async function fetchData(setData) {
   }
 }
 
-async function loginapi(username, passwd, rememberMe, setLoginSuccess, navigate) {
+async function loginapi(username, passwd, rememberMe, navigate) {
   try {
     
-    const response = await fetch('https://localhost:7206/api/ApplicationAuth/login', {
+      const response = await fetch('https://localhost:7206/api/ApplicationAuth/login', {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
       headers: {
         'Content-Type': 'application/json'
@@ -67,14 +67,12 @@ async function loginapi(username, passwd, rememberMe, setLoginSuccess, navigate)
     }
       
       toast.success('Login successful!');
-      setLoginSuccess(true);
       console.log('ok');
       navigate('/');
     
     
   } catch (error) {
     toast.error('Login failed!');
-    setLoginSuccess(false);
     console.error(error.message);
     
   }
@@ -82,7 +80,6 @@ async function loginapi(username, passwd, rememberMe, setLoginSuccess, navigate)
 
 function Login() {
   const [basicModal, setBasicModal] = useState(false);
-  const [loginSuccess, setLoginSuccess] = useState(false);
   const [userName, setUserName] = useState('');
   const [password, setPassWord] = useState('');
   const [PasswordInputType, ToggleIcon] = usePasswordToggle();
@@ -102,7 +99,7 @@ function Login() {
            toast.error("Email/Password is required");
            return;
        }
-       loginapi(userName, password, true, setLoginSuccess, navigate);
+       loginapi(userName, password, true, navigate);
     }
 
   return (
@@ -120,7 +117,7 @@ function Login() {
                           </div>
                           <h5 className="fw-bold my-5 pb-2" style={{ letterSpacing: '1px', textAlign: 'center', fontSize: '30px' }}>Sign into your account</h5>
 
-                          <MDBInput wrapperClass='mb-4' label='Email address' id='formControlLg' 
+                          <MDBInput wrapperClass='mb-4' label='Username' id='formControlLg' 
                                     onChange={(e) => handleOnChangeUsername(e)} 
                                     value={userName} 
                                     type='email' 
