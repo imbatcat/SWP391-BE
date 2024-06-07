@@ -97,13 +97,13 @@ function Login() {
         setPassWord(e.target.value);
     }
 
-    //const handleLoginClick = () => {
-    //    if (!userName || !password) {
-    //        toast.error("Email/Password is required");
-    //        return;
-    //    }
-    //    loginapi(userName, password, true, setLoginSuccess, navigate);
-    //}
+    const handleLoginClick = () => {
+       if (!userName || !password) {
+           toast.error("Email/Password is required");
+           return;
+       }
+       loginapi(userName, password, true, setLoginSuccess, navigate);
+    }
 
   return (
       <MDBContainer className="my-5 d-10 justify-content-center">
@@ -120,10 +120,25 @@ function Login() {
                           </div>
                           <h5 className="fw-bold my-5 pb-2" style={{ letterSpacing: '1px', textAlign: 'center', fontSize: '30px' }}>Sign into your account</h5>
 
-                            <MDBInput wrapperClass='mb-4' label='Username' id='formControlLg' onChange={(e) => handleOnChangeUsername(e)} value={userName} type='email' size="lg" />
-                            <MDBInput wrapperClass='mb-4' label='Password' id='formControlLg' onChange={(e) => handleOnChangePassWord(e)} value={password} type='password' size="lg" />
+                          <MDBInput wrapperClass='mb-4' label='Email address' id='formControlLg' 
+                                    onChange={(e) => handleOnChangeUsername(e)} 
+                                    value={userName} 
+                                    type='email' 
+                                    size="lg"                                    
+                          />
+                        <div className='password-input-container'>
+                          <MDBInput wrapperClass='mb-4' label='Password' id='formControlLg' 
+                                    onChange={(e) => handleOnChangePassWord(e)} 
+                                    value={password} 
+                                    type={PasswordInputType} 
+                                    size="lg"                                    
+                          />
+                          <span className='password-toggle-icon'>
+                            {ToggleIcon}
+                          </span>
+                        </div>
 
-                            <MDBBtn className="mb-4 px-5" color='blue' size='lg' onClick={() => loginapi(userName, password, true, navigate)}>Login</MDBBtn>
+                            <MDBBtn className="mb-4 px-5" color='blue' size='lg' onClick={handleLoginClick}>Login</MDBBtn>
 
                             <a className="small text-muted" style={{ textAlign: 'end' }} onClick={toggleOpen}>Forgot password?</a>
                             <MDBModal open={basicModal} onClose={() => setBasicModal(false)} tabIndex='-1'>
