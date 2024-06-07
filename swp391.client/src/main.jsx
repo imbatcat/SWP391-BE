@@ -18,7 +18,7 @@ import ConfirmEmail from './Pages/ConfirmEmail';
 import GglLogin from './Pages/GoogleLogin';
 
 import { ToastContainer } from 'react-toastify';
-import AdminAccount from './Pages/Admin Pages/AdminAccount';
+//import AdminAccount from './Pages/Admin Pages/AdminAccount';
 const router = createBrowserRouter([
     {
         path: '/',
@@ -35,11 +35,11 @@ const router = createBrowserRouter([
         element: <SignUp />,
         errorElement: <div>404 Not Found</div>,
     },
-    {
-        path: '/aboutUs',
-        element: <AdminAccount/>,
-        errorElement: <div>404 Not Found</div>,
-    },
+    //{
+    //    path: '/aboutUs',
+    //    element: <AdminAccount/>,
+    //    errorElement: <div>404 Not Found</div>,
+    //},
     {
         path: '/appointment',
         element: <Appointment />,

@@ -91,7 +91,7 @@ builder.Services.AddSwaggerGen().AddSwaggerGenNewtonsoftSupport();
 #region Cookie config
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.Cookie.HttpOnly = true;
+    options.Cookie.HttpOnly = false;
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     options.Cookie.SameSite = SameSiteMode.Strict;
     options.Cookie.Name = "AspNetLogin";
