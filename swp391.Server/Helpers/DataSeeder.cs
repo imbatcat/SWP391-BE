@@ -27,7 +27,7 @@ namespace PetHealthcare.Server.Helpers
                     ("Staff", "STAFF"),
                     ("Customer", "Customer"),
                     ("Vet", "VET"),
-                    ("Guest", "GUEST")
+                    //("Guest", "GUEST")
                 };
 
                 foreach (var (name, normalizedName) in roles)

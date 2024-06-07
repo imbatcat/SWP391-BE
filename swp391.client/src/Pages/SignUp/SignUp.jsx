@@ -14,13 +14,6 @@ import { toast } from 'react-toastify';
 import { useState } from 'react';
 
 async function register(lastname, firstname, username, phonenumber, dateOfBirth, password, gender, email, navigate) {
-    console.log(lastname + firstname);
-    console.log(username);
-    console.log(phonenumber);
-    console.log(dateOfBirth);
-    console.log(password); // Be cautious logging sensitive information like passwords
-    console.log(gender);
-    console.log(email);
     try {
         const response = await fetch('https://localhost:7206/api/ApplicationAuth/register', {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.

@@ -19,6 +19,9 @@ import GglLogin from './Pages/GoogleLogin';
 
 import { ToastContainer } from 'react-toastify';
 import AdminAccount from './Pages/Admin Pages/AdminAccount';
+import UserProfile from './Pages/Profile/UserProfile';
+import { UserProvider } from './Context/UserContext';
+
 const router = createBrowserRouter([
     {
         path: '/',
@@ -56,7 +59,7 @@ const router = createBrowserRouter([
         errorElement: <div>404 Not Found</div>,
     },
     {
-        path: '/petList',
+        path: '/user/petList',
         element: <PetList />,
         errorElement: <div>404 Not Found</div>,
     },
@@ -70,14 +73,21 @@ const router = createBrowserRouter([
         element: <GglLogin />,
         errorElement: <div>404 Not Found</div>,
     },
+    {
+        path: '/user/profile',
+        element: <UserProfile></UserProfile>,
+        errorElement: <div>404 Not Found</div>,
+    }
 ])
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <AuthProvider>
-        <React.StrictMode>
-            <RouterProvider router={router} />
-            <ToastContainer></ToastContainer>
-        </React.StrictMode>
+        <UserProvider>
+            <React.StrictMode>
+                <RouterProvider router={router} />
+                <ToastContainer></ToastContainer>
+            </React.StrictMode>
+        </UserProvider>
     </AuthProvider>
 
 );

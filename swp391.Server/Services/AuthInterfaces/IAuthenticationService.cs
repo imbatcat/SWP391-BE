@@ -8,5 +8,6 @@ namespace PetHealthcare.Server.Services.AuthInterfaces
         Task SendForgotPasswordEmail(ApplicationUser userId, string userEmail);
         Task<string> GenerateConfirmationToken(ApplicationUser user, string email, bool isChange = false);
         Task<string> GenerateForgotPasswordToken(ApplicationUser user, string email);
+        Task<string?> GetUserRole(ApplicationUser user);
     }
 }
