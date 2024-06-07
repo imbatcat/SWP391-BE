@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Services.Interfaces;
@@ -9,6 +10,7 @@ using PetHealthcare.Server.Services.Interfaces;
 namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(Roles = "Staff,Veterianrian")]
     [ApiController]
     public class CagesController : ControllerBase
     {
@@ -43,6 +45,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // POST api/<CagesController>
         [HttpPost]
+        [Authorize(Roles = "Staff")]
         public async Task<ActionResult<Cage>> Post([FromBody] CageDTO newCage)
         {
             await _context.CreateCage(newCage);
@@ -52,6 +55,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // PUT api/<CagesController>/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Staff")]
         public async Task<ActionResult<Cage>> Put(int id, [FromBody] CageDTO CaGe)
         {
             var cage = await _context.GetCageByCondition(c => c.CageId == id);

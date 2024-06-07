@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Services.Interfaces;
@@ -7,6 +8,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 {
 
     [Route("api/[controller]")]
+    [Authorize(Roles = "Staff,Veterinarian, User")]
     [ApiController]
     public class AdmissionRecordController : ControllerBase
     {
@@ -49,6 +51,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         // PUT: api/Services/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("/api/AdmissionRecord/{id}")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> UpdateAdmissionRecord([FromRoute] string id, [FromBody] AdmissionRecordDTO toUpdate)
         {
             var service = await _context.GetAdmissionRecordByPetName(p => p.AdmissionId.Equals(id));
@@ -62,6 +65,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         [HttpPost("/api/AdmissionRecord")]
+        [Authorize(Roles = "Staff")]
         public async Task<ActionResult<AdmissionRecord>> CreateAdmissionRecord([FromBody] AdmissionRecordRegisterDTO _new)
         {
             await _context.CreateAdmissionRecord(_new);
