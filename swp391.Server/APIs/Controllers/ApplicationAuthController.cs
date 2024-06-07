@@ -80,7 +80,7 @@ public class ApplicationAuthController : ControllerBase
 
     [HttpPost("login")]
     [AllowAnonymous]
-    public async Task<ActionResult> Login([FromBody] LoginModel loginAccount)
+    public async Task<ActionResult<ResponseUserDTO>> Login([FromBody] LoginModel loginAccount)
     {
         if (ModelState.IsValid)
         {
@@ -98,12 +98,24 @@ public class ApplicationAuthController : ControllerBase
             var result = await _signInManager.PasswordSignInAsync(loginAccount.UserName, loginAccount.Password, loginAccount.RememberMe, lockoutOnFailure: false);
             if (result.Succeeded)
             {
-                return Ok();
+                return Ok(new ResponseUserDTO
+                {
+                    id = (await _accountService.GetAccountByCondition(x => x.Username == user.UserName)).AccountId,
+                    role = await _authenticationService.GetUserRole(user)
+                });
             }
         }
 
         // If we got this far, something failed, redisplay form
         return BadRequest("Incorrect password");
+    }
+
+    [AllowAnonymous]
+    [HttpPost("get-role")]
+    public async Task<string?> GetRole(string userName)
+    {
+        var user = await _userManager.FindByNameAsync(userName);
+        return await _authenticationService.GetUserRole(user);
     }
 
     [HttpPost("logout")]
@@ -189,7 +201,6 @@ public class ApplicationAuthController : ControllerBase
         return Ok();
     }
     [AllowAnonymous]
-    //[Authorize(Roles = ("Admin"))]
     [HttpGet("setrole")]
     public async Task<IActionResult> SetRole([FromQuery] string userName, [FromQuery] string role)
     {

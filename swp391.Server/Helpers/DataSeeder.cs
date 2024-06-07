@@ -27,7 +27,7 @@ namespace PetHealthcare.Server.Helpers
                     ("Staff", "STAFF"),
                     ("Customer", "Customer"),
                     ("Vet", "VET"),
-                    ("Guest", "GUEST")
+                    //("Guest", "GUEST")
                 };
 
                 foreach (var (name, normalizedName) in roles)
@@ -36,16 +36,17 @@ namespace PetHealthcare.Server.Helpers
 
                     if (!context.Roles.Any(r => r.Name == name))
                     {
-                        await roleStore.CreateAsync(new ApplicationRole { 
-                            Name = name, 
-                            NormalizedName = normalizedName 
+                        await roleStore.CreateAsync(new ApplicationRole
+                        {
+                            Name = name,
+                            NormalizedName = normalizedName
                         });
                     }
                 }
 
                 await context.SaveChangesAsync();
             }
-            
+
         }
     }
 }

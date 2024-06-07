@@ -13,12 +13,14 @@ namespace PetHealthcare.Server.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IEmailSender _emailService;
 
-        public AuthenticationService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailService)
+        public AuthenticationService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager, IEmailSender emailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _emailService = emailService;
         }
 
@@ -34,9 +36,15 @@ namespace PetHealthcare.Server.Services
 
         public async Task<string> GenerateForgotPasswordToken(ApplicationUser user, string email)
         {
-            var code = await _userManager.GeneratePasswordResetTokenAsync(user); 
+            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
             return code;
+        }
+
+        public async Task<string?> GetUserRole(ApplicationUser user)
+        {
+            var role = await _userManager.GetRolesAsync(user);
+            return role.FirstOrDefault().ToString();
         }
 
         public async Task SendConfirmationEmail(string userId, string userEmail)
@@ -54,7 +62,7 @@ namespace PetHealthcare.Server.Services
 
         public async Task SendForgotPasswordEmail(ApplicationUser user, string userEmail)
         {
-            if (await _userManager.GetEmailAsync(user) != userEmail) 
+            if (await _userManager.GetEmailAsync(user) != userEmail)
                 throw new BadHttpRequestException("Input email does not match with user's");
             var token = await GenerateForgotPasswordToken(user, userEmail);
 
@@ -67,5 +75,7 @@ namespace PetHealthcare.Server.Services
                 $"<p>Reset your password by clicking <a href='{confirmationLink}'>here</a>. 100% reliable no scam.</p>");
 
         }
+
+
     }
 }
