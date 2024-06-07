@@ -9,11 +9,11 @@ namespace PetHealthcare.Server.Helpers
 {
     public class DataSeeder
     {
-        public static async void SeedRoles()
+        public static async void SeedRoles(string DataSrc, string Pass)
         {
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             optionsBuilder.UseSqlServer(
-                 $"Data Source=MEOMATLON\\SQLEXPRESS; User = sa; Password =MukuroHoshimiya;" +
+                 $"Data Source={DataSrc}; User = sa; Password ={Pass};" +
                  $"Initial Catalog=PetHealthCareSystemAuth;Integrated Security=True;" +
                  $"Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;" +
                  $"Application Intent=ReadWrite;Multi Subnet Failover=False");
@@ -36,16 +36,17 @@ namespace PetHealthcare.Server.Helpers
 
                     if (!context.Roles.Any(r => r.Name == name))
                     {
-                        await roleStore.CreateAsync(new ApplicationRole { 
-                            Name = name, 
-                            NormalizedName = normalizedName 
+                        await roleStore.CreateAsync(new ApplicationRole
+                        {
+                            Name = name,
+                            NormalizedName = normalizedName
                         });
                     }
                 }
 
                 await context.SaveChangesAsync();
             }
-            
+
         }
     }
 }

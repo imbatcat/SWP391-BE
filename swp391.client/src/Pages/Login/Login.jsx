@@ -18,7 +18,7 @@ import {
 } from 'mdb-react-ui-kit';
 import { useState } from 'react';
 import ForgotPassForm from '../../Component/ForgotPass/ForgotPassForm';
-import { toast } from 'react-toastify';
+import toast, { Toaster } from 'react-hot-toast';
 import 'react-toastify/dist/ReactToastify.css';
 import usePasswordToggle from './usePasswordToggle';
 
@@ -131,7 +131,7 @@ function Login() {
                                     <MDBModalContent>
                                         <MDBModalHeader >
                                             <MDBModalTitle>
-                                                <h6>Forgot your account’s password?</h6>
+                                                <h6 style={{fontSize:'3vw'}}>Forgot your account’s password?</h6>
                                                 <h3 style={{ fontSize: '20px' }}>Enter your email address and we’ll send you a recovery link.</h3>
                                             </MDBModalTitle>
                                             <MDBBtn className='btn-close' color='none' onClick={toggleOpen}></MDBBtn>
@@ -143,18 +143,18 @@ function Login() {
                                 </MDBModalDialog>
                             </MDBModal>
 
-                            <p className="mb-5 pb-lg-2" style={{ color: 'Black' }}>Dont have an accounts ?
-                                <Link to="/signUp"><a style={{ color: '#393f81' }}>Register here</a></Link>
+                            <p className="mb-5 pb-lg-2" style={{ color: 'Black', fontSize:'1vw' }}>Dont have an accounts ?
+                                <Link to="/signUp"><a style={{ color: '#393f81', fontSize:'1vw'  }}>Register here</a></Link>
                             </p>
 
                             <div className='d-flex flex-row justify-content-start'>
-                                <a href="#!" className="small text-muted me-1">Terms of use.</a>
-                                <a href="#!" className="small text-muted">Privacy policy</a>
+                                <a href="#!" className="small text-muted me-1" style={{fontSize:'1vw'}}>Terms of use.</a>
+                                <a href="#!" className="small text-muted" style={{fontSize:'1vw'}}>Privacy policy</a>
                             </div>
 
 
                             <div className='d-flex flex-row mt-2' style={{ justifyContent: 'end' }}>
-                                <Link to="/"> <span className="h1 fw-bold mb-0" style={{ fontSize: '20px', color: 'black' }}>BACK</span></Link>
+                                <Link to="/"> <span className="h1 fw-bold mb-0" style={{ fontSize: '1.5vw', color: 'black' }}>BACK</span></Link>
                             </div>
 
                       </MDBCardBody>

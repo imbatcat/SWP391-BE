@@ -16,7 +16,9 @@ import PasswordResetForm from './Pages/SetNewPass/PasswordResetForm';
 import PetList from './Pages/MyPetList/PetList';
 import ConfirmEmail from './Pages/ConfirmEmail';
 import GglLogin from './Pages/GoogleLogin';
+
 import { ToastContainer } from 'react-toastify';
+import AdminAccount from './Pages/Admin Pages/AdminAccount';
 const router = createBrowserRouter([
     {
         path: '/',
@@ -35,7 +37,7 @@ const router = createBrowserRouter([
     },
     {
         path: '/aboutUs',
-        element: <AboutUs />,
+        element: <AdminAccount/>,
         errorElement: <div>404 Not Found</div>,
     },
     {

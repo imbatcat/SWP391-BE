@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Identity;
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var config = builder.Configuration;
-const string DataSrc = "MEOMATLON\\SQLEXPRESS", Password = "MukuroHoshimiya";
+const string DataSrc = "", Password = "";
 
 // Add services to the container.
 #region DBcontext
@@ -120,7 +120,7 @@ builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
 var app = builder.Build();
 
 //Role seeding
-DataSeeder.SeedRoles();
+DataSeeder.SeedRoles(DataSrc, Password);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
