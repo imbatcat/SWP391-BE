@@ -76,7 +76,7 @@ function Login() {
         }
         loginapi(userName, password, true, setLoginSuccess, navigate);
     }
-    n
+    
     function handleNavigation() {
         if (user.role === 'Admin') {
             navigate('/adminAccount');
