@@ -13,7 +13,7 @@ namespace PetHealthcare.Server.Services.Interfaces
         Task<Account?> GetAccountByCondition(Expression<Func<Account, bool>> expression);
         Task<Account?> CreateAccount(AccountDTO Account);
         Task UpdateAccount(string id, AccountDTO Account);
-        void DeleteAccount(Account Account);
+        Task DeleteAccount(Account Account);
         Task<bool> SetAccountIsDisabled(RequestAccountDisable account);
 
         string GenerateId();

@@ -24,9 +24,15 @@ namespace PetHealthcare.Server.Repositories
             await SaveChanges();
         }
 
-        public void Delete(Pet entity)
+        public async Task Delete(Pet entity)
         {
-            context.Pets.Remove(entity);
+            var pet = await GetByCondition(e => e.PetId == entity.PetId);
+            if (pet != null)
+            {
+                context.Entry(pet).State = EntityState.Modified;
+                pet.IsDisabled=entity.IsDisabled;
+                await SaveChanges();
+            }
         }
 
         public async Task<IEnumerable<Pet>> GetAll()
@@ -107,6 +113,11 @@ namespace PetHealthcare.Server.Repositories
                 }
             }
             return admissionRecords;
+        }
+
+        void IRepositoryBase<Pet>.Delete(Pet entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }
