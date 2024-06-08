@@ -60,22 +60,21 @@ function Login() {
             localStorage.setItem("user", JSON.stringify(userData));
             setIsAuthenticated(true);
             toast.success('Login successful!');
-            navigateBasedOnRole(userData.role);
-            console.log(userData.role);
+            console.log('ok');
+            handleNavigation();
         } catch (error) {
             toast.error('Login failed!');
             console.error(error.message);
         }
-        
     }
-
-    const navigateBasedOnRole = (role) => {
-        if (role === 'User') {
-            navigate('/');
-        } else if (role === 'Admin') {
+    function handleNavigation() {
+        if (user.role === 'Admin') {
             navigate('/adminAccount');
+        } else {
+            navigate('/');
         }
-    }
+    };
+
     const handleOnChangeUsername = (e) => {
         setUserName(e.target.value);
     }
@@ -97,16 +96,16 @@ function Login() {
 
                             <MDBInput wrapperClass='mb-4' label='Username' id='formControlLg' onChange={(e) => handleOnChangeUsername(e)} value={userName} type='email' size="lg" />
                             <div className='password-input-container'>
-                          <MDBInput wrapperClass='mb-4' label='Password' id='formControlLg' 
-                                    onChange={(e) => handleOnChangePassWord(e)} 
-                                    value={password} 
-                                    type={PasswordInputType} 
-                                    size="lg"                                    
-                          />
-                          <span className='password-toggle-icon'>
-                            {ToggleIcon}
-                          </span>
-                        </div>
+                                <MDBInput wrapperClass='mb-4' label='Password' id='formControlLg'
+                                    onChange={(e) => handleOnChangePassWord(e)}
+                                    value={password}
+                                    type={PasswordInputType}
+                                    size="lg"
+                                />
+                                <span className='password-toggle-icon'>
+                                    {ToggleIcon}
+                                </span>
+                            </div>
 
                             <MDBBtn className="mb-4 px-5" color='blue' size='lg' onClick={(e) => loginapi(e)}>Login</MDBBtn>
 

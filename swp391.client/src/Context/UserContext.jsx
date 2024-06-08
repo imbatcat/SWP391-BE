@@ -1,5 +1,4 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import Cookies from 'js-cookie';
 
 // Create the context
 const UserContext = createContext();
@@ -16,6 +15,7 @@ const UserProvider = ({ children }) => {
         if (data) {
             const parseData = JSON.parse(data);
             setUser({
+                ...user,
                 id: parseData.id,
                 role: parseData.role,
             });

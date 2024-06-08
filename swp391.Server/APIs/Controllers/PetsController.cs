@@ -7,7 +7,7 @@ using PetHealthcare.Server.Services.Interfaces;
 namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Roles = "User, Staff")]
+    [Authorize(Roles = "User, Staff, Admin")]
     [ApiController]
     public class PetsController : ControllerBase
     {
@@ -20,7 +20,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // GET: api/Pets
         [HttpGet("")]
-        [Authorize(Roles = "Staff")]
+        [Authorize(Roles = "Admin, Staff")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Pet>))]
         public async Task<IEnumerable<Pet>> GetPets()
         {

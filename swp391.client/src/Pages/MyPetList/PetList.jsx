@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from 'react';
 import './PetList.css'
 import {
@@ -12,35 +13,38 @@ import {
 } from 'mdb-react-ui-kit';
 import { useUser } from '../../Context/UserContext';
 import { toast } from 'react-toastify';
-
+import axios from 'axios';
 export default function PetList() {
+    const [petLists, setPetLists] = useState([]);
     const [user, setUser] = useUser();
-    const [petList, setPetList] = useState(null);
+    // const [petList, setPetList] = useState(null);
     const [centredModal, setCentredModal] = useState(false);
     const [selectedPet, setSelectedPet] = useState(null);
 
     useEffect(() => {
-        const getPetList = async () => {
-            console.log(user.id);
+        const getPetList = async (user) => {
+            console.log(user.id + '1');
             try {
                 const response = await fetch(`https://localhost:7206/api/accounts/pets/${user.id}`, {
                     method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
                     credentials: 'include',
                 });
                 if (!response.ok) {
-                    throw new Error(response.message);
+                    throw new Error(`HTTP error status: ${response.status}`);
                 }
                 const pets = await response.json();
                 console.log(pets);
-                setPetList(pets);
+                setPetLists(pets);
             } catch (error) {
-                toast.error('Error fetching data!');
                 console.error(error.message);
             }
         };
 
-        getPetList();
-    }, []);
+        getPetList(user);
+    }, [user]);
 
     const toggleOpen = (Pet = null) => {
         setSelectedPet(Pet);
@@ -48,10 +52,10 @@ export default function PetList() {
     };
 
     return (
-        <div className='Pet-display'>
+        < div className='Pet-display' >
             <div className='Pet-display-list'>
-                {petList.map((pet) => (
-                    <div className="Pet-item" key={pet.id}>
+                {petLists.map((pet, index) => (
+                    <div className="Pet-item" key={index}>
                         <div className="Pet-item-img-container">
                             <img className='Pet-item-image' src={pet.img} alt='' />
                         </div>
@@ -68,26 +72,28 @@ export default function PetList() {
                 ))}
             </div>
 
-            {selectedPet && (
-                <MDBModal tabIndex='-1' open={centredModal} onClose={() => setCentredModal(false)}>
-                    <MDBModalDialog centered>
-                        <MDBModalContent>
-                            <MDBModalHeader>
-                                <MDBModalTitle>Detail of {selectedPet.name}</MDBModalTitle>
-                                <MDBBtn className='btn-close' color='none' onClick={toggleOpen}></MDBBtn>
-                            </MDBModalHeader>
-                            <MDBModalBody>
-                                <p className='Pet-detail'>Age: {selectedPet.petAge}</p>
-                                <p className='Pet-detail'>Vaccination: {selectedPet.vaccinationHistory}</p>
-                                <p className='Pet-detail'>Gender: {selectedPet.isMale ? 'Male' : 'Female'}</p>
-                                <p className='Pet-detail'>Description: {selectedPet.description}</p>
-                            </MDBModalBody>
-                            <MDBModalFooter>
-                            </MDBModalFooter>
-                        </MDBModalContent>
-                    </MDBModalDialog>
-                </MDBModal>
-            )}
-        </div>
+            {
+                selectedPet && (
+                    <MDBModal tabIndex='-1' open={centredModal} onClose={() => setCentredModal(false)}>
+                        <MDBModalDialog centered>
+                            <MDBModalContent>
+                                <MDBModalHeader>
+                                    <MDBModalTitle>Detail of {selectedPet.name}</MDBModalTitle>
+                                    <MDBBtn className='btn-close' color='none' onClick={toggleOpen}></MDBBtn>
+                                </MDBModalHeader>
+                                <MDBModalBody>
+                                    <p className='Pet-detail'>Age: {selectedPet.petAge}</p>
+                                    <p className='Pet-detail'>Vaccination: {selectedPet.vaccinationHistory}</p>
+                                    <p className='Pet-detail'>Gender: {selectedPet.isMale ? 'Male' : 'Female'}</p>
+                                    <p className='Pet-detail'>Description: {selectedPet.description}</p>
+                                </MDBModalBody>
+                                <MDBModalFooter>
+                                </MDBModalFooter>
+                            </MDBModalContent>
+                        </MDBModalDialog>
+                    </MDBModal>
+                )
+            }
+        </div >
     );
 }

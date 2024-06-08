@@ -42,9 +42,9 @@ const router = createBrowserRouter([
         errorElement: <div>404 Not Found</div>,
     },
     {
-       path: '/adminAccount',
-       element: <AdminAccount/>,
-       errorElement: <div>404 Not Found</div>,
+        path: '/adminAccount',
+        element: <AdminAccount />,
+        errorElement: <div>404 Not Found</div>,
     },
     {
         path: '/appointment',
@@ -63,7 +63,7 @@ const router = createBrowserRouter([
     },
     {
         path: '/petList',
-        element: <PetList/>,
+        element: <PetList />,
         errorElement: <div>404 Not Found</div>,
     },
     {
@@ -83,22 +83,22 @@ const router = createBrowserRouter([
     },
     {
         path: '/vetAccount',
-        element: <VetAccount/>,
+        element: <VetAccount />,
         errorElement: <div>404 Not Found</div>,
     },
     {
         path: '/appointmentManage',
-        element: <AppointmentManage/>,
+        element: <AppointmentManage />,
         errorElement: <div>404 Not Found</div>,
     },
     {
         path: '/usersAccount',
-        element: <UsersAccount/>,
+        element: <UsersAccount />,
         errorElement: <div>404 Not Found</div>,
     },
     {
         path: '/usersAccount',
-        element: <UsersAccount/>,
+        element: <UsersAccount />,
         errorElement: <div>404 Not Found</div>,
     }
 ])

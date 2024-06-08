@@ -35,6 +35,7 @@ export const Accounts=[
         isDisabled: false,
 
     },
+
     {
         fullName: 'Luong The Minh',
         email: 'minhltse182480@fpt.edu.vn',
@@ -48,6 +49,7 @@ export const Accounts=[
 
     },
 
-    
+
+    }
 
 ]
