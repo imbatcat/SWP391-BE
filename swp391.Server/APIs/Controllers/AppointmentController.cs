@@ -11,7 +11,8 @@ namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Staff")]
+    [Authorize(Roles = "Staff,Admin")]
+
     public class AppointmentController : ControllerBase
     {
         private readonly IAppointmentService _appointment;
@@ -42,19 +43,19 @@ namespace PetHealthcare.Server.APIs.Controllers
             return appointment;
         }
         [HttpGet("AppointmentList/{accountId}")]
-        [Authorize(Roles="Customer")]
+        [Authorize(Roles="Customer,Admin")]
         public async Task<IEnumerable<ResAppListForCustomer>> GetCustomerAppointmentList([FromRoute] string accountId)
         {
             return await _appointment.getAllCustomerAppList(accountId);
         }
         [HttpGet("AppointmentList/AppointmentHistory/{accountId}")]
-        [Authorize(Roles = "Customer")]
+        [Authorize(Roles = "Customer,Admin")]
         public async Task<IEnumerable<ResAppListForCustomer>> GetCustomerAppointmentHistory([FromRoute] string accountId)
         {
             return await _appointment.getAllCustomerAppHistory(accountId);
         }
         [HttpGet("AppointmentList/{accountId}&{typeOfSorting}&{orderBy}")]
-        [Authorize(Roles = "Customer")]
+        [Authorize(Roles = "Customer,Admin")]
         public async Task<ActionResult<IEnumerable<ResAppListForCustomer>>> GetSortedListByDate(string accountId, string typeOfSorting, string orderBy)
         {
             if (!typeOfSorting.Equals("history", StringComparison.OrdinalIgnoreCase)
@@ -91,7 +92,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         // POST: api/Services
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [Authorize(Roles = "Customer, Staff")]
+        [Authorize(Roles = "Customer,Staff,Admin")]
         public async Task<ActionResult<GetAllAppointmentDTOs>> CreateAppointment([FromBody] CreateAppointmentDTO toCreateAppointment)
         {
             await _appointment.CreateAppointment(toCreateAppointment);
