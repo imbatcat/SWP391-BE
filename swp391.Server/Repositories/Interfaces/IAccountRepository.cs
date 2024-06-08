@@ -8,5 +8,6 @@ namespace PetHealthcare.Server.Repositories.Interfaces
         Task<IEnumerable<Account>> GetAccountsByRole(int roleId);
         Task<Account?> GetAccountByRole(int roleId, string id);
         Task<bool> SetAccountIsDisabled(RequestAccountDisable account);
+        Task DeleteAccount(Account account);
     }
 }

@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Identity;
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var config = builder.Configuration;
-const string DataSrc = "LAPTOP-8QVR89KA\\SQLEXPRESS02", Password = "12345";
+const string DataSrc = "MSI", Password = "123456";
 
 
 // Add services to the container.
@@ -89,7 +89,7 @@ builder.Services.AddCors(options =>
                       });
 });
 #endregion
-
+ 
 #region Swagger
 builder.Services.AddControllers()
     .AddNewtonsoftJson(options =>
@@ -104,18 +104,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen().AddSwaggerGenNewtonsoftSupport();
 #endregion
 
-#region Cookie config
-builder.Services.ConfigureApplicationCookie(options =>
-{
-    options.Cookie.HttpOnly = true;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    options.Cookie.SameSite = SameSiteMode.Strict;
-    options.Cookie.Name = "AspNetLogin";
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-    options.SlidingExpiration = true;
-});
-#endregion
-
 #region Identity
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
@@ -127,7 +115,7 @@ builder.Services.AddIdentityApiEndpoints<ApplicationUser>(
 
 builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
 {
-    options.TokenLifespan = TimeSpan.FromHours(24);
+    options.TokenLifespan = TimeSpan.FromMinutes(30);
 });
 #endregion 
 

@@ -7,7 +7,7 @@ using PetHealthcare.Server.Services.Interfaces;
 namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Customer")]
     [ApiController]
     public class AccountsController : ControllerBase
     {
@@ -116,6 +116,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // DELETE: api/Accounts/5
         [HttpDelete("{id}")]
+        [Authorize(Roles ="Customer")]
         public async Task<IActionResult> DeleteAccount(string id)
         {
             var account = await _context.GetAccountByCondition(a => a.AccountId == id);
@@ -124,7 +125,7 @@ namespace PetHealthcare.Server.APIs.Controllers
                 return NotFound();
             }
 
-            _context.DeleteAccount(account);
+            await _context.DeleteAccount(account);
 
             return NoContent();
         }

@@ -58,7 +58,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         [HttpPost]
         public async Task<ActionResult<MedicalRecord>> PostMedicalRecord([FromBody] MedicalRecordDTO medicalRecordDTO)
         {
-            _context.CreateMedicalRecord(medicalRecordDTO);
+            await   _context.CreateMedicalRecord(medicalRecordDTO);
             //try
             //{
             //    await _context.SaveChangesAsync();

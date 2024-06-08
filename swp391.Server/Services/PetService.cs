@@ -47,9 +47,15 @@ namespace PetHealthcare.Server.Services
             }
         }
 
-        public void DeletePet(Pet pet)
+        public async Task DeletePet(Pet pet)
         {
-            _petService.Delete(pet);
+            var _pet=new Pet 
+            {
+                PetId=pet.PetId,
+                IsDisabled = true
+            };
+            await _petService.Delete(_pet);
+
         }
         public async Task<IEnumerable<Pet>> GetAllPets()
         {
