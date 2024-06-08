@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using NanoidDotNet;
 using PetHealthcare.Server.APIs.DTOS;
+using PetHealthcare.Server.APIs.DTOS.ServiceOrderDTO;
 using PetHealthcare.Server.APIs.DTOS.ServiceOrderDTOs;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
@@ -116,6 +117,29 @@ namespace PetHealthcare.Server.Repositories
                 toUpdateServiceOrder.Price = newPrice; //new Price
                 await SaveChanges();
             }
+        }
+
+        public async Task<IEnumerable<GetAllServiceOrderForStaff>> GetAllServiceOrderForStaff()
+        {
+            //    public string ServiceOrderId { get; set; }
+            //public double Price { get; set; }
+            //public DateOnly OrderDate { get; set; }
+            //public string OrderStatus { get; set; }
+            //public string customerName { get; set; }
+            var orderServiceList = context.ServiceOrders.ToList();
+            List<GetAllServiceOrderForStaff> ServiceOrderForStaff = new List<GetAllServiceOrderForStaff>();
+            foreach (ServiceOrder order in orderServiceList)
+            {
+                ServiceOrderForStaff.Add(new GetAllServiceOrderForStaff
+                {
+                    ServiceOrderId = order.ServiceOrderId,
+                    Price = order.Price,
+                    OrderDate = order.OrderDate,
+                    OrderStatus = order.OrderStatus,
+                    customerName = context.ServiceOrders.Include(service)
+                });
+            }
+            return ServiceOrderForStaff;
         }
     }
 }

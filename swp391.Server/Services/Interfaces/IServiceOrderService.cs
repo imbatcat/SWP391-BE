@@ -1,4 +1,5 @@
 ﻿using PetHealthcare.Server.APIs.DTOS;
+using PetHealthcare.Server.APIs.DTOS.ServiceOrderDTO;
 using PetHealthcare.Server.APIs.DTOS.ServiceOrderDTOs;
 using PetHealthcare.Server.Models;
 
@@ -12,5 +13,6 @@ namespace PetHealthcare.Server.Services.Interfaces
         Task<IEnumerable<ServiceOrder>> GetAllServiceOrderByMedId(string medId);
         Task<IEnumerable<ServiceOrder>> GetAllServiceOrder();
         Task UpdateOrderStatus(string orderStatus);
+        Task<IEnumerable<GetAllServiceOrderForStaff>> getAllServiceOrderForStaff();
     }
 }

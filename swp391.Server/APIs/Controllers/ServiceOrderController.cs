@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Identity.Client;
 using PetHealthcare.Server.APIs.DTOS;
+using PetHealthcare.Server.APIs.DTOS.ServiceOrderDTO;
 using PetHealthcare.Server.APIs.DTOS.ServiceOrderDTOs;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Services.Interfaces;
@@ -23,7 +24,12 @@ namespace PetHealthcare.Server.APIs.Controllers
             this._serviceOrderService = _serviceOrder;
             this._healthService = _healthService;
         }
-
+        [HttpGet("Staff")]
+        [Authorize(Roles = "Staff, Admin")]
+        public async Task<IEnumerable<GetAllServiceOrderForStaff>> getAllServiceOrderForStaff()
+        {
+            return await _serviceOrderService.getAllServiceOrderForStaff();
+        }
         [HttpPost]
         public async Task<IActionResult> createServiceOrder([FromBody]ServiceOrderDTO serviceOrderDTO)
         {
@@ -52,5 +58,7 @@ namespace PetHealthcare.Server.APIs.Controllers
             await _serviceOrderService.UpdateServiceOrder(id, serviceIdList);
             return Ok();
         }
+
+        
     }
 }

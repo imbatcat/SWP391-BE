@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.Sections;
 using PetHealthcare.Server.APIs.DTOS;
+using PetHealthcare.Server.APIs.DTOS.ServiceOrderDTO;
 using PetHealthcare.Server.APIs.DTOS.ServiceOrderDTOs;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
@@ -43,6 +44,11 @@ namespace PetHealthcare.Server.Services
         public async Task UpdateServiceOrder(string id, List<int> serviceIdList)
         {
             await _serviceOrderRepo.UpdateServiceOrder(id, serviceIdList);
+        }
+
+        public async Task<IEnumerable<GetAllServiceOrderForStaff>> getAllServiceOrderForStaff()
+        {
+            return await _serviceOrderRepo.GetAllServiceOrderForStaff();
         }
     }
 }
