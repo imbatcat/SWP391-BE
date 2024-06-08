@@ -10,7 +10,7 @@ using PetHealthcare.Server.Services.Interfaces;
 namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Roles = "Staff,Veterianrian")]
+    [Authorize(Roles = "Staff,Veterianrian,Admin")]
     [ApiController]
     public class CagesController : ControllerBase
     {
@@ -45,7 +45,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // POST api/<CagesController>
         [HttpPost]
-        [Authorize(Roles = "Staff")]
+        [Authorize(Roles = "Staff,Admin")]
         public async Task<ActionResult<Cage>> Post([FromBody] CageDTO newCage)
         {
             await _context.CreateCage(newCage);
@@ -55,7 +55,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // PUT api/<CagesController>/5
         [HttpPut("{id}")]
-        [Authorize(Roles = "Staff")]
+        [Authorize(Roles = "Staff,Admin")]
         public async Task<ActionResult<Cage>> Put(int id, [FromBody] CageDTO CaGe)
         {
             var cage = await _context.GetCageByCondition(c => c.CageId == id);
