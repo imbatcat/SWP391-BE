@@ -1,4 +1,5 @@
-﻿using PetHealthcare.Server.APIs.DTOS;
+﻿using Microsoft.AspNetCore.Components.Sections;
+using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
 using PetHealthcare.Server.Services.Interfaces;
@@ -38,9 +39,9 @@ namespace PetHealthcare.Server.Services
             throw new NotImplementedException();
         }
 
-        public Task UpdateServiceOrder(ServiceOrderDTO orderDTO)
+        public async Task UpdateServiceOrder(string id, List<int> serviceIdList)
         {
-            throw new NotImplementedException();
+            await _serviceOrderRepo.UpdateServiceOrder(id, serviceIdList);
         }
     }
 }

@@ -34,6 +34,16 @@ namespace PetHealthcare.Server.Repositories
             double priceSum=0;
             try
             {
+
+                ServiceOrder toCreateServiceOrder = new ServiceOrder
+                {
+                    ServiceOrderId = SoId,
+                    OrderDate = order.OrderDate,
+                    OrderStatus = "Pending",
+                    MedicalRecordId = order.MedicalRecordId,
+                    Price = context.Services.Where(s => order.ServiceId.Contains(s.ServiceId)).Sum(s => s.ServicePrice),
+                };
+                context.ServiceOrders.Add(toCreateServiceOrder);
                 foreach (int serviceId in order.ServiceId)
                 {
                     context.ServiceOrderDetails.Add(new ServiceOrderDetails
@@ -41,22 +51,14 @@ namespace PetHealthcare.Server.Repositories
                         ServiceId = serviceId,
                         ServiceOrderId = SoId,
                     });
-                    priceSum += context.Services.FirstOrDefault(s => s.ServiceId == serviceId).ServicePrice;
-                    await SaveChanges();
+                    
                 }
-                ServiceOrder toCreateServiceOrder = new ServiceOrder
-                {
-                    ServiceOrderId = SoId,
-                    OrderDate = order.OrderDate,
-                    OrderStatus = "Pending",
-                    MedicalRecordId = order.MedicalRecordId,
-                    Price = priceSum,
-                };
+                await SaveChanges();
             }
             catch (Exception ex)
             {
                Console.WriteLine(ex.ToString());
-                Console.WriteLine("priceSum error");
+                Console.WriteLine("Error");
             }
 
         }
@@ -86,10 +88,32 @@ namespace PetHealthcare.Server.Repositories
 
         public async Task Update(ServiceOrder entity)
         {
-            var serviceOrder = await GetByCondition(a => a.ServiceOrderId == entity.ServiceOrderId);
-            if(serviceOrder != null)
+        
+        }
+        public async Task UpdateServiceOrder(string serviceOrderId, List<int> ServiceId)
+        {
+            ServiceOrder? toUpdateServiceOrder = await context.ServiceOrders.FirstOrDefaultAsync(s => s.ServiceOrderId.Equals(serviceOrderId));
+            if (toUpdateServiceOrder == null)
             {
-                
+                return;
+            } else
+            {
+                //remove old ServiceOrderDetail than replace it by the new ones
+                var toRemoveOrderDetails = context.ServiceOrderDetails.Where(s => s.ServiceOrderId.Equals(toUpdateServiceOrder.ServiceOrderId)).ToList();
+                context.ServiceOrderDetails.RemoveRange(toRemoveOrderDetails);
+                //Add new ones
+                double newPrice = 0;
+                foreach (int serviceId in ServiceId)
+                {
+                    context.ServiceOrderDetails.Add(new ServiceOrderDetails
+                    {
+                        ServiceId = serviceId,
+                        ServiceOrderId = serviceOrderId,
+                    });
+                    newPrice += context.Services.Find(serviceId).ServicePrice;
+                }
+                toUpdateServiceOrder.Price = newPrice; //new Price
+                await SaveChanges();
             }
         }
     }

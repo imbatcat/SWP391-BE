@@ -6,5 +6,6 @@ namespace PetHealthcare.Server.Repositories.Interfaces
     public interface IServiceOrderRepository: IRepositoryBase<ServiceOrder>
     {
         Task CreateServiceOrder(ServiceOrderDTO order);
+        Task UpdateServiceOrder(string ServiceOrderId, List<int> ServiceId);
     }
 }

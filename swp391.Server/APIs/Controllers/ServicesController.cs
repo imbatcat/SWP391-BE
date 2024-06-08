@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Services.Interfaces;
@@ -6,6 +7,7 @@ using PetHealthcare.Server.Services.Interfaces;
 namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin,Vet")]
     [ApiController]
     public class ServicesController : ControllerBase
     {
@@ -40,6 +42,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         // PUT: api/Services/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> UpdateService([FromRoute] int id, [FromBody] HealthServiceDTO toUpdateService)
         {
             var service = await _healthService.GetHealthServiceByCondition(s => s.ServiceId == id);
@@ -54,6 +57,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         // POST: api/Services
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Service>> CreateService([FromBody] HealthServiceDTO toCreateService)
         {
 
@@ -64,6 +68,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // DELETE: api/Services/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteService([FromRoute] int id)
         {
             var toDeleteService = await _healthService.GetHealthServiceByCondition(s => s.ServiceId == id);

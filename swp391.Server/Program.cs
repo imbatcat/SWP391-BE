@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Identity;
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var config = builder.Configuration;
-const string DataSrc = "MEOMATLON\\SQLEXPRESS", Password = "MukuroHoshimiya";
+const string DataSrc = "LAPTOP-8QVR89KA\\SQLEXPRESS02", Password = "12345";
 
 
 // Add services to the container.
@@ -31,6 +31,7 @@ option => option.UseSqlServer(
 #endregion
 
 #region Repositories
+builder.Services.AddScoped<IServiceOrderRepository, ServiceOrderRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
@@ -47,6 +48,7 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 
 #region Services
 // Application services
+builder.Services.AddScoped<IServiceOrderService, ServiceOrderService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IHealthService, HealthService>();

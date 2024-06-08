@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -11,6 +12,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles ="Admin,Vet")]
     public class ServiceOrderController : ControllerBase
     {
         private readonly IServiceOrderService _serviceOrderService;
@@ -39,5 +41,15 @@ namespace PetHealthcare.Server.APIs.Controllers
             return Ok();
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateServiceOrder(string id, [FromBody] List<int> serviceIdList)
+        {
+            if(serviceIdList.Count == 0)
+            {
+                return BadRequest(new {message = "serviceIdList is empty"});
+            }
+            await _serviceOrderService.UpdateServiceOrder(id, serviceIdList);
+            return Ok();
+        }
     }
 }

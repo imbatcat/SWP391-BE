@@ -23,7 +23,7 @@ namespace PetHealthcare.Server.Services
             string id = Nanoid.Generate(size: 8);
             return prefix + id;
         }
-        public async Task CreateAppointment(AppointmentDTO appointment)
+        public async Task CreateAppointment(CreateAppointmentDTO appointment)
         {
             Appointment toCreateAppointment = new Appointment
             {
@@ -47,9 +47,38 @@ namespace PetHealthcare.Server.Services
 
 
 
-        public async Task<IEnumerable<Appointment>> GetAllAppointment()
+        public async Task<IEnumerable<GetAllAppointmentDTOs>> GetAllAppointment()
         {
-            return await _appointmentRepository.GetAll();
+            IEnumerable<Appointment> appList = await _appointmentRepository.GetAll();
+            List<GetAllAppointmentDTOs> CAList = new List<GetAllAppointmentDTOs>();
+            foreach(Appointment app in appList)
+            {
+                GetAllAppointmentDTOs appointmentDTO = new GetAllAppointmentDTOs
+                {
+                    AppointmentDate = app.AppointmentDate,
+                    AppointmentNotes = app.AppointmentNotes,
+                    VeterinarianName = app.Veterinarian.FullName,
+                    PetName= app.Pet.PetName,
+                    BookingPrice= app.BookingPrice,
+                    AppointmentType = app.AppointmentType,
+                    TimeSlotId= app.TimeSlotId,
+                    IsCancel = app.IsCancel,
+                    IsCheckIn = app.IsCheckIn,
+                //            public string AppointmentId { get; set; }
+                //public DateOnly AppointmentDate { get; set; }
+                //public string AppointmentType { get; set; }
+                //public string? AppointmentNotes { get; set; }
+                //public double BookingPrice { get; set; }
+                //public string AccountId { get; set; }
+                //public string PetName { get; set; }
+                //public string VeterinarianName { get; set; }
+                //public int TimeSlotId { get; set; }
+                //public bool IsCancel { get; set; }
+                //public bool IsCheckIn { get; set; }
+                };
+                CAList.Add(appointmentDTO);
+            }
+            return CAList;
         }
 
         public async Task<Appointment?> GetAppointmentByCondition(Expression<Func<Appointment, bool>> expression)
@@ -62,16 +91,14 @@ namespace PetHealthcare.Server.Services
             return _appointmentRepository.isInputtedVetIdValid(VetId);
         }
 
-        public async Task UpdateAppointment(string id, AppointmentDTO appointment)
+        public async Task UpdateAppointment(string id, CustomerAppointmentDTO appointment)
         {
             Appointment UpdateAppointment = new Appointment
             {
                 AppointmentDate = appointment.AppointmentDate,
                 AppointmentNotes = appointment.AppointmentNotes,
-                BookingPrice = appointment.BookingPrice,
                 VeterinarianAccountId = appointment.VeterinarianAccountId,
                 TimeSlotId = appointment.TimeSlotId,
-                AppointmentType = appointment.AppointmentType,
                 AppointmentId = id
             };
             await _appointmentRepository.Update(UpdateAppointment);
