@@ -63,7 +63,7 @@ const router = createBrowserRouter([
     },
     {
         path: '/petList',
-        element: <PetList />,
+        element: <PetList/>,
         errorElement: <div>404 Not Found</div>,
     },
     {

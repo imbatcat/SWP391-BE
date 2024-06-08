@@ -17,6 +17,7 @@ import {
 } from 'mdb-react-ui-kit';
 import { useAuth } from '../../Context/AuthProvider';
 import { useUser } from '../../Context/UserContext';
+import { toast } from 'react-toastify';
 
 export default function NavBar2() {
     const [isAuthenticated, setIsAuthenticated] = useAuth();
@@ -58,7 +59,7 @@ export default function NavBar2() {
                     <MDBIcon icon='bars' fas />
                 </MDBNavbarToggler>
 
-                <MDBCollapse navbar open={openBasic} style={{ justifyContent: 'end' }}>
+                <MDBCollapse navbar open={openBasic} style={{ justifyContent: 'end'}}>
                     <MDBNavbarNav className='mr-auto mb-2 mb-lg-0'>
                         <MDBNavbarItem>
                             <Link to="/"><MDBNavbarLink active aria-current='page'>
@@ -69,9 +70,6 @@ export default function NavBar2() {
                         </MDBNavbarItem>
                         <MDBNavbarItem>
                             <Link to="/petList"> <MDBNavbarLink>My Pet List</MDBNavbarLink></Link>
-                        </MDBNavbarItem>
-                        <MDBNavbarItem>
-                            <Link to="/adminAccount"> <MDBNavbarLink>Admin</MDBNavbarLink></Link>
                         </MDBNavbarItem>
 
                         <MDBNavbarItem>

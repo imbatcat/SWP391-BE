@@ -1,5 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import './Login.css'
+import './usePasswordToggle.css'
+import usePasswordToggle from './usePasswordToggle';
 import {
     MDBBtn,
     MDBContainer,
@@ -31,6 +33,7 @@ function Login() {
     const [password, setPassWord] = useState('');
     const navigate = useNavigate();
     const toggleOpen = () => setBasicModal(!basicModal);
+    const [PasswordInputType, ToggleIcon] = usePasswordToggle();
 
     async function loginapi(e) {
         e.preventDefault();
@@ -57,11 +60,20 @@ function Login() {
             localStorage.setItem("user", JSON.stringify(userData));
             setIsAuthenticated(true);
             toast.success('Login successful!');
-            navigate('/');
-            console.log('ok');
+            navigateBasedOnRole(userData.role);
+            console.log(userData.role);
         } catch (error) {
             toast.error('Login failed!');
             console.error(error.message);
+        }
+        
+    }
+
+    const navigateBasedOnRole = (role) => {
+        if (role === 'User') {
+            navigate('/');
+        } else if (role === 'Admin') {
+            navigate('/adminAccount');
         }
     }
     const handleOnChangeUsername = (e) => {
@@ -84,7 +96,17 @@ function Login() {
                             <h5 className="fw-bold my-5 pb-2" style={{ letterSpacing: '1px', textAlign: 'center', fontSize: '30px' }}>Sign into your account</h5>
 
                             <MDBInput wrapperClass='mb-4' label='Username' id='formControlLg' onChange={(e) => handleOnChangeUsername(e)} value={userName} type='email' size="lg" />
-                            <MDBInput wrapperClass='mb-4' label='Password' id='formControlLg' onChange={(e) => handleOnChangePassWord(e)} value={password} type='password' size="lg" />
+                            <div className='password-input-container'>
+                          <MDBInput wrapperClass='mb-4' label='Password' id='formControlLg' 
+                                    onChange={(e) => handleOnChangePassWord(e)} 
+                                    value={password} 
+                                    type={PasswordInputType} 
+                                    size="lg"                                    
+                          />
+                          <span className='password-toggle-icon'>
+                            {ToggleIcon}
+                          </span>
+                        </div>
 
                             <MDBBtn className="mb-4 px-5" color='blue' size='lg' onClick={(e) => loginapi(e)}>Login</MDBBtn>
 
