@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ using PetHealthcare.Server.Services.Interfaces;
 namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin, Vet, Customer, Staff")]
     [ApiController]
     public class MedicalRecordsController : ControllerBase
     {
@@ -24,6 +26,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // GET: api/MedicalRecords
         [HttpGet("")]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<MedicalRecord>))]
         public async Task<IEnumerable<MedicalRecord>> GetMedicalRecords()
         {
@@ -32,6 +35,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // GET: api/MedicalRecords/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin, Vet")]
         public async Task<ActionResult<MedicalRecord>> GetMedicalRecord(string id)
         {
             var medicalRecord = await _context.GetMedicalRecordByCondition(m=>m.MedicalRecordId == id);
@@ -47,6 +51,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         //PUT: api/MedicalRecords/5
          //To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles = "Vet, Staff")]
         public async Task<IActionResult> PutMedicalRecord(string id, MedicalRecordDTO medicalRecord)
         {
             await _context.UpdateMedicalRecord(id, medicalRecord);
@@ -56,6 +61,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         // POST: api/MedicalRecords
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Vet, Staff, Customer")]
         public async Task<ActionResult<MedicalRecord>> PostMedicalRecord([FromBody] MedicalRecordDTO medicalRecordDTO)
         {
             await   _context.CreateMedicalRecord(medicalRecordDTO);

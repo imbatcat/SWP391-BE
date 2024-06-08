@@ -21,20 +21,27 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         // GET: api/Accounts
+        //<summary>
+        //get all of the account
+        //</summary>
         [HttpGet]
+        [Authorize(Roles="Admin")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Account>))]
         public async Task<IEnumerable<Account>> GetAccounts()
         {
             return await _context.GetAllAccounts();
         }
 
+        //get all account with the same role
         [HttpGet("/api/byRole/{roleId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IEnumerable<Account>> GetAllAccountsByRole([FromRoute] int roleId)
         {
             return await _context.GetAllAccountsByRole(roleId);
         }
-
+        //get a single account with specific role and id
         [HttpGet("/api/byRole/{roleId}&{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Account>> GetAccountByRole([FromRoute] string roleId, [FromRoute] string id)
         {
             var checkAccount = await _context.GetAccountByCondition(a => a.AccountId == id);
@@ -44,16 +51,18 @@ namespace PetHealthcare.Server.APIs.Controllers
             }
             return Ok(checkAccount);
         }
-
-        [HttpGet("/api/accounts/pets/{id}")]
-        public async Task<IEnumerable<Pet>> GetAccountPets([FromRoute] string id)
+        //get the list of pet of this account has the inphut id
+        [HttpGet("/api/accounts/pets/{accountId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IEnumerable<Pet>> GetAccountPets([FromRoute] string accountId)
         {
-            return await _contextPet.GetAccountPets(id);
+            return await _contextPet.GetAccountPets(accountId);
 
         }
 
-        // GET: api/Accounts/5
+        // GET: get the account with the input id
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Account>> GetAccount([FromRoute] string id)
         {
             var account = await _context.GetAccountByCondition(a => a.AccountId == id);
@@ -66,7 +75,7 @@ namespace PetHealthcare.Server.APIs.Controllers
             return account;
         }
 
-        // PUT: api/Accounts/5
+        // change the information of the account
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAccount(string id, AccountDTO account)
@@ -92,7 +101,7 @@ namespace PetHealthcare.Server.APIs.Controllers
             return NoContent();
         }
 
-        // POST: api/Accounts
+        // POST: create a new user and insert it into database
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Account>> PostAccount([FromBody] AccountDTO accountDTO)
@@ -114,9 +123,9 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         }
 
-        // DELETE: api/Accounts/5
+        // DELETE: change the status of the account to true, not show it to the customer
         [HttpDelete("{id}")]
-        [Authorize(Roles ="Customer")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteAccount(string id)
         {
             var account = await _context.GetAccountByCondition(a => a.AccountId == id);

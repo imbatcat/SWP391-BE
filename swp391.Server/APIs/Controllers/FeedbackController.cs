@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Services.Interfaces;
@@ -6,6 +7,7 @@ using PetHealthcare.Server.Services.Interfaces;
 namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin, Customer")]
     [ApiController]
     public class FeedbacksController : ControllerBase
     {
@@ -18,11 +20,13 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // GET: api/Feedbacks
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IEnumerable<Feedback>> GetFeedbacks()
         {
             return await _context.GetAllFeedback();
         }
         [HttpGet("/api/feedBackByName/{UserName}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IEnumerable<Feedback>> GetFeedbacksByUserName([FromRoute]string UserName)
         {
             return await _context.GetFeedbacksByUserName(UserName);
@@ -45,6 +49,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         // POST: api/Feedbacks
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Customer")]
         public async Task<ActionResult<Feedback>> PostFeedback([FromBody] FeedbackDTO feedback)
         {
             await _context.CreateFeedback(feedback);

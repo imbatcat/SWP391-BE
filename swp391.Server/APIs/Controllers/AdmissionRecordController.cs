@@ -8,7 +8,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 {
 
     [Route("api/[controller]")]
-    [Authorize(Roles = "Staff,Veterinarian, User")]
+    [Authorize(Roles = "Staff,Veterinarian, Customer, Admin")]
     [ApiController]
     public class AdmissionRecordController : ControllerBase
     {
@@ -22,8 +22,9 @@ namespace PetHealthcare.Server.APIs.Controllers
             _context = context;
         }
 
-        // GET: api/Accounts
+        // GET: all the admission record
         [HttpGet("/api/AdmissionRecord")]
+        [Authorize(Roles = "Admin, Staff")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<AdmissionRecord>))]
         public async Task<IEnumerable<AdmissionRecord>> GetAllAdmissionRecords()
         {
@@ -51,7 +52,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         // PUT: api/Services/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("/api/AdmissionRecord/{id}")]
-        [Authorize(Roles = "Staff")]
+        [Authorize(Roles = "Staff, Admin")]
         public async Task<IActionResult> UpdateAdmissionRecord([FromRoute] string id, [FromBody] AdmissionRecordDTO toUpdate)
         {
             var service = await _context.GetAdmissionRecordByPetName(p => p.AdmissionId.Equals(id));
