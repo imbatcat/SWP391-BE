@@ -60,7 +60,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         
-        [HttpPut("{ServiceOrderId}")]
+        [HttpPut("/OrderStatus/{serviceOrderId}")]
         [Authorize(Roles = "Admin,Staff")]
         public async Task<ActionResult> UpdateOrderStatus(string orderStatus, [FromRoute]string serviceOrderId)
         {
