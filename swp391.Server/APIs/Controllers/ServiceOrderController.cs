@@ -60,5 +60,16 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         
+        [HttpPut("{ServiceOrderId}")]
+        [Authorize(Roles = "Admin,Staff")]
+        public async Task<ActionResult> UpdateOrderStatus(string orderStatus, [FromRoute]string serviceOrderId)
+        {
+            if(!orderStatus.Equals("Paid") && !orderStatus.Equals("Pending") && !orderStatus.Equals("Cancel"))
+            {
+                return BadRequest(new { message = "OrderStatus must be Paid, Pending or Cancel" });
+            }
+            await _serviceOrderService.UpdateOrderStatus(orderStatus, serviceOrderId);
+            return Ok();
+        }
     }
 }

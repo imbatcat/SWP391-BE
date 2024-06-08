@@ -36,9 +36,17 @@ namespace PetHealthcare.Server.Services
             throw new NotImplementedException();
         }
 
-        public Task UpdateOrderStatus(string orderStatus)
+        public async Task UpdateOrderStatus(string orderStatus, string serviceOrderId)
         {
-            throw new NotImplementedException();
+            ServiceOrder toUpdateStatus = await _serviceOrderRepo.GetByCondition(s => s.ServiceOrderId.Equals(serviceOrderId));
+            if (toUpdateStatus == null)
+            {
+                return;
+            } else
+            {
+                toUpdateStatus.OrderStatus = orderStatus;
+                await _serviceOrderRepo.SaveChanges();
+            }
         }
 
         public async Task UpdateServiceOrder(string id, List<int> serviceIdList)

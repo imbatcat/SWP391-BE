@@ -118,7 +118,7 @@ namespace PetHealthcare.Server.Repositories
                 await SaveChanges();
             }
         }
-
+      
         public async Task<IEnumerable<GetAllServiceOrderForStaff>> GetAllServiceOrderForStaff()
         {
             //    public string ServiceOrderId { get; set; }
@@ -126,7 +126,8 @@ namespace PetHealthcare.Server.Repositories
             //public DateOnly OrderDate { get; set; }
             //public string OrderStatus { get; set; }
             //public string customerName { get; set; }
-            var orderServiceList = context.ServiceOrders.ToList();
+            var orderServiceList = context.ServiceOrders.Include("MedicalRecord.Appointment.Account");
+
             List<GetAllServiceOrderForStaff> ServiceOrderForStaff = new List<GetAllServiceOrderForStaff>();
             foreach (ServiceOrder order in orderServiceList)
             {
@@ -136,7 +137,7 @@ namespace PetHealthcare.Server.Repositories
                     Price = order.Price,
                     OrderDate = order.OrderDate,
                     OrderStatus = order.OrderStatus,
-                    customerName = context.ServiceOrders.Include(service)
+                    customerName = order.MedicalRecord.Appointment.Account.FullName,
                 });
             }
             return ServiceOrderForStaff;
