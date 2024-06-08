@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Services.Interfaces;
@@ -6,6 +7,7 @@ using PetHealthcare.Server.Services.Interfaces;
 namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(Roles = "Veterianrian, Staff, User")]
     [ApiController]
     public class TimeSlotsController : ControllerBase
     {
@@ -41,6 +43,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         // PUT: api/Services/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> UpdateTimeSlot([FromRoute] int id, [FromBody] TimeslotDTO toUpdateTimeSlot)
         {
             var service = await _context.GetTimeSlotByCondition(p => p.TimeSlotId == id);
@@ -54,6 +57,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // POST api/<CagesController>
         [HttpPost]
+        [Authorize(Roles = "Staff")]
         public async Task<ActionResult<TimeSlot>> Post([FromBody] TimeslotDTO newCage)
         {
             await _context.CreateTimeSlot(newCage);
