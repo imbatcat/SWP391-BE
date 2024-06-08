@@ -67,6 +67,16 @@ function Login() {
             console.error(error.message);
         }
     }
+
+    const handleLoginClick = () => {
+        e.preventDefault();
+        if (!userName || !password) {
+            toast.error("Email/Password is required");
+            return;
+        }
+        loginapi(userName, password, true, setLoginSuccess, navigate);
+    }
+    n
     function handleNavigation() {
         if (user.role === 'Admin') {
             navigate('/adminAccount');
@@ -107,7 +117,7 @@ function Login() {
                                 </span>
                             </div>
 
-                            <MDBBtn className="mb-4 px-5" color='blue' size='lg' onClick={(e) => loginapi(e)}>Login</MDBBtn>
+                            <MDBBtn className="mb-4 px-5" color='blue' size='lg' onClick={(e) => handleLoginClick(e)}>Login</MDBBtn>
 
                             <a className="small text-muted" style={{ textAlign: 'end' }} onClick={toggleOpen}>Forgot password?</a>
                             <MDBModal open={basicModal} onClose={() => setBasicModal(false)} tabIndex='-1'>
