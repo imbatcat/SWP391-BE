@@ -44,7 +44,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
         [HttpGet("admin/{accountId}")]
         [Authorize(Roles ="Admin")]
-        public async Task<ActionResult<GetAllAppointmentDTOs>> GetAllAppointmentForAdmin([FromRoute]string accountId)
+        public async Task<ActionResult<GetAllAppointmentForAdminDTO>> GetAllAppointmentForAdmin([FromRoute]string accountId)
         {
             if(accountId == null)
             {

@@ -182,17 +182,17 @@ namespace PetHealthcare.Server.Services
             return SortedList;
         }
 
-        public async Task<IEnumerable<GetAllAppointmentDTOs>> GetAllAppointmentByAccountId(string acId)
+        public async Task<IEnumerable<GetAllAppointmentForAdminDTO>> GetAllAppointmentByAccountId(string acId)
         {
             IEnumerable<Appointment> AppList = await _appointmentRepository.GetAll();
-            List<GetAllAppointmentDTOs> appointmentList = new List<GetAllAppointmentDTOs>();
+            List<GetAllAppointmentForAdminDTO> appointmentList = new List<GetAllAppointmentForAdminDTO>();
             if(AppList != null)
             {
                 foreach (Appointment app in AppList)
                 {
                     if (app.AccountId.Equals(acId))
                     {
-                        appointmentList.Add(new GetAllAppointmentDTOs
+                        appointmentList.Add(new GetAllAppointmentForAdminDTO
                         {
                             AccountId = app.AccountId,
                             AppointmentDate = app.AppointmentDate,
@@ -200,6 +200,7 @@ namespace PetHealthcare.Server.Services
                             AppointmentNotes = app.AppointmentNotes,
                             AppointmentType = app.AppointmentType,
                             BookingPrice = app.BookingPrice,
+                            TimeSlot = app.TimeSlot.StartTime.ToString("h:mm") + " - " + app.TimeSlot.EndTime.ToString("h:mm"),
                             IsCancel = app.IsCancel,
                             IsCheckIn = app.IsCheckIn,
                         });
