@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { MDBBadge, MDBBtn, MDBTable, MDBTableBody, MDBTableHead, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBInput, MDBModalDialog, MDBModalContent, MDBModalTitle, MDBCol, MDBRow, MDBCheckbox } from 'mdb-react-ui-kit';
 import SideNav from '../../Component/SideNav/SideNav';
 
-function VetAccount() {
-    const [accounts, setAccounts] = useState([]);
-    const [selectedAccount, setSelectedAccount] = useState(null);
+function AdminPet() {
+    const [pets, setPets] = useState([]);
+    const [selectedPet, setSelectedPet] = useState(null);
     const [basicModal, setBasicModal] = useState(false);
 
     useEffect(() => {
@@ -21,7 +21,7 @@ function VetAccount() {
                     throw new Error("Error fetching data");
                 }
                 const data = await response.json();
-                setAccounts(data);
+                setPets(data);
                 console.log(data);
             } catch (error) {
                 console.error(error.message);
@@ -31,14 +31,14 @@ function VetAccount() {
         fetchData();
     }, []);
 
-    const toggleOpen = (account = null) => {
-        setSelectedAccount(account);
+    const toggleOpen = (pet = null) => {
+        setSelectedPet(pet);
         setBasicModal(!basicModal);
     };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setSelectedAccount(prevState => ({
+        setSelectedPet(prevState => ({
             ...prevState,
             [name]: value
         }));
@@ -46,21 +46,21 @@ function VetAccount() {
 
     const handleSaveChanges = async () => {
         try {
-            const response = await fetch(`https://localhost:7206/api/Accounts/${selectedAccount.id}`, {
-                method: 'PUT',
+            const response = await fetch(`https://localhost:7206/api/Pets`, {
+                method: 'GET',
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(selectedAccount),
+                body: JSON.stringify(selectedPet),
             });
 
             if (!response.ok) {
                 throw new Error('Error updating data');
             }
 
-            const updatedAccount = await response.json();
-            setAccounts(prevAccounts => prevAccounts.map(acc => (acc.id === updatedAccount.id ? updatedAccount : acc)));
+            const updatedPet = await response.json();
+            setPets(prevPets => prevPets.map(pet => (pet.id === updatedPet.id ? updatedPet : pet)));
             toggleOpen();
         } catch (error) {
             console.error(error.message);
@@ -78,44 +78,42 @@ function VetAccount() {
                         <th scope='col'>Phone Number</th>
                         <th scope='col'>Gender</th>
                         <th scope='col'>Status</th>
-                        <th scope='col'>Role</th>
                         <th scope='col'>Actions</th>
                     </tr>
                 </MDBTableHead>
                 <MDBTableBody>
-                    {accounts.filter(acc => acc.roleId === 1).map((acc) => (
-                        <tr key={acc.id}>
+                    {pets.map((pet) => (
+                        <tr key={pet.id}>
                             <td>
                                 <div className='d-flex align-items-center'>
                                     <img
-                                        src='https://mdbootstrap.com/img/new/avatars/8.jpg'
-                                        alt=''
+                                        src={pet.imgUrl}
+                                        alt='pet img'
                                         style={{ width: '45px', height: '45px' }}
                                         className='rounded-circle'
                                     />
                                     <div className='ms-3'>
-                                        <p className='fw-bold mb-1'>{acc.fullName}</p>
-                                        <p className='text-muted mb-0'>{acc.username}</p>
+                                        <p className='fw-bold mb-1'>{pet.petName}</p>
+                                        <p className='text-muted mb-0'>{pet.petBreed}</p>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <p className='fw-normal mb-1'>{acc.email}</p>
+                                <p className='fw-normal mb-1'>{pet.petAge}</p>
                             </td>
                             <td>
-                                <p className='fw-normal mb-1'>{acc.phoneNumber}</p>
+                                <p className='fw-normal mb-1'>{pet.description}</p>
                             </td>
                             <td>
-                                <p className='fw-normal mb-1'>{acc.isMale ? "Male" : "Female"}</p>
+                                <p className='fw-normal mb-1'>{pet.isMale ? "Male" : "Female"}</p>
                             </td>
                             <td>
-                                <MDBBadge color={acc.isDisabled ? 'danger' : 'success'} pill>
-                                    {acc.isDisabled ? "Disabled" : "Active"}
+                                <MDBBadge color={pet.isDisabled ? 'danger' : 'success'} pill>
+                                    {pet.isDisabled ? "Disabled" : "Active"}
                                 </MDBBadge>
                             </td>
-                            <td>User</td>
                             <td>
-                                <MDBBtn color='link' rounded size='sm' onClick={() => toggleOpen(acc)}>
+                                <MDBBtn color='link' rounded size='sm' onClick={() => toggleOpen(pet)}>
                                     Edit
                                 </MDBBtn>
                             </td>
@@ -124,12 +122,12 @@ function VetAccount() {
                 </MDBTableBody>
             </MDBTable>
 
-            {selectedAccount && (
+            {selectedPet && (
                 <MDBModal open={basicModal} onClose={() => setBasicModal(false)} tabIndex='-1'>
                     <MDBModalDialog centered>
                         <MDBModalContent>
                             <MDBModalHeader>
-                                <MDBModalTitle>Edit Account</MDBModalTitle>
+                                <MDBModalTitle>Edit Pet</MDBModalTitle>
                                 <MDBBtn className='btn-close' color='none' onClick={toggleOpen}></MDBBtn>
                             </MDBModalHeader>
                             <MDBModalBody>
@@ -139,15 +137,15 @@ function VetAccount() {
                                             <MDBInput
                                                 label="Full Name"
                                                 name="fullName"
-                                                value={selectedAccount.fullName}
+                                                value={selectedPet.petName}
                                                 onChange={handleInputChange}
                                             />
                                         </MDBCol>
                                         <MDBCol>
                                             <MDBInput
-                                                label="Username"
-                                                name="username"
-                                                value={selectedAccount.username}
+                                                label="Pet ID"
+                                                name="petId"
+                                                value={selectedPet.petId}
                                                 onChange={handleInputChange}
                                             />
                                         </MDBCol>
@@ -157,7 +155,7 @@ function VetAccount() {
                                             <MDBInput
                                                 label="Email"
                                                 name="email"
-                                                value={selectedAccount.email}
+                                                value={selectedPet.imgUrl}
                                                 onChange={handleInputChange}
                                             />
                                         </MDBCol>
@@ -169,7 +167,7 @@ function VetAccount() {
                                             <MDBInput
                                                 label="Phone Number"
                                                 name="phoneNumber"
-                                                value={selectedAccount.phoneNumber}
+                                                value={selectedPet.petName}
                                                 onChange={handleInputChange}
                                             />
                                         </MDBCol>
@@ -180,14 +178,11 @@ function VetAccount() {
                                     </MDBRow>
                                 </form>
 
-
-
-
                                 <MDBInput
                                     type="select"
                                     label="Gender"
                                     name="isMale"
-                                    value={selectedAccount.isMale ? "Male" : "Female"}
+                                    value={selectedPet.isMale ? "Male" : "Female"}
                                     onChange={(e) => handleInputChange({ target: { name: "isMale", value: e.target.value === "Male" } })}
                                 >
                                     <option value="Male">Male</option>
@@ -207,4 +202,4 @@ function VetAccount() {
     );
 }
 
-export default VetAccount;
+export default AdminPet;

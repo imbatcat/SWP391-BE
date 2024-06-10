@@ -6,7 +6,6 @@ function MainLayout({ children }) {
     const [isAuth, setAuth] = useAuth();
     return (
         <div>
-            <CheckAuth></CheckAuth>
             <NavBar2 />
             <main>
                 {children}

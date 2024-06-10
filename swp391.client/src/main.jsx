@@ -25,6 +25,8 @@ import AdminAccount from './Pages/AdminPages/adminAccount';
 import VetAccount from './Pages/AdminPages/VetAccount';
 import AppointmentManage from './Pages/AdminPages/AppointmentManage';
 import UsersAccount from './Pages/AdminPages/UsersAccount';
+import CheckAuth from './Helpers/CheckAuth';
+import AdminPet from './Pages/AdminPages/petManage';
 
 const router = createBrowserRouter([
     {
@@ -40,11 +42,6 @@ const router = createBrowserRouter([
     {
         path: '/signUp',
         element: <SignUp />,
-        errorElement: <div>404 Not Found</div>,
-    },
-    {
-        path: '/adminAccount',
-        element: <AdminAccount />,
         errorElement: <div>404 Not Found</div>,
     },
     {
@@ -79,46 +76,60 @@ const router = createBrowserRouter([
     },
     {
         path: '/user/profile',
-        element: <UserProfile></UserProfile>,
+        element: (
+            <CheckAuth>
+                <UserProfile />
+            </CheckAuth>
+        ),
         errorElement: <div>404 Not Found</div>,
     },
     {
         path: '/user/pets',
-        element: <UserPets></UserPets>,
+        element: (
+            <CheckAuth>
+                <UserPets />
+            </CheckAuth>
+        ),
         errorElement: <div>404 Not Found</div>,
     },
     {
         path: '/user/appointments',
-        element: <UserAppointments></UserAppointments>,
+        element: (
+            <CheckAuth>
+                <UserAppointments />
+            </CheckAuth>
+        ),
         errorElement: <div>404 Not Found</div>,
     },
     {
-        path: '/vetAccount',
+        path: '/admin/vets',
         element: <VetAccount />,
         errorElement: <div>404 Not Found</div>,
     },
     {
-        path: '/appointmentManage',
+        path: '/admin/appointments',
         element: <AppointmentManage />,
         errorElement: <div>404 Not Found</div>,
     },
     {
-        path: '/usersAccount',
-        element: <UsersAccount />,
+        path: '/admin/customers',
+        element: <AdminAccount />,
         errorElement: <div>404 Not Found</div>,
     },
     {
-        path: '/usersAccount',
-        element: <UsersAccount />,
+        path: '/admin/pets',
+        element: <AdminPet />,
         errorElement: <div>404 Not Found</div>,
-    }
+    },
+
 ])
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <AuthProvider>
         <UserProvider>
             <React.StrictMode>
-                <RouterProvider router={router} />
+                <RouterProvider router={router}>
+                </RouterProvider>
                 <ToastContainer></ToastContainer>
             </React.StrictMode>
         </UserProvider>

@@ -54,33 +54,34 @@ function adminAccount() {
         if (value === '') {
             setFilteredAccounts(accounts);
         } else {
-            setFilteredAccounts(accounts.filter(acc =>
+            setFilteredAccounts(filteredAccounts.filter(acc =>
                 acc.fullName.toLowerCase().includes(value) ||
                 acc.phoneNumber.toLowerCase().includes(value) ||
                 acc.email.toLowerCase().includes(value) ||
-                acc.username.toLowerCase().includes(value) 
+                acc.username.toLowerCase().includes(value)
             ));
         }
     };
 
     const handleSaveChanges = async () => {
+        console.log(selectedAccount);
         try {
-            const response = await fetch(`https://localhost:7206/api/Accounts/${selectedAccount.id}`, {
-                method: 'PUT',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(selectedAccount),
-            });
+            //const response = await fetch(`https://localhost:7206/api/Accounts/${selectedAccount.id}`, {
+            //    method: 'PUT',
+            //    credentials: 'include',
+            //    headers: {
+            //        'Content-Type': 'application/json',
+            //    },
+            //    body: JSON.stringify(selectedAccount),
+            //});
 
-            if (!response.ok) {
-                throw new Error('Error updating data');
-            }
+            //if (!response.ok) {
+            //    throw new Error('Error updating data');
+            //}
 
-            const updatedAccount = await response.json();
-            setAccounts(prevAccounts => prevAccounts.map(acc => (acc.id === updatedAccount.id ? updatedAccount : acc)));
-            toggleOpen();
+            //const updatedAccount = await response.json();
+            //setFilteredAccounts(prevAccounts => prevAccounts.map(acc => (acc.id === updatedAccount.id ? updatedAccount : acc)));
+            //toggleOpen();
         } catch (error) {
             console.error(error.message);
         }
@@ -90,17 +91,17 @@ function adminAccount() {
         <div>
             <SideNav />
             <MDBCol md='2'>
-                        <MDBContainer className="py-1">
-                            <input
-                                type="text"
-                                className="search-hover"
-                                 placeholder="Search here"
-                                 value={searchInput}
-                                 onChange={handleSearchInputChange}
-                            />
-                             <MDBIcon icon='search' style={{marginLeft:'-35px'}} />
-                        </MDBContainer>
-                    </MDBCol>   
+                <MDBContainer className="py-1">
+                    <input
+                        type="text"
+                        className="search-hover"
+                        placeholder="Search here"
+                        value={searchInput}
+                        onChange={handleSearchInputChange}
+                    />
+                    <MDBIcon icon='search' style={{ marginLeft: '-35px' }} />
+                </MDBContainer>
+            </MDBCol>
             <MDBTable align='middle'>
                 <MDBTableHead>
                     <tr>
