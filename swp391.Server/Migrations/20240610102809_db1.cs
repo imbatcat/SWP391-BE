@@ -159,7 +159,9 @@ namespace PetHealthcare.Server.Migrations
                     AccountId = table.Column<string>(type: "char(11)", nullable: false),
                     PetId = table.Column<string>(type: "char(11)", nullable: false),
                     VeterinarianAccountId = table.Column<string>(type: "char(11)", nullable: false),
-                    TimeSlotId = table.Column<int>(type: "int", nullable: false)
+                    TimeSlotId = table.Column<int>(type: "int", nullable: false),
+                    IsCancel = table.Column<bool>(type: "bit", nullable: false),
+                    IsCheckIn = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -250,7 +252,7 @@ namespace PetHealthcare.Server.Migrations
                 columns: table => new
                 {
                     AdmissionId = table.Column<string>(type: "char(11)", maxLength: 10, nullable: false),
-                    AdmissionDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    AdmissionDate = table.Column<DateOnly>(type: "date", nullable: true),
                     DischargeDate = table.Column<DateOnly>(type: "date", nullable: true),
                     IsDischarged = table.Column<bool>(type: "bit", nullable: false),
                     PetCurrentCondition = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
