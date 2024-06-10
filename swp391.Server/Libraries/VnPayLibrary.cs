@@ -24,14 +24,15 @@ public class VnPayLibrary
                 vnPay.AddResponseData(key, value);
             }
         }
-
+        DateTime time = DateTime.Now;
         var orderId = Convert.ToInt64(vnPay.GetResponseData("vnp_TxnRef"));
         var vnPayTranId = Convert.ToInt64(vnPay.GetResponseData("vnp_TransactionNo"));
         var vnpResponseCode = vnPay.GetResponseData("vnp_ResponseCode");
         var vnpSecureHash =
             collection.FirstOrDefault(k => k.Key == "vnp_SecureHash").Value; //hash của dữ liệu trả về
         var orderInfo = vnPay.GetResponseData("vnp_OrderInfo");
-
+        var paymentDate = time;
+        Console.WriteLine(paymentDate);
         var checkSignature =
             vnPay.ValidateSignature(vnpSecureHash, hashSecret); //check Signature
 
@@ -50,7 +51,8 @@ public class VnPayLibrary
             PaymentId = vnPayTranId.ToString(),
             TransactionId = vnPayTranId.ToString(),
             Token = vnpSecureHash,
-            VnPayResponseCode = vnpResponseCode
+            VnPayResponseCode = vnpResponseCode,
+            PaymentDate = paymentDate,
         };
     }
     public string GetIpAddress(HttpContext context)

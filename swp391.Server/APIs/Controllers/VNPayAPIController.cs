@@ -32,8 +32,15 @@ namespace PetHealthcare.Server.APIs.Controllers
             var queury = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(string.Join("&", form.Select(x => $"{x.Key}={x.Value}")));
             var response = _vnPayService.PaymentExecute(new QueryCollection(queury));
             // TODO: kiem tra hash
-            context.paymentResponseModels.Add(response);
-            context.SaveChanges();
+            try
+            {
+                context.paymentResponseModels.Add(response);
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
             return Ok(response);
         }
     }

@@ -53,6 +53,7 @@ async function logout() {
     try {
         const response = await fetch('https://localhost:7206/api/ApplicationAuth/logout', {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
+         
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -102,13 +103,16 @@ function App() {
     useEffect(() => {
         const params = new URLSearchParams(window.location.search)
             
-        fetch("http://localhost:7206/VNPayAPI/PaymentCallback", {
+        fetch("https://localhost:7206/api/VNPayAPI/PaymentCallback", {
             method: "POST",
             headers: {
-                "Content- Type": "application / x - www - form - urlencoded"
+                "Content-Type": "application/x-www-form-urlencoded"
             },
+            credentials: 'include',
             body: params.toString()
-        })
+        }).then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
         console.log(params);
         },[])
 
