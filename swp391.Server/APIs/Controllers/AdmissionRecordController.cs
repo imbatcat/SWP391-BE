@@ -8,7 +8,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 {
 
     [Route("api/[controller]")]
-    [Authorize(Roles = "Staff,Veterinarian, Customer, Admin")]
+    [Authorize(Roles = "Staff,Vet, Customer, Admin")]
     [ApiController]
     public class AdmissionRecordController : ControllerBase
     {

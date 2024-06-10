@@ -10,7 +10,7 @@ using PetHealthcare.Server.Services.Interfaces;
 namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Roles = "Staff,Veterianrian,Admin")]
+    [Authorize(Roles = "Staff,Vet,Admin")]
     [ApiController]
     public class CagesController : ControllerBase
     {
