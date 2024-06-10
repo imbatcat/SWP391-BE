@@ -7,7 +7,7 @@ using PetHealthcare.Server.Services.Interfaces;
 namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Roles = "Veterianrian, Staff, User")]
+    [Authorize(Roles = "Veterianrian, Staff, User, Admin")]
     [ApiController]
     public class TimeSlotsController : ControllerBase
     {
@@ -43,7 +43,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         // PUT: api/Services/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        [Authorize(Roles = "Staff")]
+        [Authorize(Roles = "Staff,Admin")]
         public async Task<IActionResult> UpdateTimeSlot([FromRoute] int id, [FromBody] TimeslotDTO toUpdateTimeSlot)
         {
             var service = await _context.GetTimeSlotByCondition(p => p.TimeSlotId == id);
@@ -57,7 +57,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // POST api/<CagesController>
         [HttpPost]
-        [Authorize(Roles = "Staff")]
+        [Authorize(Roles = "Staff,Admin")]
         public async Task<ActionResult<TimeSlot>> Post([FromBody] TimeslotDTO newCage)
         {
             await _context.CreateTimeSlot(newCage);
