@@ -35,8 +35,7 @@ function Login() {
     const toggleOpen = () => setBasicModal(!basicModal);
     const [PasswordInputType, ToggleIcon] = usePasswordToggle();
 
-    async function loginapi(e) {
-        e.preventDefault();
+    async function loginapi() {
         try {
             const response = await fetch('https://localhost:7206/api/ApplicationAuth/login', {
                 method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -68,13 +67,13 @@ function Login() {
         }
     }
 
-    const handleLoginClick = () => {
+    const handleLoginClick = (e) => {
         e.preventDefault();
         if (!userName || !password) {
             toast.error("Email/Password is required");
             return;
         }
-        loginapi(userName, password, true, setLoginSuccess, navigate);
+        loginapi();
     }
     
     function handleNavigation() {

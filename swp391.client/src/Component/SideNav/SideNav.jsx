@@ -7,6 +7,7 @@ import './SideNav.css';
 import { IconContext } from 'react-icons';
 import { useAuth } from '../../Context/AuthProvider';
 import { toast } from 'react-toastify';
+import { MDBBtn, MDBCol, MDBContainer, MDBIcon, MDBInput, MDBInputGroup, MDBRow } from 'mdb-react-ui-kit';
 
 function SideNav() {
     const [sidebar, setSidebar] = useState(false);
@@ -37,9 +38,12 @@ function SideNav() {
         <>
             <IconContext.Provider value={{ color: '#fff' }}>
                 <div className='navbar'>
-                    <Link to='#' className='menu-bars'>
-                        <FaIcons.FaBars onClick={showSidebar} />
-                    </Link>
+                    <MDBCol md='10'>
+                        <Link className='menu-bars'>
+                            <FaIcons.FaBars onClick={showSidebar} />
+                        </Link>
+                    </MDBCol>
+                    
                 </div>
                 <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
                     <ul className='nav-menu-items' onClick={showSidebar}>

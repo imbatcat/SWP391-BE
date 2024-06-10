@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
-import { MDBBadge, MDBBtn, MDBTable, MDBTableBody, MDBTableHead, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBInput, MDBModalDialog, MDBModalContent, MDBModalTitle, MDBCol, MDBRow, MDBCheckbox } from 'mdb-react-ui-kit';
+import { MDBBadge, MDBBtn, MDBTable, MDBTableBody, MDBTableHead, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBInput, MDBModalDialog, MDBModalContent, MDBModalTitle, MDBCol, MDBRow, MDBCheckbox, MDBContainer, MDBIcon } from 'mdb-react-ui-kit';
 import SideNav from '../../Component/SideNav/SideNav';
-//import { Accounts } from './AccountData';
+
+
 
 function adminAccount() {
     const [accounts, setAccounts] = useState([]);
     const [selectedAccount, setSelectedAccount] = useState(null);
     const [basicModal, setBasicModal] = useState(false);
-
+    const [searchInput, setSearchInput] = useState('');
+    const [filteredAccounts, setFilteredAccounts] = useState([]);
 
     useEffect(() => {
         async function fetchData() {
@@ -24,6 +26,7 @@ function adminAccount() {
                 }
                 const data = await response.json();
                 setAccounts(data);
+                setFilteredAccounts(data);
                 console.log(data);
             } catch (error) {
                 console.error(error.message);
@@ -44,6 +47,20 @@ function adminAccount() {
             ...prevState,
             [name]: value
         }));
+    };
+    const handleSearchInputChange = (e) => {
+        const value = e.target.value.toLowerCase();
+        setSearchInput(value);
+        if (value === '') {
+            setFilteredAccounts(accounts);
+        } else {
+            setFilteredAccounts(accounts.filter(acc =>
+                acc.fullName.toLowerCase().includes(value) ||
+                acc.phoneNumber.toLowerCase().includes(value) ||
+                acc.email.toLowerCase().includes(value) ||
+                acc.username.toLowerCase().includes(value) 
+            ));
+        }
     };
 
     const handleSaveChanges = async () => {
@@ -72,6 +89,18 @@ function adminAccount() {
     return (
         <div>
             <SideNav />
+            <MDBCol md='2'>
+                        <MDBContainer className="py-1">
+                            <input
+                                type="text"
+                                className="search-hover"
+                                 placeholder="Search here"
+                                 value={searchInput}
+                                 onChange={handleSearchInputChange}
+                            />
+                             <MDBIcon icon='search' style={{marginLeft:'-35px'}} />
+                        </MDBContainer>
+                    </MDBCol>   
             <MDBTable align='middle'>
                 <MDBTableHead>
                     <tr>
@@ -84,7 +113,7 @@ function adminAccount() {
                     </tr>
                 </MDBTableHead>
                 <MDBTableBody>
-                    {accounts.filter(acc => acc.roleId === 1).map((acc) => (
+                    {filteredAccounts.filter(acc => acc.roleId === 1).map((acc) => (
                         <tr key={acc.id}>
                             <td>
                                 <div className='d-flex align-items-center'>
