@@ -89,19 +89,7 @@ function adminAccount() {
 
     return (
         <div>
-            <SideNav />
-            <MDBCol md='2'>
-                <MDBContainer className="py-1">
-                    <input
-                        type="text"
-                        className="search-hover"
-                        placeholder="Search here"
-                        value={searchInput}
-                        onChange={handleSearchInputChange}
-                    />
-                    <MDBIcon icon='search' style={{ marginLeft: '-35px' }} />
-                </MDBContainer>
-            </MDBCol>
+            <SideNav searchInput={searchInput} handleSearchInputChange={handleSearchInputChange} />
             <MDBTable align='middle'>
                 <MDBTableHead>
                     <tr>
