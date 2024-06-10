@@ -9,7 +9,7 @@ import { useAuth } from '../../Context/AuthProvider';
 import { toast } from 'react-toastify';
 import { MDBBtn, MDBCol, MDBContainer, MDBIcon, MDBInput, MDBInputGroup, MDBRow } from 'mdb-react-ui-kit';
 
-function SideNav() {
+function SideNav({ searchInput, handleSearchInputChange }) {
     const [sidebar, setSidebar] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useAuth();
     const showSidebar = () => setSidebar(!sidebar);
@@ -38,11 +38,23 @@ function SideNav() {
         <>
             <IconContext.Provider value={{ color: '#fff' }}>
                 <div className='navbar'>
-                    <MDBCol md='10'>
+                    <MDBCol md='9'>
                         <Link className='menu-bars'>
                             <FaIcons.FaBars onClick={showSidebar} />
                         </Link>
                     </MDBCol>
+                    <MDBCol md='2'>
+                        <MDBContainer className="py-1 search-container">
+                            <input
+                                type="text"
+                                className="search-hover"
+                                 placeholder="Search here"
+                                 value={searchInput}
+                                 onChange={handleSearchInputChange}
+                            />
+                             <MDBIcon icon='search' style={{marginLeft:'-35px'}} />
+                        </MDBContainer>
+                    </MDBCol>   
                     
                 </div>
                 <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>

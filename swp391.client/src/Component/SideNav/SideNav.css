@@ -85,3 +85,9 @@
     width: 200px;
     padding-left: 50px;
   }
+  .search-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100%;
+}
