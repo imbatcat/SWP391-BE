@@ -17,7 +17,7 @@ import {
     MDBModalHeader,
     MDBModalTitle
 } from 'mdb-react-ui-kit';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ForgotPassForm from '../../Component/ForgotPass/ForgotPassForm';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -28,6 +28,7 @@ import { useUser } from '../../Context/UserContext';
 function Login() {
     const [isAuthenticated, setIsAuthenticated] = useAuth();
     const [user, setUser] = useUser();
+    const [localUser, setLocalUser] = useState();
     const [basicModal, setBasicModal] = useState(false);
     const [userName, setUserName] = useState('');
     const [password, setPassWord] = useState('');
@@ -35,8 +36,7 @@ function Login() {
     const toggleOpen = () => setBasicModal(!basicModal);
     const [PasswordInputType, ToggleIcon] = usePasswordToggle();
 
-    async function loginapi(e) {
-        e.preventDefault();
+    async function loginapi() {
         try {
             const response = await fetch('https://localhost:7206/api/ApplicationAuth/login', {
                 method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -56,35 +56,25 @@ function Login() {
                 throw new Error("Error fetching data");
             }
             var userData = await response.json();
-            setUser(userData);
             localStorage.setItem("user", JSON.stringify(userData));
+            setUser(userData);
             setIsAuthenticated(true);
-            toast.success('Login successful!');
             console.log('ok');
-            handleNavigation();
+            toast.success('Login successful!');
+            handleNavigation(userData.role);
         } catch (error) {
             toast.error('Login failed!');
             console.error(error.message);
         }
     }
 
-    const handleLoginClick = () => {
-        e.preventDefault();
+    const handleLoginClick = (e) => {
         if (!userName || !password) {
             toast.error("Email/Password is required");
             return;
         }
-        loginapi(userName, password, true, setLoginSuccess, navigate);
+        loginapi(e);
     }
-    
-    function handleNavigation() {
-        if (user.role === 'Admin') {
-            navigate('/adminAccount');
-        } else {
-            navigate('/');
-        }
-    };
-
     const handleOnChangeUsername = (e) => {
         setUserName(e.target.value);
     }
@@ -92,8 +82,13 @@ function Login() {
     const handleOnChangePassWord = (e) => {
         setPassWord(e.target.value);
     }
-
-
+    const handleNavigation = (role) => {
+        if (role === 'Admin') {
+            navigate('/adminAccount');
+        } else {
+            navigate('/');
+        }
+    }
     return (
         <MDBContainer className="my-5 d-10 justify-content-center">
             <MDBCard className='login-card'>

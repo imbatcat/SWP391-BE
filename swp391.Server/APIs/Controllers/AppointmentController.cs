@@ -32,7 +32,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
             if (appointment == null)
             {
-                return NotFound(new {message = "Appointment not found"});
+                return NotFound(new { message = "Appointment not found" });
             }
 
             return appointment;
@@ -46,12 +46,15 @@ namespace PetHealthcare.Server.APIs.Controllers
             var appointment = await _appointment.GetAppointmentByCondition(a => a.AppointmentId.Equals(id));
             if (appointment == null)
             {
-                return NotFound(new {message ="Update fail, appointment not found"});
-            } else if(!_appointment.isVetIdValid(toUpdateAppointment.VeterinarianAccountId)) { 
-                return BadRequest(new {message = "Invalid foreign key VetId"});
-            } else if(toUpdateAppointment.BookingPrice <= 0)
+                return NotFound(new { message = "Update fail, appointment not found" });
+            }
+            else if (!_appointment.isVetIdValid(toUpdateAppointment.VeterinarianAccountId))
             {
-                return BadRequest(new {message = "Price must be higher than 0"});
+                return BadRequest(new { message = "Invalid foreign key VetId" });
+            }
+            else if (toUpdateAppointment.BookingPrice <= 0)
+            {
+                return BadRequest(new { message = "Price must be higher than 0" });
             }
             await _appointment.UpdateAppointment(id, toUpdateAppointment);
             return Ok(toUpdateAppointment);

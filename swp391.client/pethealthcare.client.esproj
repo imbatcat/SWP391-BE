@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="src\Component\Modals\" />
+    <Folder Include="src\Helpers\" />
     <Folder Include="src\Layouts\" />
   </ItemGroup>
 </Project>
