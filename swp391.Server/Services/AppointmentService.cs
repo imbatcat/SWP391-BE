@@ -181,6 +181,37 @@ namespace PetHealthcare.Server.Services
             }
             return SortedList;
         }
+
+        public async Task<IEnumerable<GetAllAppointmentDTOs>> GetAllAppointmentByAccountId(string acId)
+        {
+            IEnumerable<Appointment> AppList = await _appointmentRepository.GetAll();
+            List<GetAllAppointmentDTOs> appointmentList = new List<GetAllAppointmentDTOs>();
+            if(AppList != null)
+            {
+                foreach (Appointment app in AppList)
+                {
+                    if (app.AccountId.Equals(acId))
+                    {
+                        appointmentList.Add(new GetAllAppointmentDTOs
+                        {
+                            AccountId = app.AccountId,
+                            AppointmentDate = app.AppointmentDate,
+                            AppointmentId = app.AppointmentId,
+                            AppointmentNotes = app.AppointmentNotes,
+                            AppointmentType = app.AppointmentType,
+                            BookingPrice = app.BookingPrice,
+                            IsCancel = app.IsCancel,
+                            IsCheckIn = app.IsCheckIn,
+                        });
+                    }
+                }
+            }
+            if(appointmentList.Count == 0)
+            {
+                return null;
+            }
+            return appointmentList;
+        }
     }
 
 }

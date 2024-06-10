@@ -42,12 +42,27 @@ namespace PetHealthcare.Server.APIs.Controllers
 
             return appointment;
         }
+        [HttpGet("admin/{accountId}")]
+        [Authorize(Roles ="Admin")]
+        public async Task<ActionResult<GetAllAppointmentDTOs>> GetAllAppointmentForAdmin([FromRoute]string accountId)
+        {
+            if(accountId == null)
+            {
+                return BadRequest(new { message = "Account id must not null" });
+            }
+            var appointmentList = await _appointment.GetAllAppointmentByAccountId(accountId);
+            if (appointmentList == null)
+            {
+                return NotFound(new { message = "Can't find any appointment of that account" });
+            }
+            return Ok(appointmentList);
+        }
         [HttpGet("AppointmentList/{accountId}")]
         [Authorize(Roles="Customer,Admin")]
         public async Task<IEnumerable<ResAppListForCustomer>> GetCustomerAppointmentList([FromRoute] string accountId)
         {
             return await _appointment.getAllCustomerAppList(accountId);
-        }
+        } 
         [HttpGet("AppointmentList/AppointmentHistory/{accountId}")]
         [Authorize(Roles = "Customer,Admin")]
         public async Task<IEnumerable<ResAppListForCustomer>> GetCustomerAppointmentHistory([FromRoute] string accountId)
