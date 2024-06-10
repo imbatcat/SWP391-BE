@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace PetHealthcare.Server.Migrations
 {
     [DbContext(typeof(PetHealthcareDbContext))]
-    [Migration("20240530094220_db1")]
+    [Migration("20240610102809_db1")]
     partial class db1
     {
         /// <inheritdoc />
@@ -19,7 +19,7 @@ namespace PetHealthcare.Server.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.5")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -98,7 +98,7 @@ namespace PetHealthcare.Server.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("char(11)");
 
-                    b.Property<DateOnly>("AdmissionDate")
+                    b.Property<DateOnly?>("AdmissionDate")
                         .HasColumnType("date");
 
                     b.Property<int>("CageId")
@@ -162,6 +162,12 @@ namespace PetHealthcare.Server.Migrations
 
                     b.Property<double>("BookingPrice")
                         .HasColumnType("float");
+
+                    b.Property<bool>("IsCancel")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsCheckIn")
+                        .HasColumnType("bit");
 
                     b.Property<string>("PetId")
                         .IsRequired()
