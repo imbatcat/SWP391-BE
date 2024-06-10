@@ -5,22 +5,21 @@ const UserContext = createContext();
 
 // Provide context to the component tree
 const UserProvider = ({ children }) => {
-    const [user, setUser] = useState({
-        id: '',
-        role: '',
-    });
-
-    useEffect(() => {
+    const [user, setUser] = useState(() => {
         const data = localStorage.getItem("user");
         if (data) {
             const parseData = JSON.parse(data);
-            setUser({
-                ...user,
+
+            var parsedData = {
                 id: parseData.id,
                 role: parseData.role,
-            });
+            };
+            console.log(parsedData);
+            return parsedData;
         }
-    }, []);
+        return null;
+    });
+
     return (
         <UserContext.Provider value={[user, setUser]}>
             {children}

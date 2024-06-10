@@ -6,14 +6,10 @@ const AuthContext = createContext();
 
 // Provide context to the component tree
 const AuthProvider = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-    useEffect(() => {
-        const userToken = Cookies.get('AspNetLogin');
-        if (userToken) {
-            setIsAuthenticated(true);
-        }
-    }, []);
+    const [isAuthenticated, setIsAuthenticated] = useState(() => {
+        var userToken = Cookies.get('AspNetLogin');
+        return userToken ? true : false;
+    });
 
     return (
         <AuthContext.Provider value={[isAuthenticated, setIsAuthenticated]}>

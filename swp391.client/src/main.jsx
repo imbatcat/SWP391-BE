@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import UserPets from './Pages/Profile/UserPets';
+import UserAppointments from './Pages/Profile/UserAppointments';
 import './index.css';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -16,7 +18,6 @@ import PasswordResetForm from './Pages/SetNewPass/PasswordResetForm';
 import PetList from './Pages/MyPetList/PetList';
 import ConfirmEmail from './Pages/ConfirmEmail';
 import GglLogin from './Pages/GoogleLogin';
-
 import { ToastContainer } from 'react-toastify';
 import UserProfile from './Pages/Profile/UserProfile';
 import { UserProvider } from './Context/UserContext';
@@ -79,6 +80,16 @@ const router = createBrowserRouter([
     {
         path: '/user/profile',
         element: <UserProfile></UserProfile>,
+        errorElement: <div>404 Not Found</div>,
+    },
+    {
+        path: '/user/pets',
+        element: <UserPets></UserPets>,
+        errorElement: <div>404 Not Found</div>,
+    },
+    {
+        path: '/user/appointments',
+        element: <UserAppointments></UserAppointments>,
         errorElement: <div>404 Not Found</div>,
     },
     {

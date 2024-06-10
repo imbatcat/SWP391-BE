@@ -24,7 +24,8 @@ export default function NavBar2() {
     const [user, setUser] = useUser();
     const [openBasic, setOpenBasic] = useState(false);
     const navigate = useNavigate();
-    const logout = async () => {
+    const logout = async (e) => {
+        e.preventDefault();
         try {
             const response = await fetch(`https://localhost:7206/api/ApplicationAuth/logout`, {
                 method: 'POST',
@@ -59,7 +60,7 @@ export default function NavBar2() {
                     <MDBIcon icon='bars' fas />
                 </MDBNavbarToggler>
 
-                <MDBCollapse navbar open={openBasic} style={{ justifyContent: 'end'}}>
+                <MDBCollapse navbar open={openBasic} style={{ justifyContent: 'end' }}>
                     <MDBNavbarNav className='mr-auto mb-2 mb-lg-0'>
                         <MDBNavbarItem>
                             <Link to="/"><MDBNavbarLink active aria-current='page'>
@@ -110,7 +111,7 @@ export default function NavBar2() {
                                     </Link>
                                 </MDBNavbarItem>
                                 <MDBNavbarItem>
-                                    <button className="btn" onClick={() => logout()}>Logout</button>
+                                    <button className="btn" onClick={(e) => logout(e)}>Logout</button>
                                 </MDBNavbarItem>
                             </>
                         ) : (

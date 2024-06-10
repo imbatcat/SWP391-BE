@@ -13,7 +13,6 @@ import {
 } from 'mdb-react-ui-kit';
 import { useUser } from '../../Context/UserContext';
 import { toast } from 'react-toastify';
-import axios from 'axios';
 export default function PetList() {
     const [petLists, setPetLists] = useState([]);
     const [user, setUser] = useUser();
