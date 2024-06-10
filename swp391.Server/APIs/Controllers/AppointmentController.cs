@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Humanizer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using PetHealthcare.Server.APIs.DTOS;
@@ -57,21 +58,28 @@ namespace PetHealthcare.Server.APIs.Controllers
             }
             return Ok(appointmentList);
         }
+
         [HttpGet("AppointmentList/{accountId}")]
-        [Authorize(Roles="Customer,Admin")]
-        public async Task<IEnumerable<ResAppListForCustomer>> GetCustomerAppointmentList([FromRoute] string accountId)
-        {
-            return await _appointment.getAllCustomerAppList(accountId);
-        } 
-        [HttpGet("AppointmentList/AppointmentHistory/{accountId}")]
         [Authorize(Roles = "Customer,Admin")]
-        public async Task<IEnumerable<ResAppListForCustomer>> GetCustomerAppointmentHistory([FromRoute] string accountId)
+        public async Task<ActionResult<IEnumerable<ResAppListForCustomer>>> GetCustomerAppointmentList([FromRoute] string accountId, string listType)
         {
-            return await _appointment.getAllCustomerAppHistory(accountId);
+            if (!listType.Equals("history", StringComparison.OrdinalIgnoreCase)
+                &&
+               !listType.Equals("current", StringComparison.OrdinalIgnoreCase))
+            {
+                return BadRequest(new { message = "listType must be current or history" });
+            }
+            var appointmentList = await _appointment.getAllCustomerAppointment(accountId,listType);
+            if(appointmentList == null)
+            {
+                return NotFound(new {message="Can't find that account id"});
+            }
+            return Ok(appointmentList);
         }
+
         [HttpGet("AppointmentList/{accountId}&{typeOfSorting}&{orderBy}")]
         [Authorize(Roles = "Customer,Admin")]
-        public async Task<ActionResult<IEnumerable<ResAppListForCustomer>>> GetSortedListByDate(string accountId, string typeOfSorting, string orderBy)
+        public async Task<ActionResult<IEnumerable<ResAppListForCustomer>>> GetSortedListByDate(string accountId, string typeOfSorting, string orderBy="asc")
         {
             if (!typeOfSorting.Equals("history", StringComparison.OrdinalIgnoreCase)
                 &&
@@ -86,6 +94,10 @@ namespace PetHealthcare.Server.APIs.Controllers
                 return BadRequest(new { message = "orderBy must be asc or desc" });
             }
             var sortedAppointment = await _appointment.SortAppointmentByDate(accountId, typeOfSorting, orderBy);
+            if(sortedAppointment == null)
+            {
+                return NotFound(new { message = "Can't find that account id" });
+            }
             return Ok(sortedAppointment);
         }
         // PUT: api/Services/5

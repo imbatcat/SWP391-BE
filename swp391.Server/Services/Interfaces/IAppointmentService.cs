@@ -13,8 +13,7 @@ namespace PetHealthcare.Server.Services.Interfaces
         Task CreateAppointment(CreateAppointmentDTO appointment);
         Task UpdateAppointment(string id, CustomerAppointmentDTO appointment);
         void DeleteAppointment(Appointment appointment);
-        Task<IEnumerable<ResAppListForCustomer>> getAllCustomerAppList(string id);
-        Task<IEnumerable<ResAppListForCustomer>> getAllCustomerAppHistory(string id);
+        Task<IEnumerable<ResAppListForCustomer>> getAllCustomerAppointment(string id, string listType);
         Task<IEnumerable<ResAppListForCustomer>> SortAppointmentByDate(string id, string SortList, string SortOrder);
         bool isVetIdValid(string id);
         string GenerateId();
