@@ -136,6 +136,9 @@ function adminAccount() {
                                 <MDBBtn color='link' rounded size='sm' onClick={() => toggleOpen(acc)}>
                                     Edit
                                 </MDBBtn>
+                                <MDBBtn color='danger' style={{color:'black'}} rounded size='sm' onClick={() => toggleOpen(acc)}>
+                                    X
+                                </MDBBtn>
                             </td>
                         </tr>
                     ))}
