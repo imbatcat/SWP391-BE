@@ -25,7 +25,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // GET: api/Services
         [HttpGet]
-        public async Task<IEnumerable<GetAllAppointmentDTOs>> GetAllAppointment()
+        public async Task<IEnumerable<GetAllAppointmentForAdminDTO>> GetAllAppointment()
         {
             return await _appointment.GetAllAppointment();
         }
@@ -45,16 +45,16 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
         [HttpGet("admin/{accountId}")]
         [Authorize(Roles ="Admin")]
-        public async Task<ActionResult<GetAllAppointmentForAdminDTO>> GetAllAppointmentForAdmin([FromRoute]string accountId)
+        public async Task<ActionResult<GetAllAppointmentForAdminDTO>> GetAllAppointmentForAdminByAccountId([FromRoute]string accountId)
         {
             if(accountId == null)
             {
                 return BadRequest(new { message = "Account id must not null" });
             }
             var appointmentList = await _appointment.GetAllAppointmentByAccountId(accountId);
-            if (appointmentList == null)
+            if (appointmentList.Count() == 0)
             {
-                return NotFound(new { message = "Can't find any appointment of that account" });
+                return NotFound(new { message = "Can't find that account id or Account don't have any appointment" });
             }
             return Ok(appointmentList);
         }
@@ -70,9 +70,9 @@ namespace PetHealthcare.Server.APIs.Controllers
                 return BadRequest(new { message = "listType must be current or history" });
             }
             var appointmentList = await _appointment.getAllCustomerAppointment(accountId,listType);
-            if(appointmentList == null)
+            if(appointmentList.Count() == 0)
             {
-                return NotFound(new {message="Can't find that account id"});
+                return NotFound(new {message="Can't find that account id or Account don't have any appointment yet"});
             }
             return Ok(appointmentList);
         }
@@ -128,7 +128,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // DELETE: api/Services/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteService([FromRoute] string id)
+        public async Task<IActionResult> DeleteApppointment([FromRoute] string id)
         {
             var appointment = await _appointment.GetAppointmentByCondition(a => a.AppointmentId.Equals(id));
             if (appointment == null)

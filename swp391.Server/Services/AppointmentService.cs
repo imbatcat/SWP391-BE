@@ -35,7 +35,11 @@ namespace PetHealthcare.Server.Services
                 VeterinarianAccountId = appointment.VeterinarianAccountId,
                 AppointmentId = GenerateId(),
                 AccountId = appointment.AccountId,
-                TimeSlotId = appointment.TimeSlotId
+                TimeSlotId = appointment.TimeSlotId,
+                IsCancel = false,
+                IsCheckIn = false,
+                IsCheckUp = false,
+                
             };
             await _appointmentRepository.Create(toCreateAppointment);
         }
@@ -47,13 +51,13 @@ namespace PetHealthcare.Server.Services
 
 
 
-        public async Task<IEnumerable<GetAllAppointmentDTOs>> GetAllAppointment()
+        public async Task<IEnumerable<GetAllAppointmentForAdminDTO>> GetAllAppointment()
         {
             IEnumerable<Appointment> appList = await _appointmentRepository.GetAll();
-            List<GetAllAppointmentDTOs> CAList = new List<GetAllAppointmentDTOs>();
+            List<GetAllAppointmentForAdminDTO> CAList = new List<GetAllAppointmentForAdminDTO>();
             foreach(Appointment app in appList)
             {
-                GetAllAppointmentDTOs appointmentDTO = new GetAllAppointmentDTOs
+                GetAllAppointmentForAdminDTO appointmentDTO = new GetAllAppointmentForAdminDTO
                 {
                     AppointmentDate = app.AppointmentDate,
                     AppointmentNotes = app.AppointmentNotes,
@@ -61,9 +65,11 @@ namespace PetHealthcare.Server.Services
                     PetName= app.Pet.PetName,
                     BookingPrice= app.BookingPrice,
                     AppointmentType = app.AppointmentType,
-                    TimeSlotId= app.TimeSlotId,
+                    TimeSlot= app.TimeSlot.StartTime.ToString("h:mm") + " - " + app.TimeSlot.EndTime.ToString("h:mm"),
                     IsCancel = app.IsCancel,
                     IsCheckIn = app.IsCheckIn,
+                    IsCheckUp = app.IsCheckUp,
+                    CheckinTime = app.CheckinTime,
                 //            public string AppointmentId { get; set; }
                 //public DateOnly AppointmentDate { get; set; }
                 //public string AppointmentType { get; set; }
@@ -180,6 +186,8 @@ namespace PetHealthcare.Server.Services
                             TimeSlot = app.TimeSlot.StartTime.ToString("h:mm") + " - " + app.TimeSlot.EndTime.ToString("h:mm"),
                             IsCancel = app.IsCancel,
                             IsCheckIn = app.IsCheckIn,
+                            IsCheckUp = app.IsCheckUp,
+                            CheckinTime = app.CheckinTime,
                         });
                     }
                 }

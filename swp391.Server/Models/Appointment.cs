@@ -28,6 +28,8 @@ namespace PetHealthcare.Server.Models
         public bool IsCancel { get; set; }
 
         public bool IsCheckIn { get; set; }
+        public bool IsCheckUp {  get; set; }
+        public TimeOnly CheckinTime {  get; set; }
         // Reference entities
 
         // Adding restrict behavior will restrain from accidental deletion from Account and Pet, avoiding the deletion cycle
