@@ -5,32 +5,37 @@ using Microsoft.AspNetCore.Mvc;
 using PetHealthcare.Server.APIs.DTOS.AppointmentDTOs;
 using System.Diagnostics;
 using Microsoft.Identity.Client;
-
+using System.Text.Json;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class VNPayAPIController : ControllerBase
     {
+        private readonly ITempDataDictionaryFactory _tempDataDictionaryFactory;
         private readonly AppointmentService _appointmentService;
-        private AppointmentDTO appointmentDTO = new AppointmentDTO();
         private readonly PetHealthcareDbContext context;
         private readonly BookingPaymentService bookingPaymentService;
-        public VNPayAPIController(IVnPayService vnPayService, PetHealthcareDbContext context, AppointmentService appointmentService)
+        public VNPayAPIController(IVnPayService vnPayService, PetHealthcareDbContext context, AppointmentService appointmentService, 
+            BookingPaymentService _bookingPaymentService, ITempDataDictionaryFactory tempDataDictionaryFactory)
         {
             _vnPayService = vnPayService;
             this.context = context;
             _appointmentService = appointmentService;
-            appointmentDTO = new AppointmentDTO();
+            bookingPaymentService = _bookingPaymentService;
+            _tempDataDictionaryFactory = tempDataDictionaryFactory;
         }
-
+        private ITempDataDictionary TempData => _tempDataDictionaryFactory.GetTempData(HttpContext);
         private readonly IVnPayService _vnPayService;
         // GET: VNPayController
         [HttpPost]
         public IActionResult CreatePaymentUrl([FromBody] AppointmentDTO model)
         {
+            AppointmentDTO appointmentDTO = model;
+            TempData["AppointmentDTO"] = JsonSerializer.Serialize(appointmentDTO);
             var url = _vnPayService.CreatePaymentUrl(model, HttpContext);
-            appointmentDTO = model;
+            
             
             return Ok(url);
         }
@@ -40,12 +45,24 @@ namespace PetHealthcare.Server.APIs.Controllers
         {
             var queury = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(string.Join("&", form.Select(x => $"{x.Key}={x.Value}")));
             var response = _vnPayService.PaymentExecute(new QueryCollection(queury));
+            AppointmentDTO appointmentDTO = new AppointmentDTO();
             try
             {
+                if (TempData.ContainsKey("AppointmentDTO"))
+                {
+                    var appointmentJson = TempData["AppointmentDTO"].ToString();
+                    appointmentDTO = JsonSerializer.Deserialize<AppointmentDTO>(appointmentJson);
+                }
+                else
+                {
+                    Debug.WriteLine("No appointment data in TempData");
+                    return BadRequest("No appointment data");
+                }
                 if (response.VnPayResponseCode.Equals("00"))
                 {
                     string appointmentId = _appointmentService.GenerateId();
                     _appointmentService.CreateAppointment(appointmentDTO, appointmentId);
+                    Console.WriteLine(appointmentId);
                     if(context.Appointments.Find(appointmentId) != null)
                     {
                         var bookingPayment = new BookingPayment
@@ -57,14 +74,19 @@ namespace PetHealthcare.Server.APIs.Controllers
                             AppointmentId = appointmentId,
                         };
                         context.BookingPayments.Add(bookingPayment);
-                    }else
+                        context.paymentResponseModels.Add(response);
+                    }
+                    else
                     {
                         Debug.WriteLine("Add appointment failed");
                     }
                     
+                } else
+                {
+                    Debug.WriteLine("Transaction failed" + response.VnPayResponseCode);
                 }
-            
-                context.paymentResponseModels.Add(response);
+                appointmentDTO = null;
+                
                 context.SaveChanges();
             }
             catch (Exception ex)
