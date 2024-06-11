@@ -1,15 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Humanizer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.APIs.DTOS.AppointmentDTOs;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Services.Interfaces;
+using System.Data;
 using System.Diagnostics;
 
 namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Staff,Admin")]
+
     public class AppointmentController : ControllerBase
     {
         private readonly IAppointmentService _appointment;
@@ -21,7 +26,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // GET: api/Services
         [HttpGet]
-        public async Task<IEnumerable<Appointment>> GetAllAppointment()
+        public async Task<IEnumerable<GetAllAppointmentForAdminDTO>> GetAllAppointment()
         {
             return await _appointment.GetAllAppointment();
         }
@@ -39,39 +44,67 @@ namespace PetHealthcare.Server.APIs.Controllers
 
             return appointment;
         }
+        [HttpGet("admin/{accountId}")]
+        [Authorize(Roles ="Admin")]
+        public async Task<ActionResult<GetAllAppointmentForAdminDTO>> GetAllAppointmentForAdminByAccountId([FromRoute]string accountId)
+        {
+            if(accountId == null)
+            {
+                return BadRequest(new { message = "Account id must not null" });
+            }
+            var appointmentList = await _appointment.GetAllAppointmentByAccountId(accountId);
+            if (appointmentList.Count() == 0)
+            {
+                return NotFound(new { message = "Can't find that account id or Account don't have any appointment" });
+            }
+            return Ok(appointmentList);
+        }
 
         [HttpGet("AppointmentList/{accountId}")]
-        public async Task<IEnumerable<ResAppListForCustomer>> GetCustomerAppointmentList([FromRoute] string accountId)
+        [Authorize(Roles = "Customer,Admin")]
+        public async Task<ActionResult<IEnumerable<ResAppListForCustomer>>> GetCustomerAppointmentList([FromRoute] string accountId, string listType)
         {
-            return await _appointment.getAllCustomerAppList(accountId);
+            if (!listType.Equals("history", StringComparison.OrdinalIgnoreCase)
+                &&
+               !listType.Equals("current", StringComparison.OrdinalIgnoreCase))
+            {
+                return BadRequest(new { message = "listType must be current or history" });
+            }
+            var appointmentList = await _appointment.getAllCustomerAppointment(accountId,listType);
+            if(appointmentList.Count() == 0)
+            {
+                return NotFound(new {message="Can't find that account id or Account don't have any appointment yet"});
+            }
+            return Ok(appointmentList);
         }
-        [HttpGet("AppointmentList/AppointmentHistory/{accountId}")]
-        public async Task<IEnumerable<ResAppListForCustomer>> GetCustomerAppointmentHistory([FromRoute] string accountId)
+
+        [HttpGet("AppointmentList/{accountId}&{typeOfSorting}&{orderBy}")]
+        [Authorize(Roles = "Customer,Admin")]
+        public async Task<ActionResult<IEnumerable<ResAppListForCustomer>>> GetSortedListByDate(string accountId, string typeOfSorting, string orderBy="asc")
         {
-            return await _appointment.getAllCustomerAppHistory(accountId);
-        }
-        [HttpGet("AppointmentList/AppointmentHistory/{accountId}/{typeOfSorting}/{orderBy}")]
-        public async Task<ActionResult<IEnumerable<ResAppListForCustomer>>> GetSortedListByDate(string accountId, string typeOfSorting, string orderBy)
-        {
-            if(!typeOfSorting.Equals("history",StringComparison.OrdinalIgnoreCase)
+            if (!typeOfSorting.Equals("history", StringComparison.OrdinalIgnoreCase)
                 &&
                !typeOfSorting.Equals("current", StringComparison.OrdinalIgnoreCase))
             {
-                return BadRequest(new {message = "typeOfSorting must be current or history"});
+                return BadRequest(new { message = "typeOfSorting must be current or history" });
             }
-            if(!orderBy.Equals("asc", StringComparison.OrdinalIgnoreCase)
+            if (!orderBy.Equals("asc", StringComparison.OrdinalIgnoreCase)
                 &&
                !orderBy.Equals("desc", StringComparison.OrdinalIgnoreCase))
             {
                 return BadRequest(new { message = "orderBy must be asc or desc" });
             }
             var sortedAppointment = await _appointment.SortAppointmentByDate(accountId, typeOfSorting, orderBy);
+            if(sortedAppointment == null)
+            {
+                return NotFound(new { message = "Can't find that account id" });
+            }
             return Ok(sortedAppointment);
         }
         // PUT: api/Services/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAppointment([FromRoute] string id, [FromBody] AppointmentDTO toUpdateAppointment)
+        public async Task<IActionResult> UpdateAppointment([FromRoute] string id, [FromBody] CustomerAppointmentDTO toUpdateAppointment)
         {
             var appointment = await _appointment.GetAppointmentByCondition(a => a.AppointmentId.Equals(id));
             if (appointment == null)
@@ -79,9 +112,6 @@ namespace PetHealthcare.Server.APIs.Controllers
                 return NotFound(new {message ="Update fail, appointment not found"});
             } else if(!_appointment.isVetIdValid(toUpdateAppointment.VeterinarianAccountId)) { 
                 return BadRequest(new {message = "Invalid foreign key VetId"});
-            } else if(toUpdateAppointment.BookingPrice <= 0)
-            {
-                return BadRequest(new {message = "Price must be higher than 0"});
             }
             await _appointment.UpdateAppointment(id, toUpdateAppointment);
             return Ok(toUpdateAppointment);
@@ -90,7 +120,8 @@ namespace PetHealthcare.Server.APIs.Controllers
         // POST: api/Services
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Appointment>> CreateAppointment([FromBody] AppointmentDTO toCreateAppointment)
+        [Authorize(Roles = "Customer,Staff,Admin")]
+        public async Task<ActionResult<GetAllAppointmentDTOs>> CreateAppointment([FromBody] CreateAppointmentDTO toCreateAppointment)
         {
             string id = _appointment.GenerateId();
             await _appointment.CreateAppointment(toCreateAppointment,id);
@@ -100,7 +131,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // DELETE: api/Services/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteService([FromRoute] string id)
+        public async Task<IActionResult> DeleteApppointment([FromRoute] string id)
         {
             var appointment = await _appointment.GetAppointmentByCondition(a => a.AppointmentId.Equals(id));
             if (appointment == null)

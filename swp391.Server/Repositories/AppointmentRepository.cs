@@ -35,7 +35,7 @@ namespace PetHealthcare.Server.Repositories
 
         public async Task<IEnumerable<Appointment>> GetAll()
         {
-            return await context.Appointments.Include(a => a.Pet).Include(a=> a.Veterinarian).Include(a => a.TimeSlot).ToListAsync();
+            return await context.Appointments.Include(a => a.Pet).Include(a => a.Veterinarian).Include(a => a.TimeSlot).ToListAsync();
         }
 
         public async Task<Appointment?> GetByCondition(Expression<Func<Appointment, bool>> expression)
@@ -58,8 +58,6 @@ namespace PetHealthcare.Server.Repositories
 
                 appointment.AppointmentDate = entity.AppointmentDate;
                 appointment.AppointmentNotes = entity.AppointmentNotes;
-                appointment.AppointmentType = entity.AppointmentType;
-                appointment.BookingPrice = entity.BookingPrice;
                 appointment.TimeSlotId = entity.TimeSlotId;
                 appointment.VeterinarianAccountId = entity.VeterinarianAccountId;
                 await SaveChanges();

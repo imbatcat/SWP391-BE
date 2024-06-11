@@ -84,13 +84,15 @@ VALUES
 ('PE-00000005', N'https://example.com/pet5.jpg', N'Simba', N'Maine Coon','1929-03-01', N'Playful and sociable', 1, 1, N'Rabies, Feline Leukemia, FIV', 0, 'AC-00000001');
 GO
 
-INSERT INTO [dbo].[Appointments] (AppointmentId, AccountId, AppointmentDate, PetId, VeterinarianAccountId, TimeSlotId, AppointmentType, AppointmentNotes, BookingPrice)
+INSERT INTO [dbo].[Appointments] (AppointmentId, AccountId, AppointmentDate, PetId, VeterinarianAccountId, TimeSlotId, AppointmentType, AppointmentNotes, BookingPrice, IsCancel, IsCheckIn,CheckinTime, IsCheckUp)
 VALUES
-('AP-00000001', 'AC-00000001', '2024-03-24', 'PE-00000001', 'VE-00000000', 1, 'Deposit', 'My pet is sneezing and watery eyes', 500000),
-('AP-00000002', 'AC-00000001', '2024-04-27', 'PE-00000002', 'VE-00000004', 2, 'Deposit', 'My cat loss of appetite', 700000),
-('AP-00000003', 'AC-00000001', '2024-05-12', 'PE-00000003', 'VE-00000000', 3, 'Deposit', 'I think my pet is stressed', 100000),
-('AP-00000004', 'AC-00000003', '2024-05-15', 'PE-00000004', 'VE-00000004', 4, 'Deposit', 'Scratching, skin irritation', 1000000),
-('AP-00000005', 'AC-00000003', '2024-05-26', 'PE-00000005', 'VE-00000000', 5, 'Deposit', 'Irregular bathroom habits, dehydration', 1000000);
+('AP-00000001', 'AC-00000001', '2024-03-24', 'PE-00000001', 'VE-00000000', 1, 'Deposit', 'My pet is sneezing and watery eyes', 500000,0,1,'07:30:00',1),
+('AP-00000002', 'AC-00000001', '2024-04-27', 'PE-00000002', 'VE-00000004', 2, 'Deposit', 'My cat loss of appetite', 700000,0,1,'08:30:00',1),
+('AP-00000003', 'AC-00000001', '2024-05-12', 'PE-00000003', 'VE-00000000', 3, 'Deposit', 'I think my pet is stressed', 100000,0,1,'11:00:00',1),
+('AP-00000004', 'AC-00000003', '2024-05-15', 'PE-00000004', 'VE-00000004', 4, 'Deposit', 'Scratching, skin irritation', 1000000,0,1,'13:30:00',1),
+('AP-00000005', 'AC-00000003', '2024-05-26', 'PE-00000005', 'VE-00000000', 5, 'Deposit', 'Irregular bathroom habits, dehydration',1000000,0,1,'15:00:00',1),
+('AP-00000006', 'AC-00000001','2024-08-07','PE-00000001', 'VE-00000000',1,'Deposit','It cannot stop sneezing',	2222,0,0,'00:00:00',0),
+('AP-00000007','AC-00000001','2024-09-02','PE-00000004','VE-00000004',2,'FullyPaid','My pet cannot eat anything',2222,0,0,'00:00:00',0)
 GO
 
 INSERT INTO [dbo].[BookingPayments] (PaymentId, Price, PaymentMethod, PaymentDate, AppointmentId)

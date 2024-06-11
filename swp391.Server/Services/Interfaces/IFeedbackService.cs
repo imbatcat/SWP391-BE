@@ -9,6 +9,7 @@ namespace PetHealthcare.Server.Services.Interfaces
         Task<Feedback?>? GetFeedbackByCondition(Expression<Func<Feedback, bool>> expression);
         Task CreateFeedback(FeedbackDTO Feedback);
         //void deleteFeedback(Feedback Feedback);
+        Task<IEnumerable<Feedback>> GetFeedbacksByUserName(string cusName);
 
     }
 }

@@ -25,6 +25,11 @@ namespace PetHealthcare.Server.Models
         [DataType(DataType.Currency)]
         public double BookingPrice { get; set; }
 
+        public bool IsCancel { get; set; } = false;
+
+        public bool IsCheckIn { get; set; } = false;
+        public bool IsCheckUp { get; set; } = false;
+        public TimeOnly CheckinTime {  get; set; } = new TimeOnly(0,0,0);
         // Reference entities
 
         // Adding restrict behavior will restrain from accidental deletion from Account and Pet, avoiding the deletion cycle

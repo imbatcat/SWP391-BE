@@ -8,7 +8,6 @@ namespace PetHealthcare.Server.Repositories
     public class PetRepository : IPetRepository
     {
         private readonly PetHealthcareDbContext context;
-
         public PetRepository(PetHealthcareDbContext context)
         {
             this.context = context;
@@ -25,9 +24,15 @@ namespace PetHealthcare.Server.Repositories
             await SaveChanges();
         }
 
-        public void Delete(Pet entity)
+        public async Task Delete(Pet entity)
         {
-            context.Pets.Remove(entity);
+            var pet = await GetByCondition(e => e.PetId == entity.PetId);
+            if (pet != null)
+            {
+                context.Entry(pet).State = EntityState.Modified;
+                pet.IsDisabled=entity.IsDisabled;
+                await SaveChanges();
+            }
         }
 
         public async Task<IEnumerable<Pet>> GetAll()
@@ -58,12 +63,61 @@ namespace PetHealthcare.Server.Repositories
         {
             return context.Pets.FirstOrDefault(a => a.PetId == id);
         }
-
-        public async Task<IEnumerable<Pet>> GetAccountPets(string id)
+        public async Task<bool> petExist(Pet pet)
         {
-            return await context.Pets.Where(p => p.AccountId == id).ToListAsync();
+            return await context.Pets.AnyAsync(
+             p => p.PetName == pet.PetName &&
+             p.PetBreed == pet.PetBreed &&
+             p.IsMale == pet.IsMale &&
+             p.IsCat == pet.IsCat &&
+             p.AccountId == pet.AccountId);
+        }
+        public bool CheckMedicalRecord(string medRecId)
+        {
+            return context.MedicalRecords.Any(m => m.PetId == medRecId);
+        }
+        public async Task<IEnumerable<MedicalRecord>> GetMedicalRecordsByPet(string petId)
+        {
+            if (!CheckMedicalRecord(petId))
+            {
+                return null;
+            }
+            var list = await context.MedicalRecords.ToListAsync();
+            List<MedicalRecord> medicalRecords = new List<MedicalRecord>();
+            foreach (MedicalRecord medRec in list)
+            {
+                if (medRec.PetId == petId)
+                {
+                    medicalRecords.Add(medRec);
+                }
+            }
+            return medicalRecords;
+        }
+        public bool CheckAdmissionRecord(string admissionRecId)
+        {
+            return context.AdmissionRecords.Any(a => a.PetId == admissionRecId);
+        }
+        public async Task<IEnumerable<AdmissionRecord>> GetAdmissionRecordsByPet(string petId)
+        {
+            if (!CheckAdmissionRecord(petId))
+            {
+                return null;
+            }
+            var list = await context.AdmissionRecords.ToListAsync();
+            List<AdmissionRecord> admissionRecords = new List<AdmissionRecord>();
+            foreach (AdmissionRecord admRec in list)
+            {
+                if (admRec.PetId == petId)
+                {
+                    admissionRecords.Add(admRec);
+                }
+            }
+            return admissionRecords;
         }
 
-
+        void IRepositoryBase<Pet>.Delete(Pet entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

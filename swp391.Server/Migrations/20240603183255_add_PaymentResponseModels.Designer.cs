@@ -11,8 +11,13 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace PetHealthcare.Server.Migrations
 {
     [DbContext(typeof(PetHealthcareDbContext))]
+<<<<<<<< HEAD:swp391.Server/Migrations/20240603183255_add_PaymentResponseModels.Designer.cs
     [Migration("20240603183255_add_PaymentResponseModels")]
     partial class add_PaymentResponseModels
+========
+    [Migration("20240611142541_db01")]
+    partial class db01
+>>>>>>>> BE-Dev:swp391.Server/Migrations/20240611142541_db01.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -98,7 +103,7 @@ namespace PetHealthcare.Server.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("char(11)");
 
-                    b.Property<DateOnly>("AdmissionDate")
+                    b.Property<DateOnly?>("AdmissionDate")
                         .HasColumnType("date");
 
                     b.Property<int>("CageId")
@@ -162,6 +167,18 @@ namespace PetHealthcare.Server.Migrations
 
                     b.Property<double>("BookingPrice")
                         .HasColumnType("float");
+
+                    b.Property<TimeOnly>("CheckinTime")
+                        .HasColumnType("time");
+
+                    b.Property<bool>("IsCancel")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsCheckIn")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsCheckUp")
+                        .HasColumnType("bit");
 
                     b.Property<string>("PetId")
                         .IsRequired()

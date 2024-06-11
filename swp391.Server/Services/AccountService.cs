@@ -45,16 +45,31 @@ namespace PetHealthcare.Server.Services
                 PhoneNumber = Account.PhoneNumber,
                 RoleId = Account.RoleId,
                 IsMale = Account.IsMale,
-                JoinDate = new DateOnly()
+                JoinDate = new DateOnly(),
+                IsDisabled = true
             };
 
-            await _accountService.Create(_account);
+            try
+            {
+                await _accountService.Create(_account);
+            } catch (BadHttpRequestException ex)
+            {
+                throw new BadHttpRequestException(
+                    ex.Message,
+                    ex.StatusCode,
+                    ex.InnerException);
+            }
             return _account;
         }
 
-        public void DeleteAccount(Account Account)
+        public async Task DeleteAccount(Account Account)
         {
-            throw new NotImplementedException();
+            var _account=new Account 
+            {
+                AccountId=Account.AccountId,
+                IsDisabled = true 
+            };
+            await _accountService.DeleteAccount(_account);
         }
 
         public async Task<Account?> GetAccountByCondition(Expression<Func<Account, bool>> expression)
@@ -101,12 +116,9 @@ namespace PetHealthcare.Server.Services
             return prefix + id;
         }
 
-        public async Task<Account?> LoginAccount()
+        public async Task<bool> SetAccountIsDisabled(RequestAccountDisable account)
         {
-            // if get successfully return account, else throw 
-            // new InvalidCredentialsException exception (each for incorrect username and incorrect password)
-            //
-            return null;
+            return await _accountService.SetAccountIsDisabled(account);
         }
     }
 }

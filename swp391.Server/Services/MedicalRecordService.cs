@@ -60,14 +60,11 @@ namespace PetHealthcare.Server.Services
         {
             var medicalRec = new MedicalRecord
             {
-                MedicalRecordId = GenerateID(),
-                PetWeight = medicalRecord.PetWeight,
+                MedicalRecordId = id,
                 Symptoms = medicalRecord.Symptoms,
                 Allergies = medicalRecord.Allergies,
                 Diagnosis = medicalRecord.Diagnosis,
                 AdditionalNotes = medicalRecord.AdditionallNotes,
-                FollowUpAppointmentDate = DateOnly.FromDateTime(medicalRecord.FollowUpAppointmentDate ?? DateTime.Now),
-                FollowUpAppointmentNotes = medicalRecord.FollowUpAppointmentNotes,
                 DrugPrescriptions = medicalRecord.DrugPrescription,
             };
             await medRecService.Update(medicalRec);

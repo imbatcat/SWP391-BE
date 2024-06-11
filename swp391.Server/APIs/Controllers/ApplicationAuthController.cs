@@ -2,12 +2,21 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.WebUtilities;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.APIs.DTOS.Auth;
 using PetHealthcare.Server.Models.ApplicationModels;
+using PetHealthcare.Server.Services;
 using PetHealthcare.Server.Services.Interfaces;
+using System.Text.Encodings.Web;
+using System.Text;
+using PetHealthcare.Server.Services.AuthInterfaces;
+using NuGet.Common;
+using PetHealthcare.Server.Helpers;
 
 [Authorize]
 [ApiController]
@@ -16,13 +25,19 @@ public class ApplicationAuthController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
-    private readonly IAccountService _context;
+    private readonly RoleManager<ApplicationRole> _roleManager;
+    private readonly IEmailSender _emailService;
+    private readonly IAccountService _accountService;
+    private readonly IAuthenticationService _authenticationService;
 
-    public ApplicationAuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IAccountService context)
+    public ApplicationAuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager, IEmailSender emailService, IAccountService context, IAuthenticationService authenticationService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
-        _context = context;
+        _roleManager = roleManager;
+        _emailService = emailService;
+        _accountService = context;
+        _authenticationService = authenticationService;
     }
 
     [AllowAnonymous]
@@ -37,17 +52,26 @@ public class ApplicationAuthController : ControllerBase
                 Email = registerAccount.Email,
                 AccountFullname = registerAccount.FullName,
             };
-            var result = await _userManager.CreateAsync(user, registerAccount.Password);
-            if (result.Succeeded)
-            {
-                await _context.CreateAccount(registerAccount);
-                await _signInManager.SignInAsync(user, isPersistent: false);
-                return Ok(new { message = "User registered successfully" });
-            }
 
-            foreach (var error in result.Errors)
+            try
             {
-                ModelState.AddModelError(string.Empty, error.Description);
+                var account = await _accountService.CreateAccount(registerAccount);
+                var role = Helpers.GetRole(registerAccount.RoleId);
+                var result = await _userManager.CreateAsync(user, registerAccount.Password);
+                if (result.Succeeded)
+                {
+                    await _authenticationService.SendConfirmationEmail(user.Id, user.Email);
+                    await _userManager.AddToRoleAsync(user, role);
+                    return Ok(new { message = "User registered successfully" });
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return BadRequest(ex);
             }
         }
 
@@ -56,13 +80,22 @@ public class ApplicationAuthController : ControllerBase
 
     [HttpPost("login")]
     [AllowAnonymous]
-    public async Task<ActionResult> Login([FromBody] LoginModel registerAccount)
+    public async Task<ActionResult> Login([FromBody] LoginModel loginAccount)
     {
         if (ModelState.IsValid)
         {
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-            var result = await _signInManager.PasswordSignInAsync(registerAccount.UserName, registerAccount.Password, registerAccount.RememberMe, lockoutOnFailure: false);
+            var user = await _userManager.FindByNameAsync(loginAccount.UserName);
+            if (user == null)
+            {
+                return BadRequest("No such username");
+            }
+            if (!user.EmailConfirmed)
+            {
+                return BadRequest("Account is not confirmed");
+            }
+            var result = await _signInManager.PasswordSignInAsync(loginAccount.UserName, loginAccount.Password, loginAccount.RememberMe, lockoutOnFailure: false);
             if (result.Succeeded)
             {
                 return Ok();
@@ -70,7 +103,7 @@ public class ApplicationAuthController : ControllerBase
         }
 
         // If we got this far, something failed, redisplay form
-        return BadRequest("Check username and password");
+        return BadRequest("Incorrect password");
     }
 
     [HttpPost("logout")]
@@ -79,5 +112,98 @@ public class ApplicationAuthController : ControllerBase
         await _signInManager.SignOutAsync();
         return Ok("User logged off");
     }
-    // Other custom endpoints (login, logout, etc.)
+
+    [AllowAnonymous]
+    [HttpGet("confirm-email")]
+    public async Task<IActionResult> ConfirmEmail([FromQuery] string userId, [FromQuery] string token)
+    {
+        byte[] base64EncodedBytes = Convert.FromBase64String(token);
+        string code = Encoding.UTF8.GetString(base64EncodedBytes);
+        var user = await _userManager.FindByIdAsync(userId);
+
+        var result = await _userManager.ConfirmEmailAsync(user, code);
+        if (result.Succeeded)
+        {
+            await _accountService.SetAccountIsDisabled(new RequestAccountDisable
+            {
+                username = user.UserName,
+                IsDisabled = false
+            });
+            await _signInManager.SignInAsync(user, isPersistent: false);
+        }
+        return Ok();
+    }
+
+    [AllowAnonymous]
+    [HttpPost("send-confirm-email")]
+    public async Task<IActionResult> SendConfirmEmail([FromBody] ConfirmReqUser user)
+    {
+        await _authenticationService.SendConfirmationEmail(user.UserId, user.Email);
+        return Ok();
+    }
+
+    [AllowAnonymous]
+    [HttpPost("send-reset-password-email")]
+    public async Task<IActionResult> SendForgotPasswordEmail([FromBody] PasswordReqUser user)
+    {
+        try
+        {
+
+            var _user = await _userManager.FindByEmailAsync(user.Email);
+            if (!(await _userManager.IsEmailConfirmedAsync(_user)))
+            {
+                return BadRequest("Account is not activated");
+            }
+            await _authenticationService.SendForgotPasswordEmail(_user, user.Email);
+
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        return Ok();
+    }
+
+    [AllowAnonymous]
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword([FromBody] RequestResetPassword entity)
+    {
+        var user = await _userManager.FindByIdAsync(entity.UserId);
+        IdentityResult result;
+        try
+        {
+            byte[] base64EncodedBytes = Convert.FromBase64String(entity.Token);
+            string code = Encoding.UTF8.GetString(base64EncodedBytes);
+            result = await _userManager.ResetPasswordAsync(user, code, entity.NewPassword);
+        }
+        catch (FormatException)
+        {
+            result = IdentityResult.Failed(_userManager.ErrorDescriber.InvalidToken());
+        }
+
+        if (!result.Succeeded)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok();
+    }
+    [AllowAnonymous]
+    //[Authorize(Roles = ("Admin"))]
+    [HttpGet("setrole")]
+    public async Task<IActionResult> SetRole([FromQuery] string userName, [FromQuery] string role)
+    {
+        try
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            await _userManager.AddToRoleAsync(user, role);
+
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
+
+        return Ok();
+    }
 }

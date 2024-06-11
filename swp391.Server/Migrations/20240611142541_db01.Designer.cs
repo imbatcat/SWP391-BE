@@ -11,15 +11,20 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace PetHealthcare.Server.Migrations
 {
     [DbContext(typeof(PetHealthcareDbContext))]
-    [Migration("20240530094220_db1")]
-    partial class db1
+<<<<<<<< HEAD:swp391.Server/Migrations/20240603183255_add_PaymentResponseModels.Designer.cs
+    [Migration("20240603183255_add_PaymentResponseModels")]
+    partial class add_PaymentResponseModels
+========
+    [Migration("20240611142541_db01")]
+    partial class db01
+>>>>>>>> BE-Dev:swp391.Server/Migrations/20240611142541_db01.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.5")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -98,7 +103,7 @@ namespace PetHealthcare.Server.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("char(11)");
 
-                    b.Property<DateOnly>("AdmissionDate")
+                    b.Property<DateOnly?>("AdmissionDate")
                         .HasColumnType("date");
 
                     b.Property<int>("CageId")
@@ -162,6 +167,18 @@ namespace PetHealthcare.Server.Migrations
 
                     b.Property<double>("BookingPrice")
                         .HasColumnType("float");
+
+                    b.Property<TimeOnly>("CheckinTime")
+                        .HasColumnType("time");
+
+                    b.Property<bool>("IsCancel")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsCheckIn")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsCheckUp")
+                        .HasColumnType("bit");
 
                     b.Property<string>("PetId")
                         .IsRequired()
@@ -315,6 +332,43 @@ namespace PetHealthcare.Server.Migrations
                     b.HasIndex("PetId");
 
                     b.ToTable("MedicalRecords");
+                });
+
+            modelBuilder.Entity("PetHealthcare.Server.Models.PaymentResponseModel", b =>
+                {
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("OrderDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrderId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Success")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VnPayResponseCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TransactionId");
+
+                    b.ToTable("paymentResponseModels");
                 });
 
             modelBuilder.Entity("PetHealthcare.Server.Models.Pet", b =>
