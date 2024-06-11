@@ -9,11 +9,11 @@ namespace PetHealthcare.Server.Models
 
         [DataType(DataType.Time)]
         [Required]
-        public TimeOnly StartTime { get; set; } = new TimeOnly();
+        public TimeOnly StartTime { get; set; }
 
         [DataType(DataType.Time)]
         [Required]
-        public TimeOnly EndTime { get; set; } = new TimeOnly();
+        public TimeOnly EndTime { get; set; } 
 
     }
 }

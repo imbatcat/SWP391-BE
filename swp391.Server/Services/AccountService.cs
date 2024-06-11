@@ -62,9 +62,14 @@ namespace PetHealthcare.Server.Services
             return _account;
         }
 
-        public void DeleteAccount(Account Account)
+        public async Task DeleteAccount(Account Account)
         {
-            throw new NotImplementedException();
+            var _account=new Account 
+            {
+                AccountId=Account.AccountId,
+                IsDisabled = true 
+            };
+            await _accountService.DeleteAccount(_account);
         }
 
         public async Task<Account?> GetAccountByCondition(Expression<Func<Account, bool>> expression)

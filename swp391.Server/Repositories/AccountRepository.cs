@@ -38,8 +38,7 @@ namespace PetHealthcare.Server.Repositories
 
         public async void Delete(Account entity)
         {
-            context.Accounts.Remove(entity);
-            await SaveChanges();
+            throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<Account>> GetAll()
@@ -107,6 +106,17 @@ namespace PetHealthcare.Server.Repositories
                 return true;
             }
             return false;
+        }
+
+        public async Task DeleteAccount(Account entity)
+        {
+            var acc=await GetByCondition(a => a.AccountId == entity.AccountId);
+            if (acc != null)
+            {
+                context.Entry(acc).State = EntityState.Modified;
+                acc.IsDisabled = entity.IsDisabled;
+                await SaveChanges();
+            }
         }
     }
 }

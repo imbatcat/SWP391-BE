@@ -39,5 +39,10 @@ namespace PetHealthcare.Server.Services
         {
             return await _feedbackService.GetByCondition(expression);
         }
+
+        public async Task<IEnumerable<Feedback>> GetFeedbacksByUserName(string cusName)
+        {
+            return await _feedbackService.GetFeedbacksByUserName(cusName);
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Services.Interfaces;
@@ -6,6 +7,7 @@ using PetHealthcare.Server.Services.Interfaces;
 namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(Roles ="Admin")]
     [ApiController]
     public class RolesController : ControllerBase
     {
@@ -50,14 +52,6 @@ namespace PetHealthcare.Server.APIs.Controllers
             }
             await _context.UpdateRole(id, toUpdateRole);
             return Ok(toUpdateRole);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<Role>> CreateService([FromBody] RoleDTO toCreateRole)
-        {
-            await _context.CreateRole(toCreateRole);
-
-            return Ok(toCreateRole);
         }
 
         // DELETE: api/Services/5
