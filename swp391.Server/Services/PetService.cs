@@ -9,12 +9,15 @@ namespace PetHealthcare.Server.Services
 {
     public class PetService : IPetService
     {
-        private readonly IPetService _context;
         private readonly IPetRepository _petService;
-        public PetService(IPetRepository petService)
+        private readonly IAdmissionRecordRepository _admissionRecordService;
+
+        public PetService(IPetRepository petService, IAdmissionRecordRepository admissionRecordService)
         {
             _petService = petService;
+            _admissionRecordService = admissionRecordService;
         }
+
         public async Task CreatePet(PetDTO pet)
         {
             var res = await ConfirmPetIdentity(pet.AccountId, pet);
@@ -33,12 +36,26 @@ namespace PetHealthcare.Server.Services
                 IsDisabled = pet.IsDisable,
                 AccountId = pet.AccountId
             };
-            await _petService.Create(_pet);
+            var checkPet = await _petService.petExist(_pet);
+            if (!checkPet)
+            {
+                await _petService.Create(_pet);
+            }
+            else
+            {
+                throw new BadHttpRequestException("An exited pet already had these values.");
+            }
         }
 
-        public void DeletePet(Pet pet)
+        public async Task DeletePet(Pet pet)
         {
-            _petService.Delete(pet);
+            var _pet=new Pet 
+            {
+                PetId=pet.PetId,
+                IsDisabled = true
+            };
+            await _petService.Delete(_pet);
+
         }
         public async Task<IEnumerable<Pet>> GetAllPets()
         {
@@ -47,12 +64,28 @@ namespace PetHealthcare.Server.Services
 
         public async Task<IEnumerable<Pet>> GetAccountPets(string id)
         {
-            return await _petService.GetAccountPets(id);
+            return null;
+            //return await _petService.GetAccountPets(id);
         }
 
         public async Task<Pet?> GetPetByCondition(Expression<Func<Pet, bool>> expression)
         {
             return await _petService.GetByCondition(expression);
+        }
+        public async Task<AdmissionRecord?> GetPetByName(Expression<Func<Pet, bool>> expression)
+        {
+            var _admissionRecords = await _admissionRecordService.GetAll();
+            var born = await _petService.GetByCondition(expression);  //----Long
+            AdmissionRecord save;
+            foreach (var item in _admissionRecords)
+            {
+
+                if (item.PetId.Equals(born.PetId))
+                {
+                    return save = item;
+                }
+            }
+            return null;
         }
 
         public async Task UpdatePet(string id, PetDTO pet)
@@ -65,7 +98,16 @@ namespace PetHealthcare.Server.Services
                 VaccinationHistory = pet.VaccinationHistory,
                 IsDisabled = pet.IsDisable
             };
-            await _petService.Update(_pet);
+            var checkPet = await _petService.petExist(_pet);
+            if (!checkPet)
+            {
+                await _petService.Update(_pet);
+            }
+            else
+            {
+                throw new BadHttpRequestException("An exited pet already had these values.");
+            }
+
         }
         public string GenerateID()
         {
@@ -73,14 +115,19 @@ namespace PetHealthcare.Server.Services
             string id = Nanoid.Generate(size: 8);
             return prefix + id;
         }
-
-        public async Task<bool> ConfirmPetIdentity(string AccountId, PetDTO newPet)
+        public async Task<IEnumerable<MedicalRecord>> GetMedicalRecordsByPet(string petId)
         {
-            // newPet's name, breed and isCat must not match any pets of this owner in the database
+            return await _petService.GetMedicalRecordsByPet(petId);
+        }
 
-            //get list of pet by accound id, then check if theres any pet in the database matches the 
-            //mentioned props of newPets, if yes then return false, true if otherwise. 
-            return false;
+        public Task<bool> ConfirmPetIdentity(string AccountId, PetDTO newPet)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<AdmissionRecord>> GetAdmissionRecordsByPet(string petId)
+        {
+            return await _petService.GetAdmissionRecordsByPet(petId);
         }
     }
 

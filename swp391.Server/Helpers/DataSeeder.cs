@@ -13,7 +13,7 @@ namespace PetHealthcare.Server.Helpers
         {
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             optionsBuilder.UseSqlServer(
-                 $"Data Source={DataSrc}; User = sa; Password ={Pass};" +
+                 $"Data Source={DataSrc}; User = sa; Password = {Pass};" +
                  $"Initial Catalog=PetHealthCareSystemAuth;Integrated Security=True;" +
                  $"Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;" +
                  $"Application Intent=ReadWrite;Multi Subnet Failover=False");

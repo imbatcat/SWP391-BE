@@ -7,7 +7,7 @@ using PetHealthcare.Server.Services.Interfaces;
 namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Roles = "User, Staff, Admin")]
+    [Authorize(Roles = "Customer, Staff, Admin, Vet")]
     [ApiController]
     public class PetsController : ControllerBase
     {
@@ -20,20 +20,23 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // GET: api/Pets
         [HttpGet("")]
-        [Authorize(Roles = "Admin, Staff")]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Pet>))]
         public async Task<IEnumerable<Pet>> GetPets()
         {
             return await _context.GetAllPets();
         }
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Pet>>> GetPets()
-        //{
-        //    return await _context.Pets.ToListAsync();
-        //}
 
-        // GET: api/Pets/5
+        //Get all medical Records of a Pet from Pet Id
+        [HttpGet("/api/medRecByPet/{petId}")]
+        [Authorize(Roles = "Vet, Admin, Customer")]
+        public async Task<IEnumerable<MedicalRecord>> GetMedicalRecordsByPet([FromRoute]string petId)
+        {
+            return await _context.GetMedicalRecordsByPet(petId);
+        }
+        /*Get single pet by a unique PetId*/
         [HttpGet("{id}")]
+        [Authorize(Roles="Staff, Customer, Admin")]
         public async Task<ActionResult<Pet>> GetPet([FromRoute] string id)
         {
             var pet = await _context.GetPetByCondition(a => a.PetId == id);
@@ -42,46 +45,30 @@ namespace PetHealthcare.Server.APIs.Controllers
             {
                 return NotFound();
             }
-
             return pet;
+        }
+
+        //Get all admission Records of a Pet from Pet Id
+        [HttpGet("/api/admRecByPet/{petId}")]
+        public async Task<IEnumerable<AdmissionRecord>> GetAdmissionRecordsByPet([FromRoute]string petId)
+        {
+            return await _context.GetAdmissionRecordsByPet(petId);
         }
 
         // PUT: api/Pets/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "Customer, Admin")]
         public async Task<IActionResult> PutPet(string id, PetDTO pet)
         {
             await _context.UpdatePet(id, pet);
-            //if (id != pet.PetId)
-            //{
-            //    return BadRequest();
-            //}
-
-            //_context.Entry(pet).State = EntityState.Modified;
-
-            //try
-            //{
-            //    await _context.SaveChangesAsync();
-            //}
-            //catch (DbUpdateConcurrencyException)
-            //{
-            //    if (!PetExists(id))
-            //    {
-            //        return NotFound();
-            //    }
-            //    else
-            //    {
-            //        throw;
-            //    }
-            //}
-
-            return NoContent();
+            return Ok(pet);
         }
 
         // POST: api/Pets
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles="Customer,Staff, Admin")]
         public async Task<ActionResult<Pet>> PostPet([FromBody] PetDTO petDTO)
         {
             await _context.CreatePet(petDTO);
@@ -106,7 +93,8 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // DELETE: api/Pets/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePet([FromRoute] string id)
+        [Authorize(Roles ="Customer,Admin")]
+        public async Task<ActionResult<Pet>> DeletePet([FromRoute] string id)
         {
             var pet = await _context.GetPetByCondition(a => a.PetId == id);
             if (pet == null)
@@ -114,9 +102,9 @@ namespace PetHealthcare.Server.APIs.Controllers
                 return NotFound();
             }
 
-            _context.DeletePet(pet);
+            await _context.DeletePet(pet);
 
-            return NoContent();
+            return Ok(pet);
         }
     }
 }

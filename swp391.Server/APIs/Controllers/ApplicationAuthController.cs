@@ -126,7 +126,7 @@ public class ApplicationAuthController : ControllerBase
     }
 
     [AllowAnonymous]
-    [HttpGet("confirmemail")]
+    [HttpGet("confirm-email")]
     public async Task<IActionResult> ConfirmEmail([FromQuery] string userId, [FromQuery] string token)
     {
         byte[] base64EncodedBytes = Convert.FromBase64String(token);
@@ -147,7 +147,7 @@ public class ApplicationAuthController : ControllerBase
     }
 
     [AllowAnonymous]
-    [HttpPost("sendconfirmemail")]
+    [HttpPost("send-confirm-email")]
     public async Task<IActionResult> SendConfirmEmail([FromBody] ConfirmReqUser user)
     {
         await _authenticationService.SendConfirmationEmail(user.UserId, user.Email);
@@ -155,7 +155,7 @@ public class ApplicationAuthController : ControllerBase
     }
 
     [AllowAnonymous]
-    [HttpPost("forgot-password")]
+    [HttpPost("send-reset-password-email")]
     public async Task<IActionResult> SendForgotPasswordEmail([FromBody] PasswordReqUser user)
     {
         try

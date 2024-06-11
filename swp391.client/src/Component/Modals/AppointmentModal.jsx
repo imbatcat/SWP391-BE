@@ -8,29 +8,23 @@ import {
     MDBModalTitle
 } from 'mdb-react-ui-kit';
 import { useState } from 'react';
-import AppointmentForm from '../Modals/AppointmentForm';
+import AppointmentForm from '../Modals/AppointmentModalForm';
 
-function AppointmentModal() {
-    const [basicModal, setBasicModal] = useState(false);
-
-    const toggleOpen = () => setBasicModal(!basicModal);
+function AppointmentModal({ toggleOpen }) {
 
     return (
         <>
-            <MDBBtn outline color='dark' onClick={toggleOpen} floating size='lg'>+</MDBBtn>
-            <MDBModal open={basicModal} onClose={() => setBasicModal(false)} tabIndex='-1'>
-                <MDBModalDialog>
-                    <MDBModalContent>
-                        <MDBModalHeader >
-                            <MDBModalTitle>Appointment Information</MDBModalTitle>
-                            <MDBBtn className='btn-close' color='none' onClick={toggleOpen}></MDBBtn>
-                        </MDBModalHeader>
-                        <MDBModalBody>
-                            <AppointmentForm></AppointmentForm>
-                        </MDBModalBody>
-                    </MDBModalContent>
-                </MDBModalDialog>
-            </MDBModal>
+            <MDBModalDialog>
+                <MDBModalContent>
+                    <MDBModalHeader >
+                        <MDBModalTitle>Appointment Information</MDBModalTitle>
+                        <MDBBtn className='btn-close' color='none' onClick={toggleOpen}></MDBBtn>
+                    </MDBModalHeader>
+                    <MDBModalBody>
+                        <AppointmentForm></AppointmentForm>
+                    </MDBModalBody>
+                </MDBModalContent>
+            </MDBModalDialog>
         </>
     );
 }
