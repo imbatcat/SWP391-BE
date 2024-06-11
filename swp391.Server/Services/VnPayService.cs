@@ -1,4 +1,5 @@
-﻿using PetHealthcare.Server.Models;
+﻿using PetHealthcare.Server.APIs.DTOS.AppointmentDTOs;
+using PetHealthcare.Server.Models;
 
 namespace PetHealthcare.Server.Services
 {
@@ -10,7 +11,7 @@ namespace PetHealthcare.Server.Services
         {
             _configuration = configuration;
         }
-        public string CreatePaymentUrl(PaymentInformationModel model, HttpContext context)
+        public string CreatePaymentUrl(AppointmentDTO model, HttpContext context)
         {
             var timeZoneById = TimeZoneInfo.FindSystemTimeZoneById(_configuration["TimeZoneId"]);
             var timeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneById);
@@ -26,7 +27,7 @@ namespace PetHealthcare.Server.Services
             pay.AddRequestData("vnp_CurrCode", _configuration["Vnpay:CurrCode"]);
             pay.AddRequestData("vnp_IpAddr", pay.GetIpAddress(context));
             pay.AddRequestData("vnp_Locale", _configuration["Vnpay:Locale"]);
-            pay.AddRequestData("vnp_OrderInfo", $"{model.Name} {model.OrderDescription} {model.Amount}");
+            pay.AddRequestData("vnp_OrderInfo", $"{model.AccountId} paid {model.Amount} through VNPay");
             pay.AddRequestData("vnp_OrderType", model.OrderType);
             pay.AddRequestData("vnp_ReturnUrl", urlCallBack);
             pay.AddRequestData("vnp_TxnRef", tick);

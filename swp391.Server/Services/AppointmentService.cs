@@ -24,7 +24,7 @@ namespace PetHealthcare.Server.Services
             string id = Nanoid.Generate(size: 8);
             return prefix + id;
         }
-        public async Task CreateAppointment(AppointmentDTO appointment)
+        public async Task CreateAppointment(AppointmentDTO appointment, string id)
         {
             Appointment toCreateAppointment = new Appointment
             {
@@ -34,9 +34,12 @@ namespace PetHealthcare.Server.Services
                 BookingPrice = appointment.BookingPrice,
                 PetId = appointment.PetId,
                 VeterinarianAccountId = appointment.VeterinarianAccountId,
-                AppointmentId = GenerateId(),
+                AppointmentId = id,
                 AccountId = appointment.AccountId,
-                TimeSlotId = appointment.TimeSlotId
+                TimeSlotId = appointment.TimeSlotId,
+                IsCancel = false,
+                IsCheckIn = false,
+                IsCheckUp = false,
             };
             await _appointmentRepository.Create(toCreateAppointment);
         }

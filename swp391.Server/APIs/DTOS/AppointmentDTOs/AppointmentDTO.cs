@@ -11,6 +11,8 @@
         public string VeterinarianAccountId { get; set; }
 
         public int TimeSlotId { get; set; }
+        public string OrderType { get; set; }
+        public double Amount { get; set; }
 
     }
 }

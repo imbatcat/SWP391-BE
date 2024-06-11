@@ -24,7 +24,7 @@ public class VnPayLibrary
                 vnPay.AddResponseData(key, value);
             }
         }
-        DateTime time = DateTime.Now;
+        DateOnly time = DateOnly.FromDateTime(DateTime.Now);
         var orderId = Convert.ToInt64(vnPay.GetResponseData("vnp_TxnRef"));
         var vnPayTranId = Convert.ToInt64(vnPay.GetResponseData("vnp_TransactionNo"));
         var vnpResponseCode = vnPay.GetResponseData("vnp_ResponseCode");

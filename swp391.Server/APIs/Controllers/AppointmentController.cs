@@ -92,9 +92,11 @@ namespace PetHealthcare.Server.APIs.Controllers
         [HttpPost]
         public async Task<ActionResult<Appointment>> CreateAppointment([FromBody] AppointmentDTO toCreateAppointment)
         {
-            await _appointment.CreateAppointment(toCreateAppointment);
+            string id = _appointment.GenerateId();
+            await _appointment.CreateAppointment(toCreateAppointment,id);
             return Ok(toCreateAppointment);
         }
+
 
         // DELETE: api/Services/5
         [HttpDelete("{id}")]

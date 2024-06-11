@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Build.Execution;
 using Microsoft.EntityFrameworkCore;
+using PetHealthcare.Server.APIs.Controllers;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Models.ApplicationModels;
 using PetHealthcare.Server.Repositories;
@@ -54,6 +55,7 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IMedicalRecordService, MedicalRecordService>();
 builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
 builder.Services.AddScoped<IVnPayService, VnPayService>();
+builder.Services.AddScoped<AppointmentService>();
 #endregion
 
 #region Cookie config
