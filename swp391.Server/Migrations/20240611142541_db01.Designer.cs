@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace PetHealthcare.Server.Migrations
 {
     [DbContext(typeof(PetHealthcareDbContext))]
-    [Migration("20240611065443_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240611142541_db01")]
+    partial class db01
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
