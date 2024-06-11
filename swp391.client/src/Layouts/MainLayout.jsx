@@ -29,7 +29,7 @@ function MainLayout({ children }) {
             </main>
             <div className="fixed-bottom-right">
                 <button className="static-button" data-tooltip-id="add-button" onClick={toggleOpen}>+</button>
-                <Tooltip id='add-button' content={location.pathname}></Tooltip>
+                <Tooltip id='add-button' content={'Make An Appointment'}></Tooltip>
 
                 <MDBModal open={basicModal} onClose={() => setBasicModal(false)} tabIndex='-1'>
                     <SelectModal toggleOpen={toggleOpen}>

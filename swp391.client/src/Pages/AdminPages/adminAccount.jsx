@@ -1,13 +1,20 @@
 import { useState, useEffect } from 'react';
 import { MDBBadge, MDBBtn, MDBTable, MDBTableBody, MDBTableHead, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBInput, MDBModalDialog, MDBModalContent, MDBModalTitle, MDBCol, MDBRow, MDBCheckbox, MDBContainer, MDBIcon } from 'mdb-react-ui-kit';
 import SideNav from '../../Component/SideNav/SideNav';
-
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import { Tooltip } from 'react-tooltip';
+import SelectModal from '../../Component/Modals/SelectModal';
+import CreateNewModalForm from '../../Component/Modals/CreateModalForm';
 
 
 function adminAccount() {
     const [accounts, setAccounts] = useState([]);
     const [selectedAccount, setSelectedAccount] = useState(null);
     const [basicModal, setBasicModal] = useState(false);
+    const [basicModalNew, setBasicModalNew] = useState(false);
     const [searchInput, setSearchInput] = useState('');
     const [filteredAccounts, setFilteredAccounts] = useState([]);
 
@@ -39,6 +46,9 @@ function adminAccount() {
     const toggleOpen = (account = null) => {
         setSelectedAccount(account);
         setBasicModal(!basicModal);
+    };
+    const toggleOpenNew = (account = null) => {
+        setBasicModalNew(!basicModalNew);
     };
 
     const handleInputChange = (e) => {
@@ -144,6 +154,14 @@ function adminAccount() {
                     ))}
                 </MDBTableBody>
             </MDBTable>
+            <div className="fixed-bottom-right">
+                <button className="static-button" data-tooltip-id="add-button" onClick={toggleOpen}>+</button>
+                <Tooltip id='add-button' content={location.pathname}></Tooltip>
+
+                <MDBModal open={basicModalNew} onClose={() => setBasicModalNew(false)} tabIndex='-1'>
+                    <CreateNewModalForm toggleOpen={toggleOpenNew}/>
+                </MDBModal>
+            </div>
 
             {selectedAccount && (
                 <MDBModal open={basicModal} onClose={() => setBasicModal(false)} tabIndex='-1'>
@@ -200,18 +218,6 @@ function adminAccount() {
 
                                     </MDBRow>
                                 </form>
-
-                                <MDBInput
-                                    type="select"
-                                    label="Gender"
-                                    name="isMale"
-                                    value={selectedAccount.isMale ? "Male" : "Female"}
-                                    onChange={(e) => handleInputChange({ target: { name: "isMale", value: e.target.value === "Male" } })}
-                                >
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                </MDBInput>
-
                             </MDBModalBody>
                             <MDBModalFooter>
                                 <MDBBtn color='secondary' onClick={toggleOpen}>Close</MDBBtn>
