@@ -51,10 +51,6 @@ namespace PetHealthcare.Server.Models
         public TimeSlot TimeSlot { get; set; }
         public int TimeSlotId { get; set; }
 
-        public bool IsCancel { get; set; }
-        public bool IsCheckIn {get;set;}
-        public bool IsCheckUp { get;set;}
-        public TimeOnly CheckinTime {get;set;}
         public virtual ICollection<BookingPayment> BookingPayments { get; set; }
 
 
