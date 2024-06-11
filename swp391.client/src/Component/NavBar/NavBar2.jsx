@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './NavBar2.css'
+import './NavBar2.css';
 import {
     MDBContainer,
     MDBNavbar,
@@ -80,7 +80,11 @@ export default function NavBar2() {
                                 </MDBDropdownToggle>
                                 <MDBDropdownMenu>
                                     <MDBDropdownItem link>My Appointment</MDBDropdownItem>
-                                    <MDBDropdownItem link>Make an Appointment</MDBDropdownItem>
+                                    <MDBDropdownItem link>
+                                        <Link to="/user/appointments">
+                                            <button>Make appointments</button>
+                                        </Link>
+                                    </MDBDropdownItem>
 
                                 </MDBDropdownMenu>
                             </MDBDropdown>

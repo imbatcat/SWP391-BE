@@ -1,23 +1,26 @@
 import {
     MDBBtn,
     MDBModal,
-    MDBModalBody,
-    MDBModalContent,
     MDBModalDialog,
+    MDBModalContent,
+    MDBContainer,
+    MDBRow,
+    MDBCol,
     MDBModalHeader,
-    MDBModalTitle
+    MDBModalTitle,
+    MDBModalBody,
+    MDBModalFooter,
 } from 'mdb-react-ui-kit';
 import { useState } from 'react';
-import AppointmentForm from '../Modals/AppointmentModalForm';
+import AppointmentForm from './AppointmentModalForm';
 
-function AppointmentModal({ toggleOpen }) {
-
+function PetModal({ toggleOpen }) {
     return (
         <>
             <MDBModalDialog>
                 <MDBModalContent>
                     <MDBModalHeader >
-                        <MDBModalTitle>Appointment Information</MDBModalTitle>
+                        <MDBModalTitle>Pet Information</MDBModalTitle>
                         <MDBBtn className='btn-close' color='none' onClick={toggleOpen}></MDBBtn>
                     </MDBModalHeader>
                     <MDBModalBody>
@@ -28,4 +31,5 @@ function AppointmentModal({ toggleOpen }) {
         </>
     );
 }
-export default AppointmentModal;
+
+export default PetModal;
