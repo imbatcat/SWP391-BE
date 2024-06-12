@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PetHealthcare.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class db1 : Migration
+    public partial class db01 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -156,12 +156,14 @@ namespace PetHealthcare.Server.Migrations
                     AppointmentType = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     AppointmentNotes = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     BookingPrice = table.Column<double>(type: "float", nullable: false),
+                    IsCancel = table.Column<bool>(type: "bit", nullable: false),
+                    IsCheckIn = table.Column<bool>(type: "bit", nullable: false),
+                    IsCheckUp = table.Column<bool>(type: "bit", nullable: false),
+                    CheckinTime = table.Column<TimeOnly>(type: "time", nullable: false),
                     AccountId = table.Column<string>(type: "char(11)", nullable: false),
                     PetId = table.Column<string>(type: "char(11)", nullable: false),
                     VeterinarianAccountId = table.Column<string>(type: "char(11)", nullable: false),
-                    TimeSlotId = table.Column<int>(type: "int", nullable: false),
-                    IsCancel = table.Column<bool>(type: "bit", nullable: false),
-                    IsCheckIn = table.Column<bool>(type: "bit", nullable: false)
+                    TimeSlotId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

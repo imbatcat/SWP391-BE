@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace PetHealthcare.Server.Migrations
 {
     [DbContext(typeof(PetHealthcareDbContext))]
-    [Migration("20240610102809_db1")]
-    partial class db1
+    [Migration("20240611142541_db01")]
+    partial class db01
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -163,10 +163,16 @@ namespace PetHealthcare.Server.Migrations
                     b.Property<double>("BookingPrice")
                         .HasColumnType("float");
 
+                    b.Property<TimeOnly>("CheckinTime")
+                        .HasColumnType("time");
+
                     b.Property<bool>("IsCancel")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsCheckIn")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsCheckUp")
                         .HasColumnType("bit");
 
                     b.Property<string>("PetId")

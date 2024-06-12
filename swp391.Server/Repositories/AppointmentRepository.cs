@@ -57,8 +57,6 @@ namespace PetHealthcare.Server.Repositories
 
                 appointment.AppointmentDate = entity.AppointmentDate;
                 appointment.AppointmentNotes = entity.AppointmentNotes;
-                appointment.AppointmentType = entity.AppointmentType;
-                appointment.BookingPrice = entity.BookingPrice;
                 appointment.TimeSlotId = entity.TimeSlotId;
                 appointment.VeterinarianAccountId = entity.VeterinarianAccountId;
                 await SaveChanges();
