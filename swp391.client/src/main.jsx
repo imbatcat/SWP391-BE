@@ -77,10 +77,11 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <AuthProvider>
-        <React.StrictMode>
+        {/*<React.StrictMode>*/}
+        {/*remove React.StrictMode for VNPay to function normally*/}
             <RouterProvider router={router} />
             <ToastContainer></ToastContainer>
-        </React.StrictMode>
+        {/*</React.StrictMode>*/}
     </AuthProvider>
 
 );
