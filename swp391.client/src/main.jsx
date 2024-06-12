@@ -9,7 +9,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { AuthProvider } from "./Context/AuthProvider";
 import Login from './Pages/Login/Login';
 /*import App from './App';*/
-import Home from './Pages/Home/Home'
+import Home from './Pages/Home/Home';
 import SignUp from './Pages/SignUp/SignUp';
 import AboutUs from './Pages/About Us/AboutUs';
 import Appointment from './Pages/Appointment/Appointment';
@@ -25,6 +25,7 @@ import AdminAccount from './Pages/AdminPages/adminAccount';
 import VetAccount from './Pages/AdminPages/VetAccount';
 import AppointmentManage from './Pages/AdminPages/AppointmentManage';
 import UsersAccount from './Pages/AdminPages/UsersAccount';
+import UserHistoricalAppointments from './Pages/Profile/UserHistoricalAppointments';
 import CheckAuth from './Helpers/CheckAuth';
 import AdminPet from './Pages/AdminPages/petManage';
 
@@ -102,6 +103,15 @@ const router = createBrowserRouter([
         errorElement: <div>404 Not Found</div>,
     },
     {
+        path: '/user/old-appointments',
+        element: (
+            <CheckAuth>
+                <UserHistoricalAppointments />
+            </CheckAuth>
+        ),
+        errorElement: <div>404 Not Found</div>,
+    },
+    {
         path: '/admin/vets',
         element: <VetAccount />,
         errorElement: <div>404 Not Found</div>,
@@ -122,7 +132,7 @@ const router = createBrowserRouter([
         errorElement: <div>404 Not Found</div>,
     },
 
-])
+]);
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <AuthProvider>

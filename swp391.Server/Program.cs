@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Identity;
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var config = builder.Configuration;
-const string DataSrc = "MIB\\MINHLUONG", Password = "12345";
+const string DataSrc = "MEOMATLON\\SQLEXPRESS", Password = "MukuroHoshimiya";
 
 
 // Add services to the container.
@@ -62,18 +62,6 @@ builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
 // Auth services
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
-#endregion
-
-#region Cookie config
-builder.Services.ConfigureApplicationCookie(options =>
-{
-    options.Cookie.HttpOnly = true;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    options.Cookie.SameSite = SameSiteMode.Strict;
-    options.Cookie.Name = "AspNetLogin";
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-    options.SlidingExpiration = true;
-});
 #endregion
 
 #region Cors

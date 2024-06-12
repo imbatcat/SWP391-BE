@@ -12,7 +12,7 @@ import {
     MDBModalFooter,
 } from 'mdb-react-ui-kit';
 import { useState } from 'react';
-import AppointmentForm from './AppointmentModalForm';
+import PetModalForm from './PetModalForm';
 
 function PetModal({ toggleOpen }) {
     return (
@@ -24,7 +24,7 @@ function PetModal({ toggleOpen }) {
                         <MDBBtn className='btn-close' color='none' onClick={toggleOpen}></MDBBtn>
                     </MDBModalHeader>
                     <MDBModalBody>
-                        <AppointmentForm></AppointmentForm>
+                        <PetModalForm></PetModalForm>
                     </MDBModalBody>
                 </MDBModalContent>
             </MDBModalDialog>

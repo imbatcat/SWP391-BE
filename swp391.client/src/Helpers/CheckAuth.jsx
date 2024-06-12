@@ -5,9 +5,13 @@ import React, { useState, useEffect } from 'react';
 
 function CheckAuth({ children }) {
     const [isAuthenticated, setIsAuthenticated] = useAuth();
+    //const [isToasted, setIsToasted] = useState(false);
 
     if (!isAuthenticated) {
-        toast.info('User session expired, please login');
+        //if (!isToasted) {
+        toast.info('Please login');
+        //setIsToasted(true);
+        //}
         return <Navigate to="/" />;
     }
 

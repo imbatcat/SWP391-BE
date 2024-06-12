@@ -23,18 +23,18 @@ import { useUser } from "../../Context/UserContext";
 import MainLayout from "../../Layouts/MainLayout";
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
-import UserSidebar from '../../Component/UserSidebar/UserSidebar';
+import UserSidebar from "../../Component/UserSidebar/UserSidebar";
 
-function UserPets() {
+function UserAppointments() {
     const [user, setUser] = useUser();
-    const [petList, setPetList] = useState([]);
+    const [appointmentList, setAppointmentList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [centredModal, setCentredModal] = useState(false);
-    const [selectedPet, setSelectedPet] = useState(null);
+    const [selectedAppointment, setSelectedAppointment] = useState(null);
 
-    const getPetList = async (user) => {
+    const getAppointmentList = async (user) => {
         try {
-            const response = await fetch(`https://localhost:7206/api/accounts/pets/${user.id}`, {
+            const response = await fetch(`https://localhost:7206/api/Appointment/AppointmentList/${user.id}&history`, {
                 method: 'GET', // *GET, POST, PUT, DELETE, etc.
                 headers: {
                     'Content-Type': 'application/json'
@@ -45,7 +45,7 @@ function UserPets() {
                 throw new Error("Error fetching data");
             }
             var userData = await response.json();
-            setPetList(userData);
+            setAppointmentList(userData);
             console.log(userData);
         } catch (error) {
             toast.error('Error getting user details!');
@@ -57,14 +57,14 @@ function UserPets() {
 
     useEffect(() => {
         if (user)
-            getPetList(user);
+            getAppointmentList(user);
     }, [user]);
 
     if (isLoading) {
         return <div>Loading...</div>; // Loading state
     }
-    const toggleOpen = (Pet = null) => {
-        setSelectedPet(Pet);
+    const toggleOpen = (Appointment = null) => {
+        setSelectedAppointment(Appointment);
         setCentredModal(!centredModal);
     };
     return (
@@ -72,47 +72,46 @@ function UserPets() {
             <MainLayout>
                 <section style={{ backgroundColor: '#eee' }}>
                     <MDBContainer className="py-5">
-
                         <MDBRow>
                             <MDBCol lg="4">
                                 <UserSidebar></UserSidebar>
-                            </MDBCol>
+                            </MDBCol >
+
                             <MDBCol>
                                 <MDBCard className="mb-4 mb-lg-0">
                                     <MDBCardBody className="p-0">
-                                        <div className='Pet-display-list'>
-                                            {petList.map((pet, index) => (
-                                                <div className="Pet-item" key={index}>
-                                                    <div className="Pet-item-img-container">
-                                                        <img className='Pet-item-image' src={pet.imgUrl} alt='pet image' />
-                                                    </div>
-                                                    <div className='Pet-info'>
-                                                        <div className='Pet-name-rating'>
-                                                            <p>{pet.petName}</p>
-                                                            <p>{pet.petBreed}</p>
+                                        <div className='Appointment-display-list'>
+                                            {appointmentList ? (
+                                                appointmentList.map((appointment, index) => (
+                                                    <div className="Appointment-item" key={appointment.id || index}>
+                                                        <div className='Appointment-info'>
+                                                            <div className='Appointment-name-rating'>
+                                                                <p>{appointment.petName}</p>
+                                                            </div>
+                                                            <MDBBtn color='muted' onClick={() => toggleOpen(appointment)}>
+                                                                Detail
+                                                            </MDBBtn>
                                                         </div>
-                                                        <>
-                                                            <MDBBtn color='muted' onClick={() => toggleOpen(pet)}>Detail</MDBBtn>
-                                                        </>
                                                     </div>
-                                                </div>
-                                            ))}
+                                                ))
+                                            ) : (
+                                                <div>No upcoming appointments</div>
+                                            )}
                                         </div>
 
                                         {
-                                            selectedPet && (
+                                            selectedAppointment && (
                                                 <MDBModal tabIndex='-1' open={centredModal} onClose={() => setCentredModal(false)}>
                                                     <MDBModalDialog centered>
                                                         <MDBModalContent>
                                                             <MDBModalHeader>
-                                                                <MDBModalTitle>Detail of {selectedPet.petName}</MDBModalTitle>
+                                                                <MDBModalTitle>Appointment for {selectedAppointment.petName}</MDBModalTitle>
                                                                 <MDBBtn className='btn-close' color='none' onClick={toggleOpen}></MDBBtn>
                                                             </MDBModalHeader>
                                                             <MDBModalBody>
-                                                                <p className='Pet-detail'>Age: {selectedPet.petAge}</p>
-                                                                <p className='Pet-detail'>Vaccination: {selectedPet.vaccinationHistory}</p>
-                                                                <p className='Pet-detail'>Gender: {selectedPet.isMale ? 'Male' : 'Female'}</p>
-                                                                <p className='Pet-detail'>Description: {selectedPet.description}</p>
+                                                                <p className='Appointment-detail'>Veterinarian: {selectedAppointment.veterinarianName}</p>
+                                                                <p className='Appointment-detail'>Time slot: {selectedAppointment.timeSlot}</p>
+                                                                <p className='Appointment-detail'>Booking price: {selectedAppointment.bookingPrice}</p>
                                                             </MDBModalBody>
                                                             <MDBModalFooter>
                                                             </MDBModalFooter>
@@ -132,4 +131,4 @@ function UserPets() {
     );
 }
 
-export default UserPets;
+export default UserAppointments;;

@@ -34,7 +34,7 @@ function UserAppointments() {
 
     const getAppointmentList = async (user) => {
         try {
-            const response = await fetch(`https://localhost:7206/api/accounts/pets/${user.id}`, {
+            const response = await fetch(`https://localhost:7206/api/Appointment/AppointmentList/${user.id}&current`, {
                 method: 'GET', // *GET, POST, PUT, DELETE, etc.
                 headers: {
                     'Content-Type': 'application/json'
@@ -53,12 +53,12 @@ function UserAppointments() {
         } finally {
             setIsLoading(false);
         }
-    }
+    };
 
     useEffect(() => {
         if (user)
             getAppointmentList(user);
-    }, [user])
+    }, [user]);
 
     if (isLoading) {
         return <div>Loading...</div>; // Loading state
@@ -81,22 +81,22 @@ function UserAppointments() {
                                 <MDBCard className="mb-4 mb-lg-0">
                                     <MDBCardBody className="p-0">
                                         <div className='Appointment-display-list'>
-                                            {appointmentList.map((appointment, index) => (
-                                                <div className="Appointment-item" key={index}>
-                                                    <div className="Appointment-item-img-container">
-                                                        <img className='Appointment-item-image' src={appointment.img} alt='' />
-                                                    </div>
-                                                    <div className='Appointment-info'>
-                                                        <div className='Appointment-name-rating'>
-                                                            <p>{appointment.appointmentName}</p>
-                                                            <p>{appointment.isCat ? 'Cat' : 'Dog'}</p>
+                                            {appointmentList ? (
+                                                appointmentList.map((appointment, index) => (
+                                                    <div className="Appointment-item" key={appointment.id || index}>
+                                                        <div className='Appointment-info'>
+                                                            <div className='Appointment-name-rating'>
+                                                                <p>{appointment.petName}</p>
+                                                            </div>
+                                                            <MDBBtn color='muted' onClick={() => toggleOpen(appointment)}>
+                                                                Detail
+                                                            </MDBBtn>
                                                         </div>
-                                                        <>
-                                                            <MDBBtn color='muted' onClick={() => toggleOpen(appointment)}>Detail</MDBBtn>
-                                                        </>
                                                     </div>
-                                                </div>
-                                            ))}
+                                                ))
+                                            ) : (
+                                                <div>No upcoming appointments</div>
+                                            )}
                                         </div>
 
                                         {
@@ -105,14 +105,13 @@ function UserAppointments() {
                                                     <MDBModalDialog centered>
                                                         <MDBModalContent>
                                                             <MDBModalHeader>
-                                                                <MDBModalTitle>Detail of {selectedAppointment.name}</MDBModalTitle>
+                                                                <MDBModalTitle>Appointment for {selectedAppointment.petName}</MDBModalTitle>
                                                                 <MDBBtn className='btn-close' color='none' onClick={toggleOpen}></MDBBtn>
                                                             </MDBModalHeader>
                                                             <MDBModalBody>
-                                                                <p className='Appointment-detail'>Age: {selectedAppointment.appointmentAge}</p>
-                                                                <p className='Appointment-detail'>Vaccination: {selectedAppointment.vaccinationHistory}</p>
-                                                                <p className='Appointment-detail'>Gender: {selectedAppointment.isMale ? 'Male' : 'Female'}</p>
-                                                                <p className='Appointment-detail'>Description: {selectedAppointment.description}</p>
+                                                                <p className='Appointment-detail'>Veterinarian: {selectedAppointment.veterinarianName}</p>
+                                                                <p className='Appointment-detail'>Time slot: {selectedAppointment.timeSlot}</p>
+                                                                <p className='Appointment-detail'>Booking price: {selectedAppointment.bookingPrice}</p>
                                                             </MDBModalBody>
                                                             <MDBModalFooter>
                                                             </MDBModalFooter>
@@ -132,4 +131,4 @@ function UserAppointments() {
     );
 }
 
-export default UserAppointments;
+export default UserAppointments;;

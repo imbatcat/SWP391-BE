@@ -12,7 +12,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Staff,Admin")]
+    [Authorize(Roles = "Staff,Admin,Customer")]
 
     public class AppointmentController : ControllerBase
     {
@@ -31,6 +31,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         // GET: api/Services/5
+        [Authorize(Roles = "Customer")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Appointment>> GetAppointmentByCondition(string id)
         {
@@ -43,25 +44,10 @@ namespace PetHealthcare.Server.APIs.Controllers
 
             return appointment;
         }
-        [HttpGet("admin/{accountId}")]
-        [Authorize(Roles ="Admin")]
-        public async Task<ActionResult<GetAllAppointmentForAdminDTO>> GetAllAppointmentForAdminByAccountId([FromRoute]string accountId)
-        {
-            if(accountId == null)
-            {
-                return BadRequest(new { message = "Account id must not null" });
-            }
-            var appointmentList = await _appointment.GetAllAppointmentByAccountId(accountId);
-            if (appointmentList.Count() == 0)
-            {
-                return NotFound(new { message = "Can't find that account id or Account don't have any appointment" });
-            }
-            return Ok(appointmentList);
-        }
 
-        [HttpGet("AppointmentList/{accountId}")]
+        [HttpGet("AppointmentList/{accountId}&{listType}")]
         [Authorize(Roles = "Customer,Admin")]
-        public async Task<ActionResult<IEnumerable<ResAppListForCustomer>>> GetCustomerAppointmentList([FromRoute] string accountId, string listType)
+        public async Task<ActionResult<IEnumerable<ResAppListForCustomer>>> GetCustomerAppointmentList([FromRoute] string accountId, [FromRoute] string listType)
         {
             if (!listType.Equals("history", StringComparison.OrdinalIgnoreCase)
                 &&
@@ -69,17 +55,17 @@ namespace PetHealthcare.Server.APIs.Controllers
             {
                 return BadRequest(new { message = "listType must be current or history" });
             }
-            var appointmentList = await _appointment.getAllCustomerAppointment(accountId,listType);
-            if(appointmentList.Count() == 0)
+            var appointmentList = await _appointment.getAllCustomerAppointment(accountId, listType);
+            if (appointmentList == null)
             {
-                return NotFound(new {message="Can't find that account id or Account don't have any appointment yet"});
+                return NotFound(new { message = "Can't find that account id" });
             }
             return Ok(appointmentList);
         }
 
         [HttpGet("AppointmentList/{accountId}&{typeOfSorting}&{orderBy}")]
         [Authorize(Roles = "Customer,Admin")]
-        public async Task<ActionResult<IEnumerable<ResAppListForCustomer>>> GetSortedListByDate(string accountId, string typeOfSorting, string orderBy="asc")
+        public async Task<ActionResult<IEnumerable<ResAppListForCustomer>>> GetSortedListByDate(string accountId, string typeOfSorting, string orderBy = "asc")
         {
             if (!typeOfSorting.Equals("history", StringComparison.OrdinalIgnoreCase)
                 &&
@@ -94,7 +80,7 @@ namespace PetHealthcare.Server.APIs.Controllers
                 return BadRequest(new { message = "orderBy must be asc or desc" });
             }
             var sortedAppointment = await _appointment.SortAppointmentByDate(accountId, typeOfSorting, orderBy);
-            if(sortedAppointment == null)
+            if (sortedAppointment == null)
             {
                 return NotFound(new { message = "Can't find that account id" });
             }
@@ -108,9 +94,11 @@ namespace PetHealthcare.Server.APIs.Controllers
             var appointment = await _appointment.GetAppointmentByCondition(a => a.AppointmentId.Equals(id));
             if (appointment == null)
             {
-                return NotFound(new {message ="Update fail, appointment not found"});
-            } else if(!_appointment.isVetIdValid(toUpdateAppointment.VeterinarianAccountId)) { 
-                return BadRequest(new {message = "Invalid foreign key VetId"});
+                return NotFound(new { message = "Update fail, appointment not found" });
+            }
+            else if (!_appointment.isVetIdValid(toUpdateAppointment.VeterinarianAccountId))
+            {
+                return BadRequest(new { message = "Invalid foreign key VetId" });
             }
             await _appointment.UpdateAppointment(id, toUpdateAppointment);
             return Ok(toUpdateAppointment);
