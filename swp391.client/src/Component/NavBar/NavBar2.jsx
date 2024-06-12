@@ -16,10 +16,12 @@ import {
     MDBCollapse,
 } from 'mdb-react-ui-kit';
 import { useAuth } from '../../Context/AuthProvider';
+import { useUser } from '../../Context/UserContext';
 import { toast } from 'react-toastify';
 
 export default function NavBar2() {
     const [isAuthenticated, setIsAuthenticated] = useAuth();
+    const [user, setUser] = useUser();
     const [openBasic, setOpenBasic] = useState(false);
     const navigate = useNavigate();
     const logout = async (e) => {

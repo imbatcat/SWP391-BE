@@ -11,7 +11,7 @@ import { MDBCol, MDBContainer, MDBIcon} from 'mdb-react-ui-kit';
 
 function SideNav({ searchInput, handleSearchInputChange }) {
     const [sidebar, setSidebar] = useState(false);
-    const [setIsAuthenticated] = useAuth();
+    const [isAuthenticated, setIsAuthenticated] = useAuth();
     const showSidebar = () => setSidebar(!sidebar);
     const navigate = useNavigate();
     const logout = async () => {

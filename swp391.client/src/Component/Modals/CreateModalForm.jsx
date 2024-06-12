@@ -7,38 +7,7 @@ import {
 } from 'mdb-react-ui-kit';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-async function register(lastname, firstname, username, phonenumber, dateOfBirth, password, gender, roleid, email, navigate) {
-    try {
-        const response = await fetch('https://localhost:7206/api/ApplicationAuth/register', {
-            method: 'POST', // *GET, POST, PUT, DELETE, etc.
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: 'include',
-            body: JSON.stringify(
-                {
-                    "userName": username,
-                    "password": password,
-                    "fullName": lastname + firstname,
-                    "email": email,
-                    "phoneNumber": phonenumber,
-                    "isMale": gender,
-                    "roleId": roleid,
-                    "dateOfBirth": dateOfBirth
-                }
-            ) // body data type must match "Content-Type" header
-        });
-        if (!response.ok) {
-            throw new Error(response.message);
-        }
-        toast.info("Check your email to activate your account");
-        navigate('/');
-        console.log('ok');
-    } catch (error) {
-        toast.error('Login failed!');
-        console.error(error.message);
-    }
-}
+
 function CreateModalForm() {
     const [firstname, setFirstname] = useState('');
     const [lastname, setLastname] = useState('');
@@ -61,7 +30,39 @@ function CreateModalForm() {
         e.target.value == 'Male' ? setGender(true) : setGender(false);
     }
     const handleRoleidChange = (e) => {
-        e.target.value == 'Veternary' ? setRoleId('1') : setRoleId('2');
+        e.target.value == 'Veternary' ? setRoleId('3') : setRoleId('4');
+    }
+    async function register() {
+        try {
+            const response = await fetch('https://localhost:7206/api/ApplicationAuth/register', {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify(
+                    {
+                        "userName": username,
+                        "password": password,
+                        "fullName": lastname + firstname,
+                        "email": email,
+                        "phoneNumber": phonenumber,
+                        "isMale": gender,
+                        "roleId": roleid,
+                        "dateOfBirth": dateOfBirth
+                    }
+                ) // body data type must match "Content-Type" header
+            });
+            if (!response.ok) {
+                throw new Error(response.message);
+            }
+            toast.info("Check your email to activate your account");
+            navigate('/');
+            console.log('ok');
+        } catch (error) {
+            toast.error('Login failed!');
+            console.error(error.message);
+        }
     }
   return (
     <form>
@@ -175,16 +176,16 @@ function CreateModalForm() {
             <MDBCol md='6'>
             <h6 className="fw-bold">Role: </h6>
          <MDBRadio
-            name='inlineRadio'
-            id='inlineRadio1'
+            name='inlineRadio1'
+            id='inlineRadio3'
             value='User'
             label='User'
             inline
             onChange={handleRoleidChange}
          />
          <MDBRadio
-             name='inlineRadio'
-             id='inlineRadio2'
+             name='inlineRadio1'
+             id='inlineRadio4'
              value='Veternary'
              label='Veternary'
              inline
@@ -193,7 +194,7 @@ function CreateModalForm() {
             </MDBCol>
         </MDBRow>
         <MDBBtn className='mb-4' color='danger' size='lg'><a style={{ color: 'black' }}
-                                onClick={(e) => { e.preventDefault(); register(lastname, firstname, username, phonenumber, dateOfBirth, password, gender,roleid ,email) }}  >Submit</a></MDBBtn>
+                                onClick={(e) => { e.preventDefault(); register() }}  >Submit</a></MDBBtn>
     </form>
   );
 }

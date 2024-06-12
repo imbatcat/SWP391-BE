@@ -13,7 +13,7 @@ import { toast } from 'react-toastify';
 import UserSidebar from '../../Component/UserSidebar/UserSidebar';
 
 function UserProfile() {
-    const [user] = useUser();
+    const [user, setUser] = useUser();
     const [userDetails, setUserDetails] = useState();
     const [isLoading, setIsLoading] = useState(true);
 
