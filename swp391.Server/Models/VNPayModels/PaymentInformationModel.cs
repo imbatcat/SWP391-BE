@@ -1,5 +1,8 @@
-﻿namespace PetHealthcare.Server.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
+namespace PetHealthcare.Server.Models;
+
+[NotMapped]
 public class PaymentInformationModel
 {
     public string OrderType { get; set; }

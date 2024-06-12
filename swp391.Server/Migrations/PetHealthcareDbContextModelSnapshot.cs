@@ -339,6 +339,9 @@ namespace PetHealthcare.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateOnly>("PaymentDate")
+                        .HasColumnType("date");
+
                     b.Property<string>("PaymentId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

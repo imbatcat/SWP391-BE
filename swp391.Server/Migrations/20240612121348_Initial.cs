@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PetHealthcare.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class db_01 : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,6 +23,25 @@ namespace PetHealthcare.Server.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cages", x => x.CageId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "paymentResponseModels",
+                columns: table => new
+                {
+                    TransactionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    OrderDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrderId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PaymentId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Success = table.Column<bool>(type: "bit", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    VnPayResponseCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PaymentDate = table.Column<DateOnly>(type: "date", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_paymentResponseModels", x => x.TransactionId);
                 });
 
             migrationBuilder.CreateTable(
@@ -97,6 +116,54 @@ namespace PetHealthcare.Server.Migrations
                         principalTable: "Roles",
                         principalColumn: "RoleId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Feedbacks",
+                columns: table => new
+                {
+                    FeedbackId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Ratings = table.Column<int>(type: "int", nullable: false),
+                    FeedbackDetails = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    AccountId = table.Column<string>(type: "char(11)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Feedbacks", x => x.FeedbackId);
+                    table.ForeignKey(
+                        name: "FK_Feedbacks_Accounts_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Accounts",
+                        principalColumn: "AccountId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Pets",
+                columns: table => new
+                {
+                    PetId = table.Column<string>(type: "char(11)", nullable: false),
+                    ImgUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PetName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    PetBreed = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    PetAge = table.Column<DateOnly>(type: "date", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    IsMale = table.Column<bool>(type: "bit", nullable: false),
+                    IsCat = table.Column<bool>(type: "bit", nullable: false),
+                    VaccinationHistory = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    IsDisabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccountId = table.Column<string>(type: "char(11)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pets", x => x.PetId);
+                    table.ForeignKey(
+                        name: "FK_Pets_Accounts_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Accounts",
+                        principalColumn: "AccountId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -418,7 +485,6 @@ namespace PetHealthcare.Server.Migrations
                 table: "ServicePayments",
                 column: "ServiceOrderId",
                 unique: true);
-                unique: true);
         }
 
         /// <inheritdoc />
@@ -432,6 +498,9 @@ namespace PetHealthcare.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "Feedbacks");
+
+            migrationBuilder.DropTable(
+                name: "paymentResponseModels");
 
             migrationBuilder.DropTable(
                 name: "ServiceOrderDetails");
