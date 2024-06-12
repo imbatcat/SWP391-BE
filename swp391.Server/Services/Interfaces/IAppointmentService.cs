@@ -17,5 +17,7 @@ namespace PetHealthcare.Server.Services.Interfaces
         Task<IEnumerable<ResAppListForCustomer>> SortAppointmentByDate(string id, string SortList, string SortOrder);
         bool isVetIdValid(string id);
         string GenerateId();
+
+        Task<Account?> GetAccountById(string id);
     }
 }
