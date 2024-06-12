@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
-import { MDBBadge, MDBBtn, MDBTable, MDBTableBody, MDBTableHead, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBInput, MDBModalDialog, MDBModalContent, MDBModalTitle, MDBCol, MDBRow, MDBCheckbox, MDBContainer, MDBIcon } from 'mdb-react-ui-kit';
+import { MDBBadge, MDBBtn, MDBTable, MDBTableBody, MDBTableHead, MDBModal, 
+    MDBModalBody, MDBModalHeader, MDBModalFooter, MDBInput, MDBModalDialog, 
+    MDBModalContent, MDBModalTitle, MDBCol, MDBRow, MDBCheckbox
+} 
+ from 'mdb-react-ui-kit';
 import SideNav from '../../Component/SideNav/SideNav';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import { Tooltip } from 'react-tooltip';
-import SelectModal from '../../Component/Modals/SelectModal';
-import CreateNewModalForm from '../../Component/Modals/CreateModalForm';
+import CreateModal from '../../Component/Modals/CreateModal';
 
 
-function adminAccount() {
+function AdminAccount() {
     const [accounts, setAccounts] = useState([]);
     const [selectedAccount, setSelectedAccount] = useState(null);
     const [basicModal, setBasicModal] = useState(false);
@@ -47,9 +46,7 @@ function adminAccount() {
         setSelectedAccount(account);
         setBasicModal(!basicModal);
     };
-    const toggleOpenNew = (account = null) => {
-        setBasicModalNew(!basicModalNew);
-    };
+    const toggleOpenNew = () => setBasicModalNew(!basicModalNew);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -112,7 +109,7 @@ function adminAccount() {
                     </tr>
                 </MDBTableHead>
                 <MDBTableBody>
-                    {filteredAccounts.filter(acc => acc.roleId === 1).map((acc) => (
+                    {filteredAccounts.filter(acc => acc.roleId === 2).map((acc) => (
                         <tr key={acc.id}>
                             <td>
                                 <div className='d-flex align-items-center'>
@@ -155,11 +152,11 @@ function adminAccount() {
                 </MDBTableBody>
             </MDBTable>
             <div className="fixed-bottom-right">
-                <button className="static-button" data-tooltip-id="add-button" onClick={toggleOpen}>+</button>
-                <Tooltip id='add-button' content={location.pathname}></Tooltip>
+                <button className="static-button" data-tooltip-id="add-button" onClick={toggleOpenNew}>+</button>
+                <Tooltip id='add-button' content={'Create New Account'}></Tooltip>
 
                 <MDBModal open={basicModalNew} onClose={() => setBasicModalNew(false)} tabIndex='-1'>
-                    <CreateNewModalForm toggleOpen={toggleOpenNew}/>
+                    <CreateModal toggleOpen={toggleOpenNew}/>
                 </MDBModal>
             </div>
 
@@ -232,4 +229,4 @@ function adminAccount() {
     );
 }
 
-export default adminAccount;
+export default AdminAccount;

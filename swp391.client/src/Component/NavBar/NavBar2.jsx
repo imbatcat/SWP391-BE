@@ -16,12 +16,10 @@ import {
     MDBCollapse,
 } from 'mdb-react-ui-kit';
 import { useAuth } from '../../Context/AuthProvider';
-import { useUser } from '../../Context/UserContext';
 import { toast } from 'react-toastify';
 
 export default function NavBar2() {
     const [isAuthenticated, setIsAuthenticated] = useAuth();
-    const [user, setUser] = useUser();
     const [openBasic, setOpenBasic] = useState(false);
     const navigate = useNavigate();
     const logout = async (e) => {
@@ -49,8 +47,8 @@ export default function NavBar2() {
     return (
         <MDBNavbar expand='lg' light bgColor='light' sticky>
             <MDBContainer fluid>
-                <Link to="/"><h1 style={{ color: 'black' }}>Pet-ternary</h1></Link>
-                <h2 >Purr-fectly Healthy, Woof-tastically Happy</h2>
+                <Link to="/"><h1 style={{minWidth:'15vw'}}>Pet-ternary</h1></Link>
+                <h2 style={{minWidth:'10vw',fontSize:'100%', margin:'auto', marginLeft:'1vw'}} >Purr-fectly Healthy, Woof-tastically Happy</h2>
                 <MDBNavbarToggler
                     aria-controls='navbarSupportedContent'
                     aria-expanded='false'
@@ -130,7 +128,6 @@ export default function NavBar2() {
 
                         )}
                     </MDBNavbarNav>
-
 
                 </MDBCollapse>
             </MDBContainer >

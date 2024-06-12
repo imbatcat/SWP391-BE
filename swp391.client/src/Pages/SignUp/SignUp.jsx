@@ -54,7 +54,6 @@ function SignUp() {
     const [dateOfBirth, setDateOfBirth] = useState('');
     const [password, setPassword] = useState('');
     const [gender, setGender] = useState();
-    const [isDisabled, setIsDisabled] = useState();
     const navigate = useNavigate();
 
     const handleFirstNameChange = (e) => setFirstname(e.target.value);

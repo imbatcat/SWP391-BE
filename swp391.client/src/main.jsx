@@ -11,7 +11,6 @@ import Login from './Pages/Login/Login';
 /*import App from './App';*/
 import Home from './Pages/Home/Home'
 import SignUp from './Pages/SignUp/SignUp';
-import AboutUs from './Pages/About Us/AboutUs';
 import Appointment from './Pages/Appointment/Appointment';
 import OTPInput from './Pages/OTP Input/OTPInput';
 import PasswordResetForm from './Pages/SetNewPass/PasswordResetForm';
@@ -21,12 +20,12 @@ import GglLogin from './Pages/GoogleLogin';
 import { ToastContainer } from 'react-toastify';
 import UserProfile from './Pages/Profile/UserProfile';
 import { UserProvider } from './Context/UserContext';
-import AdminAccount from './Pages/AdminPages/adminAccount';
-import VetAccount from './Pages/AdminPages/VetAccount';
 import AppointmentManage from './Pages/AdminPages/AppointmentManage';
-import UsersAccount from './Pages/AdminPages/UsersAccount';
 import CheckAuth from './Helpers/CheckAuth';
 import AdminPet from './Pages/AdminPages/petManage';
+import VetAccount from './Pages/AdminPages/VetAccount';
+import UsersAccount from './Pages/AdminPages/UsersAccount';
+import AdminAccount from './Pages/AdminPages/AdminAccount';
 
 const router = createBrowserRouter([
     {
@@ -113,12 +112,17 @@ const router = createBrowserRouter([
     },
     {
         path: '/admin/customers',
-        element: <AdminAccount />,
+        element: <UsersAccount />,
         errorElement: <div>404 Not Found</div>,
     },
     {
         path: '/admin/pets',
         element: <AdminPet />,
+        errorElement: <div>404 Not Found</div>,
+    },
+    {
+        path: '/admin/admins',
+        element: <AdminAccount />,
         errorElement: <div>404 Not Found</div>,
     },
 

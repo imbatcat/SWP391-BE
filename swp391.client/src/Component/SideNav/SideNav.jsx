@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
 import { Link, useNavigate } from 'react-router-dom';
@@ -7,11 +7,11 @@ import './SideNav.css';
 import { IconContext } from 'react-icons';
 import { useAuth } from '../../Context/AuthProvider';
 import { toast } from 'react-toastify';
-import { MDBBtn, MDBCol, MDBContainer, MDBIcon, MDBInput, MDBInputGroup, MDBRow } from 'mdb-react-ui-kit';
+import { MDBCol, MDBContainer, MDBIcon} from 'mdb-react-ui-kit';
 
 function SideNav({ searchInput, handleSearchInputChange }) {
     const [sidebar, setSidebar] = useState(false);
-    const [isAuthenticated, setIsAuthenticated] = useAuth();
+    const [setIsAuthenticated] = useAuth();
     const showSidebar = () => setSidebar(!sidebar);
     const navigate = useNavigate();
     const logout = async () => {

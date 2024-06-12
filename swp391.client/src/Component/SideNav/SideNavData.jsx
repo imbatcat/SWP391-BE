@@ -1,14 +1,19 @@
 import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
 import * as IoIcons from 'react-icons/io';
-import React from 'react'
-import { Link } from 'react-router-dom'
+
 
 export const SideNavData = [
     {
         title: 'Home',
         path: '/',
         icon: <AiIcons.AiFillHome />,
+        cName: 'nav-text'
+    },
+    {
+        title: 'Admin',
+        path: '/admin/admins',
+        icon: <IoIcons.IoMdHelpCircle />,
         cName: 'nav-text'
     },
     {
