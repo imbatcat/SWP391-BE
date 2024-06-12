@@ -20,7 +20,7 @@ import { toast } from 'react-toastify';
 import UserSidebar from '../../Component/UserSidebar/UserSidebar';
 
 function UserPets() {
-    const [user] = useUser();
+    const [user, setUser] = useUser();
     const [petList, setPetList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [centredModal, setCentredModal] = useState(false);
