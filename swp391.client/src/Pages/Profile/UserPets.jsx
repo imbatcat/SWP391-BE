@@ -2,8 +2,6 @@ import {
     MDBBtn,
     MDBCard,
     MDBCardBody,
-    MDBCardImage,
-    MDBCardText,
     MDBCol,
     MDBContainer,
     MDBModal,
@@ -13,20 +11,16 @@ import {
     MDBModalTitle,
     MDBModalBody,
     MDBModalFooter,
-    MDBIcon,
-    MDBListGroup,
-    MDBListGroupItem,
     MDBRow,
 } from 'mdb-react-ui-kit';
 import { useEffect, useState } from "react";
 import { useUser } from "../../Context/UserContext";
 import MainLayout from "../../Layouts/MainLayout";
 import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
 import UserSidebar from '../../Component/UserSidebar/UserSidebar';
 
 function UserPets() {
-    const [user, setUser] = useUser();
+    const [user] = useUser();
     const [petList, setPetList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [centredModal, setCentredModal] = useState(false);
@@ -127,7 +121,7 @@ function UserPets() {
                         </MDBRow>
                     </MDBContainer>
                 </section>
-            </MainLayout >
+            </MainLayout>
         </>
     );
 }

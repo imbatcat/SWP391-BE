@@ -1,27 +1,19 @@
 import {
-    MDBBtn,
     MDBCard,
     MDBCardBody,
-    MDBCardImage,
     MDBCardText,
     MDBCol,
     MDBContainer,
-    MDBIcon,
-    MDBListGroup,
-    MDBListGroupItem,
-    MDBProgress,
-    MDBProgressBar,
     MDBRow
 } from 'mdb-react-ui-kit';
 import { useEffect, useState } from "react";
 import { useUser } from "../../Context/UserContext";
 import MainLayout from "../../Layouts/MainLayout";
 import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
 import UserSidebar from '../../Component/UserSidebar/UserSidebar';
 
 function UserProfile() {
-    const [user, setUser] = useUser();
+    const [user] = useUser();
     const [userDetails, setUserDetails] = useState();
     const [isLoading, setIsLoading] = useState(true);
 
