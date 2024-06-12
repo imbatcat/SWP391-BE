@@ -4,6 +4,6 @@ using PetHealthcare.Server.Models;
 namespace PetHealthcare.Server.Services;
 public interface IVnPayService
 {
-    string CreatePaymentUrl(AppointmentDTO model, HttpContext context);
+    string CreatePaymentUrl(CreateAppointmentDTO model, HttpContext context);
     PaymentResponseModel PaymentExecute(IQueryCollection collections);
 }

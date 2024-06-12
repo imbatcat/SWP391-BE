@@ -24,7 +24,7 @@ namespace PetHealthcare.Server.Services
             string id = Nanoid.Generate(size: 8);
             return prefix + id;
         }
-        public async Task CreateAppointment(CreateAppointmentDTO appointment)
+        public async Task CreateAppointment(CreateAppointmentDTO appointment, string id)
         {
             Appointment toCreateAppointment = new Appointment
             {

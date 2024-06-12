@@ -132,13 +132,13 @@ VALUES
 ('SR-00000005', 1000, '2024-05-26', 'Paid', 'ME-00000005');
 
 GO
-INSERT INTO [dbo].[ServicePayments] (ServicePaymentId, ServiceOrderId, ServicePrice, PaymentDate, PaymentMethod)
+INSERT INTO [dbo].[ServicePayments] (ServicePaymentId, ServiceOrderId, PaymentDate, PaymentMethod)
 VALUES 
-('SP-00000001', 'SR00000001', 350, '2024-03-24', 'MOMO'),
-('SP-00000002', 'SR00000002', 550, '2024-04-27', 'momo'),
-('SP-00000003', 'SR00000003', 1100, '2024-05-12', 'momo'),
-('SP-00000004', 'SR00000004', 70, '2024-05-15', 'momo'),
-('SP-00000005', 'SR00000005', 1000, '2024-05-26', 'momo');
+('SP-00000001', 'SR-00000001', '2024-03-24', 'MOMO'),
+('SP-00000002', 'SR-00000002', '2024-04-27', 'momo'),
+('SP-00000003', 'SR-00000003', '2024-05-12', 'momo'),
+('SP-00000004', 'SR-00000004', '2024-05-15', 'momo'),
+('SP-00000005', 'SR-00000005', '2024-05-26', 'momo');
 
 GO
 INSERT INTO [dbo].[ServiceOrderDetails] (ServiceOrderId, ServiceId)

@@ -11,7 +11,7 @@ namespace PetHealthcare.Server.Services
         {
             _configuration = configuration;
         }
-        public string CreatePaymentUrl(AppointmentDTO model, HttpContext context)
+        public string CreatePaymentUrl(CreateAppointmentDTO model, HttpContext context)
         {
             var timeZoneById = TimeZoneInfo.FindSystemTimeZoneById(_configuration["TimeZoneId"]);
             var timeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneById);

@@ -30,9 +30,9 @@ namespace PetHealthcare.Server.APIs.Controllers
         private readonly IVnPayService _vnPayService;
         // GET: VNPayController
         [HttpPost]
-        public IActionResult CreatePaymentUrl([FromBody] AppointmentDTO model)
+        public IActionResult CreatePaymentUrl([FromBody] CreateAppointmentDTO model)
         {
-            AppointmentDTO appointmentDTO = model;
+            CreateAppointmentDTO appointmentDTO = model;
             TempData["AppointmentDTO"] = JsonSerializer.Serialize(appointmentDTO);
             var url = _vnPayService.CreatePaymentUrl(model, HttpContext);
             
@@ -45,13 +45,13 @@ namespace PetHealthcare.Server.APIs.Controllers
         {
             var queury = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(string.Join("&", form.Select(x => $"{x.Key}={x.Value}")));
             var response = _vnPayService.PaymentExecute(new QueryCollection(queury));
-            AppointmentDTO appointmentDTO = new AppointmentDTO();
+            CreateAppointmentDTO appointmentDTO = new CreateAppointmentDTO();
             try
             {
                 if (TempData.ContainsKey("AppointmentDTO"))
                 {
                     var appointmentJson = TempData["AppointmentDTO"].ToString();
-                    appointmentDTO = JsonSerializer.Deserialize<AppointmentDTO>(appointmentJson);
+                    appointmentDTO = JsonSerializer.Deserialize<CreateAppointmentDTO>(appointmentJson);
                 }
                 else
                 {
@@ -62,7 +62,7 @@ namespace PetHealthcare.Server.APIs.Controllers
                 {
                     string appointmentId = _appointmentService.GenerateId();
                     _appointmentService.CreateAppointment(appointmentDTO, appointmentId);
-                    Console.WriteLine(appointmentId);
+                    Debug.WriteLine(appointmentId);
                     if(context.Appointments.Find(appointmentId) != null)
                     {
                         var bookingPayment = new BookingPayment
@@ -85,7 +85,6 @@ namespace PetHealthcare.Server.APIs.Controllers
                 {
                     Debug.WriteLine("Transaction failed" + response.VnPayResponseCode);
                 }
-                appointmentDTO = null;
                 
                 context.SaveChanges();
             }
