@@ -160,10 +160,16 @@ namespace PetHealthcare.Server.Migrations
                     b.Property<double>("BookingPrice")
                         .HasColumnType("float");
 
+                    b.Property<TimeOnly>("CheckinTime")
+                        .HasColumnType("time");
+
                     b.Property<bool>("IsCancel")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsCheckIn")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsCheckUp")
                         .HasColumnType("bit");
 
                     b.Property<string>("PetId")
@@ -467,9 +473,6 @@ namespace PetHealthcare.Server.Migrations
                     b.Property<string>("ServiceOrderId")
                         .IsRequired()
                         .HasColumnType("char(11)");
-
-                    b.Property<double>("ServicePrice")
-                        .HasColumnType("float");
 
                     b.HasKey("ServicePaymentId");
 

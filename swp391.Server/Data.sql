@@ -91,8 +91,8 @@ VALUES
 ('AP-00000003', 'AC-00000001', '2024-05-12', 'PE-00000003', 'VE-00000000', 3, 'Deposit', 'I think my pet is stressed', 100000,0,1,'11:00:00',1),
 ('AP-00000004', 'AC-00000003', '2024-05-15', 'PE-00000004', 'VE-00000004', 4, 'Deposit', 'Scratching, skin irritation', 1000000,0,1,'13:30:00',1),
 ('AP-00000005', 'AC-00000003', '2024-05-26', 'PE-00000005', 'VE-00000000', 5, 'Deposit', 'Irregular bathroom habits, dehydration',1000000,0,1,'15:00:00',1),
-('AP-00000006', 'AC-00000001','2024-08-07','PE-00000001', 'VE-00000000',1,'Deposit','It cannot stop sneezing',	2222,0,0,NULL,0),
-('AP-00000007','AC-00000001','2024-09-02','PE-00000004','VE-00000004',2,'FullyPaid','My pet cannot eat anything',2222,0,0,NULL,0)
+('AP-00000006', 'AC-00000001','2024-08-07','PE-00000001', 'VE-00000000',1,'Deposit','It cannot stop sneezing',	2222,0,0,'00:00:00',0),
+('AP-00000007','AC-00000001','2024-09-02','PE-00000004','VE-00000004',2,'FullyPaid','My pet cannot eat anything',2222,0,0,'00:00:00',0)
 GO
 
 INSERT INTO [dbo].[BookingPayments] (PaymentId, Price, PaymentMethod, PaymentDate, AppointmentId)

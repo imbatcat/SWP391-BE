@@ -10,10 +10,8 @@ namespace PetHealthcare.Server.APIs.DTOS.AppointmentDTOs
     {
         public DateOnly AppointmentDate { get; set; }
 
-        [StringLength(50)]
         public string AppointmentType { get; set; }
 
-        [StringLength(200)]
         public string? AppointmentNotes { get; set; }
 
         public double BookingPrice { get; set; }
@@ -22,7 +20,6 @@ namespace PetHealthcare.Server.APIs.DTOS.AppointmentDTOs
         public string PetId { get; set; }
         public string VeterinarianAccountId { get; set; }
         public int TimeSlotId { get; set; }
-        public virtual ICollection<BookingPayment> BookingPayments { get; set; }
 
     }
 }

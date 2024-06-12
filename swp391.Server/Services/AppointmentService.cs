@@ -1,4 +1,5 @@
-﻿using NanoidDotNet;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using NanoidDotNet;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.APIs.DTOS.AppointmentDTOs;
 using PetHealthcare.Server.Models;
@@ -35,7 +36,11 @@ namespace PetHealthcare.Server.Services
                 VeterinarianAccountId = appointment.VeterinarianAccountId,
                 AppointmentId = GenerateId(),
                 AccountId = appointment.AccountId,
-                TimeSlotId = appointment.TimeSlotId
+                TimeSlotId = appointment.TimeSlotId,
+                IsCancel = false,
+                IsCheckIn = false,
+                IsCheckUp = false,
+                
             };
             await _appointmentRepository.Create(toCreateAppointment);
         }
@@ -47,13 +52,13 @@ namespace PetHealthcare.Server.Services
 
 
 
-        public async Task<IEnumerable<GetAllAppointmentDTOs>> GetAllAppointment()
+        public async Task<IEnumerable<GetAllAppointmentForAdminDTO>> GetAllAppointment()
         {
             IEnumerable<Appointment> appList = await _appointmentRepository.GetAll();
-            List<GetAllAppointmentDTOs> CAList = new List<GetAllAppointmentDTOs>();
+            List<GetAllAppointmentForAdminDTO> CAList = new List<GetAllAppointmentForAdminDTO>();
             foreach(Appointment app in appList)
             {
-                GetAllAppointmentDTOs appointmentDTO = new GetAllAppointmentDTOs
+                GetAllAppointmentForAdminDTO appointmentDTO = new GetAllAppointmentForAdminDTO
                 {
                     AppointmentDate = app.AppointmentDate,
                     AppointmentNotes = app.AppointmentNotes,
@@ -61,9 +66,11 @@ namespace PetHealthcare.Server.Services
                     PetName= app.Pet.PetName,
                     BookingPrice= app.BookingPrice,
                     AppointmentType = app.AppointmentType,
-                    TimeSlotId= app.TimeSlotId,
+                    TimeSlot= app.TimeSlot.StartTime.ToString("h:mm") + " - " + app.TimeSlot.EndTime.ToString("h:mm"),
                     IsCancel = app.IsCancel,
                     IsCheckIn = app.IsCheckIn,
+                    IsCheckUp = app.IsCheckUp,
+                    CheckinTime = app.CheckinTime,
                 //            public string AppointmentId { get; set; }
                 //public DateOnly AppointmentDate { get; set; }
                 //public string AppointmentType { get; set; }
@@ -104,8 +111,26 @@ namespace PetHealthcare.Server.Services
             await _appointmentRepository.Update(UpdateAppointment);
         }
 
+        public string GetAppointmentStatus(Appointment appointment)
+        {
+            string status = "Ongoing";
+            DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
+            if(appointment.IsCancel == true)
+            {
+                status = "Cancel";
+            } else if(appointment.IsCheckUp == true || appointment.AppointmentDate.CompareTo(currentDate) < 0)
+            {
+                status = "Finish";
+            }
+            return status;
+        }
         public async Task<IEnumerable<ResAppListForCustomer>> getAllCustomerAppointment(string id, string listType)
         {
+            var AccountCheck = await GetAccountById(id);
+            if(AccountCheck == null)
+            {
+                throw new Exception("Can't find that Account");
+            }
             IEnumerable<Appointment> appointmentsList = await _appointmentRepository.GetAll();
             List<ResAppListForCustomer> resAppListForCustomers = new List<ResAppListForCustomer>();
             foreach (Appointment appointment in appointmentsList)
@@ -122,6 +147,7 @@ namespace PetHealthcare.Server.Services
                             PetName = appointment.Pet.PetName,
                             VeterinarianName = appointment.Veterinarian.FullName,
                             TimeSlot = appointment.TimeSlot.StartTime.ToString("h:mm") + " - " + appointment.TimeSlot.EndTime.ToString("h:mm"),
+                            AppointmentStatus = GetAppointmentStatus(appointment)
                         });
                     }
                 } else if (listType.Equals("current",StringComparison.OrdinalIgnoreCase))
@@ -135,10 +161,20 @@ namespace PetHealthcare.Server.Services
                             PetName = appointment.Pet.PetName,
                             VeterinarianName = appointment.Veterinarian.FullName,
                             TimeSlot = appointment.TimeSlot.StartTime.ToString("h:mm") + " - " + appointment.TimeSlot.EndTime.ToString("h:mm"),
+                            AppointmentStatus = GetAppointmentStatus(appointment)
                         });
                     }
                 }
                 
+            }
+
+            //catch error
+            if(resAppListForCustomers.Count() == 0 && listType.Equals("current", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new Exception("The current list is empty");
+            } else if (resAppListForCustomers.Count() == 0 && listType.Equals("history", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new Exception("The history list is empty");
             }
             return resAppListForCustomers;
         }
@@ -180,6 +216,8 @@ namespace PetHealthcare.Server.Services
                             TimeSlot = app.TimeSlot.StartTime.ToString("h:mm") + " - " + app.TimeSlot.EndTime.ToString("h:mm"),
                             IsCancel = app.IsCancel,
                             IsCheckIn = app.IsCheckIn,
+                            IsCheckUp = app.IsCheckUp,
+                            CheckinTime = app.CheckinTime,
                         });
                     }
                 }
@@ -189,6 +227,11 @@ namespace PetHealthcare.Server.Services
                 return null;
             }
             return appointmentList;
+        }
+
+        public async Task<Account?> GetAccountById(string id)
+        {
+            return await _appointmentRepository.GetAccountById(id);
         }
     }
 

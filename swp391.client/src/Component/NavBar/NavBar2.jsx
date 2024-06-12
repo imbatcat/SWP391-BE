@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import './NavBar2.css'
+import './NavBar2.css';
 import {
     MDBContainer,
     MDBNavbar,
