@@ -511,9 +511,6 @@ namespace PetHealthcare.Server.Migrations
                         .IsRequired()
                         .HasColumnType("char(11)");
 
-                    b.Property<double>("ServicePrice")
-                        .HasColumnType("float");
-
                     b.HasKey("ServicePaymentId");
 
                     b.HasIndex("ServiceOrderId")

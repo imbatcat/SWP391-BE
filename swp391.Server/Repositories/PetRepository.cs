@@ -30,7 +30,7 @@ namespace PetHealthcare.Server.Repositories
             if (pet != null)
             {
                 context.Entry(pet).State = EntityState.Modified;
-                pet.IsDisabled=entity.IsDisabled;
+                pet.IsDisabled = entity.IsDisabled;
                 await SaveChanges();
             }
         }
@@ -118,6 +118,12 @@ namespace PetHealthcare.Server.Repositories
         void IRepositoryBase<Pet>.Delete(Pet entity)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<Pet> GetPetInfoAppointment(string appointmentId)
+        {
+            var appointment = await context.Appointments.SingleOrDefaultAsync(app => app.AppointmentId == appointmentId);
+            return await context.Pets.SingleOrDefaultAsync(pet => pet.PetId == appointment.PetId);
         }
     }
 }

@@ -63,5 +63,10 @@ namespace PetHealthcare.Server.Repositories
                 await SaveChanges();
             }
         }
+
+        public async Task<Account?> GetAccountById(string id)
+        {
+            return await context.Accounts.FindAsync(id);
+        }
     }
 }
