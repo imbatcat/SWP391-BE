@@ -13,10 +13,18 @@ namespace PetHealthcare.Server.Services
     public class AppointmentService : IAppointmentService
     {
         private readonly IAppointmentRepository _appointmentRepository;
-        public AppointmentService(IAppointmentRepository appointmentRepository)
+        private readonly ITimeslotRepository _timeSlotRepository;
+        private readonly IAccountRepository _accountRepository;
+        private readonly IPetRepository _petRepository;
+
+        public AppointmentService(IAppointmentRepository appointmentRepository, ITimeslotRepository timeSlotRepository, IAccountRepository accountRepository, IPetRepository petRepository)
         {
             _appointmentRepository = appointmentRepository;
+            _timeSlotRepository = timeSlotRepository;
+            _accountRepository = accountRepository;
+            _petRepository = petRepository;
         }
+
         public string GenerateId()
         {
             var prefix = "AP-";
@@ -198,6 +206,30 @@ namespace PetHealthcare.Server.Services
                 return null;
             }
             return appointmentList;
+        }
+
+        public async Task<IEnumerable<AppointmentForVetDTO>> GetAppointmentsByTimeDate(DateOnly startWeekDate, DateOnly endWeekDate, TimeslotDTO timeSlot)
+        {
+            var startTime = TimeOnly.Parse(timeSlot.StartTime);
+            var endTime = TimeOnly.Parse(timeSlot.EndTime);
+
+            var timeslot = await _timeSlotRepository.GetByCondition(t => t.StartTime == startTime & t.EndTime == endTime);
+            var list = await _appointmentRepository.GetAppointmentsOfWeek(startWeekDate, endWeekDate);
+            var resList = new List<AppointmentForVetDTO>();
+            foreach (Appointment appointment in list)
+            {
+                var account = await _accountRepository.GetByCondition(a => a.AccountId == appointment.AccountId);
+                var pet = await _petRepository.GetByCondition(a => a.PetId == appointment.PetId);
+                resList.Add(new AppointmentForVetDTO
+                {
+                    AppointmentNotes = appointment.AppointmentNotes ?? "",
+                    CustomerName = account.FullName,
+                    CustomerPhoneNumber = account.PhoneNumber,
+                    PetName = pet.PetName,
+                    Status = appointment.IsCancel ? "Cancelled" : appointment.IsCheckUp ? "Checked up" : appointment.IsCheckIn ? "Checked in" : "Pending",
+                });
+            }
+            return resList;
         }
     }
 
