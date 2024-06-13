@@ -12,7 +12,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Staff,Admin")]
+    [Authorize(Roles = "Staff,Admin,Customer,Vet")]
 
     public class AppointmentController : ControllerBase
     {
@@ -100,8 +100,17 @@ namespace PetHealthcare.Server.APIs.Controllers
             }
             return Ok(sortedAppointment);
         }
+
+        // Get list of active appointments by timeslot in a week
+        [Authorize(Roles = "Admin, Vet")]
+        [HttpPost("AppointmentList/by-week/{startWeek}&{endWeek}")]
+        public async Task<IEnumerable<AppointmentForVetDTO>> GetAppointmentsByWeek([FromRoute] DateOnly startWeek, [FromRoute] DateOnly endWeek, [FromBody] TimeslotDTO timeslot)
+        {
+            return await _appointment.GetAppointmentsByTimeDate(startWeek, endWeek, timeslot);
+        }
+
+
         // PUT: api/Services/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAppointment([FromRoute] string id, [FromBody] CustomerAppointmentDTO toUpdateAppointment)
         {
