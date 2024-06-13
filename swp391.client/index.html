@@ -4,10 +4,33 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<<<<<<< Updated upstream
     <title>Vite + React</title>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
+=======
+    <meta name="google-signin-client_id" content="726135856867-grs4veuddck4hsoc7tv4n7rcvdgeejel.apps.googleusercontent.com" hidden="true"/>
+
+    <title>Pet-ternary</title>
+</head>
+<body>
+
+    <div id="root"></div>
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    <a href="#" onclick="signOut();">Sign out</a>
+    <script>
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+                console.log('User signed out.');
+            });
+        }
+    </script>
+    <script type="module" src="/src/main.jsx"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+</body>
+>>>>>>> Stashed changes
 </html>
