@@ -14,10 +14,18 @@ namespace PetHealthcare.Server.Services
     public class AppointmentService : IAppointmentService
     {
         private readonly IAppointmentRepository _appointmentRepository;
-        public AppointmentService(IAppointmentRepository appointmentRepository)
+        private readonly ITimeslotRepository _timeSlotRepository;
+        private readonly IAccountRepository _accountRepository;
+        private readonly IPetRepository _petRepository;
+
+        public AppointmentService(IAppointmentRepository appointmentRepository, ITimeslotRepository timeSlotRepository, IAccountRepository accountRepository, IPetRepository petRepository)
         {
             _appointmentRepository = appointmentRepository;
+            _timeSlotRepository = timeSlotRepository;
+            _accountRepository = accountRepository;
+            _petRepository = petRepository;
         }
+
         public string GenerateId()
         {
             var prefix = "AP-";
@@ -40,7 +48,7 @@ namespace PetHealthcare.Server.Services
                 IsCancel = false,
                 IsCheckIn = false,
                 IsCheckUp = false,
-                
+
             };
             await _appointmentRepository.Create(toCreateAppointment);
         }
@@ -56,32 +64,32 @@ namespace PetHealthcare.Server.Services
         {
             IEnumerable<Appointment> appList = await _appointmentRepository.GetAll();
             List<GetAllAppointmentForAdminDTO> CAList = new List<GetAllAppointmentForAdminDTO>();
-            foreach(Appointment app in appList)
+            foreach (Appointment app in appList)
             {
                 GetAllAppointmentForAdminDTO appointmentDTO = new GetAllAppointmentForAdminDTO
                 {
                     AppointmentDate = app.AppointmentDate,
                     AppointmentNotes = app.AppointmentNotes,
                     VeterinarianName = app.Veterinarian.FullName,
-                    PetName= app.Pet.PetName,
-                    BookingPrice= app.BookingPrice,
+                    PetName = app.Pet.PetName,
+                    BookingPrice = app.BookingPrice,
                     AppointmentType = app.AppointmentType,
-                    TimeSlot= app.TimeSlot.StartTime.ToString("h:mm") + " - " + app.TimeSlot.EndTime.ToString("h:mm"),
+                    TimeSlot = app.TimeSlot.StartTime.ToString("h:mm") + " - " + app.TimeSlot.EndTime.ToString("h:mm"),
                     IsCancel = app.IsCancel,
                     IsCheckIn = app.IsCheckIn,
                     IsCheckUp = app.IsCheckUp,
                     CheckinTime = app.CheckinTime,
-                //            public string AppointmentId { get; set; }
-                //public DateOnly AppointmentDate { get; set; }
-                //public string AppointmentType { get; set; }
-                //public string? AppointmentNotes { get; set; }
-                //public double BookingPrice { get; set; }
-                //public string AccountId { get; set; }
-                //public string PetName { get; set; }
-                //public string VeterinarianName { get; set; }
-                //public int TimeSlotId { get; set; }
-                //public bool IsCancel { get; set; }
-                //public bool IsCheckIn { get; set; }
+                    //            public string AppointmentId { get; set; }
+                    //public DateOnly AppointmentDate { get; set; }
+                    //public string AppointmentType { get; set; }
+                    //public string? AppointmentNotes { get; set; }
+                    //public double BookingPrice { get; set; }
+                    //public string AccountId { get; set; }
+                    //public string PetName { get; set; }
+                    //public string VeterinarianName { get; set; }
+                    //public int TimeSlotId { get; set; }
+                    //public bool IsCancel { get; set; }
+                    //public bool IsCheckIn { get; set; }
                 };
                 CAList.Add(appointmentDTO);
             }
@@ -115,10 +123,11 @@ namespace PetHealthcare.Server.Services
         {
             string status = "Ongoing";
             DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
-            if(appointment.IsCancel == true)
+            if (appointment.IsCancel == true)
             {
                 status = "Cancel";
-            } else if(appointment.IsCheckUp == true || appointment.AppointmentDate.CompareTo(currentDate) < 0)
+            }
+            else if (appointment.IsCheckUp == true || appointment.AppointmentDate.CompareTo(currentDate) < 0)
             {
                 status = "Finish";
             }
@@ -127,7 +136,7 @@ namespace PetHealthcare.Server.Services
         public async Task<IEnumerable<ResAppListForCustomer>> getAllCustomerAppointment(string id, string listType)
         {
             var AccountCheck = await GetAccountById(id);
-            if(AccountCheck == null)
+            if (AccountCheck == null)
             {
                 throw new Exception("Can't find that Account");
             }
@@ -136,7 +145,7 @@ namespace PetHealthcare.Server.Services
             foreach (Appointment appointment in appointmentsList)
             {
                 DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
-                if(listType.Equals("history",StringComparison.OrdinalIgnoreCase))
+                if (listType.Equals("history", StringComparison.OrdinalIgnoreCase))
                 {
                     if (appointment.AccountId.Equals(id) && appointment.AppointmentDate.CompareTo(currentDate) < 0)
                     {
@@ -150,7 +159,8 @@ namespace PetHealthcare.Server.Services
                             AppointmentStatus = GetAppointmentStatus(appointment)
                         });
                     }
-                } else if (listType.Equals("current",StringComparison.OrdinalIgnoreCase))
+                }
+                else if (listType.Equals("current", StringComparison.OrdinalIgnoreCase))
                 {
                     if (appointment.AccountId.Equals(id) && appointment.AppointmentDate.CompareTo(currentDate) > 0)
                     {
@@ -165,14 +175,15 @@ namespace PetHealthcare.Server.Services
                         });
                     }
                 }
-                
+
             }
 
             //catch error
-            if(resAppListForCustomers.Count() == 0 && listType.Equals("current", StringComparison.OrdinalIgnoreCase))
+            if (resAppListForCustomers.Count() == 0 && listType.Equals("current", StringComparison.OrdinalIgnoreCase))
             {
                 throw new Exception("The current list is empty");
-            } else if (resAppListForCustomers.Count() == 0 && listType.Equals("history", StringComparison.OrdinalIgnoreCase))
+            }
+            else if (resAppListForCustomers.Count() == 0 && listType.Equals("history", StringComparison.OrdinalIgnoreCase))
             {
                 throw new Exception("The history list is empty");
             }
@@ -182,7 +193,7 @@ namespace PetHealthcare.Server.Services
         public async Task<IEnumerable<ResAppListForCustomer>> SortAppointmentByDate(string id, string SortList, string SortOrder)
         {
             IEnumerable<ResAppListForCustomer> SortedList = new List<ResAppListForCustomer>();
-            IEnumerable<ResAppListForCustomer> allAppointment = await getAllCustomerAppointment(id,SortList);
+            IEnumerable<ResAppListForCustomer> allAppointment = await getAllCustomerAppointment(id, SortList);
             if (SortOrder.Equals("asc", StringComparison.OrdinalIgnoreCase))
             {
                 SortedList = allAppointment.OrderBy(a => a.AppointmentDate);
@@ -199,7 +210,7 @@ namespace PetHealthcare.Server.Services
         {
             IEnumerable<Appointment> AppList = await _appointmentRepository.GetAll();
             List<GetAllAppointmentForAdminDTO> appointmentList = new List<GetAllAppointmentForAdminDTO>();
-            if(AppList != null)
+            if (AppList != null)
             {
                 foreach (Appointment app in AppList)
                 {
@@ -222,17 +233,39 @@ namespace PetHealthcare.Server.Services
                     }
                 }
             }
-            if(appointmentList.Count == 0)
+            if (appointmentList.Count == 0)
             {
                 return null;
             }
             return appointmentList;
         }
 
+        public async Task<IEnumerable<AppointmentForVetDTO>> GetAppointmentsByTimeDate(DateOnly startWeekDate, DateOnly endWeekDate, TimeslotDTO timeSlot)
+        {
+            var startTime = TimeOnly.Parse(timeSlot.StartTime);
+            var endTime = TimeOnly.Parse(timeSlot.EndTime);
+
+            var timeslot = await _timeSlotRepository.GetByCondition(t => t.StartTime == startTime & t.EndTime == endTime);
+            var list = await _appointmentRepository.GetAppointmentsOfWeek(startWeekDate, endWeekDate);
+            var resList = new List<AppointmentForVetDTO>();
+            foreach (Appointment appointment in list)
+            {
+                var account = await _accountRepository.GetByCondition(a => a.AccountId == appointment.AccountId);
+                var pet = await _petRepository.GetByCondition(a => a.PetId == appointment.PetId);
+                resList.Add(new AppointmentForVetDTO
+                {
+                    AppointmentNotes = appointment.AppointmentNotes ?? "",
+                    CustomerName = account.FullName,
+                    CustomerPhoneNumber = account.PhoneNumber,
+                    PetName = pet.PetName,
+                    Status = appointment.IsCancel ? "Cancelled" : appointment.IsCheckUp ? "Checked up" : appointment.IsCheckIn ? "Checked in" : "Pending",
+                });
+            }
+            return resList;
+        }
         public async Task<Account?> GetAccountById(string id)
         {
             return await _appointmentRepository.GetAccountById(id);
         }
     }
-
 }
