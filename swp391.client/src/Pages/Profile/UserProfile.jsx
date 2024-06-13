@@ -37,12 +37,14 @@ function UserProfile() {
         } finally {
             setIsLoading(false);
         }
-    }
+    };
+
 
     useEffect(() => {
-        if (user)
+        if (user) {
             getUserDetails(user);
-    }, [user])
+        }
+    }, [user]);
 
     if (isLoading) {
         return <div>Loading...</div>; // Loading state

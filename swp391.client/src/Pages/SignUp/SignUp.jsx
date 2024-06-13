@@ -13,38 +13,7 @@ import './SignUp.css';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 
-async function register(lastname, firstname, username, phonenumber, dateOfBirth, password, gender, email, navigate) {
-    try {
-        const response = await fetch('https://localhost:7206/api/ApplicationAuth/register', {
-            method: 'POST', // *GET, POST, PUT, DELETE, etc.
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: 'include',
-            body: JSON.stringify(
-                {
-                    "userName": username,
-                    "password": password,
-                    "fullName": lastname + firstname,
-                    "email": email,
-                    "phoneNumber": phonenumber,
-                    "isMale": gender,
-                    "roleId": 1,
-                    "dateOfBirth": dateOfBirth
-                }
-            ) // body data type must match "Content-Type" header
-        });
-        if (!response.ok) {
-            throw new Error(response.message);
-        }
-        toast.info("Check your email to activate your account");
-        navigate('/');
-        console.log('ok');
-    } catch (error) {
-        toast.error('Login failed!');
-        console.error(error.message);
-    }
-}
+
 function SignUp() {
     const [firstname, setFirstname] = useState('');
     const [lastname, setLastname] = useState('');
@@ -54,9 +23,42 @@ function SignUp() {
     const [dateOfBirth, setDateOfBirth] = useState('');
     const [password, setPassword] = useState('');
     const [gender, setGender] = useState();
-    const [isDisabled, setIsDisabled] = useState();
+    const [isDisabled, setIsDisabled] = useState(false);
     const navigate = useNavigate();
 
+    async function register() {
+        setIsDisabled(!isDisabled);
+        try {
+            const response = await fetch('https://localhost:7206/api/ApplicationAuth/register', {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify(
+                    {
+                        "userName": username,
+                        "password": password,
+                        "fullName": lastname + firstname,
+                        "email": email,
+                        "phoneNumber": phonenumber,
+                        "isMale": gender,
+                        "roleId": 1,
+                        "dateOfBirth": dateOfBirth
+                    }
+                ) // body data type must match "Content-Type" header
+            });
+            if (!response.ok) {
+                throw new Error(response.message);
+            }
+            toast.info("Check your email to activate your account");
+            navigate('/');
+            console.log('ok');
+        } catch (error) {
+            toast.error('Login failed!');
+            console.error(error.message);
+        }
+    }
     const handleFirstNameChange = (e) => setFirstname(e.target.value);
     const handleLastNameChange = (e) => setLastname(e.target.value);
     const handleUsernameChange = (e) => setUsername(e.target.value);
@@ -66,7 +68,7 @@ function SignUp() {
     const handleBirthdayChange = (e) => setDateOfBirth(e.target.value);
     const handleGenderChange = (e) => {
         e.target.value == 'Male' ? setGender(true) : setGender(false);
-    }
+    };
 
     return (
         <div className='pageSignUp'>
@@ -186,7 +188,7 @@ function SignUp() {
                                 </MDBCol>
                             </MDBRow>
                             <MDBBtn className='mb-4' color='danger' size='lg'><a style={{ color: 'black' }}
-                                onClick={(e) => { e.preventDefault(); register(lastname, firstname, username, phonenumber, dateOfBirth, password, gender, email, navigate) }}  >Submit</a></MDBBtn>
+                                onClick={(e) => { e.preventDefault(); register(); }} disabled={isDisabled}  >Submit</a></MDBBtn>
                             <div className='d-flex flex-row mt-2' style={{ justifyContent: 'end' }}>
                                 <Link to="/"> <span className="h1 fw-bold mb-0" style={{ fontSize: '20px', color: 'black' }}>BACK</span></Link>
                             </div>

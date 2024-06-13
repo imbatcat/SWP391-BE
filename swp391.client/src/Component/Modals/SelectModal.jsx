@@ -15,7 +15,7 @@ import { useState } from 'react';
 import PetModal from './PetModal';
 import AppointmentModal from './AppointmentModal';
 
-function SelectModal({ toggleOpen}) {
+function SelectModal({ toggleOpen }) {
     const [isPetModal, setIsPetModal] = useState(false);
     const [isAppModal, setIsAppModal] = useState(false);
 

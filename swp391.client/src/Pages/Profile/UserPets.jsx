@@ -47,12 +47,12 @@ function UserPets() {
         } finally {
             setIsLoading(false);
         }
-    }
+    };
 
     useEffect(() => {
         if (user)
             getPetList(user);
-    }, [user])
+    }, [user]);
 
     if (isLoading) {
         return <div>Loading...</div>; // Loading state
@@ -78,12 +78,12 @@ function UserPets() {
                                             {petList.map((pet, index) => (
                                                 <div className="Pet-item" key={index}>
                                                     <div className="Pet-item-img-container">
-                                                        <img className='Pet-item-image' src={pet.img} alt='' />
+                                                        <img className='Pet-item-image' src={pet.imgUrl} alt='pet image' />
                                                     </div>
                                                     <div className='Pet-info'>
                                                         <div className='Pet-name-rating'>
                                                             <p>{pet.petName}</p>
-                                                            <p>{pet.isCat ? 'Cat' : 'Dog'}</p>
+                                                            <p>{pet.petBreed}</p>
                                                         </div>
                                                         <>
                                                             <MDBBtn color='muted' onClick={() => toggleOpen(pet)}>Detail</MDBBtn>
@@ -99,7 +99,7 @@ function UserPets() {
                                                     <MDBModalDialog centered>
                                                         <MDBModalContent>
                                                             <MDBModalHeader>
-                                                                <MDBModalTitle>Detail of {selectedPet.name}</MDBModalTitle>
+                                                                <MDBModalTitle>Detail of {selectedPet.petName}</MDBModalTitle>
                                                                 <MDBBtn className='btn-close' color='none' onClick={toggleOpen}></MDBBtn>
                                                             </MDBModalHeader>
                                                             <MDBModalBody>

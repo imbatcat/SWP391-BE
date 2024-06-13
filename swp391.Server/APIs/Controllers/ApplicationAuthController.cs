@@ -141,7 +141,6 @@ public class ApplicationAuthController : ControllerBase
                 username = user.UserName,
                 IsDisabled = false
             });
-            await _signInManager.SignInAsync(user, isPersistent: false);
         }
         return Ok();
     }

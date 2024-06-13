@@ -15,6 +15,7 @@ import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 import { useState } from 'react';
 import SelectModal from '../Component/Modals/SelectModal';
+import CheckAuth from '../Helpers/CheckAuth';
 
 function MainLayout({ children }) {
     const [basicModal, setBasicModal] = useState(false);
@@ -31,14 +32,16 @@ function MainLayout({ children }) {
                 <button className="static-button" data-tooltip-id="add-button" onClick={toggleOpen}>+</button>
                 <Tooltip id='add-button' content={'Make An Appointment'}></Tooltip>
 
-                <MDBModal open={basicModal} onClose={() => setBasicModal(false)} tabIndex='-1'>
-                    <SelectModal toggleOpen={toggleOpen}>
-                    </SelectModal>
-                </MDBModal>
+                <CheckAuth>
+                    <MDBModal open={basicModal} onClose={() => setBasicModal(false)} tabIndex='-1'>
+                        <SelectModal toggleOpen={toggleOpen}>
+                        </SelectModal>
+                    </MDBModal>
+                </CheckAuth>
             </div>
             <Footer></Footer>
         </div>
     );
-}
+};
 
 export default MainLayout;

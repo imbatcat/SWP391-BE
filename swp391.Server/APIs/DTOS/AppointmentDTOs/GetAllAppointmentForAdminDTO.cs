@@ -13,5 +13,7 @@
         public string TimeSlot { get; set; }
         public bool IsCancel { get; set; }
         public bool IsCheckIn { get; set; }
+        public bool IsCheckUp { get; set; }
+        public TimeOnly CheckinTime { get; set;}
     }
 }

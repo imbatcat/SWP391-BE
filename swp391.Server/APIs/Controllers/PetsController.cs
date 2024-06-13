@@ -30,13 +30,13 @@ namespace PetHealthcare.Server.APIs.Controllers
         //Get all medical Records of a Pet from Pet Id
         [HttpGet("/api/medRecByPet/{petId}")]
         [Authorize(Roles = "Vet, Admin, Customer")]
-        public async Task<IEnumerable<MedicalRecord>> GetMedicalRecordsByPet([FromRoute]string petId)
+        public async Task<IEnumerable<MedicalRecord>> GetMedicalRecordsByPet([FromRoute] string petId)
         {
             return await _context.GetMedicalRecordsByPet(petId);
         }
         /*Get single pet by a unique PetId*/
         [HttpGet("{id}")]
-        [Authorize(Roles="Staff, Customer, Admin")]
+        [Authorize(Roles = "Staff, Customer, Admin")]
         public async Task<ActionResult<Pet>> GetPet([FromRoute] string id)
         {
             var pet = await _context.GetPetByCondition(a => a.PetId == id);
@@ -50,9 +50,15 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         //Get all admission Records of a Pet from Pet Id
         [HttpGet("/api/admRecByPet/{petId}")]
-        public async Task<IEnumerable<AdmissionRecord>> GetAdmissionRecordsByPet([FromRoute]string petId)
+        public async Task<IEnumerable<AdmissionRecord>> GetAdmissionRecordsByPet([FromRoute] string petId)
         {
             return await _context.GetAdmissionRecordsByPet(petId);
+        }
+
+        [HttpGet("/appointment/{appointmentId}")]
+        public async Task<PetInfoAppointmentDTO> GetPetInfoFromAppointment([FromRoute] string appointmentId)
+        {
+            return await _context.GetPetInfoAppointment(appointmentId);
         }
 
         // PUT: api/Pets/5
@@ -68,32 +74,16 @@ namespace PetHealthcare.Server.APIs.Controllers
         // POST: api/Pets
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [Authorize(Roles="Customer,Staff, Admin")]
+        [Authorize(Roles = "Customer,Staff, Admin")]
         public async Task<ActionResult<Pet>> PostPet([FromBody] PetDTO petDTO)
         {
             await _context.CreatePet(petDTO);
-            //try
-            //{
-            //    await _context.SaveChangesAsync();
-            //}
-            //catch (DbUpdateException)
-            //{
-            //    if (PetExists(pet.PetId))
-            //    {
-            //        return Conflict();
-            //    }
-            //    else
-            //    {
-            //        throw;
-            //    }
-            //}
-
             return CreatedAtAction(nameof(PostPet), new { id = petDTO.GetHashCode() }, petDTO);
         }
 
         // DELETE: api/Pets/5
         [HttpDelete("{id}")]
-        [Authorize(Roles ="Customer,Admin")]
+        [Authorize(Roles = "Customer,Admin")]
         public async Task<ActionResult<Pet>> DeletePet([FromRoute] string id)
         {
             var pet = await _context.GetPetByCondition(a => a.PetId == id);

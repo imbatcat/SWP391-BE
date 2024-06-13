@@ -7,7 +7,7 @@ using PetHealthcare.Server.Services.Interfaces;
 namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Roles = "Veterianrian, Staff, User, Admin")]
+    [Authorize(Roles = "Vet, Staff, Customer, Admin")]
     [ApiController]
     public class TimeSlotsController : ControllerBase
     {
@@ -19,7 +19,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         // GET: api/Accounts
-        [HttpGet("")]
+        [HttpGet()]
         [ProducesResponseType(200, Type = typeof(IEnumerable<TimeSlot>))]
         public async Task<IEnumerable<TimeSlot>> GetTimeSlots()
         {

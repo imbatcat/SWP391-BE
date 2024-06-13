@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Humanizer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using PetHealthcare.Server.APIs.DTOS;
@@ -11,7 +12,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Staff,Admin")]
+    [Authorize(Roles = "Staff,Admin,Customer,Vet")]
 
     public class AppointmentController : ControllerBase
     {
@@ -24,12 +25,13 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // GET: api/Services
         [HttpGet]
-        public async Task<IEnumerable<GetAllAppointmentDTOs>> GetAllAppointment()
+        public async Task<IEnumerable<GetAllAppointmentForAdminDTO>> GetAllAppointment()
         {
             return await _appointment.GetAllAppointment();
         }
 
         // GET: api/Services/5
+        [Authorize(Roles = "Customer")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Appointment>> GetAppointmentByCondition(string id)
         {
@@ -42,37 +44,44 @@ namespace PetHealthcare.Server.APIs.Controllers
 
             return appointment;
         }
-        [HttpGet("admin/{accountId}")]
-        [Authorize(Roles ="Admin")]
-        public async Task<ActionResult<GetAllAppointmentForAdminDTO>> GetAllAppointmentForAdmin([FromRoute]string accountId)
+
+        [HttpGet("AppointmentList/{accountId}&{listType}")]
+        [Authorize(Roles = "Customer,Admin")]
+        public async Task<ActionResult<IEnumerable<ResAppListForCustomer>>> GetCustomerAppointmentList([FromRoute] string accountId, [FromRoute] string listType)
         {
-            if(accountId == null)
+            IEnumerable<ResAppListForCustomer> appointmentList = new List<ResAppListForCustomer>();
+            try
             {
-                return BadRequest(new { message = "Account id must not null" });
-            }
-            var appointmentList = await _appointment.GetAllAppointmentByAccountId(accountId);
-            if (appointmentList == null)
+                if (!listType.Equals("history", StringComparison.OrdinalIgnoreCase)
+                &&
+               !listType.Equals("current", StringComparison.OrdinalIgnoreCase))
+                {
+                    return BadRequest(new { message = "listType must be current or history" });
+                }
+                appointmentList = await _appointment.getAllCustomerAppointment(accountId, listType);
+            }catch(Exception ex)
             {
-                return NotFound(new { message = "Can't find any appointment of that account" });
+                if(ex.Message.Equals("Can't find that Account"))
+                {
+                    return NotFound(new { message = "Can't find that account id" });
+                }
+                if(ex.Message.Equals("The history list is empty"))
+                {
+                    return NotFound(new { message = "The history list is empty" });
+                }else if (ex.Message.Equals("The current list is empty"))
+                {
+                    return NotFound(new {message = "The current list is empty" });
+                }
             }
+            
             return Ok(appointmentList);
         }
-        [HttpGet("AppointmentList/{accountId}")]
-        [Authorize(Roles="Customer,Admin")]
-        public async Task<IEnumerable<ResAppListForCustomer>> GetCustomerAppointmentList([FromRoute] string accountId)
-        {
-            return await _appointment.getAllCustomerAppList(accountId);
-        } 
-        [HttpGet("AppointmentList/AppointmentHistory/{accountId}")]
-        [Authorize(Roles = "Customer,Admin")]
-        public async Task<IEnumerable<ResAppListForCustomer>> GetCustomerAppointmentHistory([FromRoute] string accountId)
-        {
-            return await _appointment.getAllCustomerAppHistory(accountId);
-        }
+
         [HttpGet("AppointmentList/{accountId}&{typeOfSorting}&{orderBy}")]
         [Authorize(Roles = "Customer,Admin")]
-        public async Task<ActionResult<IEnumerable<ResAppListForCustomer>>> GetSortedListByDate(string accountId, string typeOfSorting, string orderBy)
+        public async Task<ActionResult<IEnumerable<ResAppListForCustomer>>> GetSortedListByDate(string accountId, string typeOfSorting, string orderBy = "asc")
         {
+            IEnumerable<ResAppListForCustomer> sortedAppointment = new List<ResAppListForCustomer>();
             if (!typeOfSorting.Equals("history", StringComparison.OrdinalIgnoreCase)
                 &&
                !typeOfSorting.Equals("current", StringComparison.OrdinalIgnoreCase))
@@ -86,19 +95,49 @@ namespace PetHealthcare.Server.APIs.Controllers
                 return BadRequest(new { message = "orderBy must be asc or desc" });
             }
             var sortedAppointment = await _appointment.SortAppointmentByDate(accountId, typeOfSorting, orderBy);
+            if (sortedAppointment == null)
+            try
+            {
+                sortedAppointment = await _appointment.SortAppointmentByDate(accountId, typeOfSorting, orderBy);
+            } catch(Exception ex)
+            {
+                if (ex.Message.Equals("Can't find that Account"))
+                {
+                    return NotFound(new { message = "Can't find that account id" });
+                }
+                if (ex.Message.Equals("The history list is empty"))
+                {
+                    return NotFound(new { message = "The history list is empty" });
+                }
+                else if (ex.Message.Equals("The current list is empty"))
+                {
+                    return NotFound(new { message = "The current list is empty" });
+                }
+            }
             return Ok(sortedAppointment);
         }
+
+        // Get list of active appointments by timeslot in a week
+        [Authorize(Roles = "Admin, Vet")]
+        [HttpPost("AppointmentList/by-week/{startWeek}&{endWeek}")]
+        public async Task<IEnumerable<AppointmentForVetDTO>> GetAppointmentsByWeek([FromRoute] DateOnly startWeek, [FromRoute] DateOnly endWeek, [FromBody] TimeslotDTO timeslot)
+        {
+            return await _appointment.GetAppointmentsByTimeDate(startWeek, endWeek, timeslot);
+        }
+
+
         // PUT: api/Services/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAppointment([FromRoute] string id, [FromBody] CustomerAppointmentDTO toUpdateAppointment)
         {
             var appointment = await _appointment.GetAppointmentByCondition(a => a.AppointmentId.Equals(id));
             if (appointment == null)
             {
-                return NotFound(new {message ="Update fail, appointment not found"});
-            } else if(!_appointment.isVetIdValid(toUpdateAppointment.VeterinarianAccountId)) { 
-                return BadRequest(new {message = "Invalid foreign key VetId"});
+                return NotFound(new { message = "Update fail, appointment not found" });
+            }
+            else if (!_appointment.isVetIdValid(toUpdateAppointment.VeterinarianAccountId))
+            {
+                return BadRequest(new { message = "Invalid foreign key VetId" });
             }
             await _appointment.UpdateAppointment(id, toUpdateAppointment);
             return Ok(toUpdateAppointment);
@@ -116,7 +155,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // DELETE: api/Services/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteService([FromRoute] string id)
+        public async Task<IActionResult> DeleteApppointment([FromRoute] string id)
         {
             var appointment = await _appointment.GetAppointmentByCondition(a => a.AppointmentId.Equals(id));
             if (appointment == null)
