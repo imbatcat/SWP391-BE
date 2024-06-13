@@ -20,5 +20,7 @@ namespace PetHealthcare.Server.Services.Interfaces
 
         bool isVetIdValid(string id);
         string GenerateId();
+
+        Task<Account?> GetAccountById(string id);
     }
 }

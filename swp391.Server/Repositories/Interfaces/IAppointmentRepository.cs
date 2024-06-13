@@ -9,5 +9,6 @@ namespace PetHealthcare.Server.Repositories.Interfaces
         bool isInputtedVetIdValid(string id);
         Task<IEnumerable<Appointment>> GetAppointmentsOfWeek(DateOnly startWeekDate, DateOnly endWeekDate);
 
+        Task<Account?> GetAccountById(string id);
     }
 }

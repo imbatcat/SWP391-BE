@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace PetHealthcare.Server.Migrations
 {
     [DbContext(typeof(PetHealthcareDbContext))]
-    [Migration("20240611142541_db01")]
-    partial class db01
+    [Migration("20240612080610_db_01")]
+    partial class db_01
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -476,9 +476,6 @@ namespace PetHealthcare.Server.Migrations
                     b.Property<string>("ServiceOrderId")
                         .IsRequired()
                         .HasColumnType("char(11)");
-
-                    b.Property<double>("ServicePrice")
-                        .HasColumnType("float");
 
                     b.HasKey("ServicePaymentId");
 
