@@ -13,9 +13,6 @@ namespace PetHealthcare.Server.Models
         [Column(TypeName = "char(11)")]
         public string ServicePaymentId { get; set; }
 
-        [DataType(DataType.Currency)]
-        public double ServicePrice { get; set; }
-
         [JsonConverter(typeof(DateOnlyConverter))]
         [DataType(DataType.Date)]
         public DateOnly PaymentDate { get; set; }

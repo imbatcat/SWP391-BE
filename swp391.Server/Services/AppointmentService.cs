@@ -1,4 +1,5 @@
-﻿using NanoidDotNet;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using NanoidDotNet;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.APIs.DTOS.AppointmentDTOs;
 using PetHealthcare.Server.Models;
@@ -118,8 +119,27 @@ namespace PetHealthcare.Server.Services
             await _appointmentRepository.Update(UpdateAppointment);
         }
 
+        public string GetAppointmentStatus(Appointment appointment)
+        {
+            string status = "Ongoing";
+            DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
+            if (appointment.IsCancel == true)
+            {
+                status = "Cancel";
+            }
+            else if (appointment.IsCheckUp == true || appointment.AppointmentDate.CompareTo(currentDate) < 0)
+            {
+                status = "Finish";
+            }
+            return status;
+        }
         public async Task<IEnumerable<ResAppListForCustomer>> getAllCustomerAppointment(string id, string listType)
         {
+            var AccountCheck = await GetAccountById(id);
+            if (AccountCheck == null)
+            {
+                throw new Exception("Can't find that Account");
+            }
             IEnumerable<Appointment> appointmentsList = await _appointmentRepository.GetAll();
             List<ResAppListForCustomer> resAppListForCustomers = new List<ResAppListForCustomer>();
             foreach (Appointment appointment in appointmentsList)
@@ -136,6 +156,7 @@ namespace PetHealthcare.Server.Services
                             PetName = appointment.Pet.PetName,
                             VeterinarianName = appointment.Veterinarian.FullName,
                             TimeSlot = appointment.TimeSlot.StartTime.ToString("h:mm") + " - " + appointment.TimeSlot.EndTime.ToString("h:mm"),
+                            AppointmentStatus = GetAppointmentStatus(appointment)
                         });
                     }
                 }
@@ -150,10 +171,21 @@ namespace PetHealthcare.Server.Services
                             PetName = appointment.Pet.PetName,
                             VeterinarianName = appointment.Veterinarian.FullName,
                             TimeSlot = appointment.TimeSlot.StartTime.ToString("h:mm") + " - " + appointment.TimeSlot.EndTime.ToString("h:mm"),
+                            AppointmentStatus = GetAppointmentStatus(appointment)
                         });
                     }
                 }
 
+            }
+
+            //catch error
+            if (resAppListForCustomers.Count() == 0 && listType.Equals("current", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new Exception("The current list is empty");
+            }
+            else if (resAppListForCustomers.Count() == 0 && listType.Equals("history", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new Exception("The history list is empty");
             }
             return resAppListForCustomers;
         }
@@ -231,6 +263,11 @@ namespace PetHealthcare.Server.Services
             }
             return resList;
         }
-    }
 
+        public async Task<Account?> GetAccountById(string id)
+        {
+            return await _appointmentRepository.GetAccountById(id);
+        }
+    }
 }
+

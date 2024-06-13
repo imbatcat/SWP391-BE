@@ -8,6 +8,7 @@
         public string VeterinarianName { get; set; }
 
         public string TimeSlot { get; set; }
+        public string AppointmentStatus { get; set; }
 
     }
 }

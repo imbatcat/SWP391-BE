@@ -77,5 +77,9 @@ namespace PetHealthcare.Server.Repositories
                         app.IsCancel == false)
                 .ToListAsync();
         }
+        public async Task<Account?> GetAccountById(string id)
+        {
+            return await context.Accounts.FindAsync(id);
+        }
     }
 }
