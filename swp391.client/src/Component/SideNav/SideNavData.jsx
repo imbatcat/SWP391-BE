@@ -13,31 +13,31 @@ export const SideNavData = [
     {
         title: 'Admin',
         path: '/admin/admins',
-        icon: <IoIcons.IoMdHelpCircle />,
+        icon: <IoIcons.IoIosCode />,
         cName: 'nav-text'
     },
     {
         title: 'Users',
         path: '/admin/customers',
-        icon: <IoIcons.IoIosPaper />,
+        icon: <IoIcons.IoIosPeople />,
         cName: 'nav-text'
     },
     {
         title: 'Pets',
         path: '/admin/pets',
-        icon: <FaIcons.FaCartPlus />,
+        icon: <FaIcons.FaDog />,
         cName: 'nav-text'
     },
     {
         title: 'Veternary',
         path: '/admin/vets',
-        icon: <IoIcons.IoMdPeople />,
+        icon: <IoIcons.IoIosMedical />,
         cName: 'nav-text'
     },
     {
         title: 'Appointments',
         path: '/admin/appointments',
-        icon: <FaIcons.FaEnvelopeOpenText />,
+        icon: <IoIcons.IoIosPaper />,
         cName: 'nav-text'
     },
     {

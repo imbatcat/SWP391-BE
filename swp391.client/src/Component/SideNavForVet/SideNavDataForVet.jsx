@@ -6,26 +6,26 @@ import * as IoIcons from 'react-icons/io';
 export const SideNavData = [
     {
         title: 'Work Schedule',
-        path: '/workSchedule',
-        icon: <AiIcons.AiFillHome />,
+        path: '/vet/WorkSchedule',
+        icon: <AiIcons.AiFillCalendar />,
         cName: 'nav-text'
     },
     {
         title: 'Appointment List',
         path: '/admin/appointmentList',
-        icon: <IoIcons.IoMdHelpCircle />,
+        icon: <IoIcons.IoIosPaper />,
         cName: 'nav-text'
     },
     {
         title: 'Pet Medical Record',
         path: '/admin/petMedicalRecord',
-        icon: <IoIcons.IoIosPaper />,
+        icon: <IoIcons.IoIosMedkit />,
         cName: 'nav-text'
     },
     {
         title: 'Hospitalization Management',
         path: '/vet/hospitalizationManagement',
-        icon: <FaIcons.FaCartPlus />,
+        icon: <FaIcons.FaHospital />,
         cName: 'nav-text'
     }
 ];
