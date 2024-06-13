@@ -26,6 +26,7 @@ import AdminPet from './Pages/AdminPages/petManage';
 import VetAccount from './Pages/AdminPages/VetAccount';
 import UsersAccount from './Pages/AdminPages/UsersAccount';
 import AdminAccount from './Pages/AdminPages/AdminAccount';
+import WorkSchedule from './Pages/Veternary/WorkSchedule';
 
 const router = createBrowserRouter([
     {
@@ -123,6 +124,11 @@ const router = createBrowserRouter([
     {
         path: '/admin/admins',
         element: <AdminAccount />,
+        errorElement: <div>404 Not Found</div>,
+    },
+    {
+        path: '/vet/WorkSchedule',
+        element: <WorkSchedule/>,
         errorElement: <div>404 Not Found</div>,
     },
 
