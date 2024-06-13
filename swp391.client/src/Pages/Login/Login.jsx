@@ -85,8 +85,8 @@ function Login() {
     const handleNavigation = (role) => {
         if (role === 'Admin') {
             navigate('/admin/customers');
-        } else {
-            navigate('/');
+        } else if (role === 'Vet'){
+            navigate('/vet/WorkSchedule');
         }
     }
     return (
