@@ -14,19 +14,10 @@ namespace PetHealthcare.Server.Services
     public class AccountService : IAccountService
     {
         private readonly IAccountRepository _accountService;
-        //private readonly UserManager<ApplicationUser> _userManager;
-        //private readonly SignInManager<ApplicationUser> _signInManager;
-
-        //public AccountService(IAccountRepository accountService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager) 
-        //{
-        //    _accountService = accountService;
-        //    _userManager = userManager;
-        //    _signInManager = signInManager;
-        //}
 
         public AccountService(IAccountRepository service)
         {
-            _accountService = service; 
+            _accountService = service;
         }
 
         public async Task<Account?> CreateAccount(AccountDTO Account)
@@ -52,7 +43,8 @@ namespace PetHealthcare.Server.Services
             try
             {
                 await _accountService.Create(_account);
-            } catch (BadHttpRequestException ex)
+            }
+            catch (BadHttpRequestException ex)
             {
                 throw new BadHttpRequestException(
                     ex.Message,
@@ -64,10 +56,10 @@ namespace PetHealthcare.Server.Services
 
         public async Task DeleteAccount(Account Account)
         {
-            var _account=new Account 
+            var _account = new Account
             {
-                AccountId=Account.AccountId,
-                IsDisabled = true 
+                AccountId = Account.AccountId,
+                IsDisabled = true
             };
             await _accountService.DeleteAccount(_account);
         }
@@ -119,6 +111,11 @@ namespace PetHealthcare.Server.Services
         public async Task<bool> SetAccountIsDisabled(RequestAccountDisable account)
         {
             return await _accountService.SetAccountIsDisabled(account);
+        }
+
+        public async Task<bool> Any(Expression<Func<Account, bool>> expression)
+        {
+            return await _accountService.Any(expression);
         }
     }
 }

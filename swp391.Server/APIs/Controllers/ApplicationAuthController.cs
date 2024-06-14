@@ -17,6 +17,7 @@ using System.Text;
 using PetHealthcare.Server.Services.AuthInterfaces;
 using NuGet.Common;
 using PetHealthcare.Server.Helpers;
+using System.ComponentModel.DataAnnotations;
 
 [Authorize]
 [ApiController]
@@ -46,6 +47,11 @@ public class ApplicationAuthController : ControllerBase
     {
         if (ModelState.IsValid)
         {
+            var errors = await _authenticationService.ValidateUniqueFields(registerAccount);
+            if (errors != null)
+            {
+                return BadRequest(new { message = errors });
+            }
             var user = new ApplicationUser
             {
                 UserName = registerAccount.UserName,
@@ -161,9 +167,10 @@ public class ApplicationAuthController : ControllerBase
         {
 
             var _user = await _userManager.FindByEmailAsync(user.Email);
+            if (_user == null) return BadRequest(new { message = "Email does not exists" });
             if (!(await _userManager.IsEmailConfirmedAsync(_user)))
             {
-                return BadRequest("Account is not activated");
+                return BadRequest(new { message = "Account is not activated" });
             }
             await _authenticationService.SendForgotPasswordEmail(_user, user.Email);
 
