@@ -59,47 +59,8 @@ namespace PetHealthcare.Server.APIs.Controllers
                     return BadRequest(new { message = "listType must be current or history" });
                 }
                 appointmentList = await _appointment.getAllCustomerAppointment(accountId, listType);
-            }catch(Exception ex)
-            {
-                if(ex.Message.Equals("Can't find that Account"))
-                {
-                    return NotFound(new { message = "Can't find that account id" });
-                }
-                if(ex.Message.Equals("The history list is empty"))
-                {
-                    return NotFound(new { message = "The history list is empty" });
-                }else if (ex.Message.Equals("The current list is empty"))
-                {
-                    return NotFound(new {message = "The current list is empty" });
-                }
             }
-            
-            return Ok(appointmentList);
-        }
-
-        [HttpGet("AppointmentList/{accountId}&{typeOfSorting}&{orderBy}")]
-        [Authorize(Roles = "Customer,Admin")]
-        public async Task<ActionResult<IEnumerable<ResAppListForCustomer>>> GetSortedListByDate(string accountId, string typeOfSorting, string orderBy = "asc")
-        {
-            IEnumerable<ResAppListForCustomer> sortedAppointment = new List<ResAppListForCustomer>();
-            if (!typeOfSorting.Equals("history", StringComparison.OrdinalIgnoreCase)
-                &&
-               !typeOfSorting.Equals("current", StringComparison.OrdinalIgnoreCase))
-            {
-                return BadRequest(new { message = "typeOfSorting must be current or history" });
-            }
-            if (!orderBy.Equals("asc", StringComparison.OrdinalIgnoreCase)
-                &&
-               !orderBy.Equals("desc", StringComparison.OrdinalIgnoreCase))
-            {
-                return BadRequest(new { message = "orderBy must be asc or desc" });
-            }
-            var sortedAppointment = await _appointment.SortAppointmentByDate(accountId, typeOfSorting, orderBy);
-            if (sortedAppointment == null)
-            try
-            {
-                sortedAppointment = await _appointment.SortAppointmentByDate(accountId, typeOfSorting, orderBy);
-            } catch(Exception ex)
+            catch (Exception ex)
             {
                 if (ex.Message.Equals("Can't find that Account"))
                 {
@@ -114,6 +75,48 @@ namespace PetHealthcare.Server.APIs.Controllers
                     return NotFound(new { message = "The current list is empty" });
                 }
             }
+
+            return Ok(appointmentList);
+        }
+
+        [HttpGet("AppointmentList/{accountId}&{typeOfSorting}&{orderBy}")]
+        [Authorize(Roles = "Customer,Admin")]
+        public async Task<ActionResult<IEnumerable<ResAppListForCustomer>>> GetSortedListByDate(string accountId, string typeOfSorting, string orderBy = "asc")
+        {
+            //IEnumerable<ResAppListForCustomer> sortedAppointment = new List<ResAppListForCustomer>();
+            if (!typeOfSorting.Equals("history", StringComparison.OrdinalIgnoreCase)
+                &&
+               !typeOfSorting.Equals("current", StringComparison.OrdinalIgnoreCase))
+            {
+                return BadRequest(new { message = "typeOfSorting must be current or history" });
+            }
+            if (!orderBy.Equals("asc", StringComparison.OrdinalIgnoreCase)
+                &&
+               !orderBy.Equals("desc", StringComparison.OrdinalIgnoreCase))
+            {
+                return BadRequest(new { message = "orderBy must be asc or desc" });
+            }
+            var sortedAppointment = await _appointment.SortAppointmentByDate(accountId, typeOfSorting, orderBy);
+            if (sortedAppointment == null)
+                try
+                {
+                    sortedAppointment = await _appointment.SortAppointmentByDate(accountId, typeOfSorting, orderBy);
+                }
+                catch (Exception ex)
+                {
+                    if (ex.Message.Equals("Can't find that Account"))
+                    {
+                        return NotFound(new { message = "Can't find that account id" });
+                    }
+                    if (ex.Message.Equals("The history list is empty"))
+                    {
+                        return NotFound(new { message = "The history list is empty" });
+                    }
+                    else if (ex.Message.Equals("The current list is empty"))
+                    {
+                        return NotFound(new { message = "The current list is empty" });
+                    }
+                }
             return Ok(sortedAppointment);
         }
 

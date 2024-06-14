@@ -7,19 +7,19 @@ export const SideNavData = [
     {
         title: 'Work Schedule',
         path: '/vet/WorkSchedule',
-        icon: <AiIcons.AiFillCalendar />,
+        icon: <AiIcons.AiFillHome />,
         cName: 'nav-text'
     },
     {
         title: 'Appointment List',
-        path: '/admin/appointmentList',
-        icon: <IoIcons.IoIosPaper />,
+        path: '/vet/appointmentList',
+        icon: <IoIcons.IoMdHelpCircle />,
         cName: 'nav-text'
     },
     {
         title: 'Pet Medical Record',
-        path: '/admin/petMedicalRecord',
-        icon: <IoIcons.IoIosMedkit />,
+        path: '/vet/petMedicalRecord',
+        icon: <IoIcons.IoIosPaper />,
         cName: 'nav-text'
     },
     {

@@ -26,39 +26,50 @@ function SignUp() {
     const [isDisabled, setIsDisabled] = useState(false);
     const navigate = useNavigate();
 
-    async function register() {
-        setIsDisabled(!isDisabled);
-        try {
+    const handleRegister = async () => {
+        const fetchRegister = async () => {
             const response = await fetch('https://localhost:7206/api/ApplicationAuth/register', {
                 method: 'POST', // *GET, POST, PUT, DELETE, etc.
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 credentials: 'include',
-                body: JSON.stringify(
-                    {
-                        "userName": username,
-                        "password": password,
-                        "fullName": lastname + firstname,
-                        "email": email,
-                        "phoneNumber": phonenumber,
-                        "isMale": gender,
-                        "roleId": 1,
-                        "dateOfBirth": dateOfBirth
-                    }
-                ) // body data type must match "Content-Type" header
+                body: JSON.stringify({
+                    "userName": username,
+                    "password": password,
+                    "fullName": lastname + firstname,
+                    "email": email,
+                    "phoneNumber": phonenumber,
+                    "isMale": gender,
+                    "roleId": 1,
+                    "dateOfBirth": dateOfBirth
+                }) // body data type must match "Content-Type" header
             });
+
             if (!response.ok) {
-                throw new Error(response.message);
+                const errorData = await response.json();
+                throw new Error(errorData.errors || 'Failed to register');
             }
-            toast.info("Check your email to activate your account");
+
+            return response;
+        };
+
+        toast.promise(
+            fetchRegister(),
+            {
+                pending: 'Registering your account...',
+                success: 'Check your email to activate your account!',
+                error: 'Registration failed! Please try again.'
+            }
+        ).then(() => {
             navigate('/');
             console.log('ok');
-        } catch (error) {
-            toast.error('Login failed!');
+        }).catch((error) => {
+            setIsDisabled(false);
             console.error(error.message);
-        }
-    }
+        });
+    };
+
     const handleFirstNameChange = (e) => setFirstname(e.target.value);
     const handleLastNameChange = (e) => setLastname(e.target.value);
     const handleUsernameChange = (e) => setUsername(e.target.value);
@@ -188,7 +199,7 @@ function SignUp() {
                                 </MDBCol>
                             </MDBRow>
                             <MDBBtn className='mb-4' color='danger' size='lg'><a style={{ color: 'black' }}
-                                onClick={(e) => { e.preventDefault(); register(); }} disabled={isDisabled}  >Submit</a></MDBBtn>
+                                onClick={(e) => { setIsDisabled(true); e.preventDefault(); handleRegister(); }} disabled={isDisabled}>Submit</a></MDBBtn>
                             <div className='d-flex flex-row mt-2' style={{ justifyContent: 'end' }}>
                                 <Link to="/"> <span className="h1 fw-bold mb-0" style={{ fontSize: '20px', color: 'black' }}>BACK</span></Link>
                             </div>

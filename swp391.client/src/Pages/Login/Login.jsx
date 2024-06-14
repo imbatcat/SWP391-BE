@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
-import './Login.css'
-import './usePasswordToggle.css'
+import './Login.css';
+import './usePasswordToggle.css';
 import usePasswordToggle from './usePasswordToggle';
 import {
     MDBBtn,
@@ -74,21 +74,30 @@ function Login() {
             return;
         }
         loginapi(e);
-    }
+    };
     const handleOnChangeUsername = (e) => {
         setUserName(e.target.value);
-    }
+    };
 
     const handleOnChangePassWord = (e) => {
         setPassWord(e.target.value);
-    }
+    };
     const handleNavigation = (role) => {
-        if (role === 'Admin') {
-            navigate('/admin/customers');
-        } else if (role === 'Vet'){
-            navigate('/vet/WorkSchedule');
+        switch (role) {
+            case 'Admin':
+                navigate('/admin/customers');
+                break;
+            case 'Vet':
+                navigate('/vet/WorkSchedule');
+                break;
+            case 'Staff':
+                navigate('/');
+                break;
+            case 'Customer':
+                navigate('/');
+                break;
         }
-    }
+    };
     return (
         <MDBContainer className="my-5 d-10 justify-content-center">
             <MDBCard className='login-card'>

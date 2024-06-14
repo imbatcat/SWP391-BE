@@ -153,6 +153,7 @@ function PetModalForm() {
             <MDBBtn onClick={(e) => createPetApi(e)} type='submit' outline color='dark' className='mb-4' block >
                 Submit
             </MDBBtn>
+            <input type="reset" value="Reset"></input>
         </form >
     );
 }
