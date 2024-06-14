@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import { MDBBadge, MDBBtn, MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
+import { MDBBadge, MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
 import SideNav from '../../Component/SideNav/SideNav';
 
 function AdminPet() {
   const [pets, setPets] = useState([]);
-  const [accounts, setAccounts] = useState([]);
   const [searchInput, setSearchInput] = useState('');
   const [filteredPets, setFilteredPets] = useState([]);
 
