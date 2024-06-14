@@ -13,15 +13,14 @@ namespace PetHealthcare.Server.Models
     public class Account
     {
         [NotMapped]
-        public string prefix { get; set; } = "AC";
+        public string prefix { get; set; } = "AC-";
 
         [Key]
         [Column(TypeName = "char(11)")]
         public string AccountId { get; set; }
 
         [StringLength(20)]
-        [Required]
-        public string Username { get; set; }
+        public string? Username { get; set; }
 
         [StringLength(50)]
         [Required]
@@ -29,8 +28,7 @@ namespace PetHealthcare.Server.Models
 
         [StringLength(16)]
         [DataType(DataType.Password)]
-        [Required]
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
         [Required]
         public bool IsMale { get; set; }
@@ -40,8 +38,7 @@ namespace PetHealthcare.Server.Models
         public string PhoneNumber { get; set; }
 
         [EmailAddress(ErrorMessage = "Please enter a valid email address.")]
-        [Required]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [DataType(DataType.Date)]
         [Required]

@@ -6,15 +6,15 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+
 #nullable disable
 
 namespace PetHealthcare.Server.Migrations
 {
     [DbContext(typeof(PetHealthcareDbContext))]
-    [Migration("20240612080610_db_01")]
-    partial class db_01
+    [Migration("20240614132532_db03")]
+    partial class db03
     {
-        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
@@ -476,6 +476,9 @@ namespace PetHealthcare.Server.Migrations
                     b.Property<string>("ServiceOrderId")
                         .IsRequired()
                         .HasColumnType("char(11)");
+
+                    b.Property<double>("ServicePrice")
+                        .HasColumnType("float");
 
                     b.HasKey("ServicePaymentId");
 
