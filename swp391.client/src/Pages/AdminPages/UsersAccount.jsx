@@ -104,6 +104,7 @@ function UsersAccount() {
                         <th scope='col'>Name</th>
                         <th scope='col'>Email</th>
                         <th scope='col'>Phone Number</th>
+                        <th scope='col'>Date of Birth</th>
                         <th scope='col'>Gender</th>
                         <th scope='col'>Status</th>
                         <th scope='col'>Actions</th>
@@ -131,6 +132,8 @@ function UsersAccount() {
                             </td>
                             <td>
                                 <p className='fw-normal mb-1'>{acc.phoneNumber}</p>
+                            </td>                     <td>
+                                <p className='fw-normal mb-1'>{acc.dateOfBirth}</p>
                             </td>
                             <td>
                                 <p className='fw-normal mb-1'>{acc.isMale ? "Male" : "Female"}</p>
