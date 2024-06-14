@@ -8,6 +8,7 @@ import {
 import { useUser } from '../../Context/UserContext';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import { useEffect } from 'react';
 
 function AppointmentForm() {
     const [user, setUser] = useUser();
@@ -17,44 +18,31 @@ function AppointmentForm() {
     const [centredModal, setCentredModal] = useState(false);
     const [selectedPet, setSelectedPet] = useState(null);
 
-    const getPetList = async () => {
+    const apis = [
+        `https://localhost:7206/api/accounts/pets/${user.id}`,
+        `https://localhost:7206/api/TimeSlots`,
+        ``
+    ];
+    const getData = async () => {
         try {
-            const response = await fetch(`https://localhost:7206/api/accounts/pets/${user.id}`, {
+            const promise = apis.map(api => fetch(api, {
                 method: 'GET', // *GET, POST, PUT, DELETE, etc.
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 credentials: 'include'
-            });
-            if (!response.ok) {
+            }));
+            const [response1, response2] = await Promise.all(promise);
+            if (!response1.ok || !response2.ok) {
                 throw new Error("Error fetching data");
             }
-            var userData = await response.json();
-            setPetList(userData);
-            console.log(userData);
-        } catch (error) {
-            toast.error('Error getting user details!');
-            console.error(error.message);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+            var petData = await response1.json();
+            var timeslotData = await response2.json();
+            setPetList(petData);
+            setTimeSlotList(timeslotData);
 
-    const getTimeslots = async () => {
-        try {
-            const response = await fetch(`https://localhost:7206/api/TimeSlots`, {
-                method: 'GET', // *GET, POST, PUT, DELETE, etc.
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'include'
-            });
-            if (!response.ok) {
-                throw new Error("Error fetching data");
-            }
-            var userData = await response.json();
-            setTimeSlotList(userData);
-            console.log(userData);
+            console.log(petData);
+            console.log(timeslotData);
         } catch (error) {
             toast.error('Error getting user details!');
             console.error(error.message);
@@ -62,39 +50,46 @@ function AppointmentForm() {
             setIsLoading(false);
         }
     };
-    if (!isLoading) {
+    useEffect(() => {
+        getData();
+    }, []);
+
+    if (isLoading) {
         return (<div>Loading...</div>);
     }
     return (
         <form>
             <MDBRow className='mb-4'>
-                <MDBCol>
-                    <MDBInput id='ownerName' label='Owner Name' />
-                </MDBCol>
-                <MDBCol>
-                    <MDBInput id='phone' label='Phone Number' type='tel' />
-                </MDBCol>
-            </MDBRow>
-
-            <MDBRow className='mb-4'>
-                <MDBCol>
-                    <MDBInput id='petName' label='Pet Name' />
-                </MDBCol>
-                <MDBCol>
-                    <MDBInput id='petAge' label='Pet Age' type='number' min='0' />
-                </MDBCol>
-                <MDBCol>
-                    <MDBInput id='petAge' label='Pet breed' type='text' />
-                </MDBCol>
-                <MDBCol>
-                    <MDBCheckbox label="Is male"></MDBCheckbox>
-                </MDBCol>
+                <select data-mdb-select-init >
+                    <option value="" disabled selected>Choose your pet</option>
+                    {petList.map((pet, index) => (
+                        <option key={index} value={pet.petId}>
+                            <div className='Pet-info'>
+                                <div className='Pet-name-rating'>
+                                    <p>{pet.petName}</p>
+                                </div>
+                            </div>
+                        </option>
+                    ))}
+                </select>
 
             </MDBRow>
             <MDBRow className='mb-4'>
-                <MDBCol>
-                    <MDBInput id='timeSlot' label='Meet time' type='time' defaultValue={'00:00'}></MDBInput>
-                </MDBCol>
+                <select data-mdb-select-init >
+                    <option value="" disabled selected>Choose your time</option>
+                    {timeslotList.map((timeslot, index) => (
+                        <option key={index} value={timeslot.timeslotId}>
+                            <div className='timeslot-info'>
+                                <div className='timeslot-name-rating'>
+                                    <p>{timeslot.startTime} - {timeslot.endTime} </p>
+                                </div>
+                            </div>
+                        </option>
+                    ))}
+                </select>
+
+            </MDBRow>
+            <MDBRow className='mb-4'>
                 <MDBCol>
                     <MDBInput id='appDate' label='Appointment Date' type='date' ></MDBInput>
                 </MDBCol>
@@ -107,6 +102,7 @@ function AppointmentForm() {
             <MDBBtn type='submit' outline color='dark' className='mb-4' block>
                 Submit
             </MDBBtn>
+            <input type="reset" value="Reset"></input>
         </form>
     );
 }

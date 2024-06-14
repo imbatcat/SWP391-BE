@@ -67,7 +67,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
             if (account == null)
             {
-                return NotFound();
+                return NotFound(new { message = "No such account exists, check your id" });
             }
 
             return account;

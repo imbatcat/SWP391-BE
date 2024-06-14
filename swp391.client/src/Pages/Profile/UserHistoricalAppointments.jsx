@@ -2,7 +2,9 @@ import {
     MDBBtn,
     MDBCard,
     MDBCardBody,
+    MDBBadge,
     MDBCardImage,
+    MDBTable, MDBTableBody, MDBTableHead,
     MDBCardText,
     MDBCol,
     MDBContainer,
@@ -41,10 +43,10 @@ function UserAppointments() {
                 },
                 credentials: 'include'
             });
-            if (!response.ok) {
-                throw new Error("Error fetching data");
-            }
             var userData = await response.json();
+            if (!response.ok) {
+                throw new Error(userData.message);
+            }
             setAppointmentList(userData);
             console.log(userData);
         } catch (error) {
@@ -80,24 +82,48 @@ function UserAppointments() {
                             <MDBCol>
                                 <MDBCard className="mb-4 mb-lg-0">
                                     <MDBCardBody className="p-0">
-                                        <div className='Appointment-display-list'>
-                                            {appointmentList ? (
-                                                appointmentList.map((appointment, index) => (
-                                                    <div className="Appointment-item" key={appointment.id || index}>
-                                                        <div className='Appointment-info'>
-                                                            <div className='Appointment-name-rating'>
-                                                                <p>{appointment.petName}</p>
-                                                            </div>
-                                                            <MDBBtn color='muted' onClick={() => toggleOpen(appointment)}>
-                                                                Detail
-                                                            </MDBBtn>
-                                                        </div>
-                                                    </div>
-                                                ))
-                                            ) : (
-                                                <div>No upcoming appointments</div>
-                                            )}
-                                        </div>
+                                        {appointmentList && appointmentList.length > 0 ? (
+                                            <MDBTable align='middle'>
+                                                <MDBTableHead>
+                                                    <tr>
+                                                        <th scope='col'>Pet name</th>
+                                                        <th scope='col'>Veterinarian</th>
+                                                        <th scope='col'>Time slot</th>
+                                                        <th scope='col'>Date</th>
+                                                        <th scope='col'>Booking price</th>
+                                                        <th scope='col'>Status</th>
+                                                    </tr>
+                                                </MDBTableHead>
+                                                <MDBTableBody>
+                                                    {appointmentList.map((appointment, index) => (
+                                                        <tr key={index}>
+                                                            <td>
+                                                                <div className='d-flex align-items-center'>
+                                                                    <p className='fw-bold mb-1'>{appointment.petName}</p>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <p className='fw-normal mb-1'>{appointment.veterinarianName}</p>
+                                                            </td>
+                                                            <td>
+                                                                <p className='fw-normal mb-1'>{appointment.timeSlot}</p>
+                                                            </td>
+                                                            <td>
+                                                                <p className='fw-normal mb-1'>{appointment.appointmentDate}</p>
+                                                            </td>
+                                                            <td>
+                                                                <p className='fw-normal mb-1'>{appointment.bookingPrice}</p>
+                                                            </td>
+                                                            <td>
+                                                                <p className='fw-normal mb-1'>{appointment.appointmentStatus}</p>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </MDBTableBody>
+                                            </MDBTable>
+                                        ) : (
+                                            <div>No upcoming appointments</div>
+                                        )}
 
                                         {
                                             selectedAppointment && (

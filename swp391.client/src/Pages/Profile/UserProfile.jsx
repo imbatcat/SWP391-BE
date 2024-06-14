@@ -14,23 +14,42 @@ import UserSidebar from '../../Component/UserSidebar/UserSidebar';
 
 function UserProfile() {
     const [user, setUser] = useUser();
-    const [userDetails, setUserDetails] = useState();
+    const [userDetails, setUserDetails] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
     const getUserDetails = async (user) => {
+        //try {
+        //    const response = await fetch(`https://localhost:7206/api/Accounts/${user.id}`, {
+        //        method: 'GET', // *GET, POST, PUT, DELETE, etc.
+        //        headers: {
+        //            'Content-Type': 'application/json'
+        //        },
+        //        credentials: 'include'
+        //    });
+        //    if (!response.ok) {
+        //        throw new Error("Error fetching data");
+        //    }
+        //    var userData = await response.json();
+        //    setUserDetails(userData);
+        //} catch (error) {
+        //    toast.error('Error getting user details!');
+        //    console.error(error.message);
+        //} finally {
+        //    setIsLoading(false);
+        //}
         try {
-            const response = await fetch(`https://localhost:7206/api/Accounts/${user.id}`, {
+            const response = await fetch(`https://localhost:7206/api/Accounts/abx`, {
                 method: 'GET', // *GET, POST, PUT, DELETE, etc.
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 credentials: 'include'
             });
-            if (!response.ok) {
-                throw new Error("Error fetching data");
-            }
             var userData = await response.json();
-            setUserDetails(userData);
+            if (!response.ok) {
+                throw new Error(userData.message);
+            }
+            //setUserDetails(userData);
         } catch (error) {
             toast.error('Error getting user details!');
             console.error(error.message);

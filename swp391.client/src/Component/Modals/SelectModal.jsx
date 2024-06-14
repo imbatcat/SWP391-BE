@@ -14,6 +14,7 @@ import {
 import { useState } from 'react';
 import PetModal from './PetModal';
 import AppointmentModal from './AppointmentModal';
+import CheckAuth from '../../Helpers/CheckAuth';
 
 function SelectModal({ toggleOpen }) {
     const [isPetModal, setIsPetModal] = useState(false);
@@ -32,7 +33,7 @@ function SelectModal({ toggleOpen }) {
         return (<AppointmentModal></AppointmentModal>);
     }
     return (
-        <MDBModalDialog>
+        <CheckAuth>        <MDBModalDialog>
             <MDBModalContent>
                 <MDBModalHeader>
                     <MDBModalTitle>Select which to create</MDBModalTitle>
@@ -62,6 +63,8 @@ function SelectModal({ toggleOpen }) {
                 </MDBModalFooter>
             </MDBModalContent>
         </MDBModalDialog>
+        </CheckAuth>
+
     );
 }
 

@@ -89,11 +89,11 @@ public class ApplicationAuthController : ControllerBase
             var user = await _userManager.FindByNameAsync(loginAccount.UserName);
             if (user == null)
             {
-                return BadRequest("No such username");
+                return BadRequest(new { message = "No such username" });
             }
             if (!user.EmailConfirmed)
             {
-                return BadRequest("Account is not confirmed");
+                return BadRequest(new { message = "Account is not confirmed" });
             }
             var result = await _signInManager.PasswordSignInAsync(loginAccount.UserName, loginAccount.Password, loginAccount.RememberMe, lockoutOnFailure: false);
             if (result.Succeeded)
@@ -107,7 +107,7 @@ public class ApplicationAuthController : ControllerBase
         }
 
         // If we got this far, something failed, redisplay form
-        return BadRequest("Incorrect password");
+        return BadRequest(new { message = "Incorrect password" });
     }
 
     [AllowAnonymous]

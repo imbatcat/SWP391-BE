@@ -26,7 +26,7 @@ import UserHistoricalAppointments from './Pages/Profile/UserHistoricalAppointmen
 import CheckAuth from './Helpers/CheckAuth';
 import AdminPet from './Pages/AdminPages/petManage';
 import VetAccount from './Pages/AdminPages/VetAccount';
-import AdminAccount from './Pages/AdminPages/AdminAccount';
+import AdminAccount from './Pages/AdminPages/adminAccount';
 import WorkSchedule from './Pages/Veternary/WorkSchedule';
 
 const router = createBrowserRouter([
@@ -138,7 +138,11 @@ const router = createBrowserRouter([
     },
     {
         path: '/vet/WorkSchedule',
-        element: <WorkSchedule/>,
+        element: (
+            <CheckAuth>
+                <WorkSchedule></WorkSchedule>
+            </CheckAuth>
+        ),
         errorElement: <div>404 Not Found</div>,
     },
 
@@ -150,7 +154,17 @@ root.render(
             <React.StrictMode>
                 <RouterProvider router={router}>
                 </RouterProvider>
-                <ToastContainer></ToastContainer>
+                <ToastContainer
+                    position="top-center"
+                    autoClose={1000}
+                    hideProgressBar={true}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    draggable
+                    theme="light"
+                    transition: Flip
+                />
             </React.StrictMode>
         </UserProvider>
     </AuthProvider>

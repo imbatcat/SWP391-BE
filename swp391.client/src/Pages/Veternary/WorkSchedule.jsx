@@ -6,11 +6,9 @@ import SideNavForVet from '../../Component/SideNavForVet/SideNavForVet';
 
 function WorkSchedule() {
 
-
-
     return (
         <div>
-            <SideNavForVet/>
+            <SideNavForVet />
             <MDBTable align='middle'>
                 <MDBTableHead>
                     <tr>
