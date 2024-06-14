@@ -202,12 +202,12 @@ namespace PetHealthcare.Server.APIs.Controllers
             return Ok(toCreateAppointment);
         }
 
-        [HttpPost("staff/createAppointment")]
-        [Authorize]
-        public async Task<ActionResult<CreateAppointmentDTO>> StaffCreateAppointment([FromBody] CreateAppointmentDTO toCreateAppointment)
-        {
+        //[HttpPost("staff/createAppointment")]
+        //[Authorize]
+        //public async Task<ActionResult<CreateAppointmentDTO>> StaffCreateAppointment([FromBody] CreateAppointmentDTO toCreateAppointment)
+        //{
 
-        }
+        //}
         [HttpPost("Checkin/{appointmentId}")]
         public async Task<IActionResult> CheckInCustomer(string appointmentId) //api for customer to checkin for the customer
         {
