@@ -10,5 +10,8 @@ namespace PetHealthcare.Server.Repositories.Interfaces
         Task<IEnumerable<Appointment>> GetAppointmentsOfWeek(DateOnly startWeekDate, DateOnly endWeekDate);
 
         Task<Account?> GetAccountById(string id);
+
+        Task<IEnumerable<Appointment>> GetAllAppointmentListForVet(string vetId, DateOnly date);
+        Task<IEnumerable<Appointment>> GetVetAppointmentList (string vetId, int timeSlot, DateOnly date);
     }
 }

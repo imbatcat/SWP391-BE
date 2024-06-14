@@ -47,9 +47,19 @@ namespace PetHealthcare.Server.APIs.Controllers
             await _serviceOrderService.CreateServiceOrder(serviceOrderDTO);
             return Ok();
         }
-
+        [HttpPut("staff/PayServiceOrder/{ServiceOrderId}")]
+        [Authorize(Roles = "Admin, Staff")]
+        public async Task<IActionResult> PaidServiceOrder([FromRoute] string serviceOrderId, string paymentMethod)
+        {
+            bool paidResult = await _serviceOrderService.PaidServiceOrder(serviceOrderId, paymentMethod);
+            if(paidResult)
+            {
+                return Ok(new {message = "Paid successfully"});
+            }
+            return BadRequest(new { message = "Paid failed" });
+        }
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateServiceOrder(string id, [FromBody] List<int> serviceIdList)
+        public async Task<IActionResult> UpdateServiceOrder(string id, [FromBody] List<int> serviceIdList) 
         {
             if(serviceIdList.Count == 0)
             {
@@ -62,9 +72,9 @@ namespace PetHealthcare.Server.APIs.Controllers
         
         [HttpPut("/OrderStatus/{serviceOrderId}")]
         [Authorize(Roles = "Admin,Staff")]
-        public async Task<ActionResult> UpdateOrderStatus(string orderStatus, [FromRoute]string serviceOrderId)
+        public async Task<ActionResult> UpdateOrderStatus(string orderStatus, [FromRoute]string serviceOrderId) //Change status
         {
-            if(!orderStatus.Equals("Paid") && !orderStatus.Equals("Pending") && !orderStatus.Equals("Cancel"))
+            if(!orderStatus.Equals("Pending") && !orderStatus.Equals("Cancel"))
             {
                 return BadRequest(new { message = "OrderStatus must be Paid, Pending or Cancel" });
             }
