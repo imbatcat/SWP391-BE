@@ -19,11 +19,11 @@ namespace PetHealthcare.Server.Repositories
             await context.Appointments.AddAsync(entity);
             await SaveChanges();
         }
-        public bool isInputtedVetIdValid (string id) 
+        public bool isInputtedVetIdValid(string id)
         {
-            if(context.Accounts.Find(id) != null)
+            if (context.Accounts.Find(id) != null)
             {
-                if(id.StartsWith('V')) 
+                if (id.StartsWith('V'))
                 { return true; }
             }
             return false;
@@ -65,6 +65,19 @@ namespace PetHealthcare.Server.Repositories
             }
         }
 
+        //public async Task<IEnumerable<Appointment>> GetAppointmentsByDate(TimeSlot timeslot)
+        //{
+        //    return await context.Appointments.Where(app => app.TimeSlot == timeslot).ToListAsync();
+        //}
+
+        public async Task<IEnumerable<Appointment>> GetAppointmentsOfWeek(DateOnly startWeekDate, DateOnly endWeekDate)
+        {
+            return await context.Appointments
+                .Where(app => app.AppointmentDate.CompareTo(startWeekDate) >= 0 &
+                        app.AppointmentDate.CompareTo(endWeekDate) <= 0 &
+                        app.IsCancel == false)
+                .ToListAsync();
+        }
         public async Task<Account?> GetAccountById(string id)
         {
             return await context.Accounts.FindAsync(id);
