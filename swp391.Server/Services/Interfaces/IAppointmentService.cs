@@ -19,5 +19,8 @@ namespace PetHealthcare.Server.Services.Interfaces
         string GenerateId();
 
         Task<Account?> GetAccountById(string id);
+        Task<IEnumerable<AppointmentListForVetDTO?>> ViewAppointmentListForVet(string id, DateOnly date);
+        Task<IEnumerable<VetAppointment?>> ViewVetAppointmentList(string id, int timeSlot, DateOnly date);
+        Task<bool> UpdateCheckinStatus(string appointmentId);
     }
 }

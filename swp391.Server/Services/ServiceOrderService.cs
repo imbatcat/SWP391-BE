@@ -58,5 +58,10 @@ namespace PetHealthcare.Server.Services
         {
             return await _serviceOrderRepo.GetAllServiceOrderForStaff();
         }
+
+        public async Task<bool> PaidServiceOrder(string ServiceOrderId, string paymentMethod)
+        {
+            return await _serviceOrderRepo.savePaymentService(ServiceOrderId, paymentMethod);
+        }
     }
 }

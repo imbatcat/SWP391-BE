@@ -142,6 +142,7 @@ namespace PetHealthcare.Server.Services
                     {
                         resAppListForCustomers.Add(new ResAppListForCustomer
                         {
+                            AppointmentId = appointment.AppointmentId,
                             AppointmentDate = appointment.AppointmentDate,
                             BookingPrice = appointment.BookingPrice,
                             PetName = appointment.Pet.PetName,
@@ -156,6 +157,7 @@ namespace PetHealthcare.Server.Services
                     {
                         resAppListForCustomers.Add(new ResAppListForCustomer
                         {
+                            AppointmentId = appointment.AppointmentId,
                             AppointmentDate = appointment.AppointmentDate,
                             BookingPrice = appointment.BookingPrice,
                             PetName = appointment.Pet.PetName,
@@ -222,16 +224,83 @@ namespace PetHealthcare.Server.Services
                     }
                 }
             }
-            if(appointmentList.Count == 0)
-            {
-                return null;
-            }
             return appointmentList;
         }
 
         public async Task<Account?> GetAccountById(string id)
         {
             return await _appointmentRepository.GetAccountById(id);
+        }
+
+        public async Task<IEnumerable<AppointmentListForVetDTO?>> ViewAppointmentListForVet(string id, DateOnly date)
+        {
+            IEnumerable<Appointment> appointmentList = await _appointmentRepository.GetAllAppointmentListForVet(id, date);
+            
+            List<AppointmentListForVetDTO> appointmentListForVetDTO = new List<AppointmentListForVetDTO>();
+            foreach(Appointment app in appointmentList)
+            {
+                appointmentListForVetDTO.Add(new AppointmentListForVetDTO
+                {
+                    AppointmentDate = app.AppointmentDate,
+                    AppointmentNotes = app.AppointmentNotes,
+                    CustomerName = app.Account.FullName,
+                    CustomerPhone = app.Account.PhoneNumber,
+                    PetName = app.Pet.PetName,
+                });
+            }
+            return appointmentListForVetDTO;
+        }
+
+        public async Task<IEnumerable<VetAppointment?>> ViewVetAppointmentList(string id, int timeSlot, DateOnly date)
+        {
+            IEnumerable<Appointment> appointmentList = await _appointmentRepository.GetVetAppointmentList(id, timeSlot, date);
+            if (appointmentList.Count() > 0)
+            {
+                appointmentList = appointmentList.OrderByDescending(a => a.IsCheckIn).ThenBy(a => a.CheckinTime);
+            }
+            List<VetAppointment> vetAppointmentList = new List<VetAppointment>();
+            foreach(Appointment appointment in appointmentList)
+            {
+                if(appointment.IsCancel != true && appointment.IsCheckUp != true )
+                {
+                    string _status = "Waiting";
+                    string _petType = "Cat";
+                    if(appointment.Pet.IsCat == false)
+                    {
+                        _petType = "Dog";
+                    }
+                    if(appointment.IsCheckIn == false)
+                    {
+                        _status = "Haven't come";
+                    }
+                    vetAppointmentList.Add(new VetAppointment
+                    {
+                        AppointmentId = appointment.AppointmentId,
+                        OwnerName = appointment.Account.FullName,
+                        PetName=appointment.Pet.PetName,
+                        PetBreed = appointment.Pet.PetBreed,
+                        TimeSlot = appointment.TimeSlot.StartTime.ToString("h:mm") + " - " + appointment.TimeSlot.EndTime.ToString("h:mm"),
+                        status = _status,
+                        PetType = _petType,
+                    });
+                }
+            }
+            return vetAppointmentList;
+        }
+
+        public async Task<bool> UpdateCheckinStatus(string appointmentId)
+        {
+            Appointment? toCheckInAppointment = await _appointmentRepository.GetByCondition(a => a.AppointmentId == appointmentId);
+            if(toCheckInAppointment == null)
+            {
+                return false;
+            } else
+            {
+                toCheckInAppointment.IsCheckIn = true;
+                toCheckInAppointment.CheckinTime = TimeOnly.FromDateTime(DateTime.Now);
+                await _appointmentRepository.SaveChanges();
+            }
+            return true;
         }
     }
 

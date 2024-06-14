@@ -142,5 +142,26 @@ namespace PetHealthcare.Server.Repositories
             }
             return ServiceOrderForStaff;
         }
+
+        public async Task<bool> savePaymentService(string serviceOrderId, string paymentMethod)
+        {
+            string servicePaymentId = "SP-" + Nanoid.Generate(size: 8);
+            ServiceOrder? serviceOrder = await context.ServiceOrders.FindAsync(serviceOrderId);
+            if(serviceOrder != null)
+            {
+                serviceOrder.OrderStatus = "Paid";
+                ServicePayment toAddServicePayment = new ServicePayment
+                {
+                    ServicePaymentId = servicePaymentId,
+                    PaymentMethod = paymentMethod,
+                    PaymentDate = DateOnly.FromDateTime(DateTime.Today),
+                    ServiceOrderId = serviceOrderId,
+                };
+                context.ServicePayments.Add(toAddServicePayment);
+                await context.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
     }
 }
