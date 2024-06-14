@@ -16,12 +16,19 @@ namespace PetHealthcare.Server.Services
             _servicePaymentService = servicePaymentService;
         }
 
+        public ServicePaymentService()
+        {
+        }
+
+        private string Prefix { get; } = "SP";
+
         public async Task CreateServicePayment(ServicePaymentDTO entity)
         {
 
             var obj = new ServicePayment()
             {
                 ServicePaymentId = GenerateId(),
+                ServicePrice = entity.ServicePrice,
                 PaymentDate = entity.PaymentDate,
                 PaymentMethod = entity.PaymentMethod,
                 ServiceOrderId = entity.ServiceOrderId
@@ -53,9 +60,9 @@ namespace PetHealthcare.Server.Services
         private string GenerateId()
         {
             var ac = new ServicePayment();
-            var born = ac.Prefix;
+            var born = new ServicePaymentService();
             string id = Nanoid.Generate(size: 8);
-            return born + id;
+            return born.Prefix + id;
         }
 
         public async Task<ServicePayment?> GetServicePaymentByCondition(Expression<Func<ServicePayment, bool>> expression)
