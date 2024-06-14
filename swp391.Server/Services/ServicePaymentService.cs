@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 
 namespace PetHealthcare.Server.Services
 {
-    public class ServicePaymentService
+    public class ServicePaymentService : IServicePaymentService
     {
         private readonly IServicePaymentRepository _servicePaymentService;
 
@@ -34,11 +34,6 @@ namespace PetHealthcare.Server.Services
             _servicePaymentService.Delete(entity);
         }
 
-        public async Task<ServicePayment?> GetServicePaymentdByPetCondition(Expression<Func<ServicePayment, bool>> expression)
-        {
-            return await _servicePaymentService.GetByCondition(expression);
-        }
-
         public async Task<IEnumerable<ServicePayment>> GetAll()
         {
             return await _servicePaymentService.GetAll();
@@ -61,6 +56,11 @@ namespace PetHealthcare.Server.Services
             var born = ac.Prefix;
             string id = Nanoid.Generate(size: 8);
             return born + id;
+        }
+
+        public async Task<ServicePayment?> GetServicePaymentByCondition(Expression<Func<ServicePayment, bool>> expression)
+        {
+            return await _servicePaymentService.GetByCondition(expression);
         }
     }
 }

@@ -18,6 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var config = builder.Configuration;
 const string DataSrc = "MEOMATLON\\SQLEXPRESS", Password = "MukuroHoshimiya";
+const string DataSrc = "DIXEL\\DAOX", Password = "12345";
 
 
 // Add services to the container.
@@ -42,6 +43,7 @@ builder.Services.AddScoped<IPetRepository, PetRepository>();
 builder.Services.AddScoped<ITimeslotRepository, TimeslotRepository>();
 builder.Services.AddScoped<IMedicalRecordRepository, MedicalRecordRepository>();
 builder.Services.AddScoped<IAdmissionRecordRepository, AdmissionRecordRepository>();
+builder.Services.AddScoped<IServicePaymentRepository, ServicePaymentRepository>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 #endregion
 
@@ -58,6 +60,7 @@ builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 builder.Services.AddScoped<ITimeSlotService, TimeslotService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IAdmissionRecordService, AdmissionRecordService>();
+builder.Services.AddScoped<IServicePaymentService, ServicePaymentService>();
 builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
 // Auth services
 builder.Services.AddScoped<IEmailSender, EmailSender>();
