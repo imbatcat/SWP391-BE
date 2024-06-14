@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace PetHealthcare.Server.Migrations
 {
     [DbContext(typeof(PetHealthcareDbContext))]
-    [Migration("20240614101806_db02")]
-    partial class db02
+    [Migration("20240614132929_db04")]
+    partial class db04
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,7 +38,6 @@ namespace PetHealthcare.Server.Migrations
                         .HasColumnType("nvarchar(13)");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FullName")
@@ -56,7 +55,6 @@ namespace PetHealthcare.Server.Migrations
                         .HasColumnType("date");
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasMaxLength(16)
                         .HasColumnType("nvarchar(16)");
 
@@ -68,14 +66,14 @@ namespace PetHealthcare.Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Username")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
                     b.HasKey("AccountId");
 
                     b.HasIndex("Email")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
 
                     b.HasIndex("PhoneNumber")
                         .IsUnique();
@@ -83,7 +81,8 @@ namespace PetHealthcare.Server.Migrations
                     b.HasIndex("RoleId");
 
                     b.HasIndex("Username")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[Username] IS NOT NULL");
 
                     b.ToTable("Accounts");
 
@@ -475,6 +474,9 @@ namespace PetHealthcare.Server.Migrations
                     b.Property<string>("ServiceOrderId")
                         .IsRequired()
                         .HasColumnType("char(11)");
+
+                    b.Property<double>("ServicePrice")
+                        .HasColumnType("float");
 
                     b.HasKey("ServicePaymentId");
 

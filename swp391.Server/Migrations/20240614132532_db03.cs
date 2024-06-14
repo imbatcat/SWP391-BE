@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PetHealthcare.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class db_01 : Migration
+    public partial class db03 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -125,7 +125,7 @@ namespace PetHealthcare.Server.Migrations
                 columns: table => new
                 {
                     PetId = table.Column<string>(type: "char(11)", nullable: false),
-                    ImgUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImgUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PetName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     PetBreed = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     PetAge = table.Column<DateOnly>(type: "date", nullable: false),
@@ -343,6 +343,7 @@ namespace PetHealthcare.Server.Migrations
                 {
                     ServicePaymentId = table.Column<string>(type: "char(11)", nullable: false),
                     PaymentDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    ServicePrice = table.Column<double>(type: "float", nullable: false),
                     PaymentMethod = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     ServiceOrderId = table.Column<string>(type: "char(11)", nullable: false)
                 },

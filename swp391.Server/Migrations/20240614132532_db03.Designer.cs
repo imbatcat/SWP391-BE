@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace PetHealthcare.Server.Migrations
 {
     [DbContext(typeof(PetHealthcareDbContext))]
-    [Migration("20240612080610_db_01")]
-    partial class db_01
+    [Migration("20240614132532_db03")]
+    partial class db03
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -343,7 +343,6 @@ namespace PetHealthcare.Server.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ImgUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsCat")
@@ -476,6 +475,9 @@ namespace PetHealthcare.Server.Migrations
                     b.Property<string>("ServiceOrderId")
                         .IsRequired()
                         .HasColumnType("char(11)");
+
+                    b.Property<double>("ServicePrice")
+                        .HasColumnType("float");
 
                     b.HasKey("ServicePaymentId");
 
