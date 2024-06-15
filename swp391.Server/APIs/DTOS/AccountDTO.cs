@@ -17,7 +17,7 @@ namespace PetHealthcare.Server.APIs.DTOS
 
         public int RoleId { get; set; }
 
-        [Phone]
+        [Phone(ErrorMessage = "Invalid phone number")]
         public string PhoneNumber { get; set; }
 
         public DateOnly DateOfBirth { get; set; }

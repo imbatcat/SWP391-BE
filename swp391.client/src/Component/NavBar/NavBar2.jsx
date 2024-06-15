@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './NavBar2.css';
 import {
     MDBContainer,
@@ -16,16 +16,41 @@ import {
     MDBCollapse,
 } from 'mdb-react-ui-kit';
 import { useAuth } from '../../Context/AuthProvider';
+import { useUser } from '../../Context/UserContext';
+import { toast } from 'react-toastify';
 
 export default function NavBar2() {
     const [isAuthenticated, setIsAuthenticated] = useAuth();
+    const [user, setUser] = useUser();
     const [openBasic, setOpenBasic] = useState(false);
+    const navigate = useNavigate();
+    const logout = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch(`https://localhost:7206/api/ApplicationAuth/logout`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            setIsAuthenticated(false);
+            localStorage.removeItem("user");
+            navigate('/');
+        } catch (error) {
+            toast.error('Error logging ou!');
+            console.error(error.message);
+        }
+    };
 
     return (
         <MDBNavbar expand='lg' light bgColor='light' sticky>
             <MDBContainer fluid>
-                <Link to="/"><h1 style={{ color: 'black' }}>Pet-ternary</h1></Link>
-                <h2 >Purr-fectly Healthy, Woof-tastically Happy</h2>
+                <Link to="/"><h1 style={{minWidth:'15vw'}}>Pet-ternary</h1></Link>
+                <h2 style={{minWidth:'10vw',fontSize:'100%', margin:'auto', marginLeft:'1vw'}} >Purr-fectly Healthy, Woof-tastically Happy</h2>
                 <MDBNavbarToggler
                     aria-controls='navbarSupportedContent'
                     aria-expanded='false'
@@ -45,10 +70,7 @@ export default function NavBar2() {
 
                         </MDBNavbarItem>
                         <MDBNavbarItem>
-                            <Link to="/petList"> <MDBNavbarLink>My Pet List</MDBNavbarLink></Link>
-                        </MDBNavbarItem>
-                        <MDBNavbarItem>
-                            <Link to="/aboutUs"> <MDBNavbarLink>About Us</MDBNavbarLink></Link>
+                            <Link to="/vet/WorkSchedule"> <MDBNavbarLink>Vet</MDBNavbarLink></Link>
                         </MDBNavbarItem>
 
                         <MDBNavbarItem>
@@ -58,7 +80,11 @@ export default function NavBar2() {
                                 </MDBDropdownToggle>
                                 <MDBDropdownMenu>
                                     <MDBDropdownItem link>My Appointment</MDBDropdownItem>
-                                    <MDBDropdownItem link>Make an Appointment</MDBDropdownItem>
+                                    <MDBDropdownItem link>
+                                        <Link to="/user/appointments">
+                                            <button>Make appointments</button>
+                                        </Link>
+                                    </MDBDropdownItem>
 
                                 </MDBDropdownMenu>
                             </MDBDropdown>
@@ -76,16 +102,20 @@ export default function NavBar2() {
                                 </MDBDropdownMenu>
                             </MDBDropdown>
                         </MDBNavbarItem>
-
                         <MDBNavbarItem>
-                            <MDBNavbarLink disabled href='#' tabIndex={-1} aria-disabled='true'>
-                            </MDBNavbarLink>
+                            <Link to="/petList"> <MDBNavbarLink>My Pet List</MDBNavbarLink></Link>
                         </MDBNavbarItem>
+
 
                         {isAuthenticated ? (
                             <>
                                 <MDBNavbarItem>
-                                    <Link to="/profile"><button className='btn'>Profile</button></Link>
+                                    <Link to="/user/profile">
+                                        <button className="btn">Profile</button>
+                                    </Link>
+                                </MDBNavbarItem>
+                                <MDBNavbarItem>
+                                    <button className="btn" onClick={(e) => logout(e)}>Logout</button>
                                 </MDBNavbarItem>
                             </>
                         ) : (
@@ -101,9 +131,8 @@ export default function NavBar2() {
                         )}
                     </MDBNavbarNav>
 
-
                 </MDBCollapse>
-            </MDBContainer>
-        </MDBNavbar>
+            </MDBContainer >
+        </MDBNavbar >
     );
 }

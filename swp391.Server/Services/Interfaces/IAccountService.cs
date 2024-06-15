@@ -15,6 +15,7 @@ namespace PetHealthcare.Server.Services.Interfaces
         Task UpdateAccount(string id, AccountDTO Account);
         Task DeleteAccount(Account Account);
         Task<bool> SetAccountIsDisabled(RequestAccountDisable account);
+        Task<bool> Any(Expression<Func<Account, bool>> expression);
 
         string GenerateId();
     }

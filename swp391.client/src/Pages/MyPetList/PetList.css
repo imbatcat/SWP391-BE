@@ -1,18 +1,18 @@
-.orchid-display{
+.Pet-display{
     margin-top: 30px;
     align-items: center;
     margin-left: 30px;
     margin-right: 30px;
   }
   
-  .orchid-display-list{
+  .Pet-display-list{
     display: grid;
     grid-template-columns: repeat(auto-fill,minmax(240px,1fr));
     margin-top: 30px;
     gap: 30px;
     row-gap: 50px;
   }
-  .orchid-item{
+  .Pet-item{
     width: 100%;
     margin: auto;
     border-radius: 15px;
@@ -21,20 +21,20 @@
     animation: fadeIn 1s;
   }
   
-  .orchid-item-image{
+  .Pet-item-image{
     width: 100%;
     border-radius: 15px 15px 0px 0px;
   }
-  .orchid-info{
+  .Pet-info{
     padding: 20px;
   }
-  .orchid-name-rating{
+  .Pet-name-rating{
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
   }
-  .orchid-name-rating p{
+  .Pet-name-rating p{
     font-size: 20px;
     font-weight: 500;
   }
