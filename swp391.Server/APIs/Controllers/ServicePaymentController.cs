@@ -58,11 +58,24 @@ namespace PetHealthcare.Server.APIs.Controllers
         // POST api/<Controller>
         [HttpPost]
         [Authorize(Roles = "Staff,Admin")]
-        public async Task<ActionResult<TimeSlot>> Post([FromBody] ServicePaymentDTO newCage)
+        public async Task<ActionResult<ServicePayment>> Post([FromBody] ServicePaymentDTO newCage)
         {
             await _context.CreateServicePayment(newCage);
 
             return CreatedAtAction(nameof(Post), newCage.GetHashCode(), newCage);
+        }
+
+        [Authorize(Roles = "Staff,Admin")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteServicePayment([FromRoute] string id)
+        {
+            var toDelete = await _context.GetServicePaymentByCondition(r => r.ServicePaymentId == id);
+            if (toDelete == null)
+            {
+                return NotFound(new { message = "Service payment not found" });
+            }
+            _context.DeleteServicePayment(toDelete);
+            return Ok(toDelete);
         }
     }
 
