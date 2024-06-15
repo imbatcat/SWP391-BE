@@ -105,8 +105,8 @@ function VetAccount() {
                     </tr>
                 </MDBTableHead>
                 <MDBTableBody>
-                    {filteredAccounts.filter(acc => acc.roleId === 3).map((acc) => (
-                        <tr key={acc.id}>
+                    {filteredAccounts.filter(acc => acc.roleId === 3).map((acc,index) => (
+                        <tr key={index}>
                             <td>
                                 <div className='d-flex align-items-center'>
                                     <img
