@@ -7,7 +7,7 @@ namespace PetHealthcare.Server.Models
 {
     public class ServicePayment
     {
-        public string Prefix { get; } = "SP";
+        //public string Prefix { get; } = "SP";
 
         [Key]
         [Column(TypeName = "char(11)")]
@@ -16,6 +16,9 @@ namespace PetHealthcare.Server.Models
         [JsonConverter(typeof(DateOnlyConverter))]
         [DataType(DataType.Date)]
         public DateOnly PaymentDate { get; set; }
+
+        [DataType(DataType.Currency)]
+        public double ServicePrice { get; set; }
 
         [StringLength(20)]
         public string PaymentMethod { get; set; }

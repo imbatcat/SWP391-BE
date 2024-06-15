@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
 using System.Linq.Expressions;
@@ -8,6 +9,11 @@ namespace PetHealthcare.Server.Repositories
     public class ServicePaymentRepository : IServicePaymentRepository
     {
         private readonly PetHealthcareDbContext _context;
+
+        public ServicePaymentRepository(PetHealthcareDbContext context)
+        {
+            _context = context;
+        }
 
         public async Task Create(ServicePayment entity)
         {
