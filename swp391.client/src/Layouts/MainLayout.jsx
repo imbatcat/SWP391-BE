@@ -16,15 +16,49 @@ import 'react-tooltip/dist/react-tooltip.css';
 import { useState } from 'react';
 import SelectModal from '../Component/Modals/SelectModal';
 import CheckAuth from '../Helpers/CheckAuth';
-
+import { GoogleLogin } from '@react-oauth/google';
 function MainLayout({ children }) {
     const [basicModal, setBasicModal] = useState(false);
 
     const toggleOpen = () => setBasicModal(!basicModal);
+    const getProfile = (credential) => {
+        fetch(`https://localhost:7206/api/ApplicationAuth/signinGoogle
+`, {
+            method: 'POST',
 
+            headers: {
+                'Content-type': 'application/json'
+            },      
+        body: JSON.stringify({
+            "token":credential
+        })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Parses JSON response into native JavaScript objects
+            })
+            .then(data => {
+                console.log(data); // Assuming setProfile is a function to update your component's state with the user profile
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+            });
+    };
     return (
         <div>
+            <GoogleLogin onSuccess={credentialResponse => {
+                console.log(credentialResponse);
+                getProfile(credentialResponse.credential);
+            }}
+                onError={() => {
+                    console.log('Login Failed');
+                }}>
+            </GoogleLogin>
+
             <NavBar2 />
+           
             <main>
                 {children}
             </main>

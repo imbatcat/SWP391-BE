@@ -18,6 +18,8 @@ using PetHealthcare.Server.Services.AuthInterfaces;
 using NuGet.Common;
 using PetHealthcare.Server.Helpers;
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 [Authorize]
 [ApiController]
@@ -61,7 +63,7 @@ public class ApplicationAuthController : ControllerBase
 
             try
             {
-                var account = await _accountService.CreateAccount(registerAccount);
+                var account = await _accountService.CreateAccount(registerAccount, false);
                 var role = Helpers.GetRole(registerAccount.RoleId);
                 var result = await _userManager.CreateAsync(user, registerAccount.Password);
                 if (result.Succeeded)
@@ -222,5 +224,47 @@ public class ApplicationAuthController : ControllerBase
         }
 
         return Ok();
+    }
+    [AllowAnonymous]
+    [HttpPost("signinGoogle")]
+    public async Task<ActionResult<ResponseUserDTO>> GoogleLogin([FromBody] GoogleLoginModel model) 
+    {
+        var httpClient = new HttpClient();
+        var response = await httpClient.GetAsync($"https://oauth2.googleapis.com/tokeninfo?id_token={model.token}");
+        if (response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            JObject userInfo = JObject.Parse(content);
+            string name = userInfo["given_name"].ToString();
+            string fullName = userInfo["name"].ToString();
+            string email = userInfo["email"].ToString();
+            AccountDTO newAccount = new AccountDTO
+            {
+                FullName = fullName,
+                Email = email,
+                UserName = name,
+                Password = null,
+                IsMale = false,
+                RoleId = 1,
+                PhoneNumber = null,
+                DateOfBirth = null,
+                
+            };
+            var user = new ApplicationUser
+            {
+                UserName = name,
+                Email = email,
+                AccountFullname =fullName
+            };
+            var acc = await _accountService.CreateAccount(newAccount, true);
+
+            var role = Helpers.GetRole(acc.RoleId);
+            await _userManager.AddToRoleAsync(user, role);
+            await _userManager.CreateAsync(user);
+            return new ResponseUserDTO 
+            {   id = acc.AccountId,
+                role = "Customer"
+            };
+        }return Ok();
     }
 }

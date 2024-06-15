@@ -110,7 +110,7 @@ namespace PetHealthcare.Server.APIs.Controllers
             }
             try
             {
-                var result = await _context.CreateAccount(accountDTO);
+                var result = await _context.CreateAccount(accountDTO, false);
             }
             catch (BadHttpRequestException ex)
             {
