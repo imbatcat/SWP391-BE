@@ -1,4 +1,5 @@
 import React from 'react';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
@@ -71,12 +72,27 @@ const router = createBrowserRouter([
 ])
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <AuthProvider>
-        <React.StrictMode>
-            <RouterProvider router={router} />
-            <ToastContainer></ToastContainer>
-        </React.StrictMode>
-    </AuthProvider>
+    <GoogleOAuthProvider clientId="279261034420-76gqakprrgtiq9pc879d8e4ukhk9cour.apps.googleusercontent.com">
+        <AuthProvider>
+            <UserProvider>
+                <React.StrictMode>
+                    <RouterProvider router={router}>
+                    </RouterProvider>
+                    <ToastContainer
+                        position="top-center"
+                        autoClose={1000}
+                        hideProgressBar={true}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        draggable
+                        theme="light"
+                        transition: Flip
+                    />
+                </React.StrictMode>
+            </UserProvider>
+        </AuthProvider>
+    </GoogleOAuthProvider>
 
 );
 
