@@ -1,0 +1,21 @@
+.static-button {
+    position: fixed;
+    bottom: 20px; /* Adjust this value to move the button up/down */
+    right: 20px; /* Adjust this value to move the button left/right */
+    z-index: 1000; /* Ensure it appears above other elements */
+    background-color: #007bff; /* Button background color */
+    color: white; /* Button text color */
+    border: none; /* Remove default button border */
+    border-radius: 50%; /* Make the button circular */
+    width: 60px; /* Button width */
+    height: 60px; /* Button height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add some shadow for depth */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+    .static-button:hover {
+        background-color: #0056b3; /* Darker background on hover */
+    }

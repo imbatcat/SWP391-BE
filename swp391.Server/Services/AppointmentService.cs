@@ -163,7 +163,7 @@ namespace PetHealthcare.Server.Services
                 }
                 else if (listType.Equals("current", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (appointment.AccountId.Equals(id) && appointment.AppointmentDate.CompareTo(currentDate) > 0)
+                    if (appointment.AccountId.Equals(id) && appointment.AppointmentDate.CompareTo(currentDate) >= 0)
                     {
                         resAppListForCustomers.Add(new ResAppListForCustomer
                         {
@@ -261,6 +261,7 @@ namespace PetHealthcare.Server.Services
             }
             return resList;
         }
+
         public async Task<Account?> GetAccountById(string id)
         {
             return await _appointmentRepository.GetAccountById(id);
@@ -338,3 +339,4 @@ namespace PetHealthcare.Server.Services
         }
     }
 }
+

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const useQuery = () => {
     return new URLSearchParams(useLocation().search);
@@ -8,7 +9,6 @@ const useQuery = () => {
 const ConfirmEmail = () => {
     const navigate = useNavigate();
     const query = useQuery();
-    const [confirmationResult, setConfirmationResult] = useState(null);
 
     useEffect(() => {
         const userId = query.get('userId');
@@ -21,7 +21,7 @@ const ConfirmEmail = () => {
 
     const confirmEmail = async (userId, token) => {
         try {
-            const response = await fetch(`https://localhost:7206/api/ApplicationAuth/confirmemail?userId=${userId}&token=${token}`, {
+            const response = await fetch(`https://localhost:7206/api/ApplicationAuth/confirm-email?userId=${userId}&token=${token}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -29,6 +29,7 @@ const ConfirmEmail = () => {
                 credentials: 'include', // Include credentials if needed
             });
             if (response.ok) {
+                toast.info("Account activated, please login again");
                 navigate('/');
             }
         } catch (error) {

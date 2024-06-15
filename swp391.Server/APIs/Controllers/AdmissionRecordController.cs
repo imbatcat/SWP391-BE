@@ -22,7 +22,6 @@ namespace PetHealthcare.Server.APIs.Controllers
             _context = context;
         }
 
-        // GET: all the admission record
         [HttpGet("/api/AdmissionRecord")]
         [Authorize(Roles = "Admin, Staff")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<AdmissionRecord>))]
@@ -31,7 +30,6 @@ namespace PetHealthcare.Server.APIs.Controllers
             return await _context.GetAll();
         }
 
-        // GET: api/Services/5
         [HttpGet("/api/AdmissionRecord/{name}")]
         public async Task<ActionResult<ARSearchPetNameDTO>> GetAdmissionRecordByCondition([FromRoute] string name)   //----Get Addmission Record by name
         {
@@ -41,16 +39,15 @@ namespace PetHealthcare.Server.APIs.Controllers
             if (service == null)
             {
                 return NotFound();
-            } else
-            {
-                 born = new ARSearchPetNameDTO(service.AdmissionId,service.AdmissionDate,service.DischargeDate,service.IsDischarged,service.PetCurrentCondition,service.MedicalRecordId,service.VeterinarianAccountId,service.PetId,service.CageId);
             }
-            
+            else
+            {
+                born = new ARSearchPetNameDTO(service.AdmissionId, service.AdmissionDate, service.DischargeDate, service.IsDischarged, service.PetCurrentCondition, service.MedicalRecordId, service.VeterinarianAccountId, service.PetId, service.CageId);
+            }
+
             return born;
         }
 
-        // PUT: api/Services/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("/api/AdmissionRecord/{id}")]
         [Authorize(Roles = "Staff, Admin")]
         public async Task<IActionResult> UpdateAdmissionRecord([FromRoute] string id, [FromBody] AdmissionRecordDTO toUpdate)

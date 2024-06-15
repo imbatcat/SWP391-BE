@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+
 #nullable disable
 
 namespace PetHealthcare.Server.Migrations
@@ -14,7 +15,6 @@ namespace PetHealthcare.Server.Migrations
     [Migration("20240614132532_db03")]
     partial class db03
     {
-        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
