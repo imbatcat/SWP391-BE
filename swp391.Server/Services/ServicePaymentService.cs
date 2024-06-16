@@ -20,7 +20,7 @@ namespace PetHealthcare.Server.Services
         {
         }
 
-        private string Prefix { get; } = "SP";
+        private string Prefix { get; } = "SP-";
 
         public async Task CreateServicePayment(ServicePaymentDTO entity)
         {
