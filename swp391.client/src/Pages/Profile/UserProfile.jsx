@@ -18,38 +18,19 @@ function UserProfile() {
     const [isLoading, setIsLoading] = useState(true);
 
     const getUserDetails = async (user) => {
-        //try {
-        //    const response = await fetch(`https://localhost:7206/api/Accounts/${user.id}`, {
-        //        method: 'GET', // *GET, POST, PUT, DELETE, etc.
-        //        headers: {
-        //            'Content-Type': 'application/json'
-        //        },
-        //        credentials: 'include'
-        //    });
-        //    if (!response.ok) {
-        //        throw new Error("Error fetching data");
-        //    }
-        //    var userData = await response.json();
-        //    setUserDetails(userData);
-        //} catch (error) {
-        //    toast.error('Error getting user details!');
-        //    console.error(error.message);
-        //} finally {
-        //    setIsLoading(false);
-        //}
         try {
-            const response = await fetch(`https://localhost:7206/api/Accounts/abx`, {
+            const response = await fetch(`https://localhost:7206/api/Accounts/${user.id}`, {
                 method: 'GET', // *GET, POST, PUT, DELETE, etc.
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 credentials: 'include'
             });
-            var userData = await response.json();
             if (!response.ok) {
-                throw new Error(userData.message);
+                throw new Error("Error fetching data");
             }
-            //setUserDetails(userData);
+            var userData = await response.json();
+            setUserDetails(userData);
         } catch (error) {
             toast.error('Error getting user details!');
             console.error(error.message);
@@ -98,15 +79,20 @@ function UserProfile() {
                                                 <MDBCardText className="text-muted">{userDetails.username}</MDBCardText>
                                             </MDBCol>
                                         </MDBRow>
-                                        <hr />
-                                        <MDBRow>
-                                            <MDBCol sm="3">
-                                                <MDBCardText>Date of birth</MDBCardText>
-                                            </MDBCol>
-                                            <MDBCol sm="9">
-                                                <MDBCardText className="text-muted">{userDetails.dateOfBirth}</MDBCardText>
-                                            </MDBCol>
-                                        </MDBRow>
+                                        {userDetails.dateOfBirth && (
+                                            <>
+                                                <hr />
+                                                <MDBRow>
+                                                    <MDBCol sm="3">
+                                                        <MDBCardText>Date of birth</MDBCardText>
+                                                    </MDBCol>
+                                                    <MDBCol sm="9">
+                                                        <MDBCardText className="text-muted">{userDetails.dateOfBirth}</MDBCardText>
+                                                    </MDBCol>
+                                                </MDBRow>
+                                                <hr></hr>
+                                            </>
+                                        )}
                                         <hr></hr>
                                         <MDBRow>
                                             <MDBCol sm="3">
@@ -116,15 +102,19 @@ function UserProfile() {
                                                 <MDBCardText className="text-muted">{userDetails.email}</MDBCardText>
                                             </MDBCol>
                                         </MDBRow>
-                                        <hr />
-                                        <MDBRow>
-                                            <MDBCol sm="3">
-                                                <MDBCardText>Phone</MDBCardText>
-                                            </MDBCol>
-                                            <MDBCol sm="9">
-                                                <MDBCardText className="text-muted">{userDetails.phoneNumber}</MDBCardText>
-                                            </MDBCol>
-                                        </MDBRow>
+                                        {userDetails.phoneNumber && (
+                                            <>
+                                                <hr />
+                                                <MDBRow>
+                                                    <MDBCol sm="3">
+                                                        <MDBCardText>Phone</MDBCardText>
+                                                    </MDBCol>
+                                                    <MDBCol sm="9">
+                                                        <MDBCardText className="text-muted">{userDetails.phoneNumber}</MDBCardText>
+                                                    </MDBCol>
+                                                </MDBRow>
+                                            </>
+                                        )}
                                     </MDBCardBody>
                                 </MDBCard>
 

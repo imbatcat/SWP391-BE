@@ -15,7 +15,7 @@ namespace PetHealthcare.Server.Helpers
             optionsBuilder.UseSqlServer(
                  $"Data Source={DataSrc}; User = sa; Password = {Pass};" +
                  $"Initial Catalog=PetHealthCareSystemAuth;Integrated Security=True;" +
-                 $"Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;" +
+                 $"Connect Timeout=10;Encrypt=True;Trust Server Certificate=True;" +
                  $"Application Intent=ReadWrite;Multi Subnet Failover=False");
 
             using (var context = new ApplicationDbContext(optionsBuilder.Options))

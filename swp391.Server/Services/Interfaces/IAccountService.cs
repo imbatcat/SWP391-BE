@@ -19,4 +19,5 @@ namespace PetHealthcare.Server.Services.Interfaces
 
         string GenerateId();
     }
+
 }

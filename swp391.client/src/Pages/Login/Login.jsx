@@ -1,7 +1,7 @@
 
 import { Link, useNavigate } from 'react-router-dom';
-import './Login.css'
-import './usePasswordToggle.css'
+import './Login.css';
+import './usePasswordToggle.css';
 import './Login.css';
 import './usePasswordToggle.css';
 import usePasswordToggle from './usePasswordToggle';
@@ -26,6 +26,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '../../Context/AuthProvider';
 import { useUser } from '../../Context/UserContext';
+import { GoogleLogin } from '@react-oauth/google';
 
 
 function Login() {
@@ -38,7 +39,35 @@ function Login() {
     const navigate = useNavigate();
     const toggleOpen = () => setBasicModal(!basicModal);
     const [PasswordInputType, ToggleIcon] = usePasswordToggle();
+    const getProfile = async (credential) => {
+        try {
+            const response = await fetch('https://localhost:7206/api/ApplicationAuth/signinGoogle', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    "token": credential
+                })
+            });
 
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json(); // Parses JSON response into native JavaScript objects
+
+            localStorage.setItem("user", JSON.stringify(data));
+            setUser(data);
+            setIsAuthenticated(true);
+            toast.success('Login successful!');
+            handleNavigation(data.role);
+            console.log(data); // Assuming setProfile is a function to update your component's state with the user profile
+        } catch (error) {
+            console.error('There has been a problem with your fetch operation:', error);
+        }
+    };
     async function loginapi() {
         try {
             const response = await fetch('https://localhost:7206/api/ApplicationAuth/login', {
@@ -124,7 +153,18 @@ function Login() {
                                 </span>
                             </div>
 
-                            <MDBBtn className="mb-4 px-5" color='blue' size='lg' onClick={(e) => handleLoginClick(e)}>Login</MDBBtn>
+                            <MDBRow>
+                                <MDBBtn className="mb-4 px-5" color='blue' size='lg' onClick={(e) => handleLoginClick(e)}>Login</MDBBtn>
+                                <GoogleLogin onSuccess={credentialResponse => {
+                                    console.log(credentialResponse);
+                                    getProfile(credentialResponse.credential);
+                                }}
+                                    onError={() => {
+                                        console.log('Login Failed');
+                                    }}>
+                                </GoogleLogin>
+                            </MDBRow>
+
 
                             <a className="small text-muted" style={{ textAlign: 'end' }} onClick={toggleOpen}>Forgot password?</a>
                             <MDBModal open={basicModal} onClose={() => setBasicModal(false)} tabIndex='-1'>

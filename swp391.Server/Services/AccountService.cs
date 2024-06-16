@@ -22,8 +22,6 @@ namespace PetHealthcare.Server.Services
 
         public async Task<Account?> CreateAccount(AccountDTO Account, bool isGoogle)
         {
-            //var emailAuth = new EmailAddressAttribute();
-            //if (!emailAuth.IsValid(Account.Email)) throw new BadHttpRequestException("Invalid email");
 
             var _account = new Account
             {
@@ -36,7 +34,7 @@ namespace PetHealthcare.Server.Services
                 PhoneNumber = Account.PhoneNumber,
                 RoleId = Account.RoleId,
                 IsMale = Account.IsMale,
-                JoinDate = new DateOnly(),
+                JoinDate = DateOnly.FromDateTime(DateTime.Now),
                 IsDisabled = isGoogle ? false : true,
             };
 
