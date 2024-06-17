@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using NanoidDotNet;
+using PetHealthcare.Server.APIs.Constant;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.APIs.DTOS.AppointmentDTOs;
 using PetHealthcare.Server.Models;
@@ -8,6 +10,7 @@ using PetHealthcare.Server.Services.Interfaces;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq.Expressions;
+using System.Net.NetworkInformation;
 
 namespace PetHealthcare.Server.Services
 {
@@ -32,8 +35,36 @@ namespace PetHealthcare.Server.Services
             string id = Nanoid.Generate(size: 8);
             return prefix + id;
         }
+        public async Task<bool> isMaxTimeslotReached(string vetId, DateOnly appDate, int timeslotId, bool isCreate)
+        {
+            IEnumerable<Appointment> appointmentList = await _appointmentRepository.GetAll();
+            int checker = 0;
+            foreach (Appointment app in appointmentList)
+            {
+                if (app.VeterinarianAccountId.Equals(vetId)
+                    && app.AppointmentDate.Equals(appDate)
+                    && app.TimeSlotId == timeslotId)
+                {
+                    checker++;
+                }
+            }
+            /*isCreate is to check whether the appointment is belong to create or update api, because the difference is create api cannot
+            create if timeslot reached maximum but update can*/
+            if (isCreate && checker < ProjectConstant.MAX_APP_PER_TIMESLOT) 
+            {
+                return true;
+            } else if(!isCreate && checker <= ProjectConstant.MAX_APP_PER_TIMESLOT)
+            {
+                return true;
+            }
+            return false;
+        }
         public async Task CreateAppointment(CreateAppointmentDTO appointment)
         {
+            if(!await isMaxTimeslotReached(appointment.VeterinarianAccountId, appointment.AppointmentDate, appointment.TimeSlotId, true))
+            {
+                throw new Exception("Can't create appointment beacause the timeslot is full");
+            }
             Appointment toCreateAppointment = new Appointment
             {
                 AppointmentType = appointment.AppointmentType,
@@ -48,7 +79,7 @@ namespace PetHealthcare.Server.Services
                 IsCancel = false,
                 IsCheckIn = false,
                 IsCheckUp = false,
-
+                
             };
             await _appointmentRepository.Create(toCreateAppointment);
         }
@@ -105,9 +136,13 @@ namespace PetHealthcare.Server.Services
         {
             return _appointmentRepository.isInputtedVetIdValid(VetId);
         }
-
+        
         public async Task UpdateAppointment(string id, CustomerAppointmentDTO appointment)
         {
+            if(!await isMaxTimeslotReached(appointment.VeterinarianAccountId, appointment.AppointmentDate, appointment.TimeSlotId, false))
+            {
+                throw new Exception("Can't update appointment because that timeslot is full");
+            }
             Appointment UpdateAppointment = new Appointment
             {
                 AppointmentDate = appointment.AppointmentDate,
@@ -336,6 +371,76 @@ namespace PetHealthcare.Server.Services
                 await _appointmentRepository.SaveChanges();
             }
             return true;
+        }
+
+        public async Task<IEnumerable<AppointmentForStaffDTO>> GetAllAppointmentForStaff(DateOnly date, int timeslot)
+        {
+            IEnumerable<Appointment> listAppointments = new List<Appointment>();
+            listAppointments = await _appointmentRepository.GetAllAppointmentForStaff(date, timeslot);
+            List<AppointmentForStaffDTO> appointmentForStaffDTOs = new List<AppointmentForStaffDTO>();
+            foreach(Appointment app in listAppointments)
+            {
+                if (!app.IsCancel && !app.IsCheckIn && !app.IsCheckUp)
+                {
+                    appointmentForStaffDTOs.Add(new AppointmentForStaffDTO
+                    {
+
+                        //        string appointmentId { get; set;
+                        //}
+                        //string customerName { get; set; }
+                        //string phoneNumber { get; set; }
+                        //string petName { get; set; }
+                        //string status { get; set; }
+                        appointmentId = app.AppointmentId,
+                        customerName = app.Account.FullName,
+                        phoneNumber = app.Account.PhoneNumber,
+                        petName = app.Pet.PetName,
+                        status = "Uncheck in",
+                        VetName = app.Veterinarian.FullName,
+                    });
+                }
+                
+            }
+            return appointmentForStaffDTOs;
+        }
+
+        public async Task<IEnumerable<AppointmentForStaffDTO>> GetStaffHistoryAppointment()
+        {
+            
+            DateOnly curDate = DateOnly.FromDateTime(DateTime.Today);
+            IEnumerable<Appointment> appointments = await _appointmentRepository.GetAllAppointmentForStaff(curDate, 0);
+            if(appointments.Count()>0)
+            {
+                appointments = appointments.OrderByDescending(a => a.IsCancel).OrderByDescending(a => a.CheckinTime).ToList();
+            }
+            List<AppointmentForStaffDTO> appointmentForStaffDTOs = new List<AppointmentForStaffDTO>();
+            foreach (Appointment app in appointments)
+            {
+                if(app.IsCheckIn)
+                {
+                    string _status = "Checked in";
+                    if (app.IsCancel)
+                    {
+                        _status = "Cancelled";
+                    }
+                    else if (app.IsCheckIn)
+                    {
+                        _status = "Checked in";
+                    }
+                    appointmentForStaffDTOs.Add(new AppointmentForStaffDTO
+                    {
+                        appointmentId = app.AppointmentId,
+                        customerName = app.Account.FullName,
+                        phoneNumber = app.Account.PhoneNumber,
+                        petName = app.Pet.PetName,
+                        status = _status,
+                        VetName = app.Veterinarian.FullName,
+                    });
+                }
+                
+                
+            }
+            return appointmentForStaffDTOs;
         }
     }
 }

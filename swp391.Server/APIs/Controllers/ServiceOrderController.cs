@@ -47,7 +47,7 @@ namespace PetHealthcare.Server.APIs.Controllers
             await _serviceOrderService.CreateServiceOrder(serviceOrderDTO);
             return Ok();
         }
-        [HttpPut("staff/PayServiceOrder/{ServiceOrderId}")]
+        [HttpPut("staff/PayServiceOrder/{serviceOrderId}")]
         [Authorize(Roles = "Admin, Staff")]
         public async Task<IActionResult> PaidServiceOrder([FromRoute] string serviceOrderId, string paymentMethod)
         {
@@ -69,17 +69,5 @@ namespace PetHealthcare.Server.APIs.Controllers
             return Ok();
         }
 
-        
-        [HttpPut("/OrderStatus/{serviceOrderId}")]
-        [Authorize(Roles = "Admin,Staff")]
-        public async Task<ActionResult> UpdateOrderStatus(string orderStatus, [FromRoute]string serviceOrderId) //Change status
-        {
-            if(!orderStatus.Equals("Pending") && !orderStatus.Equals("Cancel"))
-            {
-                return BadRequest(new { message = "OrderStatus must be Paid, Pending or Cancel" });
-            }
-            await _serviceOrderService.UpdateOrderStatus(orderStatus, serviceOrderId);
-            return Ok();
-        }
     }
 }

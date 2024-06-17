@@ -28,7 +28,6 @@ namespace PetHealthcare.Server.Services
             var obj = new ServicePayment()
             {
                 ServicePaymentId = GenerateId(),
-                ServicePrice = entity.ServicePrice,
                 PaymentDate = entity.PaymentDate ?? DateOnly.FromDateTime(DateTime.Now),
                 PaymentMethod = entity.PaymentMethod,
                 ServiceOrderId = entity.ServiceOrderId
@@ -51,7 +50,6 @@ namespace PetHealthcare.Server.Services
             var existingRecord = await _servicePaymentService.GetByCondition(a => a.ServicePaymentId == id);
             if (existingRecord != null)
             {
-                existingRecord.ServicePrice = entity.ServicePrice;
                 existingRecord.PaymentMethod = entity.PaymentMethod;
                 existingRecord.PaymentDate = entity.PaymentDate ?? DateOnly.FromDateTime(DateTime.Now);
                 existingRecord.ServiceOrderId = entity.ServiceOrderId;

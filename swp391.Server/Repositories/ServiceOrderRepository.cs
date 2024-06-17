@@ -40,7 +40,7 @@ namespace PetHealthcare.Server.Repositories
                 ServiceOrder toCreateServiceOrder = new ServiceOrder
                 {
                     ServiceOrderId = SoId,
-                    OrderDate = order.OrderDate,
+                    OrderDate = DateOnly.FromDateTime(DateTime.Today),
                     OrderStatus = "Pending",
                     MedicalRecordId = order.MedicalRecordId,
                     Price = context.Services.Where(s => order.ServiceId.Contains(s.ServiceId)).Sum(s => s.ServicePrice),

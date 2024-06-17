@@ -17,9 +17,6 @@ namespace PetHealthcare.Server.Models
         [DataType(DataType.Date)]
         public DateOnly PaymentDate { get; set; }
 
-        [DataType(DataType.Currency)]
-        public double ServicePrice { get; set; }
-
         [StringLength(20)]
         public string PaymentMethod { get; set; }
 

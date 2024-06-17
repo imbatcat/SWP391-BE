@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
+using Microsoft.Identity.Client;
+using Microsoft.IdentityModel.Tokens;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.APIs.DTOS.AppointmentDTOs;
 using PetHealthcare.Server.Models;
@@ -29,7 +31,31 @@ namespace PetHealthcare.Server.APIs.Controllers
         {
             return await _appointment.GetAllAppointment();
         }
-
+        [HttpGet("Staff/AppointmentList/history")]
+        [Authorize(Roles = "Staff, Admin")]
+        public async Task<IEnumerable<AppointmentForStaffDTO>> GetHistoryAppointmentOfAToday()
+        {
+            return await _appointment.GetStaffHistoryAppointment();
+        }
+        [HttpGet("Staff/AppointmentList/")]
+        [Authorize(Roles = "Staff, Admin")]
+        public async Task<ActionResult<IEnumerable<AppointmentForStaffDTO>>> GetAllAppointmentForStaffWithCondition(DateOnly date,int timeslot, bool isGetAllTimeSlot = true)
+        {
+            IEnumerable<AppointmentForStaffDTO> appointmentList= new List<AppointmentForStaffDTO>();
+            try
+            {
+                if(isGetAllTimeSlot)
+                {
+                    timeslot = 0;
+                }
+                appointmentList = await _appointment.GetAllAppointmentForStaff(date, timeslot);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return Ok(appointmentList);
+        }
         // GET: api/Services/5
         [Authorize(Roles = "Customer")]
         [HttpGet("{id}")]
@@ -185,18 +211,42 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // PUT: api/Services/5
         [HttpPut("{id}")]
+        //Update TimeSlot, Appointment
         public async Task<IActionResult> UpdateAppointment([FromRoute] string id, [FromBody] CustomerAppointmentDTO toUpdateAppointment)
         {
-            var appointment = await _appointment.GetAppointmentByCondition(a => a.AppointmentId.Equals(id));
-            if (appointment == null)
+            DateOnly curDate = DateOnly.FromDateTime(DateTime.Today);
+            try
             {
-                return NotFound(new { message = "Update fail, appointment not found" });
-            }
-            else if (!_appointment.isVetIdValid(toUpdateAppointment.VeterinarianAccountId))
+                Appointment? appointemnt = await _appointment.GetAppointmentByCondition(a => a.AppointmentId.Equals(id));
+                if (appointemnt != null)
+                {
+                    if (appointemnt.AppointmentDate <= curDate.AddDays(1))
+                    {
+                        return BadRequest("You can only modify appointment more than 1 day before the appointment date");
+                    }
+                }
+                else
+                {
+                    return BadRequest(new { message = "Appointment not found" });
+                }
+                if (toUpdateAppointment.AppointmentDate <= curDate.AddDays(1))
+                {
+                    return BadRequest(new { message = "Please choose date higher than the day after current day" });
+                }
+                else if (toUpdateAppointment.AppointmentNotes.Length > 200)
+                {
+                    return BadRequest(new { message = "Appointment notes is too long please enter lower than 200 character" });
+                }
+                if (!_appointment.isVetIdValid(toUpdateAppointment.VeterinarianAccountId))
+                {
+                    return BadRequest(new { message = "Invalid foreign key VetId" });
+                }
+                await _appointment.UpdateAppointment(id, toUpdateAppointment);
+            } catch(Exception ex)
             {
-                return BadRequest(new { message = "Invalid foreign key VetId" });
+                return BadRequest(ex.Message);
             }
-            await _appointment.UpdateAppointment(id, toUpdateAppointment);
+            
             return Ok(toUpdateAppointment);
         }
 
@@ -206,7 +256,14 @@ namespace PetHealthcare.Server.APIs.Controllers
         [Authorize(Roles = "Customer,Staff,Admin")]
         public async Task<ActionResult<CreateAppointmentDTO>> CreateAppointment([FromBody] CreateAppointmentDTO toCreateAppointment)
         {
-            await _appointment.CreateAppointment(toCreateAppointment);
+            try
+            {
+                await _appointment.CreateAppointment(toCreateAppointment);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
             return Ok(toCreateAppointment);
         }
 

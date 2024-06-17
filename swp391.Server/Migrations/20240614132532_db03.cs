@@ -343,7 +343,6 @@ namespace PetHealthcare.Server.Migrations
                 {
                     ServicePaymentId = table.Column<string>(type: "char(11)", nullable: false),
                     PaymentDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    ServicePrice = table.Column<double>(type: "float", nullable: false),
                     PaymentMethod = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     ServiceOrderId = table.Column<string>(type: "char(11)", nullable: false)
                 },

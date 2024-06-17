@@ -14,6 +14,5 @@ namespace PetHealthcare.Server.Services.Interfaces
         Task<IEnumerable<ServiceOrder>> GetAllServiceOrder();
         Task<bool> PaidServiceOrder(string ServiceOrderId, string paymentMethod);
         Task<IEnumerable<GetAllServiceOrderForStaff>> getAllServiceOrderForStaff();
-        Task UpdateOrderStatus(string orderStatus, string serviceOrderId);
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.Identity.Client;
 using PetHealthcare.Server.APIs.DTOS.AppointmentDTOs;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
+using System.Diagnostics;
 using System.Linq.Expressions;
 
 namespace PetHealthcare.Server.Repositories
@@ -59,8 +60,8 @@ namespace PetHealthcare.Server.Repositories
 
                 appointment.AppointmentDate = entity.AppointmentDate;
                 appointment.AppointmentNotes = entity.AppointmentNotes;
-                appointment.TimeSlotId = entity.TimeSlotId;
                 appointment.VeterinarianAccountId = entity.VeterinarianAccountId;
+                appointment.TimeSlotId = entity.TimeSlotId;
                 await SaveChanges();
             }
         }
@@ -101,6 +102,21 @@ namespace PetHealthcare.Server.Repositories
                 Include("Account").Include("Pet").Include("TimeSlot").ToListAsync();
             }
             return appointmentList;
+        }
+
+        public async Task<IEnumerable<Appointment>> GetAllAppointmentForStaff(DateOnly date, int timeslot)
+        {
+            IEnumerable<Appointment> appList = new List<Appointment>();
+            if(timeslot == 0)
+            {
+                appList = context.Appointments.Where(a => a.AppointmentDate.CompareTo(date) == 0).Include("Account").Include("Pet").Include("Veterinarian");
+            }
+            else
+            {
+                appList = context.Appointments.Where(a => a.AppointmentDate.CompareTo(date) == 0 && a.TimeSlotId == timeslot).Include("Account").Include("Pet").Include("Veterinarian");
+            }
+            Debug.WriteLine(appList.Count());
+            return appList;
         }
     }
 }
