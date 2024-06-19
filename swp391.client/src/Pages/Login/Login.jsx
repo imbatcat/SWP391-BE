@@ -100,6 +100,7 @@ function Login() {
                 navigate('/');
                 break;
         }
+    
     };
     return (
         <MDBContainer className="my-5 d-10 justify-content-center">

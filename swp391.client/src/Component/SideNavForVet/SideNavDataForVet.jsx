@@ -12,7 +12,7 @@ export const SideNavData = [
     },
     {
         title: 'Appointment List',
-        path: '/vet/appointmentList',
+        path: '/vet/AppointmentList',
         icon: <IoIcons.IoMdHelpCircle />,
         cName: 'nav-text'
     },

@@ -82,7 +82,7 @@ function UserAppointments() {
                         <MDBRow>
                             <MDBCol lg="4">
                                 <UserSidebar></UserSidebar>
-                            </MDBCol >
+                            </MDBCol>
 
                             <MDBCol>
                                 <MDBCard className="mb-4 mb-lg-0">

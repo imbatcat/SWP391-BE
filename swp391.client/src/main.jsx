@@ -28,6 +28,7 @@ import AdminPet from './Pages/AdminPages/petManage';
 import VetAccount from './Pages/AdminPages/VetAccount';
 import AdminAccount from './Pages/AdminPages/adminAccount';
 import WorkSchedule from './Pages/Veternary/WorkSchedule';
+import AppointmentList from './Pages/Veternary/AppointmentList';
 
 const router = createBrowserRouter([
     {
@@ -145,7 +146,15 @@ const router = createBrowserRouter([
         ),
         errorElement: <div>404 Not Found</div>,
     },
-
+    {
+        path: '/vet/AppointmentList',
+        element: (
+            <CheckAuth>
+                <AppointmentList></AppointmentList>
+            </CheckAuth>
+        ),
+        errorElement: <div>404 Not Found</div>,
+    },
 ]);
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

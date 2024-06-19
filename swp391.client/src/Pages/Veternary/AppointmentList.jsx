@@ -3,10 +3,10 @@ import {
   MDBBadge, MDBBtn, MDBTable, MDBTableBody, MDBTableHead
 } 
   from 'mdb-react-ui-kit';
-import SideNav from '../../Component/SideNav/SideNav';
+import SideNavForVet from '../../Component/SideNavForVet/SideNavForVet';
 
 
-function AppointmentManage() {
+function AppointmentList() {
     const [appointments, setAppointment] = useState([]);
     const [searchInput, setSearchInput] = useState('');
     const [filteredAppointments, setFilteredApppointments] = useState([]);
@@ -81,7 +81,7 @@ function AppointmentManage() {
 
     return (
         <div>
-            <SideNav searchInput={searchInput} handleSearchInputChange={handleSearchInputChange} />
+            <SideNavForVet searchInput={searchInput} handleSearchInputChange={handleSearchInputChange} />
             <MDBTable align='middle'>
                 <MDBTableHead>
                     <tr style={{textAlign:'center'}}>
@@ -142,4 +142,4 @@ function AppointmentManage() {
     );
 }
 
-export default AppointmentManage;
+export default AppointmentList;

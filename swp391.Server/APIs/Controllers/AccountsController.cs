@@ -7,7 +7,7 @@ using PetHealthcare.Server.Services.Interfaces;
 namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin, Customer")]
+    [Authorize(Roles = "Admin, Customer, Vet")]
     [ApiController]
     public class AccountsController : ControllerBase
     {
@@ -34,7 +34,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         //get all account with the same role
         [HttpGet("/api/byRole/{roleId}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Vet")]
         public async Task<IEnumerable<Account>> GetAllAccountsByRole([FromRoute] int roleId)
         {
             return await _context.GetAllAccountsByRole(roleId);
@@ -60,6 +60,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         // GET: get the account with the input id
+        [Authorize(Roles = "Vet")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Account>> GetAccount([FromRoute] string id)
         {
