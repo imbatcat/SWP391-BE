@@ -30,31 +30,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         {
             return await _appointment.GetAllAppointment();
         }
-        [HttpGet("Staff/AppointmentList/history")]
-        [Authorize(Roles = "Staff, Admin")]
-        public async Task<IEnumerable<AppointmentForStaffDTO>> GetHistoryAppointmentOfToday()
-        {
-            return await _appointment.GetStaffHistoryAppointment();
-        }
-        [HttpGet("Staff/AppointmentList/")]
-        [Authorize(Roles = "Staff, Admin")]
-        public async Task<ActionResult<IEnumerable<AppointmentForStaffDTO>>> GetAllAppointmentForStaffWithCondition(DateOnly date,int timeslot, bool isGetAllTimeSlot = true)
-        {
-            IEnumerable<AppointmentForStaffDTO> appointmentList= new List<AppointmentForStaffDTO>();
-            try
-            {
-                if(isGetAllTimeSlot)
-                {
-                    timeslot = 0;
-                }
-                appointmentList = await _appointment.GetAllAppointmentForStaff(date, timeslot);
-            }
-            catch(Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            return Ok(appointmentList);
-        }
+
         // GET: api/Services/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Appointment>> GetAppointmentByCondition(string id)
@@ -181,22 +157,6 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
 
-        //}
-        [HttpPost("Checkin/{appointmentId}")]
-        public async Task<IActionResult> CheckInCustomer(string appointmentId, string paymentMethod) //api for customer to checkin for the customer
-        {
-            if(!paymentMethod.Equals("Cash", StringComparison.OrdinalIgnoreCase)
-                && !paymentMethod.Equals("Banking", StringComparison.OrdinalIgnoreCase))
-            {
-                return BadRequest("paymentMethod must be 'Cash' or 'Banking'");
-            }
-            bool appointmentStatus = await _appointment.UpdateCheckinStatus(appointmentId, paymentMethod);
-            if(!appointmentStatus)
-            {
-                return NotFound(new {message ="appointment not found, checkin failed"});
-            }
-            return Ok(new {message="Checkin successfully"});
-        }
         // DELETE: api/Services/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteApppointment([FromRoute] string id)
