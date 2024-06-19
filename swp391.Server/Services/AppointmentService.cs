@@ -72,6 +72,7 @@ namespace PetHealthcare.Server.Services
                     AppointmentNotes = app.AppointmentNotes,
                     VeterinarianName = app.Veterinarian.FullName,
                     PetName = app.Pet.PetName,
+                    AccountId = app.AccountId,
                     BookingPrice = app.BookingPrice,
                     AppointmentType = app.AppointmentType,
                     TimeSlot = app.TimeSlot.StartTime.ToString("h:mm") + " - " + app.TimeSlot.EndTime.ToString("h:mm"),
@@ -79,17 +80,6 @@ namespace PetHealthcare.Server.Services
                     IsCheckIn = app.IsCheckIn,
                     IsCheckUp = app.IsCheckUp,
                     CheckinTime = app.CheckinTime,
-                    //            public string AppointmentId { get; set; }
-                    //public DateOnly AppointmentDate { get; set; }
-                    //public string AppointmentType { get; set; }
-                    //public string? AppointmentNotes { get; set; }
-                    //public double BookingPrice { get; set; }
-                    //public string AccountId { get; set; }
-                    //public string PetName { get; set; }
-                    //public string VeterinarianName { get; set; }
-                    //public int TimeSlotId { get; set; }
-                    //public bool IsCancel { get; set; }
-                    //public bool IsCheckIn { get; set; }
                 };
                 CAList.Add(appointmentDTO);
             }

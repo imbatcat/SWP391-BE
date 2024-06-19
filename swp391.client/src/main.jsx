@@ -8,7 +8,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { AuthProvider } from "./Context/AuthProvider";
 import Login from './Pages/Login/Login';
 /*import App from './App';*/
-import Home from './Pages/Home/Home'
+import Home from './Pages/Home/Home';
 import SignUp from './Pages/SignUp/SignUp';
 import AboutUs from './Pages/About Us/AboutUs';
 import Appointment from './Pages/Appointment/Appointment';
@@ -16,7 +16,6 @@ import OTPInput from './Pages/OTP Input/OTPInput';
 import PasswordResetForm from './Pages/SetNewPass/PasswordResetForm';
 import PetList from './Pages/MyPetList/PetList';
 import ConfirmEmail from './Pages/ConfirmEmail';
-import GglLogin from './Pages/GoogleLogin';
 import { ToastContainer } from 'react-toastify';
 import UserProfile from './Pages/Profile/UserProfile';
 import { UserProvider } from './Context/UserContext';
@@ -79,11 +78,6 @@ const router = createBrowserRouter([
         errorElement: <div>404 Not Found</div>,
     },
     {
-        path: '/google',
-        element: <GglLogin />,
-        errorElement: <div>404 Not Found</div>,
-    },
-    {
         path: '/user/profile',
         element: (
             <CheckAuth>
@@ -96,7 +90,7 @@ const router = createBrowserRouter([
         path: '/user/pets',
         element: (
             <CheckAuth>
-                <UserPets/>
+                <UserPets />
             </CheckAuth>
         ),
         errorElement: <div>404 Not Found</div>,
