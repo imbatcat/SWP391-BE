@@ -29,6 +29,9 @@ import VetAccount from './Pages/AdminPages/VetAccount';
 import AdminAccount from './Pages/AdminPages/adminAccount';
 import WorkSchedule from './Pages/Veternary/WorkSchedule';
 import AppointmentList from './Pages/Veternary/AppointmentList';
+import UserPets from './Pages/Profile/UserPets';
+import UserAppointments from './Pages/Profile/UserHistoricalAppointments';
+
 const router = createBrowserRouter([
     {
         path: '/',
@@ -93,7 +96,7 @@ const router = createBrowserRouter([
         path: '/user/pets',
         element: (
             <CheckAuth>
-                <UserPets />
+                <UserPets/>
             </CheckAuth>
         ),
         errorElement: <div>404 Not Found</div>,
