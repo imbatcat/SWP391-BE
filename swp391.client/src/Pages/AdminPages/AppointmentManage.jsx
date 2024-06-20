@@ -35,7 +35,7 @@ function AppointmentManage() {
             // Merge appointment data with account data
             const mergedData = appointmentData.map(app => {
               const owner = accountData.find(account => account.accountId === app.accountId) || {};
-              console.log(appointmentData.accountId);
+              console.log(appointmentData);
             //   console.log("Matching owner for appointment:", app, "is:", owner);
               return { 
                 ...app, 

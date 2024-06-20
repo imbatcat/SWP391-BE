@@ -37,6 +37,7 @@ const YearWeekSelector = ({ onYearWeekChange }) => {
       });
     }
     setWeeks(weekArray);
+    setSelectedWeek(getCurrentWeek());
   };
 
   const getStartDateOfWeek = (week, year) => {
@@ -53,7 +54,12 @@ const YearWeekSelector = ({ onYearWeekChange }) => {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     return `${day}/${month}`;
   };
-
+  const getCurrentWeek = () => {
+    const currentDate = new Date();
+    const startOfYear = new Date(currentDate.getFullYear(), 0, 1);
+    const pastDaysOfYear = (currentDate - startOfYear) / 86400000;
+    return Math.ceil((pastDaysOfYear + startOfYear.getDay() + 1) / 7);
+  };
   return (
 <div>
     <div>
