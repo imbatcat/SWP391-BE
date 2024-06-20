@@ -20,10 +20,8 @@ namespace PetHealthcare.Server.Services
             _accountService = service;
         }
 
-        public async Task<Account?> CreateAccount(AccountDTO Account)
+        public async Task<Account?> CreateAccount(AccountDTO Account, bool isGoogle)
         {
-            //var emailAuth = new EmailAddressAttribute();
-            //if (!emailAuth.IsValid(Account.Email)) throw new BadHttpRequestException("Invalid email");
 
             var _account = new Account
             {
@@ -31,13 +29,13 @@ namespace PetHealthcare.Server.Services
                 Username = Account.UserName,
                 FullName = Account.FullName,
                 Password = Account.Password,
-                DateOfBirth = Account.DateOfBirth,
+                DateOfBirth = Account.DateOfBirth != null ? (DateOnly)Account.DateOfBirth : null,
                 Email = Account.Email,
                 PhoneNumber = Account.PhoneNumber,
                 RoleId = Account.RoleId,
                 IsMale = Account.IsMale,
-                JoinDate = new DateOnly(),
-                IsDisabled = true
+                JoinDate = DateOnly.FromDateTime(DateTime.Now),
+                IsDisabled = isGoogle ? false : true,
             };
 
             try

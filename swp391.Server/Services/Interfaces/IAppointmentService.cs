@@ -2,6 +2,7 @@
 using PetHealthcare.Server.APIs.DTOS.AppointmentDTOs;
 using PetHealthcare.Server.Models;
 using System.Linq.Expressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PetHealthcare.Server.Services.Interfaces
 {
@@ -22,5 +23,12 @@ namespace PetHealthcare.Server.Services.Interfaces
         string GenerateId();
 
         Task<Account?> GetAccountById(string id);
+        Task<IEnumerable<AppointmentListForVetDTO?>> ViewAppointmentListForVet(string id, DateOnly date);
+        Task<IEnumerable<VetAppointment?>> ViewVetAppointmentList(string id, int timeSlot, DateOnly date);
+        Task<bool> UpdateCheckinStatus(string appointmentId);
+
+        Task<IEnumerable<AppointmentForStaffDTO>> GetAllAppointmentForStaff(DateOnly date, int timeslot);
+
+        Task<IEnumerable<AppointmentForStaffDTO>> GetStaffHistoryAppointment();
     }
 }

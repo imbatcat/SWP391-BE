@@ -34,15 +34,13 @@ namespace PetHealthcare.Server.Models
         public bool IsMale { get; set; }
 
         [DataType(DataType.PhoneNumber, ErrorMessage = "Not a valid phone number")]
-        [Required]
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
 
         [EmailAddress(ErrorMessage = "Please enter a valid email address.")]
         public string? Email { get; set; }
 
         [DataType(DataType.Date)]
-        [Required]
-        public DateOnly DateOfBirth { get; set; }
+        public DateOnly? DateOfBirth { get; set; }
 
         [JsonConverter(typeof(DateOnlyConverter))]
         [DataType(DataType.Date)]

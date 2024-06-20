@@ -14,8 +14,8 @@ namespace PetHealthcare.Server.Repositories.DbContext
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) :
     base(options)
-        { 
-                       
+        {
+
 
         }
 
@@ -29,8 +29,8 @@ namespace PetHealthcare.Server.Repositories.DbContext
 
             modelBuilder.Entity<ApplicationUser>(b =>
             {
-                b.Property(u => u.UserName).HasMaxLength(16);
-                b.Property(u => u.NormalizedUserName).HasMaxLength(16);
+                b.Property(u => u.UserName).HasMaxLength(128);
+                b.Property(u => u.NormalizedUserName).HasMaxLength(128);
                 b.Property(u => u.Email).HasMaxLength(128);
                 b.Property(u => u.NormalizedEmail).HasMaxLength(128);
             });

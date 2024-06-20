@@ -7,7 +7,7 @@ namespace PetHealthcare.Server.Models
 {
     public class ServicePayment
     {
-        public string Prefix { get; } = "SP";
+        public string Prefix { get; } = "SP-";
 
         [Key]
         [Column(TypeName = "char(11)")]

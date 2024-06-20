@@ -6,8 +6,6 @@ import 'react-tooltip/dist/react-tooltip.css';
 import { useState } from 'react';
 import SelectModal from '../Component/Modals/SelectModal';
 import CheckAuth from '../Helpers/CheckAuth';
-import { GoogleLogin } from '@react-oauth/google';
-
 function MainLayout({ children }) {
     const [basicModal, setBasicModal] = useState(false);
 
@@ -35,16 +33,9 @@ function MainLayout({ children }) {
     };
     return (
         <div>
-            <GoogleLogin onSuccess={credentialResponse => {
-                console.log(credentialResponse);
-                getProfile(credentialResponse.credential);
-            }}
-                onError={() => {
-                    console.log('Login Failed');
-                }}>
-            </GoogleLogin>
 
             <NavBar2 />
+
             <main>
                 {children}
             </main>

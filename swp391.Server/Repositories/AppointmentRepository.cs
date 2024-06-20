@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PetHealthcare.Server.APIs.DTOS;
+using Microsoft.Identity.Client;
+using PetHealthcare.Server.APIs.DTOS.AppointmentDTOs;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
+using System.Diagnostics;
 using System.Linq.Expressions;
 
 namespace PetHealthcare.Server.Repositories
@@ -58,8 +60,8 @@ namespace PetHealthcare.Server.Repositories
 
                 appointment.AppointmentDate = entity.AppointmentDate;
                 appointment.AppointmentNotes = entity.AppointmentNotes;
-                appointment.TimeSlotId = entity.TimeSlotId;
                 appointment.VeterinarianAccountId = entity.VeterinarianAccountId;
+                appointment.TimeSlotId = entity.TimeSlotId;
                 await SaveChanges();
             }
         }
@@ -80,6 +82,41 @@ namespace PetHealthcare.Server.Repositories
         public async Task<Account?> GetAccountById(string id)
         {
             return await context.Accounts.FindAsync(id);
+        }
+
+        public async Task<IEnumerable<Appointment>> GetAllAppointmentListForVet(string vetId, DateOnly date)
+        {
+            IEnumerable<Appointment> appointmentListForVetDTOs = await context.Appointments.Where(a => a.VeterinarianAccountId.Equals(vetId) && a.AppointmentDate.CompareTo(date)==0).Include("Account").Include("Pet").ToListAsync();
+            return appointmentListForVetDTOs;
+        }
+
+        public async Task<IEnumerable<Appointment>> GetVetAppointmentList(string vetId, int timeSlot, DateOnly date)
+        {
+            IEnumerable<Appointment> appointmentList = new List<Appointment>();
+            if (timeSlot == 0)
+            {
+                appointmentList = await context.Appointments.Where(a => a.VeterinarianAccountId.Equals(vetId) && a.AppointmentDate.CompareTo(date) == 0).Include("Account").Include("Pet").Include("TimeSlot").ToListAsync();
+            } else
+            {
+                appointmentList = await context.Appointments.Where(a => a.VeterinarianAccountId.Equals(vetId) && a.AppointmentDate.CompareTo(date) == 0 && a.TimeSlotId == timeSlot).
+                Include("Account").Include("Pet").Include("TimeSlot").ToListAsync();
+            }
+            return appointmentList;
+        }
+
+        public async Task<IEnumerable<Appointment>> GetAllAppointmentForStaff(DateOnly date, int timeslot)
+        {
+            IEnumerable<Appointment> appList = new List<Appointment>();
+            if(timeslot == 0)
+            {
+                appList = context.Appointments.Where(a => a.AppointmentDate.CompareTo(date) == 0).Include("Account").Include("Pet").Include("Veterinarian");
+            }
+            else
+            {
+                appList = context.Appointments.Where(a => a.AppointmentDate.CompareTo(date) == 0 && a.TimeSlotId == timeslot).Include("Account").Include("Pet").Include("Veterinarian");
+            }
+            Debug.WriteLine(appList.Count());
+            return appList;
         }
     }
 }

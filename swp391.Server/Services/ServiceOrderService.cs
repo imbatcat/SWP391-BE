@@ -36,19 +36,6 @@ namespace PetHealthcare.Server.Services
             throw new NotImplementedException();
         }
 
-        public async Task UpdateOrderStatus(string orderStatus, string serviceOrderId)
-        {
-            ServiceOrder toUpdateStatus = await _serviceOrderRepo.GetByCondition(s => s.ServiceOrderId.Equals(serviceOrderId));
-            if (toUpdateStatus == null)
-            {
-                return;
-            } else
-            {
-                toUpdateStatus.OrderStatus = orderStatus;
-                await _serviceOrderRepo.SaveChanges();
-            }
-        }
-
         public async Task UpdateServiceOrder(string id, List<int> serviceIdList)
         {
             await _serviceOrderRepo.UpdateServiceOrder(id, serviceIdList);
@@ -57,6 +44,11 @@ namespace PetHealthcare.Server.Services
         public async Task<IEnumerable<GetAllServiceOrderForStaff>> getAllServiceOrderForStaff()
         {
             return await _serviceOrderRepo.GetAllServiceOrderForStaff();
+        }
+
+        public async Task<bool> PaidServiceOrder(string ServiceOrderId, string paymentMethod)
+        {
+            return await _serviceOrderRepo.savePaymentService(ServiceOrderId, paymentMethod);
         }
     }
 }

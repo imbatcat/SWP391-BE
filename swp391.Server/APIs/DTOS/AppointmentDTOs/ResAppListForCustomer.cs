@@ -2,6 +2,7 @@
 {
     public class ResAppListForCustomer
     {
+        public string AppointmentId {  get; set; }
         public DateOnly AppointmentDate { get; set; }
         public double BookingPrice { get; set; }
         public string PetName { get; set; }
