@@ -47,7 +47,6 @@ function WorkSchedule() {
         setSelectedDisplayDates(displayDates);
         setSelectedAPIDates(apiDates);
     }, []);
-
     async function fetchData() {
         try {
             const response = await fetch('https://localhost:7206/api/Appointment', {

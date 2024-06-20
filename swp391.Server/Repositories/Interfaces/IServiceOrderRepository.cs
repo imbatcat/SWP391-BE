@@ -10,5 +10,6 @@ namespace PetHealthcare.Server.Repositories.Interfaces
         Task CreateServiceOrder(ServiceOrderDTO order);
         Task UpdateServiceOrder(string ServiceOrderId, List<int> ServiceId);
         Task<IEnumerable<GetAllServiceOrderForStaff>> GetAllServiceOrderForStaff();
+        Task<bool> savePaymentService(string ServiceOrderId, string paymentMethod);
     }
 }

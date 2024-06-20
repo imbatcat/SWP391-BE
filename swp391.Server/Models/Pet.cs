@@ -15,7 +15,7 @@ namespace PetHealthcare.Server.Models
         public string PetId { get; set; }
 
         [DataType(DataType.ImageUrl)]
-        public string ImgUrl { get; set; }
+        public string? ImgUrl { get; set; }
 
         [StringLength(50)]
         [Required]

@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
+using Microsoft.Identity.Client;
+using Microsoft.IdentityModel.Tokens;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.APIs.DTOS.AppointmentDTOs;
 using PetHealthcare.Server.Models;
@@ -29,7 +31,31 @@ namespace PetHealthcare.Server.APIs.Controllers
         {
             return await _appointment.GetAllAppointment();
         }
-
+        [HttpGet("Staff/AppointmentList/history")]
+        [Authorize(Roles = "Staff, Admin")]
+        public async Task<IEnumerable<AppointmentForStaffDTO>> GetHistoryAppointmentOfAToday()
+        {
+            return await _appointment.GetStaffHistoryAppointment();
+        }
+        [HttpGet("Staff/AppointmentList/")]
+        [Authorize(Roles = "Staff, Admin")]
+        public async Task<ActionResult<IEnumerable<AppointmentForStaffDTO>>> GetAllAppointmentForStaffWithCondition(DateOnly date,int timeslot, bool isGetAllTimeSlot = true)
+        {
+            IEnumerable<AppointmentForStaffDTO> appointmentList= new List<AppointmentForStaffDTO>();
+            try
+            {
+                if(isGetAllTimeSlot)
+                {
+                    timeslot = 0;
+                }
+                appointmentList = await _appointment.GetAllAppointmentForStaff(date, timeslot);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return Ok(appointmentList);
+        }
         // GET: api/Services/5
         [Authorize(Roles = "Customer")]
         [HttpGet("{id}")]
@@ -43,6 +69,24 @@ namespace PetHealthcare.Server.APIs.Controllers
             }
 
             return appointment;
+        }
+        [HttpGet("admin/{accountId}")]
+        [Authorize(Roles ="Admin")]
+        public async Task<ActionResult<IEnumerable<GetAllAppointmentForAdminDTO>>> GetAllAppointmentForAdminByAccountId([FromRoute]string accountId)
+        {
+            if(accountId == null)
+            {
+                return BadRequest(new { message = "Account id must not null" });
+            } else if(await _appointment.GetAccountById(accountId) == null)
+            {
+                return NotFound(new { message = "Account id not found" });
+            }
+            IEnumerable<GetAllAppointmentForAdminDTO> appointmentList = await _appointment.GetAllAppointmentByAccountId(accountId);
+            if (appointmentList.Count() ==0)
+            {
+                return NotFound(new { message = "Can't find that account id or Account don't have any appointment" });
+            }
+            return Ok(appointmentList);
         }
 
         [HttpGet("AppointmentList/{accountId}&{listType}")]
@@ -120,6 +164,42 @@ namespace PetHealthcare.Server.APIs.Controllers
             return Ok(sortedAppointment);
         }
 
+        [HttpGet("AppointmetList/ViewAppointmentForVet")]
+        [Authorize(Roles = "Admin,Vet")]
+        //get all appointment of a day for Vet to view
+        public async Task<ActionResult<IEnumerable<AppointmentListForVetDTO>>> ViewAppointmentListForVet(string VetId, DateOnly date)
+        {
+            Console.WriteLine(date);
+            if(await _appointment.GetAccountById(VetId) is null)
+            {
+                return NotFound(new { message = "Can't find that VetId" });
+            } else if (date.CompareTo(new DateOnly(1,1,1)) == 0)
+            {
+                return BadRequest(new { message = "Please enter date in format mm/dd/yyyy" });
+            }
+            IEnumerable<AppointmentListForVetDTO> appointmentList = await _appointment.ViewAppointmentListForVet(VetId, date);
+            return Ok(appointmentList);
+        }
+        [HttpGet("AppointmetList/VetAppointment/{vetId}")]
+        [Authorize(Roles = "Admin,Vet")]
+        public async Task<ActionResult<IEnumerable<VetAppointment>>> GetVetAppointmentOfDate([FromRoute] string vetId,  int timeSlot, DateOnly date, bool isGetAll = true)
+        {
+            if(isGetAll)
+            {
+                timeSlot = 0;
+            }
+            if(await _appointment.GetAccountById(vetId) is null)
+            {
+                return NotFound(new { message = "Can't find that VetId" });
+            }
+            if(date.CompareTo(new DateOnly(1,1,1)) == 0)
+            {
+                date = DateOnly.FromDateTime(DateTime.Today);
+            }
+            var appointmentList =  await _appointment.ViewVetAppointmentList(vetId, timeSlot, date);
+            return Ok(appointmentList);
+        }
+
         // Get list of active appointments by timeslot in a week
         [Authorize(Roles = "Admin, Vet")]
         [HttpPost("AppointmentList/by-week/{startWeek}&{endWeek}")]
@@ -131,18 +211,42 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // PUT: api/Services/5
         [HttpPut("{id}")]
+        //Update TimeSlot, Appointment
         public async Task<IActionResult> UpdateAppointment([FromRoute] string id, [FromBody] CustomerAppointmentDTO toUpdateAppointment)
         {
-            var appointment = await _appointment.GetAppointmentByCondition(a => a.AppointmentId.Equals(id));
-            if (appointment == null)
+            DateOnly curDate = DateOnly.FromDateTime(DateTime.Today);
+            try
             {
-                return NotFound(new { message = "Update fail, appointment not found" });
-            }
-            else if (!_appointment.isVetIdValid(toUpdateAppointment.VeterinarianAccountId))
+                Appointment? appointemnt = await _appointment.GetAppointmentByCondition(a => a.AppointmentId.Equals(id));
+                if (appointemnt != null)
+                {
+                    if (appointemnt.AppointmentDate <= curDate.AddDays(1))
+                    {
+                        return BadRequest("You can only modify appointment more than 1 day before the appointment date");
+                    }
+                }
+                else
+                {
+                    return BadRequest(new { message = "Appointment not found" });
+                }
+                if (toUpdateAppointment.AppointmentDate <= curDate.AddDays(1))
+                {
+                    return BadRequest(new { message = "Please choose date higher than the day after current day" });
+                }
+                else if (toUpdateAppointment.AppointmentNotes.Length > 200)
+                {
+                    return BadRequest(new { message = "Appointment notes is too long please enter lower than 200 character" });
+                }
+                if (!_appointment.isVetIdValid(toUpdateAppointment.VeterinarianAccountId))
+                {
+                    return BadRequest(new { message = "Invalid foreign key VetId" });
+                }
+                await _appointment.UpdateAppointment(id, toUpdateAppointment);
+            } catch(Exception ex)
             {
-                return BadRequest(new { message = "Invalid foreign key VetId" });
+                return BadRequest(ex.Message);
             }
-            await _appointment.UpdateAppointment(id, toUpdateAppointment);
+            
             return Ok(toUpdateAppointment);
         }
 
@@ -150,12 +254,35 @@ namespace PetHealthcare.Server.APIs.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Authorize(Roles = "Customer,Staff,Admin")]
-        public async Task<ActionResult<GetAllAppointmentDTOs>> CreateAppointment([FromBody] CreateAppointmentDTO toCreateAppointment)
+        public async Task<ActionResult<CreateAppointmentDTO>> CreateAppointment([FromBody] CreateAppointmentDTO toCreateAppointment)
         {
-            await _appointment.CreateAppointment(toCreateAppointment);
+            try
+            {
+                await _appointment.CreateAppointment(toCreateAppointment);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
             return Ok(toCreateAppointment);
         }
 
+        //[HttpPost("staff/createAppointment")]
+        //[Authorize]
+        //public async Task<ActionResult<CreateAppointmentDTO>> StaffCreateAppointment([FromBody] CreateAppointmentDTO toCreateAppointment)
+        //{
+
+        //}
+        [HttpPost("Checkin/{appointmentId}")]
+        public async Task<IActionResult> CheckInCustomer(string appointmentId) //api for customer to checkin for the customer
+        {
+            bool appointmentStatus = await _appointment.UpdateCheckinStatus(appointmentId);
+            if(!appointmentStatus)
+            {
+                return NotFound(new {message ="appointment not found, checkin failed"});
+            }
+            return Ok(new {message="Checkin successfully"});
+        }
         // DELETE: api/Services/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteApppointment([FromRoute] string id)

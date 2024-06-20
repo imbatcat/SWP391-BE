@@ -11,7 +11,7 @@ namespace PetHealthcare.Server.Services.Interfaces
         Task<IEnumerable<Account>> GetAllAccountsByRole(int roleId);
         Task<Account?> GetAccountByRole(int roleId, string id);
         Task<Account?> GetAccountByCondition(Expression<Func<Account, bool>> expression);
-        Task<Account?> CreateAccount(AccountDTO Account);
+        Task<Account?> CreateAccount(AccountDTO Account, bool isGoogle);
         Task UpdateAccount(string id, AccountDTO Account);
         Task DeleteAccount(Account Account);
         Task<bool> SetAccountIsDisabled(RequestAccountDisable account);
@@ -19,4 +19,5 @@ namespace PetHealthcare.Server.Services.Interfaces
 
         string GenerateId();
     }
+
 }

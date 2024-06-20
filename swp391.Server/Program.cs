@@ -24,10 +24,10 @@ const string DataSrc = "MIB\\MINHLUONG", Password = "12345";
 #region DBcontext
 builder.Services.AddDbContext<PetHealthcareDbContext>(
 option => option.UseSqlServer(
-        $"Data Source={DataSrc}; User = sa; Password ={Password};Initial Catalog=PetHealthCareSystem;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False"));
+        $"Data Source={DataSrc}; User = sa; Password ={Password};Initial Catalog=PetHealthCareSystem;Integrated Security=True;Connect Timeout=10;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False"));
 builder.Services.AddDbContext<ApplicationDbContext>(
 option => option.UseSqlServer(
-        $"Data Source={DataSrc}; User = sa; Password ={Password};Initial Catalog=PetHealthCareSystemAuth;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False"));
+        $"Data Source={DataSrc}; User = sa; Password ={Password};Initial Catalog=PetHealthCareSystemAuth;Integrated Security=True;Connect Timeout=10;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False"));
 #endregion
 
 #region Repositories
@@ -42,6 +42,7 @@ builder.Services.AddScoped<IPetRepository, PetRepository>();
 builder.Services.AddScoped<ITimeslotRepository, TimeslotRepository>();
 builder.Services.AddScoped<IMedicalRecordRepository, MedicalRecordRepository>();
 builder.Services.AddScoped<IAdmissionRecordRepository, AdmissionRecordRepository>();
+builder.Services.AddScoped<IServicePaymentRepository, ServicePaymentRepository>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 #endregion
 
@@ -58,6 +59,7 @@ builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 builder.Services.AddScoped<ITimeSlotService, TimeslotService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IAdmissionRecordService, AdmissionRecordService>();
+builder.Services.AddScoped<IServicePaymentService, ServicePaymentService>();
 builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
 // Auth services
 builder.Services.AddScoped<IEmailSender, EmailSender>();

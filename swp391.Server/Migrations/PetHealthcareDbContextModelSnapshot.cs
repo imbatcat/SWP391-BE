@@ -26,7 +26,7 @@ namespace PetHealthcare.Server.Migrations
                     b.Property<string>("AccountId")
                         .HasColumnType("char(11)");
 
-                    b.Property<DateOnly>("DateOfBirth")
+                    b.Property<DateOnly?>("DateOfBirth")
                         .HasColumnType("date");
 
                     b.Property<string>("Discriminator")
@@ -56,7 +56,6 @@ namespace PetHealthcare.Server.Migrations
                         .HasColumnType("nvarchar(16)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("RoleId")
@@ -73,7 +72,8 @@ namespace PetHealthcare.Server.Migrations
                         .HasFilter("[Email] IS NOT NULL");
 
                     b.HasIndex("PhoneNumber")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[PhoneNumber] IS NOT NULL");
 
                     b.HasIndex("RoleId");
 
@@ -471,9 +471,6 @@ namespace PetHealthcare.Server.Migrations
                     b.Property<string>("ServiceOrderId")
                         .IsRequired()
                         .HasColumnType("char(11)");
-
-                    b.Property<double>("ServicePrice")
-                        .HasColumnType("float");
 
                     b.HasKey("ServicePaymentId");
 

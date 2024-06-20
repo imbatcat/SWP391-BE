@@ -1,8 +1,15 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
+using PetHealthcare.Server.Models.ApplicationModels;
 using PetHealthcare.Server.Services.Interfaces;
+using PetHealthcare.Server.Helpers;
+using System.Security.Policy;
+using NanoidDotNet;
+using PetHealthcare.Server.Services;
+using PetHealthcare.Server.Services.AuthInterfaces;
 
 namespace PetHealthcare.Server.APIs.Controllers
 {
@@ -13,11 +20,15 @@ namespace PetHealthcare.Server.APIs.Controllers
     {
         private readonly IAccountService _context;
         private readonly IPetService _contextPet;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IAuthenticationService _authService;
 
-        public AccountsController(IAccountService context, IPetService contextPet)
+        public AccountsController(IAccountService context, IPetService contextPet, UserManager<ApplicationUser> userManager, IAuthenticationService authService)
         {
             _context = context;
             _contextPet = contextPet;
+            _userManager = userManager;
+            _authService = authService;
         }
 
         // GET: api/Accounts
@@ -34,7 +45,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         //get all account with the same role
         [HttpGet("/api/byRole/{roleId}")]
-        [Authorize(Roles = "Admin, Vet")]
+        [Authorize(Roles = "Admin, Customer, Vet")]
         public async Task<IEnumerable<Account>> GetAllAccountsByRole([FromRoute] int roleId)
         {
             return await _context.GetAllAccountsByRole(roleId);
@@ -60,7 +71,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         // GET: get the account with the input id
-        [Authorize(Roles = "Vet")]
+        [Authorize(Roles = "Vet, Customer")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Account>> GetAccount([FromRoute] string id)
         {
@@ -101,7 +112,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         // POST: create a new user and insert it into database
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Account>> PostAccount([FromBody] AccountDTO accountDTO)
         {
@@ -111,14 +122,37 @@ namespace PetHealthcare.Server.APIs.Controllers
             }
             try
             {
-                var result = await _context.CreateAccount(accountDTO);
+                var password = "a1Z." + Nanoid.Generate(size: 6);
+                accountDTO.Password = password;
+                var result = await _context.CreateAccount(accountDTO, true);
+                var role = Helpers.Helpers.GetRole(accountDTO.RoleId);
+                var appUser = new ApplicationUser
+                {
+                    Email = accountDTO.Email,
+                    EmailConfirmed = true,
+                    AccountFullname = accountDTO.FullName,
+                    PhoneNumber = accountDTO.PhoneNumber,
+                    UserName = accountDTO.UserName
+                };
+
+                var results = await _userManager.CreateAsync(appUser, password);
+                if (results.Succeeded)
+                {
+                    await _authService.SendAccountEmail(accountDTO.Email, password, accountDTO.UserName);
+                    await _userManager.AddToRoleAsync(appUser, role);
+                    return CreatedAtAction(
+                             "GetAccount", new { id = accountDTO.GetHashCode() }, accountDTO);
+                }
+                foreach (var error in results.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
             }
             catch (BadHttpRequestException ex)
             {
-                return (BadRequest(ex.Message));
+                return BadRequest(ex);
             }
-            return CreatedAtAction(
-                     "GetAccount", new { id = accountDTO.GetHashCode() }, accountDTO);
+            return BadRequest(ModelState);
 
         }
 
