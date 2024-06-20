@@ -45,7 +45,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         //get all account with the same role
         [HttpGet("/api/byRole/{roleId}")]
-        [Authorize(Roles = "Admin, Vet")]
+        [Authorize(Roles = "Admin, Customer, Vet")]
         public async Task<IEnumerable<Account>> GetAllAccountsByRole([FromRoute] int roleId)
         {
             return await _context.GetAllAccountsByRole(roleId);
@@ -71,7 +71,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         // GET: get the account with the input id
-        [Authorize(Roles = "Vet")]
+        [Authorize(Roles = "Vet, Customer")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Account>> GetAccount([FromRoute] string id)
         {

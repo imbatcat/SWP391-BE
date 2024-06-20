@@ -225,6 +225,7 @@ public class ApplicationAuthController : ControllerBase
 
         return Ok();
     }
+
     [AllowAnonymous]
     [HttpPost("signinGoogle")]
     public async Task<ActionResult<ResponseUserDTO>> GoogleLogin([FromBody] GoogleLoginModel model)

@@ -29,9 +29,8 @@ import AdminAccount from './Pages/AdminPages/adminAccount';
 import WorkSchedule from './Pages/Veternary/WorkSchedule';
 import AppointmentList from './Pages/Veternary/AppointmentList';
 import UserPets from './Pages/Profile/UserPets';
-import UserAppointments from './Pages/Profile/UserHistoricalAppointments';
+import UserAppointments from './Pages/Profile/UserAppointments';
 
-import { GoogleOAuthProvider } from '@react-oauth/google';
 const router = createBrowserRouter([
     {
         path: '/',
