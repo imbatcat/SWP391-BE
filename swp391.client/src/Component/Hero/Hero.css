@@ -1,6 +1,11 @@
 .img-fit {
     object-fit: cover; /* Ensures the image is fully visible without being cropped */
-    height: 35vw; /* Adjust as needed */
+    height: 38vw; /* Adjust as needed */
+    width: 20vw; /* Adjust as needed */
+  }
+  .img-fit4 {
+    object-fit: initial; /* Ensures the image is fully visible without being cropped */
+    height: 38vw; /* Adjust as needed */
     width: 20vw; /* Adjust as needed */
   }
   .hero-text{
@@ -9,7 +14,7 @@
     width: 40vw;
     margin: auto;
     background-color: rgba(166, 164, 165, 0.3);
-    border-radius: 30px;
+    border-radius: 20px;
     border: none;
   }
 
@@ -23,7 +28,12 @@
     color: white; /* Optional: to ensure text is visible on the image */
   }
   
-  h5{
-    font-size: 5vw;
+  .hero-text h5{
+    font-size: 4vw;
     font-weight: 400;
+  }
+  .hero-text p{ 
+    margin-right: 2vw;
+    margin-left: 2vw;
+    font-size: 1.3vw;
   }
