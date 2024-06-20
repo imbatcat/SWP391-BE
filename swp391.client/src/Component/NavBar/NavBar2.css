@@ -10,10 +10,14 @@
     }
   }
   h2{
-    font-size: 15px;
+    font-size: 45px;
     color: black;
     justify-content: center;
     margin-left: 15px;
     margin-top: 12px;
+  }
+  h1{
+    color: black;
+    font-size: 1px;
   }
 

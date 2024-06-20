@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
+using PetHealthcare.Server.APIs.DTOS.AppointmentDTOs;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
+using System.Diagnostics;
 using System.Linq.Expressions;
 
 namespace PetHealthcare.Server.Repositories
@@ -18,11 +20,11 @@ namespace PetHealthcare.Server.Repositories
             await context.Appointments.AddAsync(entity);
             await SaveChanges();
         }
-        public bool isInputtedVetIdValid (string id) 
+        public bool isInputtedVetIdValid(string id)
         {
-            if(context.Accounts.Find(id) != null)
+            if (context.Accounts.Find(id) != null)
             {
-                if(id.StartsWith('V')) 
+                if (id.StartsWith('V'))
                 { return true; }
             }
             return false;
@@ -58,15 +60,63 @@ namespace PetHealthcare.Server.Repositories
 
                 appointment.AppointmentDate = entity.AppointmentDate;
                 appointment.AppointmentNotes = entity.AppointmentNotes;
-                appointment.TimeSlotId = entity.TimeSlotId;
                 appointment.VeterinarianAccountId = entity.VeterinarianAccountId;
+                appointment.TimeSlotId = entity.TimeSlotId;
                 await SaveChanges();
             }
         }
 
+        //public async Task<IEnumerable<Appointment>> GetAppointmentsByDate(TimeSlot timeslot)
+        //{
+        //    return await context.Appointments.Where(app => app.TimeSlot == timeslot).ToListAsync();
+        //}
+
+        public async Task<IEnumerable<Appointment>> GetAppointmentsOfWeek(DateOnly startWeekDate, DateOnly endWeekDate)
+        {
+            return await context.Appointments
+                .Where(app => app.AppointmentDate.CompareTo(startWeekDate) >= 0 &
+                        app.AppointmentDate.CompareTo(endWeekDate) <= 0 &
+                        app.IsCancel == false)
+                .ToListAsync();
+        }
         public async Task<Account?> GetAccountById(string id)
         {
             return await context.Accounts.FindAsync(id);
+        }
+
+        public async Task<IEnumerable<Appointment>> GetAllAppointmentListForVet(string vetId, DateOnly date)
+        {
+            IEnumerable<Appointment> appointmentListForVetDTOs = await context.Appointments.Where(a => a.VeterinarianAccountId.Equals(vetId) && a.AppointmentDate.CompareTo(date)==0).Include("Account").Include("Pet").ToListAsync();
+            return appointmentListForVetDTOs;
+        }
+
+        public async Task<IEnumerable<Appointment>> GetVetAppointmentList(string vetId, int timeSlot, DateOnly date)
+        {
+            IEnumerable<Appointment> appointmentList = new List<Appointment>();
+            if (timeSlot == 0)
+            {
+                appointmentList = await context.Appointments.Where(a => a.VeterinarianAccountId.Equals(vetId) && a.AppointmentDate.CompareTo(date) == 0).Include("Account").Include("Pet").Include("TimeSlot").ToListAsync();
+            } else
+            {
+                appointmentList = await context.Appointments.Where(a => a.VeterinarianAccountId.Equals(vetId) && a.AppointmentDate.CompareTo(date) == 0 && a.TimeSlotId == timeSlot).
+                Include("Account").Include("Pet").Include("TimeSlot").ToListAsync();
+            }
+            return appointmentList;
+        }
+
+        public async Task<IEnumerable<Appointment>> GetAllAppointmentForStaff(DateOnly date, int timeslot)
+        {
+            IEnumerable<Appointment> appList = new List<Appointment>();
+            if(timeslot == 0)
+            {
+                appList = context.Appointments.Where(a => a.AppointmentDate.CompareTo(date) == 0).Include("Account").Include("Pet").Include("Veterinarian");
+            }
+            else
+            {
+                appList = context.Appointments.Where(a => a.AppointmentDate.CompareTo(date) == 0 && a.TimeSlotId == timeslot).Include("Account").Include("Pet").Include("Veterinarian");
+            }
+            Debug.WriteLine(appList.Count());
+            return appList;
         }
     }
 }

@@ -11,16 +11,16 @@ namespace PetHealthcare.Server.APIs.DTOS
 
         public string UserName { get; set; }
 
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
         public bool IsMale { get; set; }
 
         public int RoleId { get; set; }
 
-        [Phone]
-        public string PhoneNumber { get; set; }
+        [Phone(ErrorMessage = "Invalid phone number")]
+        public string? PhoneNumber { get; set; }
 
-        public DateOnly DateOfBirth { get; set; }
+        public DateOnly? DateOfBirth { get; set; }
 
     }
 }

@@ -25,7 +25,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         //get all of the account
         //</summary>
         [HttpGet]
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Account>))]
         public async Task<IEnumerable<Account>> GetAccounts()
         {
@@ -51,9 +51,8 @@ namespace PetHealthcare.Server.APIs.Controllers
             }
             return Ok(checkAccount);
         }
-        //get the list of pet of this account has the inphut id
+        //get the list of pet of this account has the input id
         [HttpGet("/api/accounts/pets/{accountId}")]
-        [Authorize(Roles = "Admin")]
         public async Task<IEnumerable<Pet>> GetAccountPets([FromRoute] string accountId)
         {
             return await _contextPet.GetAccountPets(accountId);
@@ -62,14 +61,13 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // GET: get the account with the input id
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Account>> GetAccount([FromRoute] string id)
         {
             var account = await _context.GetAccountByCondition(a => a.AccountId == id);
 
             if (account == null)
             {
-                return NotFound();
+                return NotFound(new { message = "No such account exists, check your id" });
             }
 
             return account;
@@ -112,7 +110,7 @@ namespace PetHealthcare.Server.APIs.Controllers
             }
             try
             {
-                var result = await _context.CreateAccount(accountDTO);
+                var result = await _context.CreateAccount(accountDTO, false);
             }
             catch (BadHttpRequestException ex)
             {

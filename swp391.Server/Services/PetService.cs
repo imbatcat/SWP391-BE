@@ -1,5 +1,6 @@
 ﻿using NanoidDotNet;
 using PetHealthcare.Server.APIs.DTOS;
+using PetHealthcare.Server.APIs.DTOS.AppointmentDTOs;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
 using PetHealthcare.Server.Services.Interfaces;
@@ -20,7 +21,6 @@ namespace PetHealthcare.Server.Services
 
         public async Task CreatePet(PetDTO pet)
         {
-            var res = await ConfirmPetIdentity(pet.AccountId, pet);
             // if false then throw new exception
             var _pet = new Pet
             {
@@ -64,8 +64,7 @@ namespace PetHealthcare.Server.Services
 
         public async Task<IEnumerable<Pet>> GetAccountPets(string id)
         {
-            return null;
-            //return await _petService.GetAccountPets(id);
+            return await _petService.GetAccountPets(id);
         }
 
         public async Task<Pet?> GetPetByCondition(Expression<Func<Pet, bool>> expression)

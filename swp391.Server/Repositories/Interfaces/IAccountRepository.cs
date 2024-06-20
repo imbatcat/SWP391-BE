@@ -1,5 +1,6 @@
 ﻿using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
+using System.Linq.Expressions;
 
 namespace PetHealthcare.Server.Repositories.Interfaces
 {
@@ -9,5 +10,6 @@ namespace PetHealthcare.Server.Repositories.Interfaces
         Task<Account?> GetAccountByRole(int roleId, string id);
         Task<bool> SetAccountIsDisabled(RequestAccountDisable account);
         Task DeleteAccount(Account account);
+        Task<bool> Any(Expression<Func<Account, bool>> predicate);
     }
 }

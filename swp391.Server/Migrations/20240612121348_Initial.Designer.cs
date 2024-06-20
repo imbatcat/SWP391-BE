@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+
 #nullable disable
 
 namespace PetHealthcare.Server.Migrations
@@ -14,7 +15,6 @@ namespace PetHealthcare.Server.Migrations
     [Migration("20240612121348_Initial")]
     partial class Initial
     {
-        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
@@ -383,7 +383,6 @@ namespace PetHealthcare.Server.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ImgUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsCat")
@@ -516,6 +515,9 @@ namespace PetHealthcare.Server.Migrations
                     b.Property<string>("ServiceOrderId")
                         .IsRequired()
                         .HasColumnType("char(11)");
+
+                    b.Property<double>("ServicePrice")
+                        .HasColumnType("float");
 
                     b.HasKey("ServicePaymentId");
 

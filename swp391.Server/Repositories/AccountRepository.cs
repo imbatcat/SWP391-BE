@@ -27,7 +27,8 @@ namespace PetHealthcare.Server.Repositories
                 await context.Accounts.AddAsync(entity);
                 await SaveChanges();
 
-            } catch (DbUpdateException ex)
+            }
+            catch (DbUpdateException ex)
             {
                 throw new BadHttpRequestException(
                     ex.Message,
@@ -110,13 +111,18 @@ namespace PetHealthcare.Server.Repositories
 
         public async Task DeleteAccount(Account entity)
         {
-            var acc=await GetByCondition(a => a.AccountId == entity.AccountId);
+            var acc = await GetByCondition(a => a.AccountId == entity.AccountId);
             if (acc != null)
             {
                 context.Entry(acc).State = EntityState.Modified;
                 acc.IsDisabled = entity.IsDisabled;
                 await SaveChanges();
             }
+        }
+
+        public async Task<bool> Any(Expression<Func<Account, bool>> predicate)
+        {
+            return await context.Accounts.AnyAsync(predicate);
         }
     }
 }

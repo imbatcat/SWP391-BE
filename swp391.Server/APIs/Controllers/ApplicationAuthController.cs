@@ -17,6 +17,9 @@ using System.Text;
 using PetHealthcare.Server.Services.AuthInterfaces;
 using NuGet.Common;
 using PetHealthcare.Server.Helpers;
+using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 [Authorize]
 [ApiController]
@@ -46,6 +49,11 @@ public class ApplicationAuthController : ControllerBase
     {
         if (ModelState.IsValid)
         {
+            var errors = await _authenticationService.ValidateUniqueFields(registerAccount);
+            if (errors != null)
+            {
+                return BadRequest(new { message = errors });
+            }
             var user = new ApplicationUser
             {
                 UserName = registerAccount.UserName,
@@ -55,7 +63,7 @@ public class ApplicationAuthController : ControllerBase
 
             try
             {
-                var account = await _accountService.CreateAccount(registerAccount);
+                var account = await _accountService.CreateAccount(registerAccount, false);
                 var role = Helpers.GetRole(registerAccount.RoleId);
                 var result = await _userManager.CreateAsync(user, registerAccount.Password);
                 if (result.Succeeded)
@@ -80,7 +88,7 @@ public class ApplicationAuthController : ControllerBase
 
     [HttpPost("login")]
     [AllowAnonymous]
-    public async Task<ActionResult> Login([FromBody] LoginModel loginAccount)
+    public async Task<ActionResult<ResponseUserDTO>> Login([FromBody] LoginModel loginAccount)
     {
         if (ModelState.IsValid)
         {
@@ -89,21 +97,33 @@ public class ApplicationAuthController : ControllerBase
             var user = await _userManager.FindByNameAsync(loginAccount.UserName);
             if (user == null)
             {
-                return BadRequest("No such username");
+                return BadRequest(new { message = "No such username" });
             }
             if (!user.EmailConfirmed)
             {
-                return BadRequest("Account is not confirmed");
+                return BadRequest(new { message = "Account is not confirmed" });
             }
             var result = await _signInManager.PasswordSignInAsync(loginAccount.UserName, loginAccount.Password, loginAccount.RememberMe, lockoutOnFailure: false);
             if (result.Succeeded)
             {
-                return Ok();
+                return Ok(new ResponseUserDTO
+                {
+                    id = (await _accountService.GetAccountByCondition(x => x.Username == user.UserName)).AccountId,
+                    role = await _authenticationService.GetUserRole(user)
+                });
             }
         }
 
         // If we got this far, something failed, redisplay form
-        return BadRequest("Incorrect password");
+        return BadRequest(new { message = "Incorrect password" });
+    }
+
+    [AllowAnonymous]
+    [HttpPost("get-role")]
+    public async Task<string?> GetRole(string userName)
+    {
+        var user = await _userManager.FindByNameAsync(userName);
+        return await _authenticationService.GetUserRole(user);
     }
 
     [HttpPost("logout")]
@@ -129,7 +149,6 @@ public class ApplicationAuthController : ControllerBase
                 username = user.UserName,
                 IsDisabled = false
             });
-            await _signInManager.SignInAsync(user, isPersistent: false);
         }
         return Ok();
     }
@@ -150,9 +169,10 @@ public class ApplicationAuthController : ControllerBase
         {
 
             var _user = await _userManager.FindByEmailAsync(user.Email);
+            if (_user == null) return BadRequest(new { message = "Email does not exists" });
             if (!(await _userManager.IsEmailConfirmedAsync(_user)))
             {
-                return BadRequest("Account is not activated");
+                return BadRequest(new { message = "Account is not activated" });
             }
             await _authenticationService.SendForgotPasswordEmail(_user, user.Email);
 
@@ -189,7 +209,6 @@ public class ApplicationAuthController : ControllerBase
         return Ok();
     }
     [AllowAnonymous]
-    //[Authorize(Roles = ("Admin"))]
     [HttpGet("setrole")]
     public async Task<IActionResult> SetRole([FromQuery] string userName, [FromQuery] string role)
     {
@@ -205,5 +224,74 @@ public class ApplicationAuthController : ControllerBase
         }
 
         return Ok();
+    }
+    [AllowAnonymous]
+    [HttpPost("signinGoogle")]
+    public async Task<ActionResult<ResponseUserDTO>> GoogleLogin([FromBody] GoogleLoginModel model)
+    {
+        var httpClient = new HttpClient();
+        var response = await httpClient.GetAsync($"https://oauth2.googleapis.com/tokeninfo?id_token={model.token}");
+        if (response.IsSuccessStatusCode)
+        {
+            var user = new ApplicationUser();
+            var content = await response.Content.ReadAsStringAsync();
+            JObject userInfo = JObject.Parse(content);
+            string name = userInfo["given_name"].ToString();
+            string fullName = userInfo["name"].ToString();
+            string email = userInfo["email"].ToString();
+
+            user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                try
+                {
+                    AccountDTO newAccount = new AccountDTO
+                    {
+                        FullName = fullName,
+                        Email = email,
+                        UserName = name,
+                        Password = null,
+                        IsMale = false,
+                        RoleId = 1,
+                        PhoneNumber = null,
+                        DateOfBirth = null,
+
+                    };
+                    var acc = await _accountService.CreateAccount(newAccount, true);
+                    user = new ApplicationUser
+                    {
+                        UserName = acc.AccountId,
+                        Email = email,
+                        AccountFullname = fullName
+                    };
+
+                    var role = Helpers.GetRole(acc.RoleId);
+                    var result = await _userManager.CreateAsync(user);
+                    if (result.Succeeded)
+                    {
+                        await _userManager.AddToRoleAsync(user, role);
+                    }
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                        return BadRequest(ModelState);
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(new { message = ex.Message, Exception = ex.InnerException });
+                }
+            }
+            await _signInManager.SignInAsync(user, true);
+            return new ResponseUserDTO
+            {
+                id = user.UserName,
+                role = "Customer"
+            };
+
+        }
+
+        return BadRequest(new { message = "There's something wrong with your Google account" });
     }
 }

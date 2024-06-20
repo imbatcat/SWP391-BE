@@ -3,6 +3,7 @@ using System.Net.Mail;
 using System.Net;
 using System.Drawing.Text;
 using NuGet.Protocol.Plugins;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace PetHealthcare.Server.Services
 {
@@ -20,10 +21,19 @@ namespace PetHealthcare.Server.Services
                 UseDefaultCredentials = false,
                 Credentials = new NetworkCredential(Sender, "imsvkedykqcszwzj")
             };
-            
+
             var message = new MailMessage(Sender, email, subject, htmlMessage);
             message.IsBodyHtml = true;
-            return client.SendMailAsync(message);
+            try
+            {
+                return client.SendMailAsync(message);
+
+            }
+            catch (Exception ex)
+            {
+                throw new BadHttpRequestException("No such email exists");
+
+            }
         }
     }
 }
