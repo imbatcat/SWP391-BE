@@ -5,11 +5,11 @@ using PetHealthcare.Server.Core.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Models.ApplicationModels;
 using PetHealthcare.Server.Services.Interfaces;
-using PetHealthcare.Server.Helpers;
 using System.Security.Policy;
 using NanoidDotNet;
 using PetHealthcare.Server.Services;
 using PetHealthcare.Server.Services.AuthInterfaces;
+using PetHealthcare.Server.Core.Helpers;
 
 namespace PetHealthcare.Server.APIs.Controllers
 {
@@ -116,7 +116,7 @@ namespace PetHealthcare.Server.APIs.Controllers
                 var password = "a1Z." + Nanoid.Generate(size: 6);
                 accountDTO.Password = password;
                 var result = await _context.CreateAccount(accountDTO, true);
-                var role = Helpers.Helpers.GetRole(accountDTO.RoleId);
+                var role = Helpers.GetRole(accountDTO.RoleId);
                 var appUser = new ApplicationUser
                 {
                     Email = accountDTO.Email,
