@@ -10,7 +10,7 @@ namespace PetHealthcare.Server.Services.Interfaces
     {
         Task<IEnumerable<GetAllAppointmentForAdminDTO>> GetAllAppointment();
         Task<Appointment?> GetAppointmentByCondition(Expression<Func<Appointment, bool>> expression);
-        Task CreateAppointment(CreateAppointmentDTO appointment);
+        Task CreateAppointment(CreateAppointmentDTO appointment, string id);
         Task UpdateAppointment(string id, CustomerAppointmentDTO appointment);
         void DeleteAppointment(Appointment appointment);
 

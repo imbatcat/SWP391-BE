@@ -24,7 +24,9 @@ namespace PetHealthcare.Server.Models
         public DateOnly PaymentDate { get; set; }
 
         // Reference entity
+        [ForeignKey("AppointmentId")]
         [DeleteBehavior(DeleteBehavior.Restrict)]
         public Appointment Appointment { get; set; }
+        public string AppointmentId {  get; set; }
     }
 }
