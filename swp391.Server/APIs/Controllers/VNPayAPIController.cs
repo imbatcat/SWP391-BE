@@ -75,7 +75,7 @@ namespace PetHealthcare.Server.APIs.Controllers
                             AppointmentId = appointmentId,
                         };
                         context.BookingPayments.Add(bookingPayment);
-                        context.paymentResponseModels.Add(response);
+                        
                     }
                     else
                     {
