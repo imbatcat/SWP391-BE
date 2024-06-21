@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.EntityFrameworkCore;
-using PetHealthcare.Server.APIs.DTOS;
-using PetHealthcare.Server.APIs.DTOS.Auth;
+using PetHealthcare.Server.Core.DTOS;
+using PetHealthcare.Server.Core.DTOS.Auth;
 using PetHealthcare.Server.Models.ApplicationModels;
 using PetHealthcare.Server.Services.AuthInterfaces;
 using PetHealthcare.Server.Services.Interfaces;

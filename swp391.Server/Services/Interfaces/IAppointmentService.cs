@@ -1,8 +1,7 @@
-﻿using PetHealthcare.Server.APIs.DTOS;
-using PetHealthcare.Server.APIs.DTOS.AppointmentDTOs;
+﻿using PetHealthcare.Server.Core.DTOS;
+using PetHealthcare.Server.Core.DTOS.AppointmentDTOs;
 using PetHealthcare.Server.Models;
 using System.Linq.Expressions;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PetHealthcare.Server.Services.Interfaces
 {

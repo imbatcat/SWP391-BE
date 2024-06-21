@@ -1,4 +1,4 @@
-﻿using PetHealthcare.Server.APIs.DTOS;
+﻿using PetHealthcare.Server.Core.DTOS;
 using PetHealthcare.Server.Models;
 using System.Linq.Expressions;
 namespace PetHealthcare.Server.Services.Interfaces

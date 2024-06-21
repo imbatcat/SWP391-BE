@@ -1,8 +1,7 @@
-﻿using PetHealthcare.Server.APIs.DTOS;
+﻿using PetHealthcare.Server.Core.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
 using PetHealthcare.Server.Services.Interfaces;
-using System.Globalization;
 using System.Linq.Expressions;
 
 namespace PetHealthcare.Server.Services
@@ -17,14 +16,14 @@ namespace PetHealthcare.Server.Services
         }
         public async Task CreateTimeSlot(TimeslotDTO timeSlot)
         {
-           
+
             var _timeSlot = new TimeSlot
             {
-                
+
                 StartTime = ParseTime(timeSlot.StartTime),
                 EndTime = ParseTime(timeSlot.EndTime),
-                
-            };  
+
+            };
             await _timeSlotService.Create(_timeSlot);
         }
 
@@ -53,7 +52,7 @@ namespace PetHealthcare.Server.Services
             };
             await _timeSlotService.Update(_timeSlot);
         }
-         
+
         private static TimeOnly ParseTime(string input)
         {
             if (TimeOnly.TryParse(input, out TimeOnly time))

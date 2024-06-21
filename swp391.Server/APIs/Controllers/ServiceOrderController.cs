@@ -1,20 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ActionConstraints;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.Identity.Client;
-using PetHealthcare.Server.APIs.DTOS;
-using PetHealthcare.Server.APIs.DTOS.ServiceOrderDTO;
-using PetHealthcare.Server.APIs.DTOS.ServiceOrderDTOs;
-using PetHealthcare.Server.Models;
+using PetHealthcare.Server.Core.DTOS.ServiceOrderDTOs;
 using PetHealthcare.Server.Services.Interfaces;
 
 namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles ="Admin,Vet")]
+    [Authorize(Roles = "Admin,Vet")]
     public class ServiceOrderController : ControllerBase
     {
         private readonly IServiceOrderService _serviceOrderService;
@@ -31,13 +24,13 @@ namespace PetHealthcare.Server.APIs.Controllers
             return await _serviceOrderService.getAllServiceOrderForStaff();
         }
         [HttpPost]
-        public async Task<IActionResult> createServiceOrder([FromBody]ServiceOrderDTO serviceOrderDTO)
+        public async Task<IActionResult> createServiceOrder([FromBody] ServiceOrderDTO serviceOrderDTO)
         {
-            if(serviceOrderDTO.ServiceId == null)
+            if (serviceOrderDTO.ServiceId == null)
             {
                 return BadRequest(new { message = "ServiceId is null" });
             }
-            foreach(int serviceId in serviceOrderDTO.ServiceId) 
+            foreach (int serviceId in serviceOrderDTO.ServiceId)
             {
                 if (_healthService.GetHealthServiceByCondition(h => h.ServiceId == serviceId) == null)
                 {
@@ -49,21 +42,21 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
         [HttpPut("staff/PayServiceOrder/{serviceOrderId}")]
         [Authorize(Roles = "Admin, Staff")]
-        public async Task<IActionResult> PaidServiceOrder([FromRoute] string serviceOrderId, string paymentMethod)
+        public async Task<IActionResult> PaidServiceOrder([FromRoute] string serviceOrderId)
         {
-            bool paidResult = await _serviceOrderService.PaidServiceOrder(serviceOrderId, paymentMethod);
-            if(paidResult)
+            bool paidResult = await _serviceOrderService.PaidServiceOrder(serviceOrderId);
+            if (paidResult)
             {
-                return Ok(new {message = "Paid successfully"});
+                return Ok(new { message = "Paid successfully" });
             }
             return BadRequest(new { message = "Paid failed" });
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateServiceOrder(string id, [FromBody] List<int> serviceIdList) 
+        public async Task<IActionResult> UpdateServiceOrder(string id, [FromBody] List<int> serviceIdList)
         {
-            if(serviceIdList.Count == 0)
+            if (serviceIdList.Count == 0)
             {
-                return BadRequest(new {message = "serviceIdList is empty"});
+                return BadRequest(new { message = "serviceIdList is empty" });
             }
             await _serviceOrderService.UpdateServiceOrder(id, serviceIdList);
             return Ok();

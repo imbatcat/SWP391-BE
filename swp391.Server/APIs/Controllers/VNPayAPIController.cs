@@ -1,13 +1,11 @@
-﻿using PetHealthcare.Server.Models;
-using PetHealthcare.Server.Services;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using PetHealthcare.Server.APIs.DTOS.AppointmentDTOs;
-using System.Diagnostics;
-using Microsoft.Identity.Client;
-using System.Text.Json;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using PetHealthcare.Server.APIs.Constant;
+using PetHealthcare.Server.Core.Constant;
+using PetHealthcare.Server.Core.DTOS.AppointmentDTOs;
+using PetHealthcare.Server.Models;
+using PetHealthcare.Server.Services;
+using System.Diagnostics;
+using System.Text.Json;
 namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
@@ -18,7 +16,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         private readonly AppointmentService _appointmentService;
         private readonly PetHealthcareDbContext context;
         private readonly BookingPaymentService bookingPaymentService;
-        public VNPayAPIController(IVnPayService vnPayService, PetHealthcareDbContext context, AppointmentService appointmentService, 
+        public VNPayAPIController(IVnPayService vnPayService, PetHealthcareDbContext context, AppointmentService appointmentService,
             BookingPaymentService _bookingPaymentService, ITempDataDictionaryFactory tempDataDictionaryFactory)
         {
             _vnPayService = vnPayService;
@@ -36,8 +34,8 @@ namespace PetHealthcare.Server.APIs.Controllers
             CreateAppointmentDTO appointmentDTO = model;
             TempData["AppointmentDTO"] = JsonSerializer.Serialize(appointmentDTO);
             var url = _vnPayService.CreatePaymentUrl(model, HttpContext);
-            
-            
+
+
             return Ok(url);
         }
 
@@ -64,7 +62,7 @@ namespace PetHealthcare.Server.APIs.Controllers
                     string appointmentId = _appointmentService.GenerateId();
                     await _appointmentService.CreateAppointment(appointmentDTO, appointmentId);
                     Debug.WriteLine(appointmentId);
-                    if(context.Appointments.Find(appointmentId) != null)
+                    if (context.Appointments.Find(appointmentId) != null)
                     {
                         var bookingPayment = new BookingPayment
                         {
@@ -75,18 +73,19 @@ namespace PetHealthcare.Server.APIs.Controllers
                             AppointmentId = appointmentId,
                         };
                         context.BookingPayments.Add(bookingPayment);
-                        
+
                     }
                     else
                     {
                         Debug.WriteLine("Add appointment failed");
                     }
-                    
-                } else
+
+                }
+                else
                 {
                     Debug.WriteLine("Transaction failed" + response.VnPayResponseCode);
                 }
-                
+
                 context.SaveChanges();
             }
             catch (Exception ex)

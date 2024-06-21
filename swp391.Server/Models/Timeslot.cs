@@ -13,7 +13,7 @@ namespace PetHealthcare.Server.Models
 
         [DataType(DataType.Time)]
         [Required]
-        public TimeOnly EndTime { get; set; } 
+        public TimeOnly EndTime { get; set; }
 
     }
 }

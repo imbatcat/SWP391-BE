@@ -1,12 +1,8 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
-using NanoidDotNet;
-using PetHealthcare.Server.APIs.DTOS;
+﻿using NanoidDotNet;
+using PetHealthcare.Server.Core.DTOS;
 using PetHealthcare.Server.Models;
-using PetHealthcare.Server.Models.ApplicationModels;
 using PetHealthcare.Server.Repositories.Interfaces;
 using PetHealthcare.Server.Services.Interfaces;
-using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 
 namespace PetHealthcare.Server.Services

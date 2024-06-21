@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -60,5 +59,8 @@ namespace PetHealthcare.Server.Models
         public virtual ICollection<Feedback>? Feedbacks { get; set; }
 
         public virtual ICollection<Pet>? Pets { get; set; }
+
+        [Required]
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
     }
 }

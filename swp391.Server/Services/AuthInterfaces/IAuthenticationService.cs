@@ -1,5 +1,5 @@
-﻿using PetHealthcare.Server.APIs.DTOS;
-using PetHealthcare.Server.APIs.DTOS.Auth;
+﻿using PetHealthcare.Server.Core.DTOS;
+using PetHealthcare.Server.Core.DTOS.Auth;
 using PetHealthcare.Server.Models.ApplicationModels;
 
 namespace PetHealthcare.Server.Services.AuthInterfaces

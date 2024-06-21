@@ -26,6 +26,9 @@ namespace PetHealthcare.Server.Migrations
                     b.Property<string>("AccountId")
                         .HasColumnType("char(11)");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateOnly?>("DateOfBirth")
                         .HasColumnType("date");
 
@@ -161,6 +164,9 @@ namespace PetHealthcare.Server.Migrations
 
                     b.Property<TimeOnly>("CheckinTime")
                         .HasColumnType("time");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsCancel")
                         .HasColumnType("bit");
@@ -325,46 +331,6 @@ namespace PetHealthcare.Server.Migrations
                     b.ToTable("MedicalRecords");
                 });
 
-            modelBuilder.Entity("PetHealthcare.Server.Models.PaymentResponseModel", b =>
-                {
-                    b.Property<string>("TransactionId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("OrderDescription")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OrderId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateOnly>("PaymentDate")
-                        .HasColumnType("date");
-
-                    b.Property<string>("PaymentId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PaymentMethod")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Success")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("VnPayResponseCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("TransactionId");
-
-                    b.ToTable("paymentResponseModels");
-                });
-
             modelBuilder.Entity("PetHealthcare.Server.Models.Pet", b =>
                 {
                     b.Property<string>("PetId")
@@ -373,6 +339,9 @@ namespace PetHealthcare.Server.Migrations
                     b.Property<string>("AccountId")
                         .IsRequired()
                         .HasColumnType("char(11)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasMaxLength(100)
@@ -458,6 +427,9 @@ namespace PetHealthcare.Server.Migrations
                     b.Property<string>("ServiceOrderId")
                         .HasColumnType("char(11)");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("MedicalRecordId")
                         .IsRequired()
                         .HasColumnType("char(11)");
@@ -493,31 +465,6 @@ namespace PetHealthcare.Server.Migrations
                     b.HasIndex("ServiceOrderId");
 
                     b.ToTable("ServiceOrderDetails");
-                });
-
-            modelBuilder.Entity("PetHealthcare.Server.Models.ServicePayment", b =>
-                {
-                    b.Property<string>("ServicePaymentId")
-                        .HasColumnType("char(11)");
-
-                    b.Property<DateOnly>("PaymentDate")
-                        .HasColumnType("date");
-
-                    b.Property<string>("PaymentMethod")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("ServiceOrderId")
-                        .IsRequired()
-                        .HasColumnType("char(11)");
-
-                    b.HasKey("ServicePaymentId");
-
-                    b.HasIndex("ServiceOrderId")
-                        .IsUnique();
-
-                    b.ToTable("ServicePayments");
                 });
 
             modelBuilder.Entity("PetHealthcare.Server.Models.TimeSlot", b =>
@@ -731,17 +678,6 @@ namespace PetHealthcare.Server.Migrations
                     b.Navigation("ServiceOrder");
                 });
 
-            modelBuilder.Entity("PetHealthcare.Server.Models.ServicePayment", b =>
-                {
-                    b.HasOne("PetHealthcare.Server.Models.ServiceOrder", "ServiceOrder")
-                        .WithOne("ServicePayment")
-                        .HasForeignKey("PetHealthcare.Server.Models.ServicePayment", "ServiceOrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ServiceOrder");
-                });
-
             modelBuilder.Entity("PetHealthcare.Server.Models.Account", b =>
                 {
                     b.Navigation("Appointments");
@@ -783,9 +719,6 @@ namespace PetHealthcare.Server.Migrations
             modelBuilder.Entity("PetHealthcare.Server.Models.ServiceOrder", b =>
                 {
                     b.Navigation("ServiceOrderDetails");
-
-                    b.Navigation("ServicePayment")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

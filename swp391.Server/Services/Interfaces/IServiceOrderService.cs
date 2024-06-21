@@ -1,6 +1,4 @@
-﻿using PetHealthcare.Server.APIs.DTOS;
-using PetHealthcare.Server.APIs.DTOS.ServiceOrderDTO;
-using PetHealthcare.Server.APIs.DTOS.ServiceOrderDTOs;
+﻿using PetHealthcare.Server.Core.DTOS.ServiceOrderDTOs;
 using PetHealthcare.Server.Models;
 
 namespace PetHealthcare.Server.Services.Interfaces
@@ -12,7 +10,7 @@ namespace PetHealthcare.Server.Services.Interfaces
         Task<ServiceOrder> GetServiceOrderById(string id);
         Task<IEnumerable<ServiceOrder>> GetAllServiceOrderByMedId(string medId);
         Task<IEnumerable<ServiceOrder>> GetAllServiceOrder();
-        Task<bool> PaidServiceOrder(string ServiceOrderId, string paymentMethod);
+        Task<bool> PaidServiceOrder(string ServiceOrderId);
         Task<IEnumerable<GetAllServiceOrderForStaff>> getAllServiceOrderForStaff();
     }
 }

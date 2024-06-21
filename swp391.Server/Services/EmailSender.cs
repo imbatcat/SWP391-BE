@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
-using System.Net.Mail;
 using System.Net;
-using System.Drawing.Text;
-using NuGet.Protocol.Plugins;
-using Microsoft.AspNetCore.Http.HttpResults;
+using System.Net.Mail;
 
 namespace PetHealthcare.Server.Services
 {

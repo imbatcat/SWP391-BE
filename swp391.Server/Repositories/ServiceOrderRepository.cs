@@ -1,12 +1,8 @@
-﻿using Microsoft.AspNetCore.Components.Sections;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using NanoidDotNet;
-using PetHealthcare.Server.APIs.DTOS;
-using PetHealthcare.Server.APIs.DTOS.ServiceOrderDTO;
-using PetHealthcare.Server.APIs.DTOS.ServiceOrderDTOs;
+using PetHealthcare.Server.Core.DTOS.ServiceOrderDTOs;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
-using SQLitePCL;
 using System.Linq.Expressions;
 
 namespace PetHealthcare.Server.Repositories
@@ -33,7 +29,7 @@ namespace PetHealthcare.Server.Repositories
         public async Task CreateServiceOrder(ServiceOrderDTO order)
         {
             string SoId = GenerateId();
-            double priceSum=0;
+            double priceSum = 0;
             try
             {
 
@@ -53,19 +49,19 @@ namespace PetHealthcare.Server.Repositories
                         ServiceId = serviceId,
                         ServiceOrderId = SoId,
                     });
-                    
+
                 }
                 await SaveChanges();
             }
             catch (Exception ex)
             {
-               Console.WriteLine(ex.ToString());
+                Console.WriteLine(ex.ToString());
                 Console.WriteLine("Error");
             }
 
         }
 
-        
+
 
         public void Delete(ServiceOrder entity)
         {
@@ -74,7 +70,7 @@ namespace PetHealthcare.Server.Repositories
 
         public async Task<IEnumerable<ServiceOrder>> GetAll()
         {
-            return await context.ServiceOrders.Include(s => s.ServicePayment).Include(s => s.MedicalRecord).Include(s => s.ServiceOrderDetails).ToListAsync();
+            return await context.ServiceOrders.Include(s => s.MedicalRecord).Include(s => s.ServiceOrderDetails).ToListAsync();
         }
 
         public async Task<ServiceOrder?> GetByCondition(Expression<Func<ServiceOrder, bool>> expression)
@@ -84,13 +80,13 @@ namespace PetHealthcare.Server.Repositories
 
         public async Task SaveChanges()
         {
-            
+
             await context.SaveChangesAsync();
         }
 
         public async Task Update(ServiceOrder entity)
         {
-        
+
         }
         public async Task UpdateServiceOrder(string serviceOrderId, List<int> ServiceId)
         {
@@ -98,7 +94,8 @@ namespace PetHealthcare.Server.Repositories
             if (toUpdateServiceOrder == null)
             {
                 return;
-            } else
+            }
+            else
             {
                 //remove old ServiceOrderDetail than replace it by the new ones
                 var toRemoveOrderDetails = context.ServiceOrderDetails.Where(s => s.ServiceOrderId.Equals(toUpdateServiceOrder.ServiceOrderId)).ToList();
@@ -118,7 +115,7 @@ namespace PetHealthcare.Server.Repositories
                 await SaveChanges();
             }
         }
-      
+
         public async Task<IEnumerable<GetAllServiceOrderForStaff>> GetAllServiceOrderForStaff()
         {
             //    public string ServiceOrderId { get; set; }
@@ -143,21 +140,13 @@ namespace PetHealthcare.Server.Repositories
             return ServiceOrderForStaff;
         }
 
-        public async Task<bool> savePaymentService(string serviceOrderId, string paymentMethod)
+        public async Task<bool> UpdateServiceOrderStatus(string serviceOrderId)
         {
             string servicePaymentId = "SP-" + Nanoid.Generate(size: 8);
             ServiceOrder? serviceOrder = await context.ServiceOrders.FindAsync(serviceOrderId);
-            if(serviceOrder != null)
+            if (serviceOrder != null)
             {
                 serviceOrder.OrderStatus = "Paid";
-                ServicePayment toAddServicePayment = new ServicePayment
-                {
-                    ServicePaymentId = servicePaymentId,
-                    PaymentMethod = paymentMethod,
-                    PaymentDate = DateOnly.FromDateTime(DateTime.Today),
-                    ServiceOrderId = serviceOrderId,
-                };
-                context.ServicePayments.Add(toAddServicePayment);
                 await context.SaveChangesAsync();
                 return true;
             }

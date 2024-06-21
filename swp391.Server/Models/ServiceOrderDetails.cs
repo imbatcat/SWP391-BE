@@ -11,4 +11,4 @@ namespace PetHealthcare.Server.Models
         public string ServiceOrderId { get; set; }
         public ServiceOrder ServiceOrder { get; set; }
     }
-} 
+}

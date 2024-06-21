@@ -57,9 +57,9 @@ namespace PetHealthcare.Server.Repositories
         {
             var list = await context.Feedbacks.ToListAsync();
             List<Feedback> feedbacks = new List<Feedback>();
-            foreach(Feedback feedback in list)
+            foreach (Feedback feedback in list)
             {
-                if(GetNameFromAccountId(feedback.AccountId) == cusName)
+                if (GetNameFromAccountId(feedback.AccountId) == cusName)
                 {
                     feedbacks.Add(feedback);
                 }

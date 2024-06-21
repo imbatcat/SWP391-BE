@@ -27,6 +27,6 @@ namespace PetHealthcare.Server.Models
         [ForeignKey("AppointmentId")]
         [DeleteBehavior(DeleteBehavior.Restrict)]
         public Appointment Appointment { get; set; }
-        public string AppointmentId {  get; set; }
+        public string AppointmentId { get; set; }
     }
 }

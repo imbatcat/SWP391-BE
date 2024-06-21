@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PetHealthcare.Server.APIs.DTOS;
+using PetHealthcare.Server.Core.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Services.Interfaces;
 
@@ -38,7 +32,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         [Authorize(Roles = "Admin, Vet")]
         public async Task<ActionResult<MedicalRecord>> GetMedicalRecord(string id)
         {
-            var medicalRecord = await _context.GetMedicalRecordByCondition(m=>m.MedicalRecordId == id);
+            var medicalRecord = await _context.GetMedicalRecordByCondition(m => m.MedicalRecordId == id);
 
             if (medicalRecord == null)
             {
@@ -49,7 +43,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         //PUT: api/MedicalRecords/5
-         //To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         [Authorize(Roles = "Vet, Staff")]
         public async Task<IActionResult> PutMedicalRecord(string id, MedicalRecordDTO medicalRecord)
@@ -64,7 +58,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         [Authorize(Roles = "Vet, Staff, Customer")]
         public async Task<ActionResult<MedicalRecord>> PostMedicalRecord([FromBody] MedicalRecordDTO medicalRecordDTO)
         {
-            await   _context.CreateMedicalRecord(medicalRecordDTO);
+            await _context.CreateMedicalRecord(medicalRecordDTO);
             //try
             //{
             //    await _context.SaveChangesAsync();

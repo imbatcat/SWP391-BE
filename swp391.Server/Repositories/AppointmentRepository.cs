@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
-using PetHealthcare.Server.APIs.DTOS.AppointmentDTOs;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
 using System.Diagnostics;
@@ -86,7 +84,7 @@ namespace PetHealthcare.Server.Repositories
 
         public async Task<IEnumerable<Appointment>> GetAllAppointmentListForVet(string vetId, DateOnly date)
         {
-            IEnumerable<Appointment> appointmentListForVetDTOs = await context.Appointments.Where(a => a.VeterinarianAccountId.Equals(vetId) && a.AppointmentDate.CompareTo(date)==0).Include("Account").Include("Pet").ToListAsync();
+            IEnumerable<Appointment> appointmentListForVetDTOs = await context.Appointments.Where(a => a.VeterinarianAccountId.Equals(vetId) && a.AppointmentDate.CompareTo(date) == 0).Include("Account").Include("Pet").ToListAsync();
             return appointmentListForVetDTOs;
         }
 
@@ -96,7 +94,8 @@ namespace PetHealthcare.Server.Repositories
             if (timeSlot == 0)
             {
                 appointmentList = await context.Appointments.Where(a => a.VeterinarianAccountId.Equals(vetId) && a.AppointmentDate.CompareTo(date) == 0).Include("Account").Include("Pet").Include("TimeSlot").ToListAsync();
-            } else
+            }
+            else
             {
                 appointmentList = await context.Appointments.Where(a => a.VeterinarianAccountId.Equals(vetId) && a.AppointmentDate.CompareTo(date) == 0 && a.TimeSlotId == timeSlot).
                 Include("Account").Include("Pet").Include("TimeSlot").ToListAsync();
@@ -107,7 +106,7 @@ namespace PetHealthcare.Server.Repositories
         public async Task<IEnumerable<Appointment>> GetAllAppointmentForStaff(DateOnly date, int timeslot)
         {
             IEnumerable<Appointment> appList = new List<Appointment>();
-            if(timeslot == 0)
+            if (timeslot == 0)
             {
                 appList = context.Appointments.Where(a => a.AppointmentDate.CompareTo(date) == 0).Include("Account").Include("Pet").Include("Veterinarian");
             }

@@ -29,7 +29,7 @@ namespace PetHealthcare.Server.Models
 
         public bool IsCheckIn { get; set; } = false;
         public bool IsCheckUp { get; set; } = false;
-        public TimeOnly CheckinTime {  get; set; } = new TimeOnly(0,0,0);
+        public TimeOnly CheckinTime { get; set; } = new TimeOnly(0, 0, 0);
         // Reference entities
 
         // Adding restrict behavior will restrain from accidental deletion from Account and Pet, avoiding the deletion cycle
@@ -52,6 +52,8 @@ namespace PetHealthcare.Server.Models
         public int TimeSlotId { get; set; }
 
         public virtual ICollection<BookingPayment> BookingPayments { get; set; }
+        [Required]
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
 
 
     }

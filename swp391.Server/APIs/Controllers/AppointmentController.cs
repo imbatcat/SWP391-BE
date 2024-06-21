@@ -1,16 +1,10 @@
-﻿using Humanizer;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.DotNet.Scaffolding.Shared.Messaging;
-using Microsoft.Identity.Client;
-using Microsoft.IdentityModel.Tokens;
 using NanoidDotNet;
-using PetHealthcare.Server.APIs.DTOS;
-using PetHealthcare.Server.APIs.DTOS.AppointmentDTOs;
+using PetHealthcare.Server.Core.DTOS;
+using PetHealthcare.Server.Core.DTOS.AppointmentDTOs;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Services.Interfaces;
-using System.Data;
-using System.Diagnostics;
 
 namespace PetHealthcare.Server.APIs.Controllers
 {
@@ -41,18 +35,18 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
         [HttpGet("Staff/AppointmentList/")]
         [Authorize(Roles = "Staff, Admin")]
-        public async Task<ActionResult<IEnumerable<AppointmentForStaffDTO>>> GetAllAppointmentForStaffWithCondition(DateOnly date,int timeslot, bool isGetAllTimeSlot = true)
+        public async Task<ActionResult<IEnumerable<AppointmentForStaffDTO>>> GetAllAppointmentForStaffWithCondition(DateOnly date, int timeslot, bool isGetAllTimeSlot = true)
         {
-            IEnumerable<AppointmentForStaffDTO> appointmentList= new List<AppointmentForStaffDTO>();
+            IEnumerable<AppointmentForStaffDTO> appointmentList = new List<AppointmentForStaffDTO>();
             try
             {
-                if(isGetAllTimeSlot)
+                if (isGetAllTimeSlot)
                 {
                     timeslot = 0;
                 }
                 appointmentList = await _appointment.GetAllAppointmentForStaff(date, timeslot);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -73,18 +67,19 @@ namespace PetHealthcare.Server.APIs.Controllers
             return appointment;
         }
         [HttpGet("admin/{accountId}")]
-        [Authorize(Roles ="Admin")]
-        public async Task<ActionResult<IEnumerable<GetAllAppointmentForAdminDTO>>> GetAllAppointmentForAdminByAccountId([FromRoute]string accountId)
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<IEnumerable<GetAllAppointmentForAdminDTO>>> GetAllAppointmentForAdminByAccountId([FromRoute] string accountId)
         {
-            if(accountId == null)
+            if (accountId == null)
             {
                 return BadRequest(new { message = "Account id must not null" });
-            } else if(await _appointment.GetAccountById(accountId) == null)
+            }
+            else if (await _appointment.GetAccountById(accountId) == null)
             {
                 return NotFound(new { message = "Account id not found" });
             }
             IEnumerable<GetAllAppointmentForAdminDTO> appointmentList = await _appointment.GetAllAppointmentByAccountId(accountId);
-            if (appointmentList.Count() ==0)
+            if (appointmentList.Count() == 0)
             {
                 return NotFound(new { message = "Can't find that account id or Account don't have any appointment" });
             }
@@ -172,10 +167,11 @@ namespace PetHealthcare.Server.APIs.Controllers
         public async Task<ActionResult<IEnumerable<AppointmentListForVetDTO>>> ViewAppointmentListForVet(string VetId, DateOnly date)
         {
             Console.WriteLine(date);
-            if(await _appointment.GetAccountById(VetId) is null)
+            if (await _appointment.GetAccountById(VetId) is null)
             {
                 return NotFound(new { message = "Can't find that VetId" });
-            } else if (date.CompareTo(new DateOnly(1,1,1)) == 0)
+            }
+            else if (date.CompareTo(new DateOnly(1, 1, 1)) == 0)
             {
                 return BadRequest(new { message = "Please enter date in format mm/dd/yyyy" });
             }
@@ -184,21 +180,21 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
         [HttpGet("AppointmetList/VetAppointment/{vetId}")]
         [Authorize(Roles = "Admin,Vet")]
-        public async Task<ActionResult<IEnumerable<VetAppointment>>> GetVetAppointmentOfDate([FromRoute] string vetId,  int timeSlot, DateOnly date, bool isGetAll = true)
+        public async Task<ActionResult<IEnumerable<VetAppointment>>> GetVetAppointmentOfDate([FromRoute] string vetId, int timeSlot, DateOnly date, bool isGetAll = true)
         {
-            if(isGetAll)
+            if (isGetAll)
             {
                 timeSlot = 0;
             }
-            if(await _appointment.GetAccountById(vetId) is null)
+            if (await _appointment.GetAccountById(vetId) is null)
             {
                 return NotFound(new { message = "Can't find that VetId" });
             }
-            if(date.CompareTo(new DateOnly(1,1,1)) == 0)
+            if (date.CompareTo(new DateOnly(1, 1, 1)) == 0)
             {
                 date = DateOnly.FromDateTime(DateTime.Today);
             }
-            var appointmentList =  await _appointment.ViewVetAppointmentList(vetId, timeSlot, date);
+            var appointmentList = await _appointment.ViewVetAppointmentList(vetId, timeSlot, date);
             return Ok(appointmentList);
         }
 
@@ -244,11 +240,12 @@ namespace PetHealthcare.Server.APIs.Controllers
                     return BadRequest(new { message = "Invalid foreign key VetId" });
                 }
                 await _appointment.UpdateAppointment(id, toUpdateAppointment);
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            
+
             return Ok(toUpdateAppointment);
         }
 
@@ -263,7 +260,7 @@ namespace PetHealthcare.Server.APIs.Controllers
                 string appointmentId = "AP-" + Nanoid.Generate(size: 8);
                 await _appointment.CreateAppointment(toCreateAppointment, appointmentId);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -280,11 +277,11 @@ namespace PetHealthcare.Server.APIs.Controllers
         public async Task<IActionResult> CheckInCustomer(string appointmentId) //api for customer to checkin for the customer
         {
             bool appointmentStatus = await _appointment.UpdateCheckinStatus(appointmentId);
-            if(!appointmentStatus)
+            if (!appointmentStatus)
             {
-                return NotFound(new {message ="appointment not found, checkin failed"});
+                return NotFound(new { message = "appointment not found, checkin failed" });
             }
-            return Ok(new {message="Checkin successfully"});
+            return Ok(new { message = "Checkin successfully" });
         }
         // DELETE: api/Services/5
         [HttpDelete("{id}")]

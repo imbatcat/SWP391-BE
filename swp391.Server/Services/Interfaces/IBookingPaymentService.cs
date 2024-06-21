@@ -1,4 +1,4 @@
-﻿using PetHealthcare.Server.APIs.DTOS.AppointmentDTOs;
+﻿using PetHealthcare.Server.Core.DTOS.AppointmentDTOs;
 
 namespace PetHealthcare.Server.Services.Interfaces
 {

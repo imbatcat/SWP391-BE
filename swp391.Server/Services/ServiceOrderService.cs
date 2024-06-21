@@ -1,11 +1,7 @@
-﻿using Microsoft.AspNetCore.Components.Sections;
-using PetHealthcare.Server.APIs.DTOS;
-using PetHealthcare.Server.APIs.DTOS.ServiceOrderDTO;
-using PetHealthcare.Server.APIs.DTOS.ServiceOrderDTOs;
+﻿using PetHealthcare.Server.Core.DTOS.ServiceOrderDTOs;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
 using PetHealthcare.Server.Services.Interfaces;
-using System.Linq.Expressions;
 
 namespace PetHealthcare.Server.Services
 {
@@ -46,9 +42,9 @@ namespace PetHealthcare.Server.Services
             return await _serviceOrderRepo.GetAllServiceOrderForStaff();
         }
 
-        public async Task<bool> PaidServiceOrder(string ServiceOrderId, string paymentMethod)
+        public async Task<bool> PaidServiceOrder(string ServiceOrderId)
         {
-            return await _serviceOrderRepo.savePaymentService(ServiceOrderId, paymentMethod);
+            return await _serviceOrderRepo.UpdateServiceOrderStatus(ServiceOrderId);
         }
     }
 }

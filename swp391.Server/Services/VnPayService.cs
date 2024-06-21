@@ -1,5 +1,5 @@
-﻿using PetHealthcare.Server.APIs.Constant;
-using PetHealthcare.Server.APIs.DTOS.AppointmentDTOs;
+﻿using PetHealthcare.Server.Core.Constant;
+using PetHealthcare.Server.Core.DTOS.AppointmentDTOs;
 using PetHealthcare.Server.Models;
 
 namespace PetHealthcare.Server.Services
@@ -8,7 +8,7 @@ namespace PetHealthcare.Server.Services
     {
         private readonly IConfiguration _configuration;
 
-        public VnPayService( IConfiguration configuration)
+        public VnPayService(IConfiguration configuration)
         {
             _configuration = configuration;
         }

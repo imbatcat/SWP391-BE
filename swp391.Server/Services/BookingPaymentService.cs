@@ -1,13 +1,11 @@
 ﻿using NanoidDotNet;
-using PetHealthcare.Server.APIs.DTOS.AppointmentDTOs;
-using PetHealthcare.Server.Models;
-using PetHealthcare.Server.Repositories;
+using PetHealthcare.Server.Core.DTOS.AppointmentDTOs;
 using PetHealthcare.Server.Repositories.Interfaces;
 using PetHealthcare.Server.Services.Interfaces;
 
 namespace PetHealthcare.Server.Services
 {
-    public class BookingPaymentService: IBookingPaymentService
+    public class BookingPaymentService : IBookingPaymentService
     {
         private readonly IBookingPaymentRepository _bookingPaymentRepo;
         public BookingPaymentService(IBookingPaymentRepository bookingPaymentRepo)

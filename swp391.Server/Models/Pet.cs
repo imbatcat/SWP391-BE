@@ -56,6 +56,8 @@ namespace PetHealthcare.Server.Models
         public virtual ICollection<AdmissionRecord> AdmissionRecords { get; set; }
 
         public virtual ICollection<MedicalRecord> MedicalRecords { get; set; }
+        [Required]
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
 
     }
 }
