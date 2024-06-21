@@ -51,11 +51,26 @@ namespace PetHealthcare.Server.Services
             return role.FirstOrDefault().ToString();
         }
 
+        public async Task SendAccountEmail(string userEmail, string userPassword, string username)
+        {
+            MailMessage message = new MailMessage();
+            try
+            {
+                await _emailService.SendEmailAsync(
+                    userEmail,
+                    "Pet-ternary credentials",
+                    $"<p>Hello,</p> <p>This is your account:</p> Username: {username} </br> Password: {userPassword}");
+            }
+            catch (Exception ex)
+            {
+                throw new BadHttpRequestException(ex.Message);
+            }
+        }
+
         public async Task SendConfirmationEmail(string userId, string userEmail)
         {
             var user = await _userManager.FindByIdAsync(userId);
             var token = await GenerateConfirmationToken(user, userEmail);
-            //Console.WriteLine(token);
             var confirmationLink = $"https://localhost:5173/account-confirm?userId={userId}&token={token}";
             MailMessage message = new MailMessage();
             try

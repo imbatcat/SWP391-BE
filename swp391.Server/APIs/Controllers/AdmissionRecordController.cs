@@ -48,6 +48,13 @@ namespace PetHealthcare.Server.APIs.Controllers
             return born;
         }
 
+        //Get all admission Records of a Pet from Pet Id
+        [HttpGet("/api/admRecByPet/{petId}")]
+        public async Task<IEnumerable<AdmissionRecord>> GetAdmissionRecordsByPet([FromRoute] string petId)
+        {
+            return await _petContext.GetAdmissionRecordsByPet(petId);
+        }
+
         [HttpPut("/api/AdmissionRecord/{id}")]
         [Authorize(Roles = "Staff, Admin")]
         public async Task<IActionResult> UpdateAdmissionRecord([FromRoute] string id, [FromBody] AdmissionRecordDTO toUpdate)
