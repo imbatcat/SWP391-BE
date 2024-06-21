@@ -1,4 +1,5 @@
-﻿using PetHealthcare.Server.APIs.DTOS.AppointmentDTOs;
+﻿using PetHealthcare.Server.APIs.Constant;
+using PetHealthcare.Server.APIs.DTOS.AppointmentDTOs;
 using PetHealthcare.Server.Models;
 
 namespace PetHealthcare.Server.Services
@@ -22,12 +23,12 @@ namespace PetHealthcare.Server.Services
             pay.AddRequestData("vnp_Version", _configuration["Vnpay:Version"]);
             pay.AddRequestData("vnp_Command", _configuration["Vnpay:Command"]);
             pay.AddRequestData("vnp_TmnCode", _configuration["Vnpay:TmnCode"]);
-            pay.AddRequestData("vnp_Amount", ((int)model.BookingPrice * 100).ToString());
+            pay.AddRequestData("vnp_Amount", ((int)ProjectConstant.DEPOSIT_COST * 100).ToString());
             pay.AddRequestData("vnp_CreateDate", timeNow.ToString("yyyyMMddHHmmss"));
             pay.AddRequestData("vnp_CurrCode", _configuration["Vnpay:CurrCode"]);
             pay.AddRequestData("vnp_IpAddr", pay.GetIpAddress(context));
             pay.AddRequestData("vnp_Locale", _configuration["Vnpay:Locale"]);
-            pay.AddRequestData("vnp_OrderInfo", $"{model.AccountId} paid {model.BookingPrice} through VNPay");
+            pay.AddRequestData("vnp_OrderInfo", $"{model.AccountId} paid {ProjectConstant.DEPOSIT_COST} through VNPay");
             pay.AddRequestData("vnp_OrderType", model.AppointmentType);
             pay.AddRequestData("vnp_ReturnUrl", urlCallBack);
             pay.AddRequestData("vnp_TxnRef", tick);

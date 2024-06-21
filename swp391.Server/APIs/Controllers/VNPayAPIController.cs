@@ -7,6 +7,7 @@ using System.Diagnostics;
 using Microsoft.Identity.Client;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using PetHealthcare.Server.APIs.Constant;
 namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
@@ -41,7 +42,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         [HttpPost("PaymentCallback")]
-        public IActionResult PaymentCallback([FromForm] IFormCollection form)
+        public async Task<IActionResult> PaymentCallback([FromForm] IFormCollection form)
         {
             var queury = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(string.Join("&", form.Select(x => $"{x.Key}={x.Value}")));
             var response = _vnPayService.PaymentExecute(new QueryCollection(queury));
@@ -61,7 +62,7 @@ namespace PetHealthcare.Server.APIs.Controllers
                 if (response.VnPayResponseCode.Equals("00"))
                 {
                     string appointmentId = _appointmentService.GenerateId();
-                    _appointmentService.CreateAppointment(appointmentDTO, appointmentId);
+                    await _appointmentService.CreateAppointment(appointmentDTO, appointmentId);
                     Debug.WriteLine(appointmentId);
                     if(context.Appointments.Find(appointmentId) != null)
                     {
@@ -70,7 +71,7 @@ namespace PetHealthcare.Server.APIs.Controllers
                             PaymentId = bookingPaymentService.GenerateBookingPaymentId(),
                             PaymentMethod = "VNPay",
                             PaymentDate = response.PaymentDate,
-                            Price = appointmentDTO.BookingPrice,
+                            Price = ProjectConstant.DEPOSIT_COST,
                             AppointmentId = appointmentId,
                         };
                         context.BookingPayments.Add(bookingPayment);

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.Identity.Client;
 using Microsoft.IdentityModel.Tokens;
+using NanoidDotNet;
 using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.APIs.DTOS.AppointmentDTOs;
 using PetHealthcare.Server.Models;
@@ -259,7 +260,8 @@ namespace PetHealthcare.Server.APIs.Controllers
         {
             try
             {
-                await _appointment.CreateAppointment(toCreateAppointment);
+                string appointmentId = "AP-" + Nanoid.Generate(size: 8);
+                await _appointment.CreateAppointment(toCreateAppointment, appointmentId);
             }
             catch(Exception ex)
             {

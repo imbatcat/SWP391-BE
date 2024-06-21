@@ -61,7 +61,7 @@ namespace PetHealthcare.Server.Services
             }
             return false;
         }
-        public async Task CreateAppointment(CreateAppointmentDTO appointment)
+        public async Task CreateAppointment(CreateAppointmentDTO appointment, string id)
         {
             if(!await isMaxTimeslotReached(appointment.VeterinarianAccountId, appointment.AppointmentDate, appointment.TimeSlotId, true))
             {
@@ -72,7 +72,7 @@ namespace PetHealthcare.Server.Services
                 AppointmentType = appointment.AppointmentType,
                 AppointmentDate = appointment.AppointmentDate,
                 AppointmentNotes = appointment.AppointmentNotes,
-                BookingPrice = appointment.BookingPrice,
+                BookingPrice = ProjectConstant.DEPOSIT_COST,
                 PetId = appointment.PetId,
                 VeterinarianAccountId = appointment.VeterinarianAccountId,
                 AppointmentId = id,
