@@ -54,11 +54,23 @@ namespace PetHealthcare.Server.APIs.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateServiceOrder(string id, [FromBody] List<int> serviceIdList)
         {
-            if (serviceIdList.Count == 0)
+            try
             {
-                return BadRequest(new { message = "serviceIdList is empty" });
+                if (serviceIdList.Count == 0)
+                {
+                    return BadRequest(new { message = "serviceIdList is empty" });
+                }
+                await _serviceOrderService.UpdateServiceOrder(id, serviceIdList);
+            } catch (Exception ex)
+            {
+                if(ex.Message.Equals("Can't update paid ServiceOrder"))
+                {
+                    return BadRequest("Can't update paid ServiceOrder");
+                } else if (ex.Message.Equals("Can't find that Service Order Id"))
+                {
+                    return NotFound("Can't find that Service Order Id");
+                }
             }
-            await _serviceOrderService.UpdateServiceOrder(id, serviceIdList);
             return Ok();
         }
 

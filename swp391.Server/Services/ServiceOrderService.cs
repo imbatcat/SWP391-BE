@@ -34,7 +34,20 @@ namespace PetHealthcare.Server.Services
 
         public async Task UpdateServiceOrder(string id, List<int> serviceIdList)
         {
-            await _serviceOrderRepo.UpdateServiceOrder(id, serviceIdList);
+            ServiceOrder? serviceOrder = await _serviceOrderRepo.GetByCondition(s => s.ServiceOrderId.Equals(id));
+            if(serviceOrder == null)
+            {
+                throw new Exception("Can't find that Service Order Id");
+            } else
+            {
+                if(serviceOrder.OrderStatus == "Pending")
+                {
+                    await _serviceOrderRepo.UpdateServiceOrder(id, serviceIdList);
+                } else
+                {
+                    throw new Exception("Can't update paid ServiceOrder");
+                }
+            }
         }
 
         public async Task<IEnumerable<GetAllServiceOrderForStaff>> getAllServiceOrderForStaff()
