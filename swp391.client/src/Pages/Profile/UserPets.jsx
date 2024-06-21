@@ -28,7 +28,7 @@ function UserPets() {
 
     const getPetList = async (user) => {
         try {
-            const response = await fetch(`https://localhost:7206/api/accounts/pets/${user.id}`, {
+            const response = await fetch(`https://localhost:7206/api/pets/by-account/${user.id}`, {
                 method: 'GET', // *GET, POST, PUT, DELETE, etc.
                 headers: {
                     'Content-Type': 'application/json'

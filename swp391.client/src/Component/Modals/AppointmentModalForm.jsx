@@ -1,4 +1,4 @@
-import {
+﻿import {
     MDBBtn,
     MDBCheckbox,
     MDBModalHeader,
@@ -14,6 +14,7 @@ import { toast } from 'react-toastify';
 import { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as svg from '@fortawesome/free-solid-svg-icons';
+import openLink from '../../Helpers/OpenLink';
 
 function AppointmentForm({ toggleOpen }) {
     const [user, setUser] = useUser();
@@ -29,11 +30,10 @@ function AppointmentForm({ toggleOpen }) {
         appointmentDate: '',
         appointmentNotes: '',
         appointmentType: '',
-        bookingPrice: '50000'
     });
 
     const apis = [
-        `https://localhost:7206/api/accounts/pets/${user.id}`,
+        `https://localhost:7206/api/pets/by-account/${user.id}`,
         `https://localhost:7206/api/TimeSlots`,
         `https://localhost:7206/api/byRole/3`
     ];
@@ -66,33 +66,39 @@ function AppointmentForm({ toggleOpen }) {
             setIsLoading(false);
         }
     };
+
     useEffect(() => {
         getData();
     }, []);
 
     const addAppointment = async () => {
-        try {
-            console.log(formData);
-            const response = await fetch('https://localhost:7206/api/Appointment', {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                credentials: 'include',
-                body: JSON.stringify(
-                    formData
-                )
-            });
+        const fetchPromise = fetch('https://localhost:7206/api/VNPayAPI', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify(formData)
+        });
 
+        toast.promise(
+            fetchPromise,
+            {
+                pending: 'Processing... You will be directed to payment gateway shortly.',
+                error: 'Error registering appointment'
+            }
+        );
+
+        try {
+            const response = await fetchPromise;
+            var data = await response.json();
+            openLink(data.url);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            toast.success('Your appointment has been successfully registered!');
         } catch (error) {
-            toast.error('Error registering appointment');
             console.error('There has been a problem with your fetch operation:', error);
         }
-
     };
     if (isLoading) {
         return (<div>Loading...</div>);

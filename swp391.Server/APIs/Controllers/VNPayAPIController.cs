@@ -8,6 +8,7 @@ using Microsoft.Identity.Client;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using PetHealthcare.Server.APIs.Constant;
+using PetHealthcare.Server.APIs.DTOS;
 namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
@@ -18,7 +19,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         private readonly AppointmentService _appointmentService;
         private readonly PetHealthcareDbContext context;
         private readonly BookingPaymentService bookingPaymentService;
-        public VNPayAPIController(IVnPayService vnPayService, PetHealthcareDbContext context, AppointmentService appointmentService, 
+        public VNPayAPIController(IVnPayService vnPayService, PetHealthcareDbContext context, AppointmentService appointmentService,
             BookingPaymentService _bookingPaymentService, ITempDataDictionaryFactory tempDataDictionaryFactory)
         {
             _vnPayService = vnPayService;
@@ -31,21 +32,20 @@ namespace PetHealthcare.Server.APIs.Controllers
         private readonly IVnPayService _vnPayService;
         // GET: VNPayController
         [HttpPost]
-        public IActionResult CreatePaymentUrl([FromBody] CreateAppointmentDTO model)
+        public ActionResult<VNPayResponseUrl> CreatePaymentUrl([FromBody] CreateAppointmentDTO model)
         {
             CreateAppointmentDTO appointmentDTO = model;
             TempData["AppointmentDTO"] = JsonSerializer.Serialize(appointmentDTO);
             var url = _vnPayService.CreatePaymentUrl(model, HttpContext);
-            
-            
-            return Ok(url);
+
+            return Ok(new VNPayResponseUrl { Url = url });
         }
 
         [HttpPost("PaymentCallback")]
         public async Task<IActionResult> PaymentCallback([FromForm] IFormCollection form)
         {
-            var queury = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(string.Join("&", form.Select(x => $"{x.Key}={x.Value}")));
-            var response = _vnPayService.PaymentExecute(new QueryCollection(queury));
+            var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(string.Join("&", form.Select(x => $"{x.Key}={x.Value}")));
+            var response = _vnPayService.PaymentExecute(new QueryCollection(query));
             CreateAppointmentDTO appointmentDTO = new CreateAppointmentDTO();
             try
             {
@@ -64,7 +64,7 @@ namespace PetHealthcare.Server.APIs.Controllers
                     string appointmentId = _appointmentService.GenerateId();
                     await _appointmentService.CreateAppointment(appointmentDTO, appointmentId);
                     Debug.WriteLine(appointmentId);
-                    if(context.Appointments.Find(appointmentId) != null)
+                    if (context.Appointments.Find(appointmentId) != null)
                     {
                         var bookingPayment = new BookingPayment
                         {
@@ -81,12 +81,13 @@ namespace PetHealthcare.Server.APIs.Controllers
                     {
                         Debug.WriteLine("Add appointment failed");
                     }
-                    
-                } else
+
+                }
+                else
                 {
                     Debug.WriteLine("Transaction failed" + response.VnPayResponseCode);
                 }
-                
+
                 context.SaveChanges();
             }
             catch (Exception ex)

@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Identity;
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var config = builder.Configuration;
-const string DataSrc = "MSI", Password = "123456";
+const string DataSrc = "MEOMATLON\\SQLEXPRESS", Password = "MukuroHoshimiya";
 
 
 // Add services to the container.
