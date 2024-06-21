@@ -27,13 +27,7 @@ namespace PetHealthcare.Server.APIs.Controllers
             return await _context.GetAllPets();
         }
 
-        //Get all medical Records of a Pet from Pet Id
-        [HttpGet("/api/medRecByPet/{petId}")]
-        [Authorize(Roles = "Vet, Admin, Customer")]
-        public async Task<IEnumerable<MedicalRecord>> GetMedicalRecordsByPet([FromRoute] string petId)
-        {
-            return await _context.GetMedicalRecordsByPet(petId);
-        }
+
         /*Get single pet by a unique PetId*/
         [HttpGet("{id}")]
         [Authorize(Roles = "Staff, Customer, Admin")]
@@ -48,19 +42,19 @@ namespace PetHealthcare.Server.APIs.Controllers
             return pet;
         }
 
-        //Get all admission Records of a Pet from Pet Id
-        [HttpGet("/api/admRecByPet/{petId}")]
-        public async Task<IEnumerable<AdmissionRecord>> GetAdmissionRecordsByPet([FromRoute] string petId)
-        {
-            return await _context.GetAdmissionRecordsByPet(petId);
-        }
-
         [HttpGet("/appointment/{appointmentId}")]
         public async Task<PetInfoAppointmentDTO> GetPetInfoFromAppointment([FromRoute] string appointmentId)
         {
             return await _context.GetPetInfoAppointment(appointmentId);
         }
 
+        //get the list of pet of this account has the input id
+        [HttpGet("/api/accounts/pets/{accountId}")]
+        public async Task<IEnumerable<Pet>> GetAccountPets([FromRoute] string accountId)
+        {
+            return await _context.GetAccountPets(accountId);
+
+        }
         // PUT: api/Pets/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
