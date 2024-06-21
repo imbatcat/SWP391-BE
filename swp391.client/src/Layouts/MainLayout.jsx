@@ -8,16 +8,13 @@ import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 import { useState } from 'react';
 import SelectModal from '../Component/Modals/SelectModal';
-import CheckAuth from '../Helpers/CheckAuth';
 function MainLayout({ children }) {
     const [basicModal, setBasicModal] = useState(false);
 
     const toggleOpen = () => setBasicModal(!basicModal);
     return (
         <div>
-
             <NavBar2 />
-
             <main>
                 {children}
             </main>

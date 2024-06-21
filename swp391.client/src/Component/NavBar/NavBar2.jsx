@@ -17,6 +17,7 @@ import {
 } from 'mdb-react-ui-kit';
 import { useAuth } from '../../Context/AuthProvider';
 import { useUser } from '../../Context/UserContext';
+import { redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 export default function NavBar2() {
@@ -39,7 +40,7 @@ export default function NavBar2() {
             }
             setIsAuthenticated(false);
             localStorage.removeItem("user");
-            navigate('/');
+            return redirect("/");
         } catch (error) {
             toast.error('Error logging out!');
             console.error(error.message);
