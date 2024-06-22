@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import { MDBBadge, MDBBtn, MDBTable, MDBTableBody, MDBTableHead, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBInput, MDBModalDialog, MDBModalContent, MDBModalTitle, MDBCol, MDBRow, MDBCheckbox } from 'mdb-react-ui-kit';
 import SideNav from '../../Component/SideNav/SideNav';
-import { Tooltip } from 'react-tooltip';
-import CreateModal from '../../Component/Modals/CreateModal';
-
+import AdminLayout from '../../Layouts/AdminLayout';
 
 function VetAccount() {
     const [accounts, setAccounts] = useState([]);
@@ -91,137 +89,133 @@ function VetAccount() {
     };
 
     return (
-        <div>
-            <SideNav searchInput={searchInput} handleSearchInputChange={handleSearchInputChange} />
-            <MDBTable align='middle'>
-                <MDBTableHead>
-                    <tr>
-                        <th scope='col'>Name</th>
-                        <th scope='col'>Email</th>
-                        <th scope='col'>Phone Number</th>
-                        <th scope='col'>Gender</th>
-                        <th scope='col'>Status</th>
-                        <th scope='col'>Actions</th>
-                    </tr>
-                </MDBTableHead>
-                <MDBTableBody>
-                    {filteredAccounts.filter(acc => acc.roleId === 3).map((acc,index) => (
-                        <tr key={index}>
-                            <td>
-                                <div className='d-flex align-items-center'>
-                                    <img
-                                        src='https://mdbootstrap.com/img/new/avatars/8.jpg'
-                                        alt=''
-                                        style={{ width: '45px', height: '45px' }}
-                                        className='rounded-circle'
-                                    />
-                                    <div className='ms-3'>
-                                        <p className='fw-bold mb-1'>{acc.fullName}</p>
-                                        <p className='text-muted mb-0'>{acc.username}</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <p className='fw-normal mb-1'>{acc.email}</p>
-                            </td>
-                            <td>
-                                <p className='fw-normal mb-1'>{acc.phoneNumber}</p>
-                            </td>
-                            <td>
-                                <p className='fw-normal mb-1'>{acc.isMale ? "Male" : "Female"}</p>
-                            </td>
-                            <td>
-                                <MDBBadge color={acc.isDisabled ? 'danger' : 'success'} pill>
-                                    {acc.isDisabled ? "Disabled" : "Active"}
-                                </MDBBadge>
-                            </td>
-                            <td>
-                                <MDBBtn color='link' rounded size='sm' onClick={() => toggleOpen(acc)}>
-                                    Edit
-                                </MDBBtn>
-                                <MDBBtn color='danger' style={{color:'black'}} rounded size='sm' onClick={() => toggleOpen(acc)}>
-                                    X
-                                </MDBBtn>
-                            </td>
+        <AdminLayout>
+            <div>
+                <SideNav searchInput={searchInput} handleSearchInputChange={handleSearchInputChange} />
+                <MDBTable align='middle'>
+                    <MDBTableHead>
+                        <tr>
+                            <th scope='col'>Name</th>
+                            <th scope='col'>Email</th>
+                            <th scope='col'>Phone Number</th>
+                            <th scope='col'>Gender</th>
+                            <th scope='col'>Status</th>
+                            <th scope='col'>Actions</th>
                         </tr>
-                    ))}
-                </MDBTableBody>
-            </MDBTable>
-            <div className="fixed-bottom-right">
-                <button className="static-button" data-tooltip-id="add-button" onClick={toggleOpenNew}>+</button>
-                <Tooltip id='add-button' content={'Create New Account'}></Tooltip>
+                    </MDBTableHead>
+                    <MDBTableBody>
+                        {filteredAccounts.filter(acc => acc.roleId === 3).map((acc, index) => (
+                            <tr key={index}>
+                                <td>
+                                    <div className='d-flex align-items-center'>
+                                        <img
+                                            src='https://mdbootstrap.com/img/new/avatars/8.jpg'
+                                            alt=''
+                                            style={{ width: '45px', height: '45px' }}
+                                            className='rounded-circle'
+                                        />
+                                        <div className='ms-3'>
+                                            <p className='fw-bold mb-1'>{acc.fullName}</p>
+                                            <p className='text-muted mb-0'>{acc.username}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <p className='fw-normal mb-1'>{acc.email}</p>
+                                </td>
+                                <td>
+                                    <p className='fw-normal mb-1'>{acc.phoneNumber}</p>
+                                </td>
+                                <td>
+                                    <p className='fw-normal mb-1'>{acc.isMale ? "Male" : "Female"}</p>
+                                </td>
+                                <td>
+                                    <MDBBadge color={acc.isDisabled ? 'danger' : 'success'} pill>
+                                        {acc.isDisabled ? "Disabled" : "Active"}
+                                    </MDBBadge>
+                                </td>
+                                <td>
+                                    <MDBBtn color='link' rounded size='sm' onClick={() => toggleOpen(acc)}>
+                                        Edit
+                                    </MDBBtn>
+                                    <MDBBtn color='danger' style={{ color: 'black' }} rounded size='sm' onClick={() => toggleOpen(acc)}>
+                                        X
+                                    </MDBBtn>
+                                </td>
+                            </tr>
+                        ))}
+                    </MDBTableBody>
+                </MDBTable>
 
-                <MDBModal open={basicModalNew} onClose={() => setBasicModalNew(false)} tabIndex='-1'>
-                    <CreateModal toggleOpen={toggleOpenNew}/>
-                </MDBModal>
+
+                {selectedAccount && (
+                    <MDBModal open={basicModal} onClose={() => setBasicModal(false)} tabIndex='-1'>
+                        <MDBModalDialog centered>
+                            <MDBModalContent>
+                                <MDBModalHeader>
+                                    <MDBModalTitle>Edit Account</MDBModalTitle>
+                                    <MDBBtn className='btn-close' color='none' onClick={toggleOpen}></MDBBtn>
+                                </MDBModalHeader>
+                                <MDBModalBody>
+                                    <form>
+                                        <MDBRow className='mb-4'>
+                                            <MDBCol>
+                                                <MDBInput
+                                                    label="Full Name"
+                                                    name="fullName"
+                                                    value={selectedAccount.fullName}
+                                                    onChange={handleInputChange}
+                                                />
+                                            </MDBCol>
+                                            <MDBCol>
+                                                <MDBInput
+                                                    label="Username"
+                                                    name="username"
+                                                    value={selectedAccount.username}
+                                                    onChange={handleInputChange}
+                                                />
+                                            </MDBCol>
+                                        </MDBRow>
+                                        <MDBRow className='mb-4'>
+                                            <MDBCol>
+                                                <MDBInput
+                                                    label="Email"
+                                                    name="email"
+                                                    value={selectedAccount.email}
+                                                    onChange={handleInputChange}
+                                                />
+                                            </MDBCol>
+
+                                        </MDBRow>
+
+                                        <MDBRow className='mb-4'>
+                                            <MDBCol>
+                                                <MDBInput
+                                                    label="Phone Number"
+                                                    name="phoneNumber"
+                                                    value={selectedAccount.phoneNumber}
+                                                    onChange={handleInputChange}
+                                                />
+                                            </MDBCol>
+                                            <MDBCol>
+                                                <MDBCheckbox label="Is male"></MDBCheckbox>
+                                            </MDBCol>
+
+                                        </MDBRow>
+                                    </form>
+                                </MDBModalBody>
+                                <MDBModalFooter>
+                                    <MDBBtn color='secondary' onClick={toggleOpen}>Close</MDBBtn>
+                                    <MDBBtn color='success' style={{ color: 'black' }} onClick={handleSaveChanges}>Save changes</MDBBtn>
+                                </MDBModalFooter>
+                            </MDBModalContent>
+                        </MDBModalDialog>
+                    </MDBModal>
+                )}
+
             </div>
 
-            {selectedAccount && (
-                <MDBModal open={basicModal} onClose={() => setBasicModal(false)} tabIndex='-1'>
-                    <MDBModalDialog centered>
-                        <MDBModalContent>
-                            <MDBModalHeader>
-                                <MDBModalTitle>Edit Account</MDBModalTitle>
-                                <MDBBtn className='btn-close' color='none' onClick={toggleOpen}></MDBBtn>
-                            </MDBModalHeader>
-                            <MDBModalBody>
-                                <form>
-                                    <MDBRow className='mb-4'>
-                                        <MDBCol>
-                                            <MDBInput
-                                                label="Full Name"
-                                                name="fullName"
-                                                value={selectedAccount.fullName}
-                                                onChange={handleInputChange}
-                                            />
-                                        </MDBCol>
-                                        <MDBCol>
-                                            <MDBInput
-                                                label="Username"
-                                                name="username"
-                                                value={selectedAccount.username}
-                                                onChange={handleInputChange}
-                                            />
-                                        </MDBCol>
-                                    </MDBRow>
-                                    <MDBRow className='mb-4'>
-                                        <MDBCol>
-                                            <MDBInput
-                                                label="Email"
-                                                name="email"
-                                                value={selectedAccount.email}
-                                                onChange={handleInputChange}
-                                            />
-                                        </MDBCol>
-
-                                    </MDBRow>
-
-                                    <MDBRow className='mb-4'>
-                                        <MDBCol>
-                                            <MDBInput
-                                                label="Phone Number"
-                                                name="phoneNumber"
-                                                value={selectedAccount.phoneNumber}
-                                                onChange={handleInputChange}
-                                            />
-                                        </MDBCol>
-                                        <MDBCol>
-                                            <MDBCheckbox label="Is male"></MDBCheckbox>
-                                        </MDBCol>
-
-                                    </MDBRow>
-                                </form>
-                            </MDBModalBody>
-                            <MDBModalFooter>
-                                <MDBBtn color='secondary' onClick={toggleOpen}>Close</MDBBtn>
-                                <MDBBtn color='success' style={{ color: 'black' }} onClick={handleSaveChanges}>Save changes</MDBBtn>
-                            </MDBModalFooter>
-                        </MDBModalContent>
-                    </MDBModalDialog>
-                </MDBModal>
-            )}
-
-        </div>
+        </AdminLayout>
     );
 }
 

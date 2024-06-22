@@ -80,7 +80,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         // change the information of the account
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAccount(string id, AccountDTO account)
+        public async Task<IActionResult> PutAccount(string id, AccountUpdateDTO account)
         {
             await _context.UpdateAccount(id, account);
 
@@ -106,7 +106,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         // POST: create a new user and insert it into database
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<Account>> PostAccount([FromBody] AccountDTO accountDTO)
+        public async Task<ActionResult<Account>> PostAccount([FromBody] InternalAccountDTO internalAccountDTO)
         {
             if (!ModelState.IsValid)
             {
@@ -115,25 +115,24 @@ namespace PetHealthcare.Server.APIs.Controllers
             try
             {
                 var password = "a1Z." + Nanoid.Generate(size: 6);
-                accountDTO.Password = password;
-                var result = await _context.CreateAccount(accountDTO, true);
-                var role = Helpers.Helpers.GetRole(accountDTO.RoleId);
+                await _context.CreateInternalUser(internalAccountDTO, password);
+                var role = Helpers.Helpers.GetRole(internalAccountDTO.RoleId);
                 var appUser = new ApplicationUser
                 {
-                    Email = accountDTO.Email,
+                    Email = internalAccountDTO.Email,
                     EmailConfirmed = true,
-                    AccountFullname = accountDTO.FullName,
-                    PhoneNumber = accountDTO.PhoneNumber,
-                    UserName = accountDTO.UserName
+                    AccountFullname = internalAccountDTO.FullName,
+                    PhoneNumber = internalAccountDTO.PhoneNumber,
+                    UserName = internalAccountDTO.UserName
                 };
 
                 var results = await _userManager.CreateAsync(appUser, password);
                 if (results.Succeeded)
                 {
-                    await _authService.SendAccountEmail(accountDTO.Email, password, accountDTO.UserName);
+                    await _authService.SendAccountEmail(internalAccountDTO.Email, password, internalAccountDTO.UserName);
                     await _userManager.AddToRoleAsync(appUser, role);
                     return CreatedAtAction(
-                             "GetAccount", new { id = accountDTO.GetHashCode() }, accountDTO);
+                             "GetAccount", new { id = internalAccountDTO.GetHashCode() }, internalAccountDTO);
                 }
                 foreach (var error in results.Errors)
                 {
@@ -141,6 +140,10 @@ namespace PetHealthcare.Server.APIs.Controllers
                 }
             }
             catch (BadHttpRequestException ex)
+            {
+                return BadRequest(ex);
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex);
             }

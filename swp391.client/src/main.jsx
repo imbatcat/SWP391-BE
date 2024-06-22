@@ -15,6 +15,7 @@ import Appointment from './Pages/Appointment/Appointment';
 import OTPInput from './Pages/OTP Input/OTPInput';
 import PasswordResetForm from './Pages/SetNewPass/PasswordResetForm';
 import PetList from './Pages/MyPetList/PetList';
+import CageList from './Pages/Staff/CageList';
 import ConfirmEmail from './Pages/ConfirmEmail';
 import { ToastContainer } from 'react-toastify';
 import UserProfile from './Pages/Profile/UserProfile';
@@ -31,6 +32,7 @@ import AppointmentList from './Pages/Veternary/AppointmentList';
 import UserPets from './Pages/Profile/UserPets';
 import UserAppointments from './Pages/Profile/UserAppointments';
 import MedicalRecord from './Pages/Veternary/MedicalRecord';
+import AppointmentCheckin from './Pages/Staff/AppointmentCheckin';
 
 
 const router = createBrowserRouter([
@@ -121,6 +123,11 @@ const router = createBrowserRouter([
         errorElement: <div>404 Not Found</div>,
     },
     {
+        path: '/admin/staff',
+        element: <VetAccount />,
+        errorElement: <div>404 Not Found</div>,
+    },
+    {
         path: '/admin/appointments',
         element: <AppointmentManage />,
         errorElement: <div>404 Not Found</div>,
@@ -162,7 +169,25 @@ const router = createBrowserRouter([
         path: '/vet/MedicalRecord',
         element: (
             <CheckAuth>
-                <MedicalRecord/>
+                <MedicalRecord />
+            </CheckAuth>
+        ),
+        errorElement: <div>404 Not Found</div>,
+    },
+    {
+        path: '/staff/cage-list',
+        element: (
+            <CheckAuth>
+                <CageList></CageList>
+            </CheckAuth>
+        ),
+        errorElement: <div>404 Not Found</div>,
+    },
+    {
+        path: '/staff/appointment-checkin',
+        element: (
+            <CheckAuth>
+                <AppointmentCheckin></AppointmentCheckin>
             </CheckAuth>
         ),
         errorElement: <div>404 Not Found</div>,
@@ -173,21 +198,21 @@ root.render(
     <GoogleOAuthProvider clientId="279261034420-76gqakprrgtiq9pc879d8e4ukhk9cour.apps.googleusercontent.com">
         <AuthProvider>
             <UserProvider>
-                {/*<React.StrictMode>*/}
-                <RouterProvider router={router}>
-                </RouterProvider>
-                <ToastContainer
-                    position="top-center"
-                    autoClose={1000}
-                    hideProgressBar={true}
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={false}
-                    draggable
-                    theme="light"
-                    transition: Flip
-                />
-                {/*</React.StrictMode>*/}
+                <React.StrictMode>
+                    <RouterProvider router={router}>
+                    </RouterProvider>
+                    <ToastContainer
+                        position="top-center"
+                        autoClose={1000}
+                        hideProgressBar={true}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        draggable
+                        theme="light"
+                        transition: Flip
+                    />
+                </React.StrictMode>
             </UserProvider>
         </AuthProvider>
     </GoogleOAuthProvider>

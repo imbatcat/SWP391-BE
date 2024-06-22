@@ -179,7 +179,7 @@ namespace PetHealthcare.Server.Services
                     {
                         resAppListForCustomers.Add(new ResAppListForCustomer
                         {
-                            id = appointment.AppointmentId,
+                            Id = appointment.AppointmentId,
                             AppointmentDate = appointment.AppointmentDate,
                             BookingPrice = appointment.BookingPrice,
                             PetName = appointment.Pet.PetName,
@@ -195,7 +195,7 @@ namespace PetHealthcare.Server.Services
                     {
                         resAppListForCustomers.Add(new ResAppListForCustomer
                         {
-                            id = appointment.AppointmentId,
+                            Id = appointment.AppointmentId,
                             AppointmentDate = appointment.AppointmentDate,
                             BookingPrice = appointment.BookingPrice,
                             PetName = appointment.Pet.PetName,

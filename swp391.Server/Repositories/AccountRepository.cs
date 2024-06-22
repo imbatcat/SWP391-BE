@@ -124,5 +124,11 @@ namespace PetHealthcare.Server.Repositories
         {
             return await context.Accounts.AnyAsync(predicate);
         }
+
+        public async Task CreateVet(Veterinarian veterinarian)
+        {
+            await context.Accounts.AddAsync(veterinarian);
+            await SaveChanges();
+        }
     }
 }
