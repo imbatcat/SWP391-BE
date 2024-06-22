@@ -11,7 +11,7 @@ namespace PetHealthcare.Server.Services
     {
         private readonly ICageRepository _cageService;
         private readonly IAdmissionRecordRepository _admissionRecordRepository;
-        private readonly IPetRepository _petRepository;        
+        private readonly IPetRepository _petRepository;
         public CageService(ICageRepository cageService,IAdmissionRecordRepository admissionRecordRepository,IPetRepository petRepository)
         {
             _cageService = cageService;
@@ -68,7 +68,8 @@ namespace PetHealthcare.Server.Services
                             ImgUrl=pet.ImgUrl,
                             PetName=pet.PetName,
                             PetAge=pet.PetAge,
-                            PetBreed = pet.PetBreed
+                            PetBreed = pet.PetBreed,
+                            PetId=pet.PetId,
                         });
                     }
                     else {
@@ -100,5 +101,13 @@ namespace PetHealthcare.Server.Services
             };
             await _cageService.Update(_cage);
         }    
+        public async Task DischargePet(string petId)
+        {
+            await _admissionRecordRepository.DischargePet(petId);
+        }
+        public async Task UpdateCondition(string petId, string condition)
+        {
+            await _admissionRecordRepository.UpdateCondition(petId, condition);
+        }
     }
 }

@@ -13,5 +13,7 @@ namespace PetHealthcare.Server.Services.Interfaces
         void DeleteCage(Cage Cage);
         //Task<Pet> GetPetByCageId(int id);
         Task<IEnumerable<CageWithPetDTO>> GetAllCagesWithPet();
+        Task DischargePet(string petId);
+        Task UpdateCondition(string petId,string condition);
     }
 }
