@@ -11,5 +11,7 @@ namespace PetHealthcare.Server.Services.Interfaces
         Task CreateCage(CageDTO Cage);
         Task UpdateCage(int id, CageDTO Cage);
         void DeleteCage(Cage Cage);
+        //Task<Pet> GetPetByCageId(int id);
+        Task<IEnumerable<CageWithPetDTO>> GetAllCagesWithPet();
     }
 }

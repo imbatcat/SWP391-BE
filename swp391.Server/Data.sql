@@ -1,25 +1,49 @@
-﻿INSERT INTO [dbo].[Cages] (CageNumber, isOccupied)
-VALUES
-    (1, 0),
-    (2, 1),
-    (3, 0),
-    (4, 1),
-    (5, 0),
-    (6, 1),
-    (7, 0),
-    (8, 1),
-    (9, 0),
-    (10, 1),
-    (11, 0),
-    (12, 1),
-    (13, 0),
-    (14, 1),
-    (15, 0),
-    (16, 1),
-    (17, 0),
-    (18, 1),
-    (19, 0),
-    (20, 1);
+﻿GO
+SET IDENTITY_INSERT [dbo].[Cages] ON 
+GO
+INSERT [dbo].[Cages] ([CageId], [CageNumber], [IsOccupied]) VALUES (1, 1, 0)
+GO
+INSERT [dbo].[Cages] ([CageId], [CageNumber], [IsOccupied]) VALUES (2, 2, 0)
+GO
+INSERT [dbo].[Cages] ([CageId], [CageNumber], [IsOccupied]) VALUES (3, 3, 1)
+GO
+INSERT [dbo].[Cages] ([CageId], [CageNumber], [IsOccupied]) VALUES (4, 4, 0)
+GO
+INSERT [dbo].[Cages] ([CageId], [CageNumber], [IsOccupied]) VALUES (5, 5, 0)
+GO
+INSERT [dbo].[Cages] ([CageId], [CageNumber], [IsOccupied]) VALUES (6, 6, 0)
+GO
+INSERT [dbo].[Cages] ([CageId], [CageNumber], [IsOccupied]) VALUES (7, 7, 1)
+GO
+INSERT [dbo].[Cages] ([CageId], [CageNumber], [IsOccupied]) VALUES (8, 8, 0)
+GO
+INSERT [dbo].[Cages] ([CageId], [CageNumber], [IsOccupied]) VALUES (9, 9, 0)
+GO
+INSERT [dbo].[Cages] ([CageId], [CageNumber], [IsOccupied]) VALUES (10, 10, 0)
+GO
+INSERT [dbo].[Cages] ([CageId], [CageNumber], [IsOccupied]) VALUES (11, 11, 0)
+GO
+INSERT [dbo].[Cages] ([CageId], [CageNumber], [IsOccupied]) VALUES (12, 12, 0)
+GO
+INSERT [dbo].[Cages] ([CageId], [CageNumber], [IsOccupied]) VALUES (13, 13, 0)
+GO
+INSERT [dbo].[Cages] ([CageId], [CageNumber], [IsOccupied]) VALUES (14, 14, 0)
+GO
+INSERT [dbo].[Cages] ([CageId], [CageNumber], [IsOccupied]) VALUES (15, 15, 0)
+GO
+INSERT [dbo].[Cages] ([CageId], [CageNumber], [IsOccupied]) VALUES (16, 16, 0)
+GO
+INSERT [dbo].[Cages] ([CageId], [CageNumber], [IsOccupied]) VALUES (17, 17, 0)
+GO
+INSERT [dbo].[Cages] ([CageId], [CageNumber], [IsOccupied]) VALUES (18, 18, 0)
+GO
+INSERT [dbo].[Cages] ([CageId], [CageNumber], [IsOccupied]) VALUES (19, 19, 0)
+GO
+INSERT [dbo].[Cages] ([CageId], [CageNumber], [IsOccupied]) VALUES (20, 20, 0)
+GO
+SET IDENTITY_INSERT [dbo].[Cages] OFF
+GO
+
 
 GO
 INSERT INTO [dbo].[Roles] (RoleName)

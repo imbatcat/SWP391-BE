@@ -1,4 +1,5 @@
-﻿using PetHealthcare.Server.Core.DTOS;
+﻿using Microsoft.EntityFrameworkCore;
+using PetHealthcare.Server.Core.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
 using PetHealthcare.Server.Services.Interfaces;
@@ -9,10 +10,13 @@ namespace PetHealthcare.Server.Services
     public class CageService : ICageService
     {
         private readonly ICageRepository _cageService;
-
-        public CageService(ICageRepository cageService)
+        private readonly IAdmissionRecordRepository _admissionRecordRepository;
+        private readonly IPetRepository _petRepository;        
+        public CageService(ICageRepository cageService,IAdmissionRecordRepository admissionRecordRepository,IPetRepository petRepository)
         {
             _cageService = cageService;
+            _admissionRecordRepository = admissionRecordRepository;
+            _petRepository = petRepository;           
         }
 
         public async Task CreateCage(CageDTO Cage)
@@ -42,7 +46,50 @@ namespace PetHealthcare.Server.Services
             return await _cageService.GetAll();
         }
 
-
+        public async Task<IEnumerable<CageWithPetDTO>> GetAllCagesWithPet()
+        {
+            //get list of all cages
+            var cageAdMissionList = await _admissionRecordRepository.GetAll();
+            var cageList = await _cageService.GetAll();
+            List<CageWithPetDTO> cageWithPetDTOs = new List<CageWithPetDTO>();
+            foreach (var item in cageList)
+            {
+                //check in admission record has this pet?
+                var cageHasPet = cageAdMissionList.FirstOrDefault(ad => ad.CageId == item.CageId);
+                if (  cageHasPet!= null)
+                {
+                    if (cageHasPet.IsDischarged == false)
+                    {
+                        var pet=await _petRepository.GetByCondition(p=>p.PetId==cageHasPet.PetId);
+                        cageWithPetDTOs.Add(new CageWithPetDTO
+                        {
+                            CageId = item.CageId,
+                            IsOccupied = true,
+                            ImgUrl=pet.ImgUrl,
+                            PetName=pet.PetName,
+                            PetAge=pet.PetAge,
+                            PetBreed = pet.PetBreed
+                        });
+                    }
+                    else {
+                        cageWithPetDTOs.Add(new CageWithPetDTO
+                        {
+                            CageId = item.CageId,
+                            IsOccupied = false,
+                        });
+                    }
+                }
+                else
+                {
+                    cageWithPetDTOs.Add(new CageWithPetDTO 
+                    {
+                        CageId=item.CageId,
+                        IsOccupied = false,
+                    });
+                }
+            }
+            return cageWithPetDTOs;
+        }
         public async Task UpdateCage(int id, CageDTO Cage)
         {
             var _cage = new Cage
@@ -52,7 +99,6 @@ namespace PetHealthcare.Server.Services
                 IsOccupied = Cage.IsOccupied,
             };
             await _cageService.Update(_cage);
-        }
-
+        }    
     }
 }
