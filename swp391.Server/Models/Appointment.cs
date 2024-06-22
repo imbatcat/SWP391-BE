@@ -50,7 +50,9 @@ namespace PetHealthcare.Server.Models
         [ForeignKey("TimeSlotId")]
         public TimeSlot TimeSlot { get; set; }
         public int TimeSlotId { get; set; }
+
         public virtual ICollection<BookingPayment> BookingPayments { get; set; }
+
 
     }
 }

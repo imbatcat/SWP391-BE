@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Build.Execution;
 using Microsoft.EntityFrameworkCore;
+using PetHealthcare.Server.APIs.Controllers;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Models.ApplicationModels;
 using PetHealthcare.Server.Repositories;
@@ -17,7 +18,7 @@ using Microsoft.AspNetCore.Identity;
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var config = builder.Configuration;
-const string DataSrc = "MIB\\MINHLUONG", Password = "12345";
+const string DataSrc = "MEOMATLON\\SQLEXPRESS", Password = "MukuroHoshimiya";
 
 
 // Add services to the container.
@@ -29,6 +30,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 option => option.UseSqlServer(
         $"Data Source={DataSrc}; User = sa; Password ={Password};Initial Catalog=PetHealthCareSystemAuth;Integrated Security=True;Connect Timeout=10;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False"));
 #endregion
+
+builder.Services.AddControllersWithViews().AddSessionStateTempDataProvider();
+builder.Services.AddSession();
+
 
 #region Repositories
 builder.Services.AddScoped<IServiceOrderRepository, ServiceOrderRepository>();
@@ -44,6 +49,7 @@ builder.Services.AddScoped<IMedicalRecordRepository, MedicalRecordRepository>();
 builder.Services.AddScoped<IAdmissionRecordRepository, AdmissionRecordRepository>();
 builder.Services.AddScoped<IServicePaymentRepository, ServicePaymentRepository>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IBookingPaymentRepository, BookingPaymentRepository>();
 #endregion
 
 #region Services
@@ -61,6 +67,10 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IAdmissionRecordService, AdmissionRecordService>();
 builder.Services.AddScoped<IServicePaymentService, ServicePaymentService>();
 builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
+builder.Services.AddScoped<IVnPayService, VnPayService>();
+builder.Services.AddScoped<AppointmentService>();
+builder.Services.AddScoped<IBookingPaymentService, BookingPaymentService>();
+builder.Services.AddScoped<BookingPaymentService>();
 // Auth services
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
@@ -139,10 +149,15 @@ app.UseCors(MyAllowSpecificOrigins);
 app.UseRouting();
 
 app.UseHttpsRedirection();
-
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers().RequireAuthorization();
 //app.MapIdentityApi<ApplicationUser>();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=VNPay}/{action=Index}/{id?}");
+
 app.Run();

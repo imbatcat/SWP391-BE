@@ -32,6 +32,7 @@ import UserPets from './Pages/Profile/UserPets';
 import UserAppointments from './Pages/Profile/UserAppointments';
 import MedicalRecord from './Pages/Veternary/MedicalRecord';
 
+
 const router = createBrowserRouter([
     {
         path: '/',
@@ -172,21 +173,21 @@ root.render(
     <GoogleOAuthProvider clientId="279261034420-76gqakprrgtiq9pc879d8e4ukhk9cour.apps.googleusercontent.com">
         <AuthProvider>
             <UserProvider>
-                <React.StrictMode>
-                    <RouterProvider router={router}>
-                    </RouterProvider>
-                    <ToastContainer
-                        position="top-center"
-                        autoClose={1000}
-                        hideProgressBar={true}
-                        newestOnTop={false}
-                        closeOnClick
-                        rtl={false}
-                        draggable
-                        theme="light"
-                        transition: Flip
-                    />
-                </React.StrictMode>
+                {/*<React.StrictMode>*/}
+                <RouterProvider router={router}>
+                </RouterProvider>
+                <ToastContainer
+                    position="top-center"
+                    autoClose={1000}
+                    hideProgressBar={true}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    draggable
+                    theme="light"
+                    transition: Flip
+                />
+                {/*</React.StrictMode>*/}
             </UserProvider>
         </AuthProvider>
     </GoogleOAuthProvider>

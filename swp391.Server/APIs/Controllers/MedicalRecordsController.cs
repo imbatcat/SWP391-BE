@@ -18,10 +18,12 @@ namespace PetHealthcare.Server.APIs.Controllers
     public class MedicalRecordsController : ControllerBase
     {
         private readonly IMedicalRecordService _context;
+        private readonly IPetService _petService;
 
-        public MedicalRecordsController(IMedicalRecordService context)
+        public MedicalRecordsController(IMedicalRecordService context, IPetService petService)
         {
             _context = context;
+            _petService = petService;
         }
 
         // GET: api/MedicalRecords
@@ -48,8 +50,16 @@ namespace PetHealthcare.Server.APIs.Controllers
             return medicalRecord;
         }
 
+        //Get all medical Records of a Pet from Pet Id
+        [HttpGet("/api/medRecByPet/{petId}")]
+        [Authorize(Roles = "Vet, Admin, Customer")]
+        public async Task<IEnumerable<MedicalRecord>> GetMedicalRecordsByPet([FromRoute] string petId)
+        {
+            return await _petService.GetMedicalRecordsByPet(petId);
+        }
+
         //PUT: api/MedicalRecords/5
-         //To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         [Authorize(Roles = "Vet, Staff")]
         public async Task<IActionResult> PutMedicalRecord(string id, MedicalRecordDTO medicalRecord)

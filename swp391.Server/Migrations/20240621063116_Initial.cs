@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PetHealthcare.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class db03 : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,6 +23,25 @@ namespace PetHealthcare.Server.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cages", x => x.CageId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "paymentResponseModels",
+                columns: table => new
+                {
+                    TransactionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    OrderDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrderId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PaymentId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Success = table.Column<bool>(type: "bit", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    VnPayResponseCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PaymentDate = table.Column<DateOnly>(type: "date", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_paymentResponseModels", x => x.TransactionId);
                 });
 
             migrationBuilder.CreateTable(
@@ -71,13 +90,13 @@ namespace PetHealthcare.Server.Migrations
                 columns: table => new
                 {
                     AccountId = table.Column<string>(type: "char(11)", nullable: false),
-                    Username = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     FullName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: true),
                     IsMale = table.Column<bool>(type: "bit", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    DateOfBirth = table.Column<DateOnly>(type: "date", nullable: true),
                     JoinDate = table.Column<DateOnly>(type: "date", nullable: false),
                     IsDisabled = table.Column<bool>(type: "bit", nullable: false),
                     RoleId = table.Column<int>(type: "int", nullable: false),
@@ -361,13 +380,15 @@ namespace PetHealthcare.Server.Migrations
                 name: "IX_Accounts_Email",
                 table: "Accounts",
                 column: "Email",
-                unique: true);
+                unique: true,
+                filter: "[Email] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Accounts_PhoneNumber",
                 table: "Accounts",
                 column: "PhoneNumber",
-                unique: true);
+                unique: true,
+                filter: "[PhoneNumber] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Accounts_RoleId",
@@ -378,7 +399,8 @@ namespace PetHealthcare.Server.Migrations
                 name: "IX_Accounts_Username",
                 table: "Accounts",
                 column: "Username",
-                unique: true);
+                unique: true,
+                filter: "[Username] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AdmissionRecords_CageId",
@@ -479,6 +501,9 @@ namespace PetHealthcare.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "Feedbacks");
+
+            migrationBuilder.DropTable(
+                name: "paymentResponseModels");
 
             migrationBuilder.DropTable(
                 name: "ServiceOrderDetails");

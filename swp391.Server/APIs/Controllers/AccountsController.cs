@@ -62,14 +62,6 @@ namespace PetHealthcare.Server.APIs.Controllers
             }
             return Ok(checkAccount);
         }
-        //get the list of pet of this account has the input id
-        [HttpGet("/api/accounts/pets/{accountId}")]
-        public async Task<IEnumerable<Pet>> GetAccountPets([FromRoute] string accountId)
-        {
-            return await _contextPet.GetAccountPets(accountId);
-
-        }
-
         // GET: get the account with the input id
         [Authorize(Roles = "Vet, Customer")]
         [HttpGet("{id}")]
