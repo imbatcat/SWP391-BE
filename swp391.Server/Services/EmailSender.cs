@@ -26,7 +26,7 @@ namespace PetHealthcare.Server.Services
                 return client.SendMailAsync(message);
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new BadHttpRequestException("No such email exists");
 

@@ -1,14 +1,13 @@
-﻿using PetHealthcare.Server.Models;
-using PetHealthcare.Server.Services;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using PetHealthcare.Server.APIs.DTOS.AppointmentDTOs;
-using System.Diagnostics;
-using Microsoft.Identity.Client;
-using System.Text.Json;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using PetHealthcare.Server.APIs.Constant;
-using PetHealthcare.Server.APIs.DTOS;
+using PetHealthcare.Server.Core.Constant;
+using PetHealthcare.Server.Core.DTOS;
+using PetHealthcare.Server.Core.DTOS.AppointmentDTOs;
+using PetHealthcare.Server.Models;
+using PetHealthcare.Server.Services;
+using PetHealthcare.Server.Services.Interfaces;
+using System.Diagnostics;
+using System.Text.Json;
 namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
@@ -75,7 +74,6 @@ namespace PetHealthcare.Server.APIs.Controllers
                             AppointmentId = appointmentId,
                         };
                         context.BookingPayments.Add(bookingPayment);
-                        context.paymentResponseModels.Add(response);
                     }
                     else
                     {

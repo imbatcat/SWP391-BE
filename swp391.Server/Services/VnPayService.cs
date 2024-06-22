@@ -1,6 +1,7 @@
 ﻿using PetHealthcare.Server.Core.Constant;
 using PetHealthcare.Server.Core.DTOS.AppointmentDTOs;
-using PetHealthcare.Server.Models;
+using PetHealthcare.Server.Models.VNPayModels;
+using PetHealthcare.Server.Services.Interfaces;
 
 namespace PetHealthcare.Server.Services
 {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PetHealthcare.Server.APIs.DTOS
+namespace PetHealthcare.Server.Core.DTOS
 {
     public class AccountUpdateDTO
     {

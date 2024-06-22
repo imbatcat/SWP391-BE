@@ -1,15 +1,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using PetHealthcare.Server.APIs.DTOS;
+using NanoidDotNet;
+using PetHealthcare.Server.Core.DTOS;
+using PetHealthcare.Server.Core.Helpers;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Models.ApplicationModels;
-using PetHealthcare.Server.Services.Interfaces;
-using PetHealthcare.Server.Helpers;
-using System.Security.Policy;
-using NanoidDotNet;
-using PetHealthcare.Server.Services;
 using PetHealthcare.Server.Services.AuthInterfaces;
+using PetHealthcare.Server.Services.Interfaces;
 
 namespace PetHealthcare.Server.APIs.Controllers
 {
@@ -116,7 +114,7 @@ namespace PetHealthcare.Server.APIs.Controllers
             {
                 var password = "a1Z." + Nanoid.Generate(size: 6);
                 await _context.CreateInternalUser(internalAccountDTO, password);
-                var role = Helpers.Helpers.GetRole(internalAccountDTO.RoleId);
+                var role = Helpers.GetRole(internalAccountDTO.RoleId);
                 var appUser = new ApplicationUser
                 {
                     Email = internalAccountDTO.Email,

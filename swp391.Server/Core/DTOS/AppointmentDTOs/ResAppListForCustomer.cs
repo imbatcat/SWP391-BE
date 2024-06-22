@@ -1,8 +1,8 @@
-﻿namespace PetHealthcare.Server.APIs.DTOS
+﻿namespace PetHealthcare.Server.Core.DTOS.AppointmentDTOs
 {
     public class ResAppListForCustomer
     {
-        public string Id {  get; set; }
+        public string AppointmentId { get; set; }
         public DateOnly AppointmentDate { get; set; }
         public double BookingPrice { get; set; }
         public string PetName { get; set; }

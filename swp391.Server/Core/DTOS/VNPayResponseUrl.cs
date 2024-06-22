@@ -1,4 +1,4 @@
-﻿namespace PetHealthcare.Server.APIs.DTOS
+﻿namespace PetHealthcare.Server.Core.DTOS
 {
     public class VNPayResponseUrl
     {
