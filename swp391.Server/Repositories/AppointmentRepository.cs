@@ -84,7 +84,7 @@ namespace PetHealthcare.Server.Repositories
 
         public async Task<IEnumerable<Appointment>> GetAllAppointmentListForVet(string vetId, DateOnly date)
         {
-            IEnumerable<Appointment> appointmentListForVetDTOs = await context.Appointments.Where(a => a.VeterinarianAccountId.Equals(vetId) && a.AppointmentDate.CompareTo(date) == 0).Include("Account").Include("Pet").ToListAsync();
+            IEnumerable<Appointment> appointmentListForVetDTOs = await context.Appointments.Where(a => a.VeterinarianAccountId.Equals(vetId) && a.AppointmentDate.CompareTo(date) == 0 && a.IsCancel == false).Include("Account").Include("Pet").ToListAsync();
             return appointmentListForVetDTOs;
         }
 

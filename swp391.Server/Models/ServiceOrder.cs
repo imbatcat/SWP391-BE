@@ -30,8 +30,7 @@ namespace PetHealthcare.Server.Models
         public MedicalRecord MedicalRecord { get; set; }
 
         public virtual ICollection<ServiceOrderDetails> ServiceOrderDetails { get; set; }
-        [Required]
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
+
         //public virtual ICollection<Service> Services { get; set; }
     }
 }

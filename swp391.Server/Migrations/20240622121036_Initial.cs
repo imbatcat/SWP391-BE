@@ -134,7 +134,8 @@ namespace PetHealthcare.Server.Migrations
                     IsCat = table.Column<bool>(type: "bit", nullable: false),
                     VaccinationHistory = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     IsDisabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccountId = table.Column<string>(type: "char(11)", nullable: false)
+                    AccountId = table.Column<string>(type: "char(11)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -163,7 +164,8 @@ namespace PetHealthcare.Server.Migrations
                     AccountId = table.Column<string>(type: "char(11)", nullable: false),
                     PetId = table.Column<string>(type: "char(11)", nullable: false),
                     VeterinarianAccountId = table.Column<string>(type: "char(11)", nullable: false),
-                    TimeSlotId = table.Column<int>(type: "int", nullable: false)
+                    TimeSlotId = table.Column<int>(type: "int", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {

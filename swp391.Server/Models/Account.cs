@@ -59,8 +59,5 @@ namespace PetHealthcare.Server.Models
         public virtual ICollection<Feedback>? Feedbacks { get; set; }
 
         public virtual ICollection<Pet>? Pets { get; set; }
-
-        [Required]
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
     }
 }

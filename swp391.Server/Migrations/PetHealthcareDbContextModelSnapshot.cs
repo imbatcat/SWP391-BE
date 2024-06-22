@@ -26,9 +26,6 @@ namespace PetHealthcare.Server.Migrations
                     b.Property<string>("AccountId")
                         .HasColumnType("char(11)");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateOnly?>("DateOfBirth")
                         .HasColumnType("date");
 
@@ -426,9 +423,6 @@ namespace PetHealthcare.Server.Migrations
                 {
                     b.Property<string>("ServiceOrderId")
                         .HasColumnType("char(11)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("MedicalRecordId")
                         .IsRequired()
