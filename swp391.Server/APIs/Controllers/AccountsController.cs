@@ -36,7 +36,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         //get all of the account
         //</summary>
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Vet")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Account>))]
         public async Task<IEnumerable<Account>> GetAccounts()
         {

@@ -57,9 +57,15 @@ const YearWeekSelector = ({ onYearWeekChange }) => {
   const getCurrentWeek = () => {
     const currentDate = new Date();
     const startOfYear = new Date(currentDate.getFullYear(), 0, 1);
-    const pastDaysOfYear = (currentDate - startOfYear) / 86400000;
-    return Math.ceil((pastDaysOfYear + startOfYear.getDay() + 1) / 7);
+    const dayOfYear = ((currentDate - startOfYear + 86400000) / 86400000);
+    
+    // Adjust for start of the week (Monday as the first day of the week)
+    const startOfWeekAdjustment = (startOfYear.getDay() || 7) - 1; // startOfYear.getDay() returns 0 for Sunday
+    
+    // Calculate the current week number
+    return Math.ceil((dayOfYear + startOfWeekAdjustment) / 7);
   };
+  
   return (
 <div>
     <div>

@@ -73,7 +73,9 @@ function AppointmentList() {
         } else {
             setFilteredApppointments(filteredAppointments.filter(app =>
                 app.ownerName.toLowerCase().includes(value) ||
-                app.ownerNumber.toLowerCase().includes(value) 
+                app.ownerNumber.toLowerCase().includes(value)||
+                app.appointmentDate.toLowerCase().includes(value)||
+                app.timeSlot.toLowerCase().includes(value)
             ));
         }
     };

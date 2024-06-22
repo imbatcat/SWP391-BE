@@ -67,10 +67,6 @@ export default function NavBar2() {
                                 Home
                             </MDBNavbarLink>
                             </Link>
-
-                        </MDBNavbarItem>
-                        <MDBNavbarItem>
-                            <Link to="/vet/WorkSchedule"> <MDBNavbarLink>Vet</MDBNavbarLink></Link>
                         </MDBNavbarItem>
 
                         <MDBNavbarItem>
