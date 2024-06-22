@@ -15,7 +15,7 @@ function CreateModal({ toggleOpen }) {
             <MDBModalDialog>
                 <MDBModalContent>
                     <MDBModalHeader >
-                        <MDBModalTitle>Appointment Information</MDBModalTitle>
+                        <MDBModalTitle>User Information</MDBModalTitle>
                         <MDBBtn className='btn-close' color='none' onClick={toggleOpen}></MDBBtn>
                     </MDBModalHeader>
                     <MDBModalBody>

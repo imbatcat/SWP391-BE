@@ -1,20 +1,20 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using PetHealthcare.Server.Core.DTOS;
+using PetHealthcare.Server.APIs.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Models.ApplicationModels;
 using PetHealthcare.Server.Services.Interfaces;
+using PetHealthcare.Server.Helpers;
 using System.Security.Policy;
 using NanoidDotNet;
 using PetHealthcare.Server.Services;
 using PetHealthcare.Server.Services.AuthInterfaces;
-using PetHealthcare.Server.Core.Helpers;
 
 namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin, Customer")]
+    [Authorize(Roles = "Admin, Customer, Vet")]
     [ApiController]
     public class AccountsController : ControllerBase
     {
@@ -36,7 +36,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         //get all of the account
         //</summary>
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Vet")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Account>))]
         public async Task<IEnumerable<Account>> GetAccounts()
         {
@@ -45,7 +45,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         //get all account with the same role
         [HttpGet("/api/byRole/{roleId}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Customer, Vet")]
         public async Task<IEnumerable<Account>> GetAllAccountsByRole([FromRoute] int roleId)
         {
             return await _context.GetAllAccountsByRole(roleId);
@@ -63,6 +63,7 @@ namespace PetHealthcare.Server.APIs.Controllers
             return Ok(checkAccount);
         }
         // GET: get the account with the input id
+        [Authorize(Roles = "Vet, Customer")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Account>> GetAccount([FromRoute] string id)
         {
@@ -79,7 +80,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         // change the information of the account
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAccount(string id, AccountDTO account)
+        public async Task<IActionResult> PutAccount(string id, AccountUpdateDTO account)
         {
             await _context.UpdateAccount(id, account);
 
@@ -105,7 +106,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         // POST: create a new user and insert it into database
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<Account>> PostAccount([FromBody] AccountDTO accountDTO)
+        public async Task<ActionResult<Account>> PostAccount([FromBody] InternalAccountDTO internalAccountDTO)
         {
             if (!ModelState.IsValid)
             {
@@ -114,25 +115,24 @@ namespace PetHealthcare.Server.APIs.Controllers
             try
             {
                 var password = "a1Z." + Nanoid.Generate(size: 6);
-                accountDTO.Password = password;
-                var result = await _context.CreateAccount(accountDTO, true);
-                var role = Helpers.GetRole(accountDTO.RoleId);
+                await _context.CreateInternalUser(internalAccountDTO, password);
+                var role = Helpers.Helpers.GetRole(internalAccountDTO.RoleId);
                 var appUser = new ApplicationUser
                 {
-                    Email = accountDTO.Email,
+                    Email = internalAccountDTO.Email,
                     EmailConfirmed = true,
-                    AccountFullname = accountDTO.FullName,
-                    PhoneNumber = accountDTO.PhoneNumber,
-                    UserName = accountDTO.UserName
+                    AccountFullname = internalAccountDTO.FullName,
+                    PhoneNumber = internalAccountDTO.PhoneNumber,
+                    UserName = internalAccountDTO.UserName
                 };
 
                 var results = await _userManager.CreateAsync(appUser, password);
                 if (results.Succeeded)
                 {
-                    await _authService.SendAccountEmail(accountDTO.Email, password, accountDTO.UserName);
+                    await _authService.SendAccountEmail(internalAccountDTO.Email, password, internalAccountDTO.UserName);
                     await _userManager.AddToRoleAsync(appUser, role);
                     return CreatedAtAction(
-                             "GetAccount", new { id = accountDTO.GetHashCode() }, accountDTO);
+                             "GetAccount", new { id = internalAccountDTO.GetHashCode() }, internalAccountDTO);
                 }
                 foreach (var error in results.Errors)
                 {
@@ -140,6 +140,10 @@ namespace PetHealthcare.Server.APIs.Controllers
                 }
             }
             catch (BadHttpRequestException ex)
+            {
+                return BadRequest(ex);
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex);
             }

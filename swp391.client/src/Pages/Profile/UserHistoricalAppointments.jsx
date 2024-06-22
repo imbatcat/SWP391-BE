@@ -27,7 +27,7 @@ import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import UserSidebar from "../../Component/UserSidebar/UserSidebar";
 
-function UserAppointments() {
+function UserHistoricalAppointments() {
     const [user, setUser] = useUser();
     const [appointmentList, setAppointmentList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -43,12 +43,17 @@ function UserAppointments() {
                 },
                 credentials: 'include'
             });
-            var userData = await response.json();
-            if (!response.ok) {
-                throw new Error(userData.message);
+            if (!response.ok && response.status != 404) {
+                throw new Error('Error fetching data');
             }
-            setAppointmentList(userData);
-            console.log(userData);
+            else if (response.status == 404) {
+                setAppointmentList(null);
+            }
+            else {
+                var userData = await response.json();
+                setAppointmentList(userData);
+                console.log(userData);
+            }
         } catch (error) {
             toast.error('Error getting user details!');
             console.error(error.message);
@@ -157,4 +162,4 @@ function UserAppointments() {
     );
 }
 
-export default UserAppointments;;
+export default UserHistoricalAppointments;

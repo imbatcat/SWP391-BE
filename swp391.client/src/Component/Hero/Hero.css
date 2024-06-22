@@ -1,42 +1,39 @@
-.hero-container{
-    width: 100%;
-    min-height: 85vh;
-    background-image: url('../../assets/images/dc.png');
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-size: auto;
-}
-
-.hero-text{
+.img-fit {
+    object-fit: cover; /* Ensures the image is fully visible without being cropped */
+    height: 38vw; /* Adjust as needed */
+    width: 20vw; /* Adjust as needed */
+  }
+  .img-fit4 {
+    object-fit: initial; /* Ensures the image is fully visible without being cropped */
+    height: 38vw; /* Adjust as needed */
+    width: 20vw; /* Adjust as needed */
+  }
+  .hero-text{
     color: black;
     text-align: center;
-    width: 50vw;
+    width: 40vw;
+    margin: auto;
     background-color: rgba(166, 164, 165, 0.3);
-    border-radius: 30px;
+    border-radius: 20px;
     border: none;
+  }
 
-}
-
-.hero-text h1{
-    width: 50vw;
+  .carousel-caption-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    align-content: center;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    color: white; /* Optional: to ensure text is visible on the image */
+  }
+  
+  .hero-text h5{
     font-size: 4vw;
-    font-weight: 600;
-    margin-top: 20px;
-}
-
-.hero-text p{
-    font-size: 1vw;
-    width: 20vw;
-    margin: 10px auto 20px;
-    line-height: 1.4 ;
-    
-}
-.hero-text button{
-    margin-bottom: 20px;
-}
-
-.btn{
-    background-color: rgba(255, 255, 255, 0.905);
-    
-}
+    font-weight: 400;
+  }
+  .hero-text p{ 
+    margin-right: 2vw;
+    margin-left: 2vw;
+    font-size: 1.3vw;
+  }

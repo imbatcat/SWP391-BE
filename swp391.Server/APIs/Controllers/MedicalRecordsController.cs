@@ -22,7 +22,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // GET: api/MedicalRecords
         [HttpGet("")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Vet")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<MedicalRecord>))]
         public async Task<IEnumerable<MedicalRecord>> GetMedicalRecords()
         {

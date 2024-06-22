@@ -17,6 +17,7 @@ import {
 } from 'mdb-react-ui-kit';
 import { useAuth } from '../../Context/AuthProvider';
 import { useUser } from '../../Context/UserContext';
+import { redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 export default function NavBar2() {
@@ -39,9 +40,9 @@ export default function NavBar2() {
             }
             setIsAuthenticated(false);
             localStorage.removeItem("user");
-            navigate('/');
+            return redirect("/");
         } catch (error) {
-            toast.error('Error logging ou!');
+            toast.error('Error logging out!');
             console.error(error.message);
         }
     };
@@ -49,8 +50,8 @@ export default function NavBar2() {
     return (
         <MDBNavbar expand='lg' light bgColor='light' sticky>
             <MDBContainer fluid>
-                <Link to="/"><h1 style={{minWidth:'15vw'}}>Pet-ternary</h1></Link>
-                <h2 style={{minWidth:'10vw',fontSize:'100%', margin:'auto', marginLeft:'1vw'}} >Purr-fectly Healthy, Woof-tastically Happy</h2>
+                <Link to="/"><h1 style={{ minWidth: '15vw' }}>Pet-ternary</h1></Link>
+                <h2 style={{ minWidth: '10vw', fontSize: '100%', margin: 'auto', marginLeft: '1vw' }} >Purr-fectly Healthy, Woof-tastically Happy</h2>
                 <MDBNavbarToggler
                     aria-controls='navbarSupportedContent'
                     aria-expanded='false'
@@ -67,10 +68,6 @@ export default function NavBar2() {
                                 Home
                             </MDBNavbarLink>
                             </Link>
-
-                        </MDBNavbarItem>
-                        <MDBNavbarItem>
-                            <Link to="/vet/WorkSchedule"> <MDBNavbarLink>Vet</MDBNavbarLink></Link>
                         </MDBNavbarItem>
 
                         <MDBNavbarItem>

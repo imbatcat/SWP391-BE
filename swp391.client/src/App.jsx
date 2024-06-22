@@ -1,5 +1,5 @@
 import { useEffect, } from 'react';
-import { nanoid } from 'nanoid'
+import { nanoid } from 'nanoid';
 
 import './App.css';
 async function fetchData(setData) {
@@ -10,7 +10,7 @@ async function fetchData(setData) {
             headers: {
                 // 'Content-Type': 'application/x-www-form-urlencoded',
             }
-// body data type must match "Content-Type" header
+            // body data type must match "Content-Type" header
         });
         if (!response.ok) {
             throw new Error("Error fetching data");
@@ -53,7 +53,7 @@ async function logout() {
     try {
         const response = await fetch('https://localhost:7206/api/ApplicationAuth/logout', {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
-         
+
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -69,7 +69,7 @@ async function logout() {
 }
 async function signup(id) {
     try {
-/*        var now = new Date();*/
+        /*        var now = new Date();*/
         console.log('rutkre' + id);
         const response = await fetch('https://localhost:7206/api/ApplicationAuth/register', {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -101,8 +101,8 @@ function App() {
     //const [token, setToken] = useState(null);
 
     useEffect(() => {
-        const params = new URLSearchParams(window.location.search)
-            
+        const params = new URLSearchParams(window.location.search);
+
         fetch("https://localhost:7206/api/VNPayAPI/PaymentCallback", {
             method: "POST",
             headers: {
@@ -114,7 +114,7 @@ function App() {
             .then(data => console.log(data))
             .catch(error => console.error('Error:', error));
         console.log(params);
-        },[])
+    }, []);
 
     const id = nanoid(2);
     return (

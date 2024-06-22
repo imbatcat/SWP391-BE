@@ -22,7 +22,7 @@ function SideNav({ searchInput, handleSearchInputChange }) {
                     'Content-Type': 'application/json'
                 },
                 credentials: 'include',
-            });
+            }); 
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -30,6 +30,7 @@ function SideNav({ searchInput, handleSearchInputChange }) {
             localStorage.removeItem("user");
             navigate('/');
         } catch (error) {
+            navigate('/');
             toast.error('Error logging out!');
             console.error(error.message);
         }

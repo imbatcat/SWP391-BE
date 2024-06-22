@@ -18,7 +18,6 @@ namespace PetHealthcare.Server.Services
 
         public async Task<Account?> CreateAccount(AccountDTO Account, bool isGoogle)
         {
-
             var _account = new Account
             {
                 AccountId = GenerateId(),
@@ -83,21 +82,27 @@ namespace PetHealthcare.Server.Services
             return await _accountService.GetAccountsByRole(roleId);
         }
 
-        public async Task UpdateAccount(string id, AccountDTO Account)
+        public async Task UpdateAccount(string id, AccountUpdateDTO Account)
         {
             var _account = new Account
             {
                 AccountId = id,
                 FullName = Account.FullName,
-                Password = Account.Password,
-                Username = Account.UserName
+                Username = Account.Username,
+                Email = Account.Email,
+                PhoneNumber = Account.PhoneNumber,
+                IsMale = Account.IsMale,
             };
             await _accountService.Update(_account);
         }
 
-        public string GenerateId()
+        public string GenerateId(bool isVet = false)
         {
-            var prefix = "AC-";
+            string prefix = "";
+            if (!isVet)
+                prefix = "AC-";
+            else
+                prefix = "VE-";
             string id = Nanoid.Generate(size: 8);
             return prefix + id;
         }
@@ -110,6 +115,66 @@ namespace PetHealthcare.Server.Services
         public async Task<bool> Any(Expression<Func<Account, bool>> expression)
         {
             return await _accountService.Any(expression);
+        }
+
+        public async Task CreateInternalUser(InternalAccountDTO dto, string password)
+        {
+            try
+            {
+                switch (dto.RoleId)
+                {
+                    // Vet
+                    case 3:
+                        {
+                            var _account = new Veterinarian
+                            {
+                                AccountId = GenerateId(isVet: true),
+                                Username = dto.UserName,
+                                FullName = dto.FullName,
+                                Password = password,
+                                DateOfBirth = dto.DateOfBirth != null ? (DateOnly)dto.DateOfBirth : null,
+                                Email = dto.Email,
+                                PhoneNumber = dto.PhoneNumber,
+                                RoleId = dto.RoleId,
+                                IsMale = dto.IsMale,
+                                JoinDate = DateOnly.FromDateTime(DateTime.Now),
+                                IsDisabled = false,
+                                ImgUrl = dto.ImgUrl,
+                                Description = dto.Description,
+                                Department = dto.Department,
+                                Position = dto.Position,
+                                Experience = dto.Experience
+                            };
+                            await _accountService.CreateVet(_account);
+                            break;
+                        }
+                    // Staff
+                    case 4:
+                        {
+                            var _account = new Account
+                            {
+                                AccountId = GenerateId(),
+                                Username = dto.UserName,
+                                FullName = dto.FullName,
+                                Password = password,
+                                DateOfBirth = dto.DateOfBirth != null ? (DateOnly)dto.DateOfBirth : null,
+                                Email = dto.Email,
+                                PhoneNumber = dto.PhoneNumber,
+                                RoleId = dto.RoleId,
+                                IsMale = dto.IsMale,
+                                JoinDate = DateOnly.FromDateTime(DateTime.Now),
+                                IsDisabled = false,
+                            };
+                            await _accountService.Create(_account);
+                            break;
+                        }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex.InnerException);
+            }
         }
     }
 }

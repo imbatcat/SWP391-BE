@@ -7,25 +7,23 @@ import {
     MDBModalHeader,
     MDBModalTitle
 } from 'mdb-react-ui-kit';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AppointmentForm from '../Modals/AppointmentModalForm';
+import PaymentModal from './PaymentModal';
+
 
 function AppointmentModal({ toggleOpen }) {
+    // This represents the step count from stepper
+    const [stepData, setStepData] = useState(0);
 
     return (
         <>
             <MDBModalDialog>
                 <MDBModalContent>
-                    <MDBModalHeader >
-                        <MDBModalTitle>Appointment Information</MDBModalTitle>
-                        <MDBBtn className='btn-close' color='none' onClick={toggleOpen}></MDBBtn>
-                    </MDBModalHeader>
-                    <MDBModalBody>
-                        <AppointmentForm></AppointmentForm>
-                    </MDBModalBody>
+                    {stepData == 0 && <AppointmentForm toggleOpen={toggleOpen}></AppointmentForm>}
+
                 </MDBModalContent>
             </MDBModalDialog>
-        </>
-    );
+        </>);
 }
 export default AppointmentModal;

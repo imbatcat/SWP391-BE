@@ -30,6 +30,7 @@ function SideNavForVet({ searchInput, handleSearchInputChange }) {
             localStorage.removeItem("user");
             navigate('/');
         } catch (error) {
+            navigate('/');
             toast.error('Error logging out!');
             console.error(error.message);
         }
