@@ -77,11 +77,10 @@ export default function NavBar2() {
                                 </MDBDropdownToggle>
                                 <MDBDropdownMenu>
                                     <MDBDropdownItem link>My Appointment</MDBDropdownItem>
-                                    <MDBDropdownItem link>
                                         <Link to="/user/appointments">
-                                            <button>Make appointments</button>
+                                            <MDBDropdownItem link> Make an Appointment</MDBDropdownItem>
                                         </Link>
-                                    </MDBDropdownItem>
+                                    
 
                                 </MDBDropdownMenu>
                             </MDBDropdown>
