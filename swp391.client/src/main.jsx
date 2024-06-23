@@ -198,7 +198,7 @@ root.render(
     <GoogleOAuthProvider clientId="279261034420-76gqakprrgtiq9pc879d8e4ukhk9cour.apps.googleusercontent.com">
         <AuthProvider>
             <UserProvider>
-                <React.StrictMode>
+                {/*<React.StrictMode>*/}
                     <RouterProvider router={router}>
                     </RouterProvider>
                     <ToastContainer
@@ -212,7 +212,7 @@ root.render(
                         theme="light"
                         transition: Flip
                     />
-                </React.StrictMode>
+                {/*</React.StrictMode>*/}
             </UserProvider>
         </AuthProvider>
     </GoogleOAuthProvider>

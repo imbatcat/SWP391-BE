@@ -14,6 +14,6 @@
 
         public required string? MedicalRecordId { get; set; }
 
-        public required string? VeterianrianId { get; set; }
+        public required string? VeterinarianId { get; set; }
     }
 }

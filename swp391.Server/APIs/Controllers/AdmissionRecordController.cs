@@ -70,7 +70,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         [HttpPost("/api/AdmissionRecord")]
-        [Authorize(Roles = "Staff")]
+        [Authorize(Roles = "Staff,Admin")]
         public async Task<ActionResult<AdmissionRecord>> CreateAdmissionRecord([FromBody] AdmissionRecordRegisterDTO _new)
         {
             await _context.CreateAdmissionRecord(_new);
