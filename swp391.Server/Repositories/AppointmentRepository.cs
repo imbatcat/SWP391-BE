@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NanoidDotNet;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
 using System.Diagnostics;
@@ -15,6 +16,15 @@ namespace PetHealthcare.Server.Repositories
         }
         public async Task Create(Appointment entity)
         {
+            BookingPayment book = new BookingPayment
+            {
+                PaymentId = "BP-" + Nanoid.Generate(size: 8),
+                AppointmentId = entity.AppointmentId,
+                PaymentDate = DateOnly.FromDateTime(DateTime.Now),
+                PaymentMethod = "VNPay",
+                Price = 50000
+            };
+            await context.BookingPayments.AddAsync(book);
             await context.Appointments.AddAsync(entity);
             await SaveChanges();
         }
