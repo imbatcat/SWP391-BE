@@ -1,0 +1,6 @@
+Account với email real
+giap: Admin
+general: Admin
+chien, MinhL3: Customer
+MinhL, MinhL2: Staff
+MinhAnh, Dat_Vet: Veterinarian
