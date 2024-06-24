@@ -347,6 +347,8 @@ namespace PetHealthcare.Server.Services
                         PetName = appointment.Pet.PetName,
                         PetBreed = appointment.Pet.PetBreed,
                         TimeSlot = appointment.TimeSlot.StartTime.ToString("h:mm") + " - " + appointment.TimeSlot.EndTime.ToString("h:mm"),
+                        AppointmentDate = appointment.AppointmentDate,
+                        PhoneNumber = appointment.Account.PhoneNumber,
                         status = _status,
                         PetType = _petType,
                     });

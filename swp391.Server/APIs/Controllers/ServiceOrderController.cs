@@ -19,6 +19,12 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
         [HttpGet("Staff")]
         [Authorize(Roles = "Staff, Admin")]
+        public async Task<IEnumerable<GetAllServiceOrderForStaff>> getServiceOrderListForStaff(DateOnly date,bool isUnPaidList = true)
+        {
+            return await _serviceOrderService.getServiceOrderListForStaff(date, isUnPaidList);
+        }
+        [HttpGet("Staff/getAll")]
+        [Authorize(Roles = "Staff, Admin")]
         public async Task<IEnumerable<GetAllServiceOrderForStaff>> getAllServiceOrderForStaff()
         {
             return await _serviceOrderService.getAllServiceOrderForStaff();

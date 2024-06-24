@@ -9,5 +9,7 @@
         public string PetType { get; set; }
         public string PetBreed { get; set; }
         public string status { get; set; }
+        public DateOnly AppointmentDate { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }
