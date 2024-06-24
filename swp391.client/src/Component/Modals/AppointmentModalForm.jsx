@@ -15,6 +15,7 @@ import { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as svg from '@fortawesome/free-solid-svg-icons';
 import openLink from '../../Helpers/OpenLink';
+import VetSelectionTable from '../VetSelectionTable/VetSelectionTable';
 
 function AppointmentForm({ toggleOpen }) {
     const [user, setUser] = useUser();
@@ -153,14 +154,7 @@ function AppointmentForm({ toggleOpen }) {
 
                     <MDBRow className='mb-4'>
                         <MDBCol>
-                            <select name="veterinarianAccountId" value={formData.veterinarianAccountId} onChange={handleChange} data-mdb-select-init >
-                                <option value="" disabled>Choose your vet (optional)</option>
-                                {vetList.map((vet, index) => (
-                                    <option key={index} value={vet.accountId}>
-                                        {vet.fullName}
-                                    </option>
-                                ))}
-                            </select>
+                            <VetSelectionTable vetList={vetList} formData={formData} onChange={handleChange} />
                         </MDBCol>
                     </MDBRow>
 

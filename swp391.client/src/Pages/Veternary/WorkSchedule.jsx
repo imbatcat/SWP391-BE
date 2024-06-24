@@ -47,13 +47,12 @@ const timeSlotMapping = {
     3: '10:00 - 11:30',
     4: '13:00 - 14:30',
     5: '14:30 - 16:00',
-    6: '16:00 - 17:30'  // Added to match your example
+    6: '16:00 - 17:30'
 };
 
 const getTimeSlotKey = (timeSlotValue) => {
-    return Object.keys(timeSlotMapping).find(key => timeSlotMapping[key] === timeSlotValue);
+    return parseInt(Object.keys(timeSlotMapping).find(key => timeSlotMapping[key] === timeSlotValue), 10);
 };
-
 function WorkSchedule() {
     const [user] = useUser();
     const [selectedDisplayDates, setSelectedDisplayDates] = useState([]);
@@ -82,10 +81,10 @@ function WorkSchedule() {
             if (timeSlot) url.searchParams.append('timeSlot', timeSlot);
             if (date) url.searchParams.append('date', date);
             url.searchParams.append('isGetAll', isGetAll);
-
+    
             // Log the constructed URL for debugging
             console.log('Fetching data from URL:', url.toString());
-
+    
             const response = await fetch(url, {
                 method: 'GET',
                 credentials: 'include',
@@ -93,11 +92,21 @@ function WorkSchedule() {
                     'Content-Type': 'application/json',
                 }
             });
-
+    
+            console.log(`Response status: ${response.status}`); // Log response status
+    
             if (!response.ok) {
-                throw new Error(`Error fetching data: ${response.statusText}`);
+                if (response.status === 400) {
+                    throw new Error(`Bad Request: ${response.statusText}`);
+                } else if (response.status === 401) {
+                    throw new Error(`Unauthorized: ${response.statusText}`);
+                } else if (response.status === 404) {
+                    throw new Error(`Not Found: ${response.statusText}`);
+                } else {
+                    throw new Error(`Unexpected Error: ${response.statusText}`);
+                }
             }
-
+    
             const data = await response.json();
             setAppointments(data);
             setIsLoading(false); // Update the loading state after data is fetched
