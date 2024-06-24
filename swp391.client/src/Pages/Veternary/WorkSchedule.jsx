@@ -16,9 +16,7 @@ import {
 import SideNavForVet from '../../Component/SideNavForVet/SideNavForVet';
 import YearWeekSelector from '../../Component/YearWeekSelector/YearWeekSelector';
 import { useUser } from '../../Context/UserContext';
-
-// Helper functions omitted for brevity
-
+import { Link } from 'react-router-dom';
 const getStartDateOfWeek = (week, year) => {
     const janFirst = new Date(year, 0, 1);
     const days = (week - 1) * 7;
@@ -39,19 +37,6 @@ const formatDateForAPI = (date) => {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
     return `${year}-${month}-${day}`;
-};
-
-const timeSlotMapping = {
-    1: '7:00 - 8:30',
-    2: '8:30 - 10:00',
-    3: '10:00 - 11:30',
-    4: '13:00 - 14:30',
-    5: '14:30 - 16:00',
-    6: '16:00 - 17:30'
-};
-
-const getTimeSlotKey = (timeSlotValue) => {
-    return parseInt(Object.keys(timeSlotMapping).find(key => timeSlotMapping[key] === timeSlotValue), 10);
 };
 function WorkSchedule() {
     const [user, setUser] = useUser();
@@ -74,80 +59,74 @@ function WorkSchedule() {
         setSelectedDisplayDates(displayDates);
         setSelectedAPIDates(apiDates);
     }, []);
-
-    async function fetchData(vetId, timeSlot, date, isGetAll = true) {
+    async function fetchData() {
         try {
-            const url = new URL(`https://localhost:7206/api/Appointment/AppointmetList/ViewAppointmentForVet?VetId=${user.id}`);
-            //if (timeSlot) url.searchParams.append('timeSlot', timeSlot);
-            //if (date) url.searchParams.append('date', date);
-            //url.searchParams.append('isGetAll', isGetAll);
-
-            // Log the constructed URL for debugging
-            console.log('Fetching data from URL:', url.toString());
+            const [appResponse, accountResponse] = await Promise.all([
+                fetch('https://localhost:7206/api/Appointment', {
+                    method: 'GET',
+                    credentials: 'include',
+                }),
+                fetch('https://localhost:7206/api/Accounts', {
+                    method: 'GET',
+                    credentials: 'include',
+                })
+            ]);
     
-            const response = await fetch(url, {
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-    
-            console.log(`Response status: ${response.status}`); // Log response status
-    
-            if (!response.ok) {
-                if (response.status === 400) {
-                    throw new Error(`Bad Request: ${response.statusText}`);
-                } else if (response.status === 401) {
-                    throw new Error(`Unauthorized: ${response.statusText}`);
-                } else if (response.status === 404) {
-                    throw new Error(`Not Found: ${response.statusText}`);
-                } else {
-                    throw new Error(`Unexpected Error: ${response.statusText}`);
-                }
+            if (!appResponse.ok) {
+                throw new Error("Error fetching appointment data");
+            }
+            if (!accountResponse.ok) {
+                throw new Error("Error fetching account data");
             }
     
-            const data = await response.json();
-            setAppointments(data);
-            setIsLoading(false); // Update the loading state after data is fetched
+            const appointmentData = await appResponse.json();
+            const accountData = await accountResponse.json();
+  
+          // Merge appointment data with account data
+          const mergedData = appointmentData.map(app => {
+            const owner = accountData.find(account => account.accountId === app.accountId) || {};
+            console.log(app);
+          //   console.log("Matching owner for appointment:", app, "is:", owner);
+            return { 
+              ...app, 
+              ownerName: owner.fullName || 'Unknown', ownerNumber: owner.phoneNumber };
+          });
+  
+          setAppointments(mergedData);
         } catch (error) {
-            console.error('Fetch error:', error.message);
-            setIsLoading(false); // Update the loading state in case of an error
+            console.error(error.message);
+        } finally {
+            setIsLoading(false);
         }
     }
 
     useEffect(() => {
         if (user) {
-            fetchData(user.vetId, '', '', true); // Fetch initial data without timeSlot and date
+            fetchData();
         }
     }, [user]);
+
+    if (isLoading) {
+        return <div>Loading...</div>; // Loading state
+    }
 
     const countAppointments = (date, timeSlot) => {
         return appointments.filter(appointment =>
             appointment.timeSlot === timeSlot && appointment.appointmentDate === date
         ).length;
     };
-
     const getBadgeColor = (count) => {
         if (count > 0 && count < 4) return 'success';
         if (count >= 4 && count < 7) return 'warning';
         if (count >= 7) return 'danger';
         return 'secondary';
     };
-
-    const handleBadgeClick = (date, timeSlotDisplay) => {
-        const timeSlot = getTimeSlotKey(timeSlotDisplay);
-        fetchData(user.vetId, timeSlot, date, false); // Fetch data for the specific date and timeSlot
+    const handleBadgeClick = (date, timeSlot) => {
         const filteredAppointments = appointments.filter(appointment =>
             appointment.timeSlot === timeSlot && appointment.appointmentDate === date
         );
-        setModal({ isOpen: true, date, timeSlot: timeSlotDisplay, appointments: filteredAppointments });
+        setModal({ isOpen: true, date, timeSlot, appointments: filteredAppointments });
     };
-
-    if (isLoading) {
-        return <div>Loading...</div>; // Loading state
-    }
-
     return (
         <div>
             <SideNavForVet />
@@ -173,18 +152,18 @@ function WorkSchedule() {
                     </tr>
                 </MDBTableHead>
                 <MDBTableBody>
-                    {Object.values(timeSlotMapping).map((timeSlotDisplay, timeIndex) => (
+                {['7:00 - 8:30', '8:30 - 10:00', '10:00 - 11:30', '13:00 - 14:30', '14:30 - 16:00'].map((timeSlot, timeIndex) => (
                         <tr key={timeIndex} style={{ textAlign: 'center' }}>
-                            <th scope='row'>{timeSlotDisplay}</th>
+                            <th scope='row'>{timeSlot}</th>
                             {selectedAPIDates.map((date, dateIndex) => {
-                                const count = countAppointments(date, getTimeSlotKey(timeSlotDisplay));
+                                const count = countAppointments(date, timeSlot);
                                 return (
                                     <td key={dateIndex}>
                                         <MDBBadge
                                             color={getBadgeColor(count)}
                                             pill
                                             style={{ textAlign: 'center', display: 'block', margin: 'auto' }}
-                                            onClick={() => handleBadgeClick(date, timeSlotDisplay)}
+                                            onClick={() => handleBadgeClick(date, timeSlot)}
                                         >
                                             {count} Appointments
                                         </MDBBadge>
@@ -195,14 +174,13 @@ function WorkSchedule() {
                     ))}
                 </MDBTableBody>
             </MDBTable>
-
             <MDBModal open={modal.isOpen} onClose={() => setModal({ ...modal, isOpen: false })} tabIndex='-1'>
                 <MDBModalDialog scrollable>
-                    <MDBModalContent style={{ width: '60vw' }} >
+                    <MDBModalContent style={{width:'60vw'}} >
                         <MDBModalHeader>
                             <MDBModalTitle>
-                                <p>Appointments for {modal.date} </p>
-                                <p>{modal.timeSlot}</p>
+                            <p>Appointments for {modal.date} </p>
+                            <p>{modal.timeSlot}</p>
                             </MDBModalTitle>
                             <MDBBtn
                                 className='btn-close'
@@ -221,6 +199,7 @@ function WorkSchedule() {
                                         <th scope='col'>Status</th>
                                         <th scope='col'>Booking Price</th>
                                         <th scope='col'>Note</th>
+                                        <th scope='col'></th>
                                     </tr>
                                 </MDBTableHead>
                                 <MDBTableBody style={{ textAlign: 'center' }}>
@@ -262,10 +241,15 @@ function WorkSchedule() {
                                             <td>
                                                 <p className='fw-normal mb-1'>{app.appointmentNotes}</p>
                                             </td>
+                                            <td>
+                                                <Link>
+                                                    <MDBBtn color='danger'>View Detail</MDBBtn>
+                                                </Link>
+                                            </td>
                                         </tr>
                                     ))}
-                                </MDBTableBody>
-                            </MDBTable>
+                                </MDBTableBody>  
+                                </MDBTable>
                         </MDBModalBody>
                         <MDBModalFooter>
                             <MDBBtn color='secondary' onClick={() => setModal({ ...modal, isOpen: false })}>
@@ -275,7 +259,7 @@ function WorkSchedule() {
                     </MDBModalContent>
                 </MDBModalDialog>
             </MDBModal>
-        </div>
+            </div>
     );
 }
 
