@@ -43,7 +43,7 @@ namespace PetHealthcare.Server.APIs.Controllers
             return cage;
         }
 
-        [HttpGet("/api/Cage/PetDetail")]
+        [HttpGet("/api/Cages/PetDetail")]
         public async Task<IEnumerable<CageWithPetDTO>> GetAllCagesWithPet()
         {
             return await _context.GetAllCagesWithPet();

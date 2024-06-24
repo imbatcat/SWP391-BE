@@ -87,7 +87,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         [HttpGet("AppointmentList/{accountId}&{listType}")]
-        [Authorize(Roles = "Customer,Admin")]
+        [Authorize(Roles = "Customer,Admin, Vet")]
         public async Task<ActionResult<IEnumerable<ResAppListForCustomer>>> GetCustomerAppointmentList([FromRoute] string accountId, [FromRoute] string listType)
         {
             IEnumerable<ResAppListForCustomer> appointmentList = new List<ResAppListForCustomer>();
@@ -164,18 +164,13 @@ namespace PetHealthcare.Server.APIs.Controllers
         [HttpGet("AppointmetList/ViewAppointmentForVet")]
         [Authorize(Roles = "Admin,Vet")]
         //get all appointment of a day for Vet to view
-        public async Task<ActionResult<IEnumerable<AppointmentListForVetDTO>>> ViewAppointmentListForVet(string VetId, DateOnly date)
+        public async Task<ActionResult<IEnumerable<AppointmentListForVetDTO>>> ViewAppointmentListForVet(string VetId)
         {
-            Console.WriteLine(date);
             if (await _appointment.GetAccountById(VetId) is null)
             {
                 return NotFound(new { message = "Can't find that VetId" });
             }
-            else if (date.CompareTo(new DateOnly(1, 1, 1)) == 0)
-            {
-                return BadRequest(new { message = "Please enter date in format mm/dd/yyyy" });
-            }
-            IEnumerable<AppointmentListForVetDTO> appointmentList = await _appointment.ViewAppointmentListForVet(VetId, date);
+            IEnumerable<AppointmentListForVetDTO> appointmentList = await _appointment.ViewAppointmentListForVet(VetId);
             return Ok(appointmentList);
         }
         [HttpGet("AppointmetList/VetAppointment/{vetId}")]
