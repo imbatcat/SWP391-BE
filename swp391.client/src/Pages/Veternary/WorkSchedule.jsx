@@ -243,7 +243,7 @@ function WorkSchedule() {
                                             </td>
                                             <td>
                                                 <Link>
-                                                    <MDBBtn color='danger'>View Detail</MDBBtn>
+                                                    <MDBBtn color='danger'>View Detal</MDBBtn>
                                                 </Link>
                                             </td>
                                         </tr>
