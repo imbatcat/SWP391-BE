@@ -33,6 +33,7 @@ import UserPets from './Pages/Profile/UserPets';
 import UserAppointments from './Pages/Profile/UserAppointments';
 import MedicalRecord from './Pages/Veternary/MedicalRecord';
 import AppointmentCheckin from './Pages/Staff/AppointmentCheckin';
+import MedicalRecordList from './Pages/Veternary/MedicalRecordList';
 
 
 const router = createBrowserRouter([
@@ -161,6 +162,15 @@ const router = createBrowserRouter([
         element: (
             <CheckAuth>
                 <AppointmentList></AppointmentList>
+            </CheckAuth>
+        ),
+        errorElement: <div>404 Not Found</div>,
+    },
+    {
+        path: '/vet/MedicalRecordList',
+        element: (
+            <CheckAuth>
+                <MedicalRecordList />
             </CheckAuth>
         ),
         errorElement: <div>404 Not Found</div>,

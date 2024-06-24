@@ -58,45 +58,27 @@ function WorkSchedule() {
         }
         setSelectedDisplayDates(displayDates);
         setSelectedAPIDates(apiDates);
+        fetchData(apiDates);  // Fetch data for the new week
+        
     }, []);
     async function fetchData() {
         try {
-            const [appResponse, accountResponse] = await Promise.all([
-                fetch('https://localhost:7206/api/Appointment', {
-                    method: 'GET',
-                    credentials: 'include',
-                }),
-                fetch('https://localhost:7206/api/Accounts', {
-                    method: 'GET',
-                    credentials: 'include',
-                })
-            ]);
-    
-            if (!appResponse.ok) {
-                throw new Error("Error fetching appointment data");
+            const response = await fetch('https://localhost:7206/api/Appointment/AppointmetList/VetAppointment/${user.id}', {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                }
+            });
+            if (!response.ok) {
+                throw new Error("Error fetching data");
             }
-            if (!accountResponse.ok) {
-                throw new Error("Error fetching account data");
-            }
-    
-            const appointmentData = await appResponse.json();
-            const accountData = await accountResponse.json();
-  
-          // Merge appointment data with account data
-          const mergedData = appointmentData.map(app => {
-            const owner = accountData.find(account => account.accountId === app.accountId) || {};
-            console.log(app);
-          //   console.log("Matching owner for appointment:", app, "is:", owner);
-            return { 
-              ...app, 
-              ownerName: owner.fullName || 'Unknown', ownerNumber: owner.phoneNumber };
-          });
-  
-          setAppointments(mergedData);
+            const data = await response.json();
+            setAppointments(data);
+            setIsLoading(false);
+            console.log(data);
         } catch (error) {
             console.error(error.message);
-        } finally {
-            setIsLoading(false);
         }
     }
 
@@ -236,13 +218,16 @@ function WorkSchedule() {
                                             </td>
                                             <td>
                                                 <p className='fw-bold mb-1'>{app.bookingPrice}</p>
-                                                <p className='text-muted mb-0'>{app.appointmentType}</p>
+                                                <p className='text-muted mb-0'>{app.petId}</p>
                                             </td>
                                             <td>
                                                 <p className='fw-normal mb-1'>{app.appointmentNotes}</p>
                                             </td>
                                             <td>
-                                                <Link>
+                                                <Link to={{
+                                                    pathname: '/vet/MedicalRecord',
+                                                    state: { appointment: app }
+                                                }}>
                                                     <MDBBtn color='danger'>View Detal</MDBBtn>
                                                 </Link>
                                             </td>
