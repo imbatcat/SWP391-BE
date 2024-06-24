@@ -3,7 +3,9 @@ using NanoidDotNet;
 using PetHealthcare.Server.Core.DTOS.ServiceOrderDTOs;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
+using SQLitePCL;
 using System.Linq.Expressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PetHealthcare.Server.Repositories
 {
@@ -115,7 +117,7 @@ namespace PetHealthcare.Server.Repositories
             }
         }
 
-        public async Task<IEnumerable<GetAllServiceOrderForStaff>> GetAllServiceOrderForStaff()
+        public async Task<IEnumerable<GetAllServiceOrderForStaff>> GetServiceOrderListForStaff(DateOnly date, bool isUnpaidList)
         {
             //    public string ServiceOrderId { get; set; }
             //public double Price { get; set; }
@@ -125,17 +127,43 @@ namespace PetHealthcare.Server.Repositories
             var orderServiceList = context.ServiceOrders.Include("MedicalRecord.Appointment.Account");
 
             List<GetAllServiceOrderForStaff> ServiceOrderForStaff = new List<GetAllServiceOrderForStaff>();
-            foreach (ServiceOrder order in orderServiceList)
+            if(isUnpaidList)
             {
-                ServiceOrderForStaff.Add(new GetAllServiceOrderForStaff
+                foreach (ServiceOrder order in orderServiceList)
                 {
-                    ServiceOrderId = order.ServiceOrderId,
-                    Price = order.Price,
-                    OrderDate = order.OrderDate,
-                    OrderStatus = order.OrderStatus,
-                    customerName = order.MedicalRecord.Appointment.Account.FullName,
-                });
+                    if(order.OrderStatus.Equals("Pending", StringComparison.OrdinalIgnoreCase) && date.CompareTo(order.OrderDate) == 0)
+                    {
+                        ServiceOrderForStaff.Add(new GetAllServiceOrderForStaff
+                        {
+                            ServiceOrderId = order.ServiceOrderId,
+                            Price = order.Price,
+                            OrderDate = order.OrderDate,
+                            OrderStatus = order.OrderStatus,
+                            customerName = order.MedicalRecord.Appointment.Account.FullName,
+                            customerPhone = order.MedicalRecord.Appointment.Account.PhoneNumber
+                        });
+                    }
+                }
+            } else
+            {
+                
+                foreach (ServiceOrder order in orderServiceList)
+                {
+                    if (date.CompareTo(order.OrderDate) == 0)
+                    {
+                        ServiceOrderForStaff.Add(new GetAllServiceOrderForStaff
+                        {
+                            ServiceOrderId = order.ServiceOrderId,
+                            Price = order.Price,
+                            OrderDate = order.OrderDate,
+                            OrderStatus = order.OrderStatus,
+                            customerName = order.MedicalRecord.Appointment.Account.FullName,
+                            customerPhone = order.MedicalRecord.Appointment.Account.PhoneNumber
+                        });
+                    }
+                }
             }
+            
             return ServiceOrderForStaff;
         }
 
@@ -151,5 +179,26 @@ namespace PetHealthcare.Server.Repositories
             }
             return false;
         }
+
+        public async Task<IEnumerable<GetAllServiceOrderForStaff>> getAllServiceOrderForStaff()
+        {
+            var orderServiceList = context.ServiceOrders.Include("MedicalRecord.Appointment.Account");
+
+            List<GetAllServiceOrderForStaff> ServiceOrderForStaff = new List<GetAllServiceOrderForStaff>();
+            foreach (ServiceOrder order in orderServiceList)
+            {
+                    ServiceOrderForStaff.Add(new GetAllServiceOrderForStaff
+                    {
+                        ServiceOrderId = order.ServiceOrderId,
+                        Price = order.Price,
+                        OrderDate = order.OrderDate,
+                        OrderStatus = order.OrderStatus,
+                        customerName = order.MedicalRecord.Appointment.Account.FullName,
+                        customerPhone = order.MedicalRecord.Appointment.Account.PhoneNumber
+                    });
+            }
+            return ServiceOrderForStaff;
+        }
+
     }
 }

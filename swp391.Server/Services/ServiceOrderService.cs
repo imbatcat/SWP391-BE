@@ -52,14 +52,20 @@ namespace PetHealthcare.Server.Services
             }
         }
 
-        public async Task<IEnumerable<GetAllServiceOrderForStaff>> getAllServiceOrderForStaff()
+        public async Task<IEnumerable<GetAllServiceOrderForStaff>> getServiceOrderListForStaff(DateOnly date,bool isUnPaidList = true)
         {
-            return await _serviceOrderRepo.GetAllServiceOrderForStaff();
+            return await _serviceOrderRepo.GetServiceOrderListForStaff(date, isUnPaidList);
         }
 
         public async Task<bool> PaidServiceOrder(string ServiceOrderId)
         {
             return await _serviceOrderRepo.UpdateServiceOrderStatus(ServiceOrderId);
         }
+
+        public async Task<IEnumerable<GetAllServiceOrderForStaff>> getAllServiceOrderForStaff()
+        {
+            return await _serviceOrderRepo.getAllServiceOrderForStaff();
+        }
+
     }
 }

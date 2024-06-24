@@ -44,6 +44,7 @@ builder.Services.AddScoped<IMedicalRecordRepository, MedicalRecordRepository>();
 builder.Services.AddScoped<IAdmissionRecordRepository, AdmissionRecordRepository>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IBookingPaymentRepository, BookingPaymentRepository>();
+builder.Services.AddScoped<IServiceOrderDetailRepository, ServiceOrderDetailRepository>();
 #endregion
 
 #region Services
@@ -64,6 +65,7 @@ builder.Services.AddScoped<IVnPayService, VnPayService>();
 builder.Services.AddScoped<AppointmentService>();
 builder.Services.AddScoped<IBookingPaymentService, BookingPaymentService>();
 builder.Services.AddScoped<BookingPaymentService>();
+builder.Services.AddScoped<IServiceOrderDetailService, ServiceOrderDetailService>();
 // Auth services
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();

@@ -7,5 +7,6 @@
         public DateOnly OrderDate { get; set; }
         public string OrderStatus { get; set; }
         public string customerName { get; set; }
+        public string customerPhone { get; set; }
     }
 }

@@ -6,5 +6,6 @@ namespace PetHealthcare.Server.Repositories.Interfaces
     {
         Task<IEnumerable<Cage>> GetCages(int Id);
         Task<Cage?> GetCageByID(int Id);
+        Task DischargePet(string petId);
     }
 }

@@ -162,4 +162,4 @@ function UserAppointments() {
     );
 }
 
-export default UserAppointments;;;;;
+export default UserAppointments;

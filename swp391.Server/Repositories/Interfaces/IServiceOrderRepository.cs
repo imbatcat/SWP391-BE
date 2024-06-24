@@ -7,7 +7,8 @@ namespace PetHealthcare.Server.Repositories.Interfaces
     {
         Task CreateServiceOrder(ServiceOrderDTO order);
         Task UpdateServiceOrder(string ServiceOrderId, List<int> ServiceId);
-        Task<IEnumerable<GetAllServiceOrderForStaff>> GetAllServiceOrderForStaff();
+        Task<IEnumerable<GetAllServiceOrderForStaff>> GetServiceOrderListForStaff(DateOnly date, bool isUnpaidList);
         Task<bool> UpdateServiceOrderStatus(string serviceOrderId);
-    }
+        Task<IEnumerable<GetAllServiceOrderForStaff>> getAllServiceOrderForStaff();
+     }
 }
