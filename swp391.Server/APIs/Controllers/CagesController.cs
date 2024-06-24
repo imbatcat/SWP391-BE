@@ -57,14 +57,14 @@ namespace PetHealthcare.Server.APIs.Controllers
 
             return CreatedAtAction(nameof(Post), newCage.GetHashCode(), newCage);
         }
-        
+
         //PUT: Update Pet Condition
         [HttpPut("/api/Cage/UpdatePetCondition/{petId}")]
-        public async Task UpdateCondition([FromRoute]string petId,[FromBody] UpdatePetConditionDTO updatePetConditionDTO)
+        public async Task UpdateCondition([FromRoute] string petId, [FromBody] UpdatePetConditionDTO updatePetConditionDTO)
         {
             await _context.UpdateCondition(petId, updatePetConditionDTO);
         }
-        
+
         // PUT api/<CagesController>/5
         [HttpPut("{id}")]
         [Authorize(Roles = "Staff,Admin")]

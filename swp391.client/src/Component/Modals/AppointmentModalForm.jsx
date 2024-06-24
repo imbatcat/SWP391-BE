@@ -74,7 +74,7 @@ function AppointmentForm({ toggleOpen }) {
 
     const addAppointment = async () => {
         console.log(formData);
-        const fetchPromise = fetch('https://localhost:7206/api/VNPayAPI', {
+        const fetchPromise = fetch('', {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json'
@@ -186,7 +186,6 @@ function AppointmentForm({ toggleOpen }) {
                             </select>
                         </MDBCol>
                     </MDBRow>
-
                     <MDBBtn type='submit' outline color='dark' className='mb-4' block>
                         Submit
                     </MDBBtn>
