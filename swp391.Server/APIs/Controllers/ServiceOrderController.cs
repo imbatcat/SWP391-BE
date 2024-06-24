@@ -17,18 +17,24 @@ namespace PetHealthcare.Server.APIs.Controllers
             this._serviceOrderService = _serviceOrder;
             this._healthService = _healthService;
         }
+
+        //----------------------------------------------
         [HttpGet("Staff")]
         [Authorize(Roles = "Staff, Admin")]
         public async Task<IEnumerable<GetAllServiceOrderForStaff>> getServiceOrderListForStaff(DateOnly date,bool isUnPaidList = true)
         {
             return await _serviceOrderService.getServiceOrderListForStaff(date, isUnPaidList);
         }
+
+        //----------------------------------------------
         [HttpGet("Staff/getAll")]
         [Authorize(Roles = "Staff, Admin")]
         public async Task<IEnumerable<GetAllServiceOrderForStaff>> getAllServiceOrderForStaff()
         {
             return await _serviceOrderService.getAllServiceOrderForStaff();
         }
+
+        //----------------------------------------------
         [HttpPost]
         public async Task<IActionResult> createServiceOrder([FromBody] ServiceOrderDTO serviceOrderDTO)
         {
@@ -46,6 +52,8 @@ namespace PetHealthcare.Server.APIs.Controllers
             await _serviceOrderService.CreateServiceOrder(serviceOrderDTO);
             return Ok();
         }
+
+        //----------------------------------------------
         [HttpPut("staff/PayServiceOrder/{serviceOrderId}")]
         [Authorize(Roles = "Admin, Staff")]
         public async Task<IActionResult> PaidServiceOrder([FromRoute] string serviceOrderId)
@@ -57,6 +65,8 @@ namespace PetHealthcare.Server.APIs.Controllers
             }
             return BadRequest(new { message = "Paid failed" });
         }
+
+        //----------------------------------------------
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateServiceOrder(string id, [FromBody] List<int> serviceIdList)
         {

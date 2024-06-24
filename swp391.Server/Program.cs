@@ -13,7 +13,7 @@ using PetHealthcare.Server.Services.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var config = builder.Configuration;
-const string DataSrc = "MSI", Password = "123456";
+const string DataSrc = "LAPTOP-8QVR89KA\\SQLEXPRESS02", Password = "12345";
 
 
 // Add services to the container.
@@ -44,6 +44,7 @@ builder.Services.AddScoped<IMedicalRecordRepository, MedicalRecordRepository>();
 builder.Services.AddScoped<IAdmissionRecordRepository, AdmissionRecordRepository>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IBookingPaymentRepository, BookingPaymentRepository>();
+builder.Services.AddScoped<IServiceOrderDetailRepository, ServiceOrderDetailRepository>();
 #endregion
 
 #region Services
@@ -64,6 +65,7 @@ builder.Services.AddScoped<IVnPayService, VnPayService>();
 builder.Services.AddScoped<AppointmentService>();
 builder.Services.AddScoped<IBookingPaymentService, BookingPaymentService>();
 builder.Services.AddScoped<BookingPaymentService>();
+builder.Services.AddScoped<IServiceOrderDetailService, ServiceOrderDetailService>();
 // Auth services
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
