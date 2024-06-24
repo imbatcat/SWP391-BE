@@ -180,21 +180,9 @@ namespace PetHealthcare.Server.APIs.Controllers
         //}
         [HttpGet("AppointmetList/VetAppointment/{vetId}")]
         [Authorize(Roles = "Admin,Vet")]
-        public async Task<ActionResult<IEnumerable<VetAppointment>>> GetVetAppointmentOfDate([FromRoute] string vetId, int timeSlot, DateOnly date, bool isGetAll = true)
+        public async Task<ActionResult<IEnumerable<VetAppointment>>> GetAllVetAppointment([FromRoute] string vetId)
         {
-            if (isGetAll)
-            {
-                timeSlot = 0;
-            }
-            if (await _appointment.GetAccountById(vetId) is null)
-            {
-                return NotFound(new { message = "Can't find that VetId" });
-            }
-            if (date.CompareTo(new DateOnly(1, 1, 1)) == 0)
-            {
-                date = DateOnly.FromDateTime(DateTime.Today);
-            }
-            var appointmentList = await _appointment.ViewVetAppointmentList(vetId, timeSlot, date);
+            var appointmentList = await _appointment.ViewVetAppointmentList(vetId);
             return Ok(appointmentList);
         }
 

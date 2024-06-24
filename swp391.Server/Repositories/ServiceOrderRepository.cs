@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using NanoidDotNet;
 using PetHealthcare.Server.Core.DTOS.ServiceOrderDTOs;
 using PetHealthcare.Server.Models;
@@ -200,5 +201,25 @@ namespace PetHealthcare.Server.Repositories
             return ServiceOrderForStaff;
         }
 
+        public async Task<ServiceOrderInfor> getServiceOrderInforByServiceId(string serviceOrderId)
+        {
+            ServiceOrder? serviceOrder = await context.ServiceOrders.Include("MedicalRecord.Appointment.Account").Include("MedicalRecord.Pet").FirstOrDefaultAsync(o => o.ServiceOrderId.Equals(serviceOrderId));
+            string PetGender = "Female";
+            if (serviceOrder.MedicalRecord.Pet.IsMale)
+            {
+                PetGender = "Male";
+            }
+            ServiceOrderInfor serviceOrderInfor = new ServiceOrderInfor 
+            {
+                ServiceOrderId = serviceOrderId,
+                CreatedDate = serviceOrder.OrderDate,
+                diagnosis = serviceOrder.MedicalRecord.Diagnosis,
+                OwnerName = serviceOrder.MedicalRecord.Appointment.Account.FullName,
+                PetAge = DateOnly.FromDateTime(DateTime.Today).Year - serviceOrder.MedicalRecord.Pet.PetAge.Year,
+                PetGender = PetGender,
+                PetName = serviceOrder.MedicalRecord.Pet.PetName,
+            };
+            return serviceOrderInfor;
+        }
     }
 }

@@ -67,5 +67,9 @@ namespace PetHealthcare.Server.Services
             return await _serviceOrderRepo.getAllServiceOrderForStaff();
         }
 
+        public async Task<ServiceOrderInfor> getServiceOrderInforByServiceId(string serviceOrderId)
+        {
+            return await _serviceOrderRepo.getServiceOrderInforByServiceId(serviceOrderId);
+        }
     }
 }

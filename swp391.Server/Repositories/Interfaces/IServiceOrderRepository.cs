@@ -10,5 +10,6 @@ namespace PetHealthcare.Server.Repositories.Interfaces
         Task<IEnumerable<GetAllServiceOrderForStaff>> GetServiceOrderListForStaff(DateOnly date, bool isUnpaidList);
         Task<bool> UpdateServiceOrderStatus(string serviceOrderId);
         Task<IEnumerable<GetAllServiceOrderForStaff>> getAllServiceOrderForStaff();
-     }
+        Task<ServiceOrderInfor> getServiceOrderInforByServiceId(string serviceOrderid);
+    }
 }
