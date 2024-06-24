@@ -75,6 +75,13 @@ namespace PetHealthcare.Server.APIs.Controllers
             return account;
         }
 
+        [HttpGet("ChooseVet/{date}&{timeslotId}")]
+        [Authorize(Roles = "Admin, Customer")]
+        public async Task<IEnumerable<VetListDTO>> chooseVet([FromRoute] DateOnly date, [FromRoute] int timeslotId)
+        {
+            return await _context.GetVetListToChoose(date, timeslotId);
+        }
+
         // change the information of the account
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -164,5 +171,6 @@ namespace PetHealthcare.Server.APIs.Controllers
 
             return NoContent();
         }
+
     }
 }

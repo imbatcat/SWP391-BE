@@ -22,10 +22,10 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         // GET: api/Services
-        [HttpGet]
-        public async Task<IEnumerable<GetAllAppointmentForAdminDTO>> GetAllAppointment()
+        [HttpGet("GetAll/{vetId}")]
+        public async Task<IEnumerable<GetAllAppointmentForAdminDTO>> GetAllAppointment([FromRoute] string vetId)
         {
-            return await _appointment.GetAllAppointment();
+            return await _appointment.GetAllAppointment(vetId);
         }
         //[HttpGet("Staff/AppointmentList/history")]
         //[Authorize(Roles = "Staff, Admin")]
@@ -178,13 +178,13 @@ namespace PetHealthcare.Server.APIs.Controllers
         //    IEnumerable<AppointmentListForVetDTO> appointmentList = await _appointment.ViewAppointmentListForVet(VetId, date);
         //    return Ok(appointmentList);
         //}
-        [HttpGet("AppointmetList/VetAppointment/{vetId}")]
-        [Authorize(Roles = "Admin,Vet")]
-        public async Task<ActionResult<IEnumerable<VetAppointment>>> GetAllVetAppointment([FromRoute] string vetId)
-        {
-            var appointmentList = await _appointment.ViewVetAppointmentList(vetId);
-            return Ok(appointmentList);
-        }
+        //[HttpGet("AppointmetList/VetAppointment/{vetId}")]
+        //[Authorize(Roles = "Admin,Vet")]
+        //public async Task<ActionResult<IEnumerable<VetAppointment>>> GetAllVetAppointment([FromRoute] string vetId)
+        //{
+        //    var appointmentList = await _appointment.ViewVetAppointmentList(vetId);
+        //    return Ok(appointmentList);
+        //}
 
         // Get list of active appointments by timeslot in a week
         //[Authorize(Roles = "Admin, Vet")]
@@ -255,12 +255,6 @@ namespace PetHealthcare.Server.APIs.Controllers
             return Ok(toCreateAppointment);
         }
 
-        //[HttpPost("staff/createAppointment")]
-        //[Authorize]
-        //public async Task<ActionResult<CreateAppointmentDTO>> StaffCreateAppointment([FromBody] CreateAppointmentDTO toCreateAppointment)
-        //{
-
-        //}
         [HttpPost("Checkin/{appointmentId}")]
         public async Task<IActionResult> CheckInCustomer(string appointmentId) //api for customer to checkin for the customer
         {

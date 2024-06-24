@@ -1,6 +1,7 @@
 ﻿using PetHealthcare.Server.Core.DTOS;
 using PetHealthcare.Server.Models;
 using System.Linq.Expressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PetHealthcare.Server.Services.Interfaces
 {
@@ -18,5 +19,7 @@ namespace PetHealthcare.Server.Services.Interfaces
 
         Task CreateInternalUser(InternalAccountDTO dto, string password);
         string GenerateId(bool isVet);
+
+        Task<IEnumerable<VetListDTO>> GetVetListToChoose(DateOnly date, int timeslotId);
     }
 }
