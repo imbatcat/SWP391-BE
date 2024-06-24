@@ -52,5 +52,33 @@ namespace PetHealthcare.Server.Repositories
                 await SaveChanges();
             }
         }
+
+        public async Task DischargePet(string petId)
+        {
+            var admissionRecord = await GetByCondition(ad => ad.PetId == petId);
+            if (admissionRecord != null)
+            {
+                if (admissionRecord.IsDischarged == false)
+                {
+                    _context.Entry(admissionRecord).State = EntityState.Modified;
+                    admissionRecord.IsDischarged = true;
+                    await SaveChanges();
+                }
+            }
+        }
+
+        public async Task UpdateCondition(string petId, string condition)
+        {
+            var admissionRecord = await GetByCondition(ad => ad.PetId == petId);
+            if (admissionRecord != null)
+            {
+                if (admissionRecord.IsDischarged == false)
+                {
+                    _context.Entry(admissionRecord).State = EntityState.Modified;
+                    admissionRecord.PetCurrentCondition=condition;
+                    await SaveChanges();
+                }
+            }
+        }
     }
 }
