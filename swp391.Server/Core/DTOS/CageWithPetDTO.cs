@@ -2,9 +2,9 @@
 {
     public class CageWithPetDTO
     {
-        public int CageId {  get; set; }
-        public bool IsOccupied {  get; set; }
-        public string? ImgUrl {  get; set; }
+        public int CageId { get; set; }
+        public bool IsOccupied { get; set; }
+        public string? ImgUrl { get; set; }
         public string? PetName { get; set; }
         public string? PetBreed { get; set; }
         public DateOnly? PetAge { get; set; }

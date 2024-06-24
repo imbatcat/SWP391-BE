@@ -33,37 +33,38 @@ function SelectModal({ toggleOpen }) {
         return (<AppointmentModal></AppointmentModal>);
     }
     return (
-        <CheckAuth>        <MDBModalDialog>
-            <MDBModalContent>
-                <MDBModalHeader>
-                    <MDBModalTitle>Select which to create</MDBModalTitle>
-                    <MDBBtn className='btn-close' color='none' onClick={toggleOpen}></MDBBtn>
-                </MDBModalHeader>
-                <MDBModalBody>
-                    <MDBContainer>
-                        <MDBRow>
-                            <MDBCol className='mb-5'>
-                                <MDBBtn onClick={choosePet} color='none'>
-                                    PET
-                                </MDBBtn>
-                            </MDBCol>
-                            <MDBCol className='mb-5'>
-                                <MDBBtn onClick={chooseApp} color='none'>
-                                    APPOINTMENT
-                                </MDBBtn>
-                            </MDBCol>
-                        </MDBRow>
-                    </MDBContainer>
-                </MDBModalBody>
+        <CheckAuth>
+            <MDBModalDialog>
+                <MDBModalContent>
+                    <MDBModalHeader>
+                        <MDBModalTitle style={{ fontSize: '24px' }}>Select which to create</MDBModalTitle>
+                        <MDBBtn className='btn-close' color='none' onClick={toggleOpen}></MDBBtn>
+                    </MDBModalHeader>
+                    <MDBModalBody>
+                        <MDBContainer>
+                            <MDBRow>
+                                <MDBCol className='mb-5'>
+                                    <MDBBtn onClick={choosePet} color='none'>
+                                        PET
+                                    </MDBBtn>
+                                </MDBCol>
+                                <MDBCol className='mb-5'>
+                                    <MDBBtn onClick={chooseApp} color='none'>
+                                        APPOINTMENT
+                                    </MDBBtn>
+                                </MDBCol>
+                            </MDBRow>
+                        </MDBContainer>
+                    </MDBModalBody>
 
-                <MDBModalFooter>
-                    <MDBBtn color='secondary' onClick={toggleOpen}>
-                        Close
-                    </MDBBtn>
-                </MDBModalFooter>
-            </MDBModalContent>
-        </MDBModalDialog>
-        </CheckAuth>
+                    <MDBModalFooter>
+                        <MDBBtn color='secondary' onClick={toggleOpen}>
+                            Close
+                        </MDBBtn>
+                    </MDBModalFooter>
+                </MDBModalContent>
+            </MDBModalDialog>
+        </CheckAuth >
 
     );
 }

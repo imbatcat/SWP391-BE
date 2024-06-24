@@ -17,10 +17,9 @@ namespace PetHealthcare.Server.Core.Helpers
                  $"Connect Timeout=10;Encrypt=True;Trust Server Certificate=True;" +
                  $"Application Intent=ReadWrite;Multi Subnet Failover=False");
 
-            using (var context = new ApplicationDbContext(optionsBuilder.Options))
-            {
-                context.Database.EnsureCreated();
-                var roles = new List<(string name, string normalizedName)>
+            using var context = new ApplicationDbContext(optionsBuilder.Options);
+            context.Database.EnsureCreated();
+            var roles = new List<(string name, string normalizedName)>
                 {
                     ("Admin", "ADMIN"),
                     ("Staff", "STAFF"),
@@ -29,22 +28,21 @@ namespace PetHealthcare.Server.Core.Helpers
                     //("Guest", "GUEST")
                 };
 
-                foreach (var (name, normalizedName) in roles)
+            foreach (var (name, normalizedName) in roles)
+            {
+                var roleStore = new RoleStore<IdentityRole>(context);
+
+                if (!context.Roles.Any(r => r.Name == name))
                 {
-                    var roleStore = new RoleStore<IdentityRole>(context);
-
-                    if (!context.Roles.Any(r => r.Name == name))
+                    await roleStore.CreateAsync(new ApplicationRole
                     {
-                        await roleStore.CreateAsync(new ApplicationRole
-                        {
-                            Name = name,
-                            NormalizedName = normalizedName
-                        });
-                    }
+                        Name = name,
+                        NormalizedName = normalizedName
+                    });
                 }
-
-                await context.SaveChangesAsync();
             }
+
+            await context.SaveChangesAsync();
 
         }
     }

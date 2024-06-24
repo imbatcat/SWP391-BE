@@ -220,6 +220,7 @@ namespace PetHealthcare.Server.Services
             {
                 throw new Exception("The history list is empty");
             }
+            resAppListForCustomers = resAppListForCustomers.OrderBy(a => a.AppointmentDate).ToList();
             return resAppListForCustomers;
         }
 

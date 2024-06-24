@@ -61,12 +61,14 @@ namespace PetHealthcare.Server.APIs.Controllers
                     return BadRequest(new { message = "serviceIdList is empty" });
                 }
                 await _serviceOrderService.UpdateServiceOrder(id, serviceIdList);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
-                if(ex.Message.Equals("Can't update paid ServiceOrder"))
+                if (ex.Message.Equals("Can't update paid ServiceOrder"))
                 {
                     return BadRequest("Can't update paid ServiceOrder");
-                } else if (ex.Message.Equals("Can't find that Service Order Id"))
+                }
+                else if (ex.Message.Equals("Can't find that Service Order Id"))
                 {
                     return NotFound("Can't find that Service Order Id");
                 }

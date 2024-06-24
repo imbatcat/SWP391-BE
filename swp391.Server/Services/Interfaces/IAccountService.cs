@@ -11,12 +11,12 @@ namespace PetHealthcare.Server.Services.Interfaces
         Task<Account?> GetAccountByRole(int roleId, string id);
         Task<Account?> GetAccountByCondition(Expression<Func<Account, bool>> expression);
         Task<Account?> CreateAccount(AccountDTO Account, bool isGoogle);
-        Task UpdateAccount(string id, AccountDTO Account);
+        Task UpdateAccount(string id, AccountUpdateDTO Account);
         Task DeleteAccount(Account Account);
         Task<bool> SetAccountIsDisabled(RequestAccountDisable account);
         Task<bool> Any(Expression<Func<Account, bool>> expression);
 
-        string GenerateId();
+        Task CreateInternalUser(InternalAccountDTO dto, string password);
+        string GenerateId(bool isVet);
     }
-
 }

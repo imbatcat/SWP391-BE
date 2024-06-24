@@ -55,6 +55,5 @@ namespace PetHealthcare.Server.Models
         [Required]
         public DateTime CreatedDate { get; set; } = DateTime.Now;
 
-
     }
 }

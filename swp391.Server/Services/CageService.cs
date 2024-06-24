@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PetHealthcare.Server.Core.DTOS;
+﻿using PetHealthcare.Server.Core.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
 using PetHealthcare.Server.Services.Interfaces;
@@ -12,11 +11,11 @@ namespace PetHealthcare.Server.Services
         private readonly ICageRepository _cageService;
         private readonly IAdmissionRecordRepository _admissionRecordRepository;
         private readonly IPetRepository _petRepository;
-        public CageService(ICageRepository cageService,IAdmissionRecordRepository admissionRecordRepository,IPetRepository petRepository)
+        public CageService(ICageRepository cageService, IAdmissionRecordRepository admissionRecordRepository, IPetRepository petRepository)
         {
             _cageService = cageService;
             _admissionRecordRepository = admissionRecordRepository;
-            _petRepository = petRepository;           
+            _petRepository = petRepository;
         }
 
         public async Task CreateCage(CageDTO Cage)
@@ -56,11 +55,11 @@ namespace PetHealthcare.Server.Services
             {
                 //check in admission record has this pet?
                 var cageHasPet = cageAdMissionList.FirstOrDefault(ad => ad.CageId == item.CageId);
-                if (  cageHasPet!= null)
+                if (cageHasPet != null)
                 {
                     if (cageHasPet.IsDischarged == false)
                     {
-                        var pet=await _petRepository.GetByCondition(p=>p.PetId==cageHasPet.PetId);
+                        var pet = await _petRepository.GetByCondition(p => p.PetId == cageHasPet.PetId);
                         cageWithPetDTOs.Add(new CageWithPetDTO
                         {
                             CageId = item.CageId,
@@ -72,7 +71,8 @@ namespace PetHealthcare.Server.Services
                             PetId=pet.PetId,
                         });
                     }
-                    else {
+                    else
+                    {
                         cageWithPetDTOs.Add(new CageWithPetDTO
                         {
                             CageId = item.CageId,
@@ -82,9 +82,9 @@ namespace PetHealthcare.Server.Services
                 }
                 else
                 {
-                    cageWithPetDTOs.Add(new CageWithPetDTO 
+                    cageWithPetDTOs.Add(new CageWithPetDTO
                     {
-                        CageId=item.CageId,
+                        CageId = item.CageId,
                         IsOccupied = false,
                     });
                 }

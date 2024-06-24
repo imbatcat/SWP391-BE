@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PetHealthcare.Server.Models;
+namespace PetHealthcare.Server.Models.VNPayModels;
 
 public class PaymentResponseModel
 {

@@ -123,12 +123,13 @@ function Login() {
                 navigate('/vet/WorkSchedule');
                 break;
             case 'Staff':
-                navigate('/');
+                navigate('/staff/cage-list');
                 break;
             case 'Customer':
                 navigate('/');
                 break;
         }
+
     };
     return (
         <MDBContainer className="my-5 d-10 justify-content-center">

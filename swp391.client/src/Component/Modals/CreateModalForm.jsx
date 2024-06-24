@@ -6,6 +6,7 @@ import {
     MDBRow
 } from 'mdb-react-ui-kit';
 import { useState } from 'react';
+import { useNavigate  } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 function CreateModalForm() {
@@ -16,8 +17,8 @@ function CreateModalForm() {
     const [email, setEmail] = useState('');
     const [dateOfBirth, setDateOfBirth] = useState('');
     const [password, setPassword] = useState('');
-    const [roleid, setRoleId] = useState();
     const [gender, setGender] = useState();
+    const navigate = useNavigate();
 
     const handleFirstNameChange = (e) => setFirstname(e.target.value);
     const handleLastNameChange = (e) => setLastname(e.target.value);
@@ -29,9 +30,7 @@ function CreateModalForm() {
     const handleGenderChange = (e) => {
         e.target.value == 'Male' ? setGender(true) : setGender(false);
     }
-    const handleRoleidChange = (e) => {
-        e.target.value == 'Veternary' ? setRoleId('3') : setRoleId('4');
-    }
+
     async function register() {
         try {
             const response = await fetch('https://localhost:7206/api/ApplicationAuth/register', {
@@ -44,11 +43,11 @@ function CreateModalForm() {
                     {
                         "userName": username,
                         "password": password,
-                        "fullName": lastname + firstname,
+                        "fullName": `${lastname} ${firstname}`,
                         "email": email,
                         "phoneNumber": phonenumber,
                         "isMale": gender,
-                        "roleId": roleid,
+                        "roleId": '1',
                         "dateOfBirth": dateOfBirth
                     }
                 ) // body data type must match "Content-Type" header
@@ -56,9 +55,8 @@ function CreateModalForm() {
             if (!response.ok) {
                 throw new Error(response.message);
             }
-            toast.info("Check your email to activate your account");
-            navigate('/');
             console.log('ok');
+            navigate('/admin/vets')
         } catch (error) {
             toast.error('Login failed!');
             console.error(error.message);
@@ -169,28 +167,6 @@ function CreateModalForm() {
                     required
                     onChange={handlePhonenumberChange} // Assuming you want to reuse the username handler for phone number
                 />
-            </MDBCol>
-        </MDBRow>
-        <MDBRow>
-            <MDBCol md='6'></MDBCol>
-            <MDBCol md='6'>
-            <h6 className="fw-bold">Role: </h6>
-         <MDBRadio
-            name='inlineRadio1'
-            id='inlineRadio3'
-            value='User'
-            label='User'
-            inline
-            onChange={handleRoleidChange}
-         />
-         <MDBRadio
-             name='inlineRadio1'
-             id='inlineRadio4'
-             value='Veternary'
-             label='Veternary'
-             inline
-             onChange={handleRoleidChange}
-         />
             </MDBCol>
         </MDBRow>
         <MDBBtn className='mb-4' color='danger' size='lg'><a style={{ color: 'black' }}

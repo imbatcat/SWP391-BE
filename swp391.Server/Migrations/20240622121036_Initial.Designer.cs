@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace PetHealthcare.Server.Migrations
 {
     [DbContext(typeof(PetHealthcareDbContext))]
-    [Migration("20240621161536_Initial")]
+    [Migration("20240622121036_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -164,6 +164,9 @@ namespace PetHealthcare.Server.Migrations
 
                     b.Property<TimeOnly>("CheckinTime")
                         .HasColumnType("time");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsCancel")
                         .HasColumnType("bit");
@@ -336,6 +339,9 @@ namespace PetHealthcare.Server.Migrations
                     b.Property<string>("AccountId")
                         .IsRequired()
                         .HasColumnType("char(11)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasMaxLength(100)

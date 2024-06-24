@@ -1,4 +1,4 @@
-﻿using PetHealthcare.Server.Models;
+﻿using PetHealthcare.Server.Models.VNPayModels;
 using System.Globalization;
 using System.Net;
 using System.Net.Sockets;

@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using PetHealthcare.Server.Core.Constant;
+using PetHealthcare.Server.Core.DTOS;
 using PetHealthcare.Server.Core.DTOS.AppointmentDTOs;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Services;
+using PetHealthcare.Server.Services.Interfaces;
 using System.Diagnostics;
 using System.Text.Json;
 namespace PetHealthcare.Server.APIs.Controllers
@@ -29,21 +31,20 @@ namespace PetHealthcare.Server.APIs.Controllers
         private readonly IVnPayService _vnPayService;
         // GET: VNPayController
         [HttpPost]
-        public IActionResult CreatePaymentUrl([FromBody] CreateAppointmentDTO model)
+        public ActionResult<VNPayResponseUrl> CreatePaymentUrl([FromBody] CreateAppointmentDTO model)
         {
             CreateAppointmentDTO appointmentDTO = model;
             TempData["AppointmentDTO"] = JsonSerializer.Serialize(appointmentDTO);
             var url = _vnPayService.CreatePaymentUrl(model, HttpContext);
 
-
-            return Ok(url);
+            return Ok(new VNPayResponseUrl { Url = url });
         }
 
         [HttpPost("PaymentCallback")]
         public async Task<IActionResult> PaymentCallback([FromForm] IFormCollection form)
         {
-            var queury = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(string.Join("&", form.Select(x => $"{x.Key}={x.Value}")));
-            var response = _vnPayService.PaymentExecute(new QueryCollection(queury));
+            var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(string.Join("&", form.Select(x => $"{x.Key}={x.Value}")));
+            var response = _vnPayService.PaymentExecute(new QueryCollection(query));
             CreateAppointmentDTO appointmentDTO = new CreateAppointmentDTO();
             try
             {
@@ -73,7 +74,6 @@ namespace PetHealthcare.Server.APIs.Controllers
                             AppointmentId = appointmentId,
                         };
                         context.BookingPayments.Add(bookingPayment);
-
                     }
                     else
                     {

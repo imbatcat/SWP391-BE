@@ -13,7 +13,7 @@ export const SideNavData = [
     {
         title: 'Admin',
         path: '/admin/admins',
-        icon: <IoIcons.IoIosCode />,
+        icon: <IoIcons.IoIosCodeDownload />,
         cName: 'nav-text'
     },
     {
@@ -32,6 +32,12 @@ export const SideNavData = [
         title: 'Veternary',
         path: '/admin/vets',
         icon: <IoIcons.IoIosMedical />,
+        cName: 'nav-text'
+    },
+    {
+        title: 'Staff',
+        path: '/admin/staff',
+        icon: <IoIcons.IoIosPerson />,
         cName: 'nav-text'
     },
     {

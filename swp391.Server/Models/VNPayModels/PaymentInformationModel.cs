@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PetHealthcare.Server.Models;
+namespace PetHealthcare.Server.Models.VNPayModels;
 
 [NotMapped]
 public class PaymentInformationModel

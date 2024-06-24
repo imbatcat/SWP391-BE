@@ -29,7 +29,7 @@ namespace PetHealthcare.Server.Services
                 CageId = Convert.ToInt32(entity.CageId),
                 PetId = entity.PetId,
                 MedicalRecordId = entity.MedicalRecordId,
-                VeterinarianAccountId = entity.VeterianrianId,
+                VeterinarianAccountId = entity.VeterinarianId,
             };
             await _admissionRecordService.Create(obj);
         }

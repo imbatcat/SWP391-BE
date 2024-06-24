@@ -44,7 +44,7 @@ function UserAppointments() {
                 credentials: 'include'
             });
             if (!response.ok && response.status != 404) {
-                throw new Error("Error fetching data");
+                throw new Error('Error fetching data');
             }
             else if (response.status == 404) {
                 setAppointmentList(null);
@@ -55,7 +55,7 @@ function UserAppointments() {
                 console.log(userData);
             }
         } catch (error) {
-            toast.error('Error getting user details!');
+            toast.error(error.message);
             console.error(error.message);
         } finally {
             setIsLoading(false);
@@ -82,7 +82,7 @@ function UserAppointments() {
                         <MDBRow>
                             <MDBCol lg="4">
                                 <UserSidebar></UserSidebar>
-                            </MDBCol >
+                            </MDBCol>
 
                             <MDBCol>
                                 <MDBCard className="mb-4 mb-lg-0">

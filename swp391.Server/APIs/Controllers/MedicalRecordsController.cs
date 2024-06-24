@@ -22,7 +22,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // GET: api/MedicalRecords
         [HttpGet("")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Vet")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<MedicalRecord>))]
         public async Task<IEnumerable<MedicalRecord>> GetMedicalRecords()
         {
@@ -55,7 +55,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         //PUT: api/MedicalRecords/5
         //To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        [Authorize(Roles = "Vet, Staff")]
+        [Authorize(Roles = "Vet, Staff, Admin")]
         public async Task<IActionResult> PutMedicalRecord(string id, MedicalRecordDTO medicalRecord)
         {
             await _context.UpdateMedicalRecord(id, medicalRecord);
@@ -65,7 +65,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         // POST: api/MedicalRecords
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [Authorize(Roles = "Vet, Staff, Customer")]
+        [Authorize(Roles = "Vet, Staff, Customer, Admin")]
         public async Task<ActionResult<MedicalRecord>> PostMedicalRecord([FromBody] MedicalRecordDTO medicalRecordDTO)
         {
             await _context.CreateMedicalRecord(medicalRecordDTO);

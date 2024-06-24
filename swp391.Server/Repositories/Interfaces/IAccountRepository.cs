@@ -10,6 +10,8 @@ namespace PetHealthcare.Server.Repositories.Interfaces
         Task<Account?> GetAccountByRole(int roleId, string id);
         Task<bool> SetAccountIsDisabled(RequestAccountDisable account);
         Task DeleteAccount(Account account);
+
+        Task CreateVet(Veterinarian veterinarian);
         Task<bool> Any(Expression<Func<Account, bool>> predicate);
     }
 }

@@ -29,7 +29,6 @@ namespace PetHealthcare.Server.Repositories
         public async Task CreateServiceOrder(ServiceOrderDTO order)
         {
             string SoId = GenerateId();
-            double priceSum = 0;
             try
             {
 
