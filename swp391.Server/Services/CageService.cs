@@ -64,10 +64,11 @@ namespace PetHealthcare.Server.Services
                         {
                             CageId = item.CageId,
                             IsOccupied = true,
-                            ImgUrl = pet.ImgUrl,
-                            PetName = pet.PetName,
-                            PetAge = pet.PetAge,
-                            PetBreed = pet.PetBreed
+                            ImgUrl=pet.ImgUrl,
+                            PetName=pet.PetName,
+                            PetAge=pet.PetAge,
+                            PetBreed = pet.PetBreed,
+                            PetId=pet.PetId,
                         });
                     }
                     else
@@ -99,6 +100,14 @@ namespace PetHealthcare.Server.Services
                 IsOccupied = Cage.IsOccupied,
             };
             await _cageService.Update(_cage);
+        }    
+        public async Task DischargePet(string petId)
+        {
+            await _admissionRecordRepository.DischargePet(petId);
+        }
+        public async Task UpdateCondition(string petId, string condition)
+        {
+            await _admissionRecordRepository.UpdateCondition(petId, condition);
         }
     }
 }

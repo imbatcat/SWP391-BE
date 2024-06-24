@@ -8,6 +8,7 @@
         public string? PetName { get; set; }
         public string? PetBreed { get; set; }
         public DateOnly? PetAge { get; set; }
+        public string? PetId {  get; set; }
 
     }
 }
