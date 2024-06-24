@@ -54,7 +54,7 @@ const getTimeSlotKey = (timeSlotValue) => {
     return parseInt(Object.keys(timeSlotMapping).find(key => timeSlotMapping[key] === timeSlotValue), 10);
 };
 function WorkSchedule() {
-    const [user] = useUser();
+    const [user, setUser] = useUser();
     const [selectedDisplayDates, setSelectedDisplayDates] = useState([]);
     const [selectedAPIDates, setSelectedAPIDates] = useState([]);
     const [appointments, setAppointments] = useState([]);
@@ -77,11 +77,11 @@ function WorkSchedule() {
 
     async function fetchData(vetId, timeSlot, date, isGetAll = true) {
         try {
-            const url = new URL(`https://localhost:7206/api/Appointment/AppointmetList/VetAppointment/${vetId}`);
-            if (timeSlot) url.searchParams.append('timeSlot', timeSlot);
-            if (date) url.searchParams.append('date', date);
-            url.searchParams.append('isGetAll', isGetAll);
-    
+            const url = new URL(`https://localhost:7206/api/Appointment/AppointmetList/ViewAppointmentForVet?VetId=${user.id}`);
+            //if (timeSlot) url.searchParams.append('timeSlot', timeSlot);
+            //if (date) url.searchParams.append('date', date);
+            //url.searchParams.append('isGetAll', isGetAll);
+
             // Log the constructed URL for debugging
             console.log('Fetching data from URL:', url.toString());
     

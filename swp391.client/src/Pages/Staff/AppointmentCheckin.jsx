@@ -1,13 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
     MDBBadge, MDBBtn, MDBTable, MDBTableBody, MDBTableHead
 }
     from 'mdb-react-ui-kit';
 import SideNavForStaff from '../../Component/SideNavForStaff/SideNavForStaff';
+import YearWeekSelector from '../../Component/YearWeekSelector/YearWeekSelector';
+import { useUser } from '../../Context/UserContext';
+import FormatDateForDisplay from '../../Helpers/FormatDateForDisplay';
+import FormatStartDateForDisplay from '../../Helpers/FormatDateForDisplay';
+import getStartDateOfWeek from '../../Helpers/getStartDateOfWeek';
+import formatDateForApi from '../../Helpers/formatDateForAPI';
+import FormatDateForAPI from '../../Helpers/formatDateForAPI';
 
 export default function AppointmentCheckin() {
     const [appointmentList, setAppointmentList] = useState([]);
     const [searchInput, setSearchInput] = useState();
+    const [selectedDisplayDates, setSelectedDisplayDates] = useState([]);
+    const [selectedAPIDates, setSelectedAPIDates] = useState([]);
 
     const handleSearchInputChange = () => {
     };
@@ -15,9 +24,24 @@ export default function AppointmentCheckin() {
     useEffect(() => {
 
     }, []);
+
+    const handleYearWeekChange = useCallback((year, week) => {
+        const startDate = getStartDateOfWeek(week, year);
+        const displayDates = [];
+        const apiDates = [];
+        for (let i = 0; i < 7; i++) {
+            const date = new Date(startDate);
+            date.setDate(date.getDate() + i);
+            displayDates.push(FormatDateForDisplay(date));
+            apiDates.push(FormatDateForAPI(date));
+        }
+        setSelectedDisplayDates(displayDates);
+        setSelectedAPIDates(apiDates);
+    }, []);
     return (
         <>
             <SideNavForStaff searchInput={searchInput} handleSearchInputChange={handleSearchInputChange} />
+            <YearWeekSelector onYearWeekChange={handleYearWeekChange}></YearWeekSelector>
             <MDBTable align='middle'>
                 <MDBTableHead>
                     <tr style={{ textAlign: 'center' }}>

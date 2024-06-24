@@ -43,7 +43,7 @@ namespace PetHealthcare.Server.APIs.Controllers
             return cage;
         }
 
-        [HttpGet("/api/Cage/PetDetail")]
+        [HttpGet("/api/Cages/PetDetail")]
         public async Task<IEnumerable<CageWithPetDTO>> GetAllCagesWithPet()
         {
             return await _context.GetAllCagesWithPet();
@@ -57,7 +57,11 @@ namespace PetHealthcare.Server.APIs.Controllers
 
             return CreatedAtAction(nameof(Post), newCage.GetHashCode(), newCage);
         }
-
+        [HttpPost("/api/Cage/PetDetail/{petId}")]
+        public async Task UpdateCondition([FromRoute]string petId,[FromBody] string condition)
+        {
+            await _context.UpdateCondition(petId, condition);
+        }
         // PUT api/<CagesController>/5
         [HttpPut("{id}")]
         [Authorize(Roles = "Staff,Admin")]
@@ -77,6 +81,11 @@ namespace PetHealthcare.Server.APIs.Controllers
         public void Delete(int id)
         {
 
+        }
+        [HttpDelete("/api/DischargePet/{petId}")]
+        public async Task DischargePet(string petId)
+        {
+            await _context.DischargePet(petId);
         }
     }
 }

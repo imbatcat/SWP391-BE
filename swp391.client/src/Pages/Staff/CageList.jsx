@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import {
-    MDBBadge, MDBBtn, MDBTable, MDBTableBody, MDBTableHead
+    MDBBadge, MDBBtn, MDBTable, MDBTableBody, MDBTableHead, MDBRow, MDBCol
 }
     from 'mdb-react-ui-kit';
 import SideNavForStaff from '../../Component/SideNavForStaff/SideNavForStaff';
@@ -17,7 +17,7 @@ function CageList() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const appResponse = await fetch('https://localhost:7206/api/Cages', {
+                const appResponse = await fetch('https://localhost:7206/api/Cages/PetDetail', {
                     method: 'GET',
                     credentials: 'include',
                 });
@@ -25,6 +25,7 @@ function CageList() {
                     throw new Error("Error fetching pet data");
                 }
                 const data = await appResponse.json();
+                console.log(data.imgUrl);
                 setCageList(data);
 
             } catch (error) {
@@ -63,7 +64,6 @@ function CageList() {
                         <th scope='col'>Id</th>
                         <th scope='col'>Pet Name</th>
                         <th scope='col'>Status</th>
-                        <th scope='col'></th>
                         <th scope='col'>Actions</th>
                     </tr>
                 </MDBTableHead>
@@ -73,7 +73,7 @@ function CageList() {
                             <td>
                                 <div className='d-flex align-items-center'>
                                     <img
-                                        src='https://mdbootstrap.com/img/new/avatars/8.jpg'
+                                        src={(cage.imgUrl && URL.createObjectURL(cage.imgUrl)) || 'https://mdbootstrap.com/img/new/avatars/8.jpg'}
                                         alt=''
                                         style={{ width: '45px', height: '45px' }}
                                         className='rounded-circle'
@@ -81,6 +81,34 @@ function CageList() {
                                     <div className='ms-3'>
                                     </div>
                                 </div>
+                            </td>
+                            <td>
+                                <div>
+                                    {cage.petName || 'N / A'}
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    {cage.isOccupied ? (
+                                        <div>
+                                            Occupied
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            Unoccupied
+                                        </div>
+                                    )}
+                                </div>
+                            </td>
+                            <td>
+                                <MDBRow className="justify-content-center">
+                                    <MDBCol size='3'>
+                                        <MDBBtn>Discharge</MDBBtn>
+                                    </MDBCol>
+                                    <MDBCol size='3'>
+                                        <MDBBtn>Update pet</MDBBtn>
+                                    </MDBCol>
+                                </MDBRow>
                             </td>
                         </tr>
                     ))

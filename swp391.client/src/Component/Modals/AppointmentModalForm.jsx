@@ -73,6 +73,7 @@ function AppointmentForm({ toggleOpen }) {
     }, []);
 
     const addAppointment = async () => {
+        console.log(formData);
         const fetchPromise = fetch('https://localhost:7206/api/VNPayAPI', {
             method: 'POST',
             headers: {
@@ -106,6 +107,7 @@ function AppointmentForm({ toggleOpen }) {
     }
     const handleChange = (e) => {
         const { name, value } = e.target;
+        //console.log(name, value);
         setFormData({
             ...formData,
             [name]: value
@@ -115,7 +117,12 @@ function AppointmentForm({ toggleOpen }) {
         e.preventDefault();
         addAppointment(formData);
     };
-    const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+    const tomorrow = () => {
+        const today = new Date(); // Get today's date in YYYY-MM-DD format
+        today.setDate(today.getDate() + 1);
+        return today.toISOString().split('T')[0];
+    };
+
     const maxDate = new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString().split('T')[0]; // One month from today
 
     return (
@@ -141,7 +148,7 @@ function AppointmentForm({ toggleOpen }) {
 
                     <MDBRow className='mb-4'>
                         <MDBCol>
-                            <select name="timeSlotId" value={formData.timeslotId} onChange={handleChange} data-mdb-select-init >
+                            <select name="timeSlotId" value={formData.timeSlotId} onChange={handleChange} data-mdb-select-init >
                                 <option value="" disabled>Choose your time</option>
                                 {timeSlotList.map((timeslot, index) => (
                                     <option key={index} value={timeslot.timeSlotId}>
@@ -160,7 +167,7 @@ function AppointmentForm({ toggleOpen }) {
 
                     <MDBRow className='mb-4'>
                         <MDBCol>
-                            <MDBInput id='appDate' name='appointmentDate' label='Appointment Date' type='date' min={today} max={maxDate} value={formData.appointmentDate} onChange={handleChange} />
+                            <MDBInput id='appDate' name='appointmentDate' label='Appointment Date' type='date' min={tomorrow()} max={maxDate} value={formData.appointmentDate} onChange={handleChange} />
                         </MDBCol>
                     </MDBRow>
 
