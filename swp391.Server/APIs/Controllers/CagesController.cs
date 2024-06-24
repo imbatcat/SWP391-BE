@@ -57,11 +57,14 @@ namespace PetHealthcare.Server.APIs.Controllers
 
             return CreatedAtAction(nameof(Post), newCage.GetHashCode(), newCage);
         }
-        [HttpPost("/api/Cage/PetDetail/{petId}")]
-        public async Task UpdateCondition([FromRoute]string petId,[FromBody] string condition)
+        
+        //PUT: Update Pet Condition
+        [HttpPut("/api/Cage/UpdatePetCondition/{petId}")]
+        public async Task UpdateCondition([FromRoute]string petId,[FromBody] UpdatePetConditionDTO updatePetConditionDTO)
         {
-            await _context.UpdateCondition(petId, condition);
+            await _context.UpdateCondition(petId, updatePetConditionDTO);
         }
+        
         // PUT api/<CagesController>/5
         [HttpPut("{id}")]
         [Authorize(Roles = "Staff,Admin")]
@@ -82,6 +85,8 @@ namespace PetHealthcare.Server.APIs.Controllers
         {
 
         }
+
+        //DELETE: change isDischarge = true.
         [HttpDelete("/api/DischargePet/{petId}")]
         public async Task DischargePet(string petId)
         {

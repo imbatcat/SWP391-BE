@@ -104,10 +104,11 @@ namespace PetHealthcare.Server.Services
         public async Task DischargePet(string petId)
         {
             await _admissionRecordRepository.DischargePet(petId);
+            await _cageService.DischargePet(petId);
         }
-        public async Task UpdateCondition(string petId, string condition)
+        public async Task UpdateCondition(string petId, UpdatePetConditionDTO updatePetConditionDTO)
         {
-            await _admissionRecordRepository.UpdateCondition(petId, condition);
+            await _admissionRecordRepository.UpdateCondition(petId, updatePetConditionDTO);
         }
     }
 }
