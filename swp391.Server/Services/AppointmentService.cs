@@ -318,13 +318,9 @@ namespace PetHealthcare.Server.Services
             return appointmentListForVetDTO;
         }
 
-        public async Task<IEnumerable<VetAppointment?>> ViewVetAppointmentList(string id, int timeSlot, DateOnly date)
+        public async Task<IEnumerable<VetAppointment?>> ViewVetAppointmentList(string id)
         {
-            IEnumerable<Appointment> appointmentList = await _appointmentRepository.GetVetAppointmentList(id, timeSlot, date);
-            if (appointmentList.Count() > 0)
-            {
-                appointmentList = appointmentList.OrderByDescending(a => a.IsCheckIn).ThenBy(a => a.CheckinTime);
-            }
+            IEnumerable<Appointment> appointmentList = await _appointmentRepository.GetVetAppointmentList(id);
             List<VetAppointment> vetAppointmentList = new List<VetAppointment>();
             foreach (Appointment appointment in appointmentList)
             {
@@ -340,8 +336,10 @@ namespace PetHealthcare.Server.Services
                     {
                         _status = "Haven't come";
                     }
+                    TimeOnly time = appointment.CheckinTime;
                     vetAppointmentList.Add(new VetAppointment
                     {
+                        
                         AppointmentId = appointment.AppointmentId,
                         OwnerName = appointment.Account.FullName,
                         PetName = appointment.Pet.PetName,
@@ -350,6 +348,9 @@ namespace PetHealthcare.Server.Services
                         AppointmentDate = appointment.AppointmentDate,
                         PhoneNumber = appointment.Account.PhoneNumber,
                         status = _status,
+                        AccountId = appointment.AccountId,
+                        PetId = appointment.PetId,
+                        CheckinTime = appointment.CheckinTime,
                         PetType = _petType,
                     });
                 }
