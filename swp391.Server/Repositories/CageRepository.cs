@@ -22,7 +22,6 @@ namespace PetHealthcare.Server.Repositories
         {
             context.Cages.Remove(entity);
         }
-
         public async Task<IEnumerable<Cage>> GetAll()
         {
             return await context.Cages.OrderBy(p => p.CageId).ToListAsync();
@@ -65,6 +64,19 @@ namespace PetHealthcare.Server.Repositories
                 await SaveChanges();
             }
         }
-
+        public async Task DischargePet(string petId)
+        {
+            var list = context.AdmissionRecords.ToList();
+            foreach (AdmissionRecord adRec in list)
+            {
+                if (adRec.PetId == petId)
+                {
+                    var cage = await GetByCondition(c => c.CageId == adRec.CageId);
+                    context.Entry(cage).State = EntityState.Modified;
+                    cage.IsOccupied = false;
+                    await SaveChanges();
+                }
+            }
+        }
     }
 }

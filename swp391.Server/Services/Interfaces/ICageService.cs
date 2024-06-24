@@ -14,6 +14,6 @@ namespace PetHealthcare.Server.Services.Interfaces
         //Task<Pet> GetPetByCageId(int id);
         Task<IEnumerable<CageWithPetDTO>> GetAllCagesWithPet();
         Task DischargePet(string petId);
-        Task UpdateCondition(string petId,string condition);
+        Task UpdateCondition(string petId, UpdatePetConditionDTO updatePetConditionDTO);
     }
 }
