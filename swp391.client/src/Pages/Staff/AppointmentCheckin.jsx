@@ -9,55 +9,132 @@ import { useUser } from '../../Context/UserContext';
 import FormatDateForDisplay from '../../Helpers/FormatDateForDisplay';
 import FormatStartDateForDisplay from '../../Helpers/FormatDateForDisplay';
 import getStartDateOfWeek from '../../Helpers/getStartDateOfWeek';
-import formatDateForApi from '../../Helpers/formatDateForAPI';
 import FormatDateForAPI from '../../Helpers/formatDateForAPI';
+import DatePicker from "react-datepicker";
+import { toast } from 'react-toastify';
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function AppointmentCheckin() {
     const [appointmentList, setAppointmentList] = useState([]);
+    const [filteredAppointmentList, setFilteredAppointmentList] = useState([]);
     const [searchInput, setSearchInput] = useState();
-    const [selectedDisplayDates, setSelectedDisplayDates] = useState([]);
-    const [selectedAPIDates, setSelectedAPIDates] = useState([]);
+    const [startDate, setStartDate] = useState(new Date());
+    const [convertedDate, setConvertedDate] = useState(() => {
+        const currentDate = new Date();
+        const obj = {
+            'year': currentDate.getFullYear(),
+            'month': currentDate.getMonth() + 1,
+            'day': currentDate.getDate(),
+        };
+        return obj;
+    });
 
-    const handleSearchInputChange = () => {
-    };
 
     useEffect(() => {
+        const date = `${convertedDate.year}-${convertedDate.month}-${convertedDate.day}`;
 
-    }, []);
-
-    const handleYearWeekChange = useCallback((year, week) => {
-        const startDate = getStartDateOfWeek(week, year);
-        const displayDates = [];
-        const apiDates = [];
-        for (let i = 0; i < 7; i++) {
-            const date = new Date(startDate);
-            date.setDate(date.getDate() + i);
-            displayDates.push(FormatDateForDisplay(date));
-            apiDates.push(FormatDateForAPI(date));
+        async function fetchData() {
+            const response = await fetch(`https://localhost:7206/api/Appointment/Staff/AppointmentList?date=${date}&timeslot=0&isGetAllTimeSlot=true`, {
+                method: 'GET',
+                credentials: 'include',
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
         }
-        setSelectedDisplayDates(displayDates);
-        setSelectedAPIDates(apiDates);
-    }, []);
+
+        toast.promise(
+            fetchData().then(data => {
+                setAppointmentList(data);
+                setFilteredAppointmentList(data);
+            }),
+            {
+                pending: 'Loading appointments...',
+                success: 'Appointments loaded successfully!',
+                error: 'Failed to load appointments.'
+            }
+        );
+    }, [convertedDate.day]);
+
+    const handleDateChange = (date) => {
+        setStartDate(date);
+        const parsedDate = new Date(date);
+        const year = parsedDate.getFullYear();
+        const month = parsedDate.getMonth();
+        const day = parsedDate.getDate();
+
+        let tempDate = convertedDate;
+        tempDate.year = year;
+        tempDate.month = month + 1;
+        tempDate.day = day;
+
+        console.log(tempDate);
+        setConvertedDate(tempDate);
+    };
+    const handleSearchInputChange = (e) => {
+        const value = e.target.value.toLowerCase();
+        setSearchInput(value);
+        if (value === '') {
+            setFilteredAppointmentList(appointmentList);
+        } else {
+            setFilteredAppointmentList(appointmentList.filter(app =>
+                app.appointmentId.toLowerCase().includes(value) ||
+                app.customerName.toLowerCase().includes(value)
+            ));
+        }
+    };
+
+    async function checkinAppointment(app) {
+        console.log(app);
+        async function fetchData() {
+            const response = await fetch(`https://localhost:7206/api/Appointment/Checkin/${app.appointmentId}`, {
+                method: 'POST',
+                credentials: 'include',
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        }
+
+        toast.promise(
+            fetchData().then(
+                setAppointmentList([])
+            ),
+            {
+                pending: 'Checking in...',
+                success: 'Checked in!',
+                error: 'Theres something wrong'
+            }
+        );
+    }
     return (
         <>
             <SideNavForStaff searchInput={searchInput} handleSearchInputChange={handleSearchInputChange} />
-            <YearWeekSelector onYearWeekChange={handleYearWeekChange}></YearWeekSelector>
+            <DatePicker
+                selected={startDate}
+                onChange={(date) => handleDateChange(date)}
+            />
             <MDBTable align='middle'>
                 <MDBTableHead>
                     <tr style={{ textAlign: 'center' }}>
                         <th scope='col' width='20%'>Appointment ID</th>
                         <th scope='col'>Owner name</th>
                         <th scope='col'>Pet name</th>
-                        <th scope='col'>Appointment Date</th>
-                        <th scope='col'>Note</th>
+                        <th scope='col'>Veterinarian</th>
+                        <th scope='col'>Status</th>
                         <th scope='col'></th>
                     </tr>
                 </MDBTableHead>
                 <MDBTableBody style={{ textAlign: 'center' }}>
-                    {appointmentList.map((app) => (
+                    {filteredAppointmentList.map((app) => (
                         <tr key={app.id}>
                             <td>
-                                <div className='d-flex align-items-center'>
+                                <p className='fw-normal mb-1'>{app.appointmentId}</p>
+                            </td>
+                            <td>
+                                <div>
                                     <img
                                         src='https://mdbootstrap.com/img/new/avatars/8.jpg'
                                         alt=''
@@ -65,28 +142,28 @@ export default function AppointmentCheckin() {
                                         className='rounded-circle'
                                     />
                                     <div className='ms-3'>
-                                        <p className='fw-bold mb-1'>{app.ownerName}</p>
-                                        <p className='text-muted mb-0'>{app.ownerNumber}</p>
+                                        <p className='fw-bold mb-1'>{app.customerName}</p>
+                                        <p className='text-muted mb-0'>{app.phoneNumber}</p>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <p className='fw-normal mb-1'>{app.petName}</p>
+                                <p className='fw-bold mb-1'>{app.petName}</p>
                             </td>
                             <td>
-                                <p className='fw-bold mb-1'>{app.appointmentDate}</p>
-                                <p className='text-muted mb-0'>{app.timeSlot}</p>
+                                <p className='fw-normal mb-1'>{app.vetName}</p>
                             </td>
                             <td>
-                                <p className='fw-normal mb-1'>{app.appointmentNotes}</p>
+                                <p className='fw-normal mb-1'>{app.status}</p>
                             </td>
                             <td>
-                                <MDBBtn>Checkin</MDBBtn>
+                                <MDBBtn onClick={() => checkinAppointment(app)}>Checkin</MDBBtn>
                             </td>
                         </tr>
                     ))}
                 </MDBTableBody>
+
             </MDBTable>
         </>
     );
-}
+};

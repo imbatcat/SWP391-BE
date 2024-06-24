@@ -26,6 +26,7 @@ const VetSelectionTable = ({ vetList, formData, handleChange }) => {
                     <tr key={index}>
                         <td>
                             <MDBBtn
+                                type='button'
                                 color={selectedVet === vet.accountId ? 'primary' : 'secondary'}
                                 onClick={() => handleVetSelect(vet.accountId)}
                             >

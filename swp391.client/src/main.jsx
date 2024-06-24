@@ -33,6 +33,7 @@ import UserPets from './Pages/Profile/UserPets';
 import UserAppointments from './Pages/Profile/UserAppointments';
 import MedicalRecord from './Pages/Veternary/MedicalRecord';
 import AppointmentCheckin from './Pages/Staff/AppointmentCheckin';
+import ServiceBills from './Pages/Staff/ServiceBills';
 
 
 const router = createBrowserRouter([
@@ -192,6 +193,15 @@ const router = createBrowserRouter([
         ),
         errorElement: <div>404 Not Found</div>,
     },
+    {
+        path: '/staff/service-bill-list',
+        element: (
+            <CheckAuth>
+                <ServiceBills></ServiceBills>
+            </CheckAuth>
+        ),
+        errorElement: <div>404 Not Found</div>,
+    },
 ]);
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -199,19 +209,19 @@ root.render(
         <AuthProvider>
             <UserProvider>
                 {/*<React.StrictMode>*/}
-                    <RouterProvider router={router}>
-                    </RouterProvider>
-                    <ToastContainer
-                        position="top-center"
-                        autoClose={1000}
-                        hideProgressBar={true}
-                        newestOnTop={false}
-                        closeOnClick
-                        rtl={false}
-                        draggable
-                        theme="light"
-                        transition: Flip
-                    />
+                <RouterProvider router={router}>
+                </RouterProvider>
+                <ToastContainer
+                    position="top-center"
+                    autoClose={1000}
+                    hideProgressBar={true}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    draggable
+                    theme="light"
+                    transition: Flip
+                />
                 {/*</React.StrictMode>*/}
             </UserProvider>
         </AuthProvider>

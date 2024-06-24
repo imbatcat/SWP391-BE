@@ -14,20 +14,20 @@ namespace PetHealthcare.Server.Services
         {
             medRecService = medicalRecordService;
         }
-        public async Task CreateMedicalRecord(MedicalRecordDTO medicalRecord)
+        public async Task CreateMedicalRecord(MedicalRecorResDTO medicalRecord)
         {
             var medicalRec = new MedicalRecord
             {
                 MedicalRecordId = GenerateID(),
-                DateCreated = medicalRecord.DataCreated,
+                DateCreated = DateOnly.FromDateTime(DateTime.Now),
                 PetWeight = medicalRecord.PetWeight,
                 Symptoms = medicalRecord.Symptoms,
                 Allergies = medicalRecord.Allergies,
                 Diagnosis = medicalRecord.Diagnosis,
-                AdditionalNotes = medicalRecord.AdditionallNotes,
-                FollowUpAppointmentDate = DateOnly.FromDateTime(medicalRecord.FollowUpAppointmentDate ?? DateTime.Now),
+                AdditionalNotes = medicalRecord.AdditionalNotes,
+                FollowUpAppointmentDate = medicalRecord.FollowUpAppointmentDate != null ? medicalRecord.FollowUpAppointmentDate : null,
                 FollowUpAppointmentNotes = medicalRecord.FollowUpAppointmentNotes,
-                DrugPrescriptions = medicalRecord.DrugPrescription,
+                DrugPrescriptions = medicalRecord.DrugPrescriptions,
                 AppointmentId = medicalRecord.AppointmentId,
                 PetId = medicalRecord.PetId
             };

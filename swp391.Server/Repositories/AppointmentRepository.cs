@@ -110,5 +110,10 @@ namespace PetHealthcare.Server.Repositories
             Debug.WriteLine(appList.Count());
             return appList;
         }
+
+        public Task<IEnumerable<Appointment>> GetAllAppointmentListForVet(string vetId, DateOnly date)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

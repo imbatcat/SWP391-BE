@@ -66,7 +66,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Authorize(Roles = "Vet, Staff, Customer, Admin")]
-        public async Task<ActionResult<MedicalRecord>> PostMedicalRecord([FromBody] MedicalRecordDTO medicalRecordDTO)
+        public async Task<ActionResult<MedicalRecorResDTO>> PostMedicalRecord([FromBody] MedicalRecorResDTO medicalRecordDTO)
         {
             await _context.CreateMedicalRecord(medicalRecordDTO);
             //try
@@ -85,7 +85,7 @@ namespace PetHealthcare.Server.APIs.Controllers
             //    }
             //}
 
-            return CreatedAtAction(nameof(PostMedicalRecord), new { id = medicalRecordDTO.MedicalRecordId }, medicalRecordDTO);
+            return CreatedAtAction(nameof(PostMedicalRecord), new { id = medicalRecordDTO.PetId + medicalRecordDTO.AppointmentId }, medicalRecordDTO);
         }
 
         //// DELETE: api/MedicalRecords/5
