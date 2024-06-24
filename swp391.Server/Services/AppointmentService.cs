@@ -59,7 +59,7 @@ namespace PetHealthcare.Server.Services
         {
             if (!await isMaxTimeslotReached(appointment.VeterinarianAccountId, appointment.AppointmentDate, appointment.TimeSlotId, true))
             {
-                throw new Exception("Can't create appointment because the timeslot is full");
+                throw new Exception("Can't create appointment beacause the timeslot is full");
             }
             Appointment toCreateAppointment = new Appointment
             {
@@ -299,9 +299,9 @@ namespace PetHealthcare.Server.Services
             return await _appointmentRepository.GetAccountById(id);
         }
 
-        public async Task<IEnumerable<AppointmentListForVetDTO?>> ViewAppointmentListForVet(string id)
+        public async Task<IEnumerable<AppointmentListForVetDTO?>> ViewAppointmentListForVet(string id, DateOnly date)
         {
-            IEnumerable<Appointment> appointmentList = await _appointmentRepository.GetAllAppointmentListForVet(id);
+            IEnumerable<Appointment> appointmentList = await _appointmentRepository.GetAllAppointmentListForVet(id, date);
 
             List<AppointmentListForVetDTO> appointmentListForVetDTO = new List<AppointmentListForVetDTO>();
             foreach (Appointment app in appointmentList)
@@ -339,7 +339,7 @@ namespace PetHealthcare.Server.Services
                     TimeOnly time = appointment.CheckinTime;
                     vetAppointmentList.Add(new VetAppointment
                     {
-                        
+
                         AppointmentId = appointment.AppointmentId,
                         OwnerName = appointment.Account.FullName,
                         PetName = appointment.Pet.PetName,
