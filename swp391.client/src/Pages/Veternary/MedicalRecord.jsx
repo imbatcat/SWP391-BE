@@ -40,15 +40,15 @@ async function fetchOwnerAndPetData(accountId, petId) {
 
 function MedicalRecord() {
     const location = useLocation();
-    const AccountId = location.state.accoutId;
-    const PetId = location.state.accoutId;
-    const [accountData, setOwnerData] = useState(null);
+    const { appointment } = location.state || {};
+    const [ownerData, setOwnerData] = useState(null);
     const [petData, setPetData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-            fetchOwnerAndPetData(AccountId, PetId)
+        if (appointment) {
+            fetchOwnerAndPetData(appointment.accountId, appointment.petId)
                 .then(({ accountData, petData }) => {
                     setOwnerData(accountData);
                     setPetData(petData);
@@ -58,7 +58,12 @@ function MedicalRecord() {
                     setError(error.message);
                     setLoading(false);
                 });
-})
+        } else {
+            setError("No appointment data provided");
+            setLoading(false);
+        }
+    }, [appointment]);
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -67,7 +72,7 @@ function MedicalRecord() {
         return <div>Error: {error}</div>;
     }
 
-    if (!accountData || !petData) {
+    if (!ownerData || !petData) {
         return <div>No data available</div>;
     }
 
