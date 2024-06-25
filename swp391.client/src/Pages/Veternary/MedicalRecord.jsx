@@ -294,7 +294,7 @@ function MedicalRecord() {
                                         </div>
                                     </form>
                                 </MDBCardText>
-                                <MDBBtn type="submit">Submit</MDBBtn>
+                                <MDBBtn type="submit" onClick={handleSubmit}>Submit</MDBBtn>
                             </MDBCardBody>
                     </MDBCard>
                 </MDBRow>
