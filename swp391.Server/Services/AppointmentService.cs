@@ -97,6 +97,7 @@ namespace PetHealthcare.Server.Services
                 {
                     GetAllAppointmentForAdminDTO appointmentDTO = new GetAllAppointmentForAdminDTO
                     {
+                        AppointmentId = app.AppointmentId,
                         AppointmentDate = app.AppointmentDate,
                         AppointmentNotes = app.AppointmentNotes,
                         VeterinarianName = app.Veterinarian.FullName,
