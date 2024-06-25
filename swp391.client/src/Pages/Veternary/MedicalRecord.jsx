@@ -40,9 +40,6 @@ async function fetchOwnerAndPetData(accountId, petId, vetId) {
         const accountData = await accountResponse.json();
         const petData = await petResponse.json();
         const vetData = await vetResponse.json();
-        console.log(petData);
-        console.log(accountData);
-        console.log(vetData);
 
         return { accountData, petData, vetData };
     } catch (error) {
@@ -59,7 +56,6 @@ function MedicalRecord() {
     const [vetData, setVetData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    console.log(appointment)
     const [formData, setFormData] = useState({
         petId: appointment.petId,
         appointmentId: appointment.appointmentId,
@@ -276,25 +272,28 @@ function MedicalRecord() {
                                             </MDBInputGroup>   
                                         </div>
                                         <div>
-                                            <label>Additional Notes</label>
+                                            <MDBInputGroup  className='mb-3' textBefore='Additional Notes' >
                                             <input type="text" name="additionalNotes" value={formData.additionalNotes} onChange={handleChange} required />
+                                            </MDBInputGroup>                          
                                         </div>
                                         <div>
-                                            <label>Follow-Up Appointment Date</label>
+                                            <MDBInputGroup  className='mb-3' textBefore='Follow-Up Appointment Date' >
                                             <input type="date" name="followUpAppointmentDate" value={formData.followUpAppointmentDate} onChange={handleChange} required />
+                                            </MDBInputGroup>  
                                         </div>
                                         <div>
-                                            <label>Follow-Up Appointment Notes</label>
-                                            <input type="text" name="followUpAppointmentNotes" value={formData.followUpAppointmentNotes} onChange={handleChange} required />
+                                            <MDBInputGroup  className='mb-3' textBefore='Follow-Up Appointment Notes' >
+                                            <input className='form-control' type="text" name="followUpAppointmentNotes" value={formData.followUpAppointmentNotes} onChange={handleChange} required />
+                                            </MDBInputGroup>  
                                         </div>
                                         <div>
-                                            <label>Drug Prescriptions</label>
+                                            <MDBInputGroup  className='mb-3' textBefore='Drug Prescriptions' >
                                             <input type="text" name="drugPrescriptions" value={formData.drugPrescriptions} onChange={handleChange} required />
+                                            </MDBInputGroup>  
                                         </div>
-                                        <button type="submit">Submit</button>
                                     </form>
                                 </MDBCardText>
-                                <MDBBtn href='#'>Go somewhere</MDBBtn>
+                                <MDBBtn type="submit">Submit</MDBBtn>
                             </MDBCardBody>
                     </MDBCard>
                 </MDBRow>
