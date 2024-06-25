@@ -40,13 +40,14 @@ async function fetchOwnerAndPetData(accountId, petId) {
 
 function MedicalRecord() {
     const location = useLocation();
-    const { appointment } = location.state || {};
+    const appointment = location.state;
     const [ownerData, setOwnerData] = useState(null);
     const [petData, setPetData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
+    
     useEffect(() => {
+        console.log(appointment);
         if (appointment) {
             fetchOwnerAndPetData(appointment.accountId, appointment.petId)
                 .then(({ accountData, petData }) => {

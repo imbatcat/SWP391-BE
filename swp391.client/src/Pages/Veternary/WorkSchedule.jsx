@@ -58,12 +58,12 @@ function WorkSchedule() {
         }
         setSelectedDisplayDates(displayDates);
         setSelectedAPIDates(apiDates);
-        fetchData(apiDates);  // Fetch data for the new week
+        fetchData(user.id);  // Fetch data for the new week
         
     }, []);
-    async function fetchData() {
+    async function fetchData(vetId) {
         try {
-            const response = await fetch('https://localhost:7206/api/Appointment/AppointmetList/VetAppointment/${user.id}', {
+            const response = await fetch(`https://localhost:7206/api/Appointment/GetAll/${vetId}`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -81,10 +81,11 @@ function WorkSchedule() {
             console.error(error.message);
         }
     }
+    
 
     useEffect(() => {
         if (user) {
-            fetchData();
+            fetchData(user.id);
         }
     }, [user]);
 
@@ -187,6 +188,7 @@ function WorkSchedule() {
                                 <MDBTableBody style={{ textAlign: 'center' }}>
                                     {modal.appointments.map((app) => (
                                         <tr key={app.id}>
+                                        
                                             <td>
                                                 <div className='d-flex align-items-center'>
                                                     <img
@@ -195,8 +197,9 @@ function WorkSchedule() {
                                                         style={{ width: '45px', height: '45px' }}
                                                         className='rounded-circle'
                                                     />
+                                                    
                                                     <div className='ms-3'>
-                                                        <p className='fw-bold mb-1'>{app.ownerName}</p>
+                                                        <p className='fw-bold mb-1'>{app.accountId}</p>
                                                         <p className='text-muted mb-0'>{app.ownerNumber}</p>
                                                     </div>
                                                 </div>
@@ -224,10 +227,8 @@ function WorkSchedule() {
                                                 <p className='fw-normal mb-1'>{app.appointmentNotes}</p>
                                             </td>
                                             <td>
-                                                <Link to={{
-                                                    pathname: '/vet/MedicalRecord',
-                                                    state: { appointment: app }
-                                                }}>
+                                                <Link to='/vet/MedicalRecord'                                                   
+                                                    state={app}>
                                                     <MDBBtn color='danger'>View Detal</MDBBtn>
                                                 </Link>
                                             </td>
