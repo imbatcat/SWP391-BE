@@ -30,7 +30,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         /*Get single pet by a unique PetId*/
         [HttpGet("{id}")]
-        [Authorize(Roles = "Staff, Customer, Admin")]
+
         public async Task<ActionResult<Pet>> GetPet([FromRoute] string id)
         {
             var pet = await _context.GetPetByCondition(a => a.PetId == id);
