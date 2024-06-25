@@ -108,6 +108,11 @@ namespace PetHealthcare.Server.Services
                         IsCheckIn = app.IsCheckIn,
                         IsCheckUp = app.IsCheckUp,
                         CheckinTime = app.CheckinTime,
+                        OwnerName = app.Account.FullName,
+                        PhoneNumber = app.Account.PhoneNumber,
+                        AccountId = app.AccountId,
+                        PetId = app.PetId,
+                        VeterinarianId = app.VeterinarianAccountId,
                     };
                     CAList.Add(appointmentDTO);
                 }
