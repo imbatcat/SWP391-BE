@@ -129,6 +129,7 @@ function MedicalRecord() {
             ...formData,
             [name]: value
         });
+        console.log(formData);
     };
 
     const handleSubmit = async (e) => {
@@ -252,33 +253,33 @@ function MedicalRecord() {
                                         
                                         <div>
                                             <MDBInputGroup  className='mb-3' textBefore='Pet Weight' textAfter='kg'>
-                                                <input style={{width:'5vw', textAlign:'center'}}  type="number" 
+                                                <input className='form-control' style={{width:'5vw', textAlign:'center'}}  type="number" 
                                                         name="petWeight" value={formData.petWeight} onChange={handleChange} required />
                                             </MDBInputGroup>                                        
                                         </div>
                                         <div>
                                             <MDBInputGroup  className='mb-3' textBefore='Symptoms' >
-                                                <input type="text" name="symptoms" value={formData.symptoms} onChange={handleChange} required />
+                                                <input className='form-control' type="text" name="symptoms" value={formData.symptoms} onChange={handleChange} required />
                                             </MDBInputGroup>                                      
                                         </div>
                                         <div>
                                             <MDBInputGroup  className='mb-3' textBefore='Allergies' >
-                                            <input type="text" name="allergies" value={formData.allergies} onChange={handleChange} required />
+                                            <input className='form-control' type="text" name="allergies" value={formData.allergies} onChange={handleChange} required />
                                             </MDBInputGroup>     
                                         </div>
                                         <div>
                                             <MDBInputGroup  className='mb-3' textBefore='Diagnosis' >
-                                            <input type="text" name="diagnosis" value={formData.diagnosis} onChange={handleChange} required />
+                                            <input className='form-control' type="text" name="diagnosis" value={formData.diagnosis} onChange={handleChange} required />
                                             </MDBInputGroup>   
                                         </div>
                                         <div>
                                             <MDBInputGroup  className='mb-3' textBefore='Additional Notes' >
-                                            <input type="text" name="additionalNotes" value={formData.additionalNotes} onChange={handleChange} required />
+                                            <input className='form-control' type="text" name="additionalNotes" value={formData.additionalNotes} onChange={handleChange} required />
                                             </MDBInputGroup>                          
                                         </div>
                                         <div>
                                             <MDBInputGroup  className='mb-3' textBefore='Follow-Up Appointment Date' >
-                                            <input type="date" name="followUpAppointmentDate" value={formData.followUpAppointmentDate} onChange={handleChange} required />
+                                            <input className='form-control' type="date" name="followUpAppointmentDate" value={formData.followUpAppointmentDate} onChange={handleChange} required />
                                             </MDBInputGroup>  
                                         </div>
                                         <div>
