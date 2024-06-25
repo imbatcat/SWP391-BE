@@ -12,6 +12,7 @@ import {
     MDBBadge,
     MDBInputGroup
 } from 'mdb-react-ui-kit';
+import { toast } from 'react-toastify';
 
 async function fetchOwnerAndPetData(accountId, petId, vetId) {
     try {
@@ -152,6 +153,7 @@ function MedicalRecord() {
 
             const responseData = await response.json();
             console.log('Success:', responseData);
+            toast.success('Submit Medical Record Success')
         } catch (error) {
             console.error('Error:', error);
         }
