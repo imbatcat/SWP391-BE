@@ -56,6 +56,11 @@ namespace PetHealthcare.Server.Services
             return await medRecService.GetByCondition(expression);
         }
 
+        public async Task<IEnumerable<MedicalRecordVetDTO>> GetMedicalRecordsByAppointmentId(string appointmentId)
+        {
+            return await medRecService.GetMedicalRecordsByAppointmentId(appointmentId);
+        }
+
         public async Task UpdateMedicalRecord(string id, MedicalRecordDTO medicalRecord)
         {
             var medicalRec = new MedicalRecord

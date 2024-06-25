@@ -11,6 +11,7 @@ namespace PetHealthcare.Server.Services.Interfaces
         Task CreateMedicalRecord(MedicalRecordDTO medicalRecord);
         Task UpdateMedicalRecord(string id, MedicalRecordDTO medicalRecord);
         void DeleteMedicalRecord(MedicalRecord medicalRecord);
+        Task<IEnumerable<MedicalRecordVetDTO>> GetMedicalRecordsByAppointmentId(string appointmentId);
         string GenerateID();
     }
 }

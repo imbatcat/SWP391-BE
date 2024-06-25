@@ -44,8 +44,6 @@ namespace PetHealthcare.Server.Repositories
         {
             return await context.Pets.FirstOrDefaultAsync(expression);
         }
-
-
         public async Task Update(Pet entity)
         {
             var pet = await GetByCondition(e => e.PetId == entity.PetId);
@@ -114,8 +112,6 @@ namespace PetHealthcare.Server.Repositories
             }
             return admissionRecords;
         }
-
-
         void IRepositoryBase<Pet>.Delete(Pet entity)
         {
             throw new NotImplementedException();
