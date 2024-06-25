@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PetHealthcare.Server.Core.Constant;
 using PetHealthcare.Server.Core.DTOS;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
@@ -129,6 +130,33 @@ namespace PetHealthcare.Server.Repositories
         {
             await context.Accounts.AddAsync(veterinarian);
             await SaveChanges();
+        }
+
+        public async Task<IEnumerable<VetListDTO>> GetVetListToChoose(DateOnly date, int timeslotId)
+        {
+            List<Appointment> appointments = await context.Appointments.Include("TimeSlot").Include("Account").ToListAsync();
+            List<Veterinarian> veterinarians = await context.Veterinarians.ToListAsync();
+            List<VetListDTO> vetListToChoose = new List<VetListDTO>();
+            foreach(Veterinarian vet in veterinarians)
+            {
+                int currentCapacity = 0;
+                foreach(Appointment appointment in appointments)
+                {
+                    if(appointment.VeterinarianAccountId.Equals(vet.AccountId) && appointment.AppointmentDate.CompareTo(date) == 0 && appointment.TimeSlotId == timeslotId)
+                    {
+                        currentCapacity++;
+                    }
+                }
+                vetListToChoose.Add(new VetListDTO
+                {
+                    Department = vet.Department,
+                    Experience = vet.Experience,
+                    VetId = vet.AccountId,
+                    VetName = vet.FullName,
+                    CurrentCapacity = currentCapacity + "/" + ProjectConstant.MAX_APP_PER_TIMESLOT
+                });
+            }
+            return vetListToChoose;
         }
     }
 }

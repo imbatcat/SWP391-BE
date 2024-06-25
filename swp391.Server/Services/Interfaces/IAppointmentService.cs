@@ -7,7 +7,7 @@ namespace PetHealthcare.Server.Services.Interfaces
 {
     public interface IAppointmentService
     {
-        Task<IEnumerable<GetAllAppointmentForAdminDTO>> GetAllAppointment();
+        Task<IEnumerable<GetAllAppointmentForAdminDTO>> GetAllAppointment(string vetId);
         Task<Appointment?> GetAppointmentByCondition(Expression<Func<Appointment, bool>> expression);
         Task CreateAppointment(CreateAppointmentDTO appointment, string id);
         Task UpdateAppointment(string id, CustomerAppointmentDTO appointment);

@@ -176,5 +176,10 @@ namespace PetHealthcare.Server.Services
                 throw new Exception(ex.Message, ex.InnerException);
             }
         }
+
+        public async Task<IEnumerable<VetListDTO>> GetVetListToChoose(DateOnly date, int timeslotId)
+        {
+            return await _accountService.GetVetListToChoose(date, timeslotId);
+        }
     }
 }

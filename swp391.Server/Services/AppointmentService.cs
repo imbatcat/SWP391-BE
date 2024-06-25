@@ -87,38 +87,31 @@ namespace PetHealthcare.Server.Services
 
 
 
-        public async Task<IEnumerable<GetAllAppointmentForAdminDTO>> GetAllAppointment()
+        public async Task<IEnumerable<GetAllAppointmentForAdminDTO>> GetAllAppointment(string vetId)
         {
             IEnumerable<Appointment> appList = await _appointmentRepository.GetAll();
             List<GetAllAppointmentForAdminDTO> CAList = new List<GetAllAppointmentForAdminDTO>();
             foreach (Appointment app in appList)
             {
-                GetAllAppointmentForAdminDTO appointmentDTO = new GetAllAppointmentForAdminDTO
+                if(app.VeterinarianAccountId == vetId)
                 {
-                    AppointmentDate = app.AppointmentDate,
-                    AppointmentNotes = app.AppointmentNotes,
-                    VeterinarianName = app.Veterinarian.FullName,
-                    PetName = app.Pet.PetName,
-                    BookingPrice = app.BookingPrice,
-                    AppointmentType = app.AppointmentType,
-                    TimeSlot = app.TimeSlot.StartTime.ToString("h:mm") + " - " + app.TimeSlot.EndTime.ToString("h:mm"),
-                    IsCancel = app.IsCancel,
-                    IsCheckIn = app.IsCheckIn,
-                    IsCheckUp = app.IsCheckUp,
-                    CheckinTime = app.CheckinTime,
-                    //            public string AppointmentId { get; set; }
-                    //public DateOnly AppointmentDate { get; set; }
-                    //public string AppointmentType { get; set; }
-                    //public string? AppointmentNotes { get; set; }
-                    //public double BookingPrice { get; set; }
-                    //public string AccountId { get; set; }
-                    //public string PetName { get; set; }
-                    //public string VeterinarianName { get; set; }
-                    //public int TimeSlotId { get; set; }
-                    //public bool IsCancel { get; set; }
-                    //public bool IsCheckIn { get; set; }
-                };
-                CAList.Add(appointmentDTO);
+                    GetAllAppointmentForAdminDTO appointmentDTO = new GetAllAppointmentForAdminDTO
+                    {
+                        AppointmentDate = app.AppointmentDate,
+                        AppointmentNotes = app.AppointmentNotes,
+                        VeterinarianName = app.Veterinarian.FullName,
+                        PetName = app.Pet.PetName,
+                        BookingPrice = app.BookingPrice,
+                        AppointmentType = app.AppointmentType,
+                        TimeSlot = app.TimeSlot.StartTime.ToString("h:mm") + " - " + app.TimeSlot.EndTime.ToString("h:mm"),
+                        IsCancel = app.IsCancel,
+                        IsCheckIn = app.IsCheckIn,
+                        IsCheckUp = app.IsCheckUp,
+                        CheckinTime = app.CheckinTime,
+                    };
+                    CAList.Add(appointmentDTO);
+                }
+                
             }
             return CAList;
         }
