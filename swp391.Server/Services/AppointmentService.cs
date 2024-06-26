@@ -2,6 +2,7 @@ using NanoidDotNet;
 using PetHealthcare.Server.Core.Constant;
 using PetHealthcare.Server.Core.DTOS;
 using PetHealthcare.Server.Core.DTOS.AppointmentDTOs;
+using PetHealthcare.Server.Core.Helpers;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Repositories.Interfaces;
 using PetHealthcare.Server.Services.Interfaces;
@@ -23,44 +24,15 @@ namespace PetHealthcare.Server.Services
             _accountRepository = accountRepository;
             _petRepository = petRepository;
         }
-
         public string GenerateId()
         {
             var prefix = "AP-";
             string id = Nanoid.Generate(size: 8);
             return prefix + id;
         }
-        public async Task<bool> isMaxTimeslotReached(string vetId, DateOnly appDate, int timeslotId, bool isCreate)
-        {
-            IEnumerable<Appointment> appointmentList = await _appointmentRepository.GetAll();
-            int checker = 0;
-            foreach (Appointment app in appointmentList)
-            {
-                if (app.VeterinarianAccountId.Equals(vetId)
-                    && app.AppointmentDate.Equals(appDate)
-                    && app.TimeSlotId == timeslotId)
-                {
-                    checker++;
-                }
-            }
-            /*isCreate is to check whether the appointment is belong to create or update api, because the difference is create api cannot
-            create if timeslot reached maximum but update can*/
-            if (isCreate && checker < ProjectConstant.MAX_APP_PER_TIMESLOT)
-            {
-                return true;
-            }
-            else if (!isCreate && checker <= ProjectConstant.MAX_APP_PER_TIMESLOT)
-            {
-                return true;
-            }
-            return false;
-        }
+        
         public async Task CreateAppointment(CreateAppointmentDTO appointment, string id)
         {
-            if (!await isMaxTimeslotReached(appointment.VeterinarianAccountId, appointment.AppointmentDate, appointment.TimeSlotId, true))
-            {
-                throw new Exception("Can't create appointment beacause the timeslot is full");
-            }
             Appointment toCreateAppointment = new Appointment
             {
                 AppointmentType = appointment.AppointmentType,
@@ -132,9 +104,9 @@ namespace PetHealthcare.Server.Services
             return _appointmentRepository.isInputtedVetIdValid(VetId);
         }
 
-        public async Task UpdateAppointment(string id, CustomerAppointmentDTO appointment)
+        public async Task UpdateAppointment(string id, CustomerAppointmentDTO appointment, bool isUpdateDate)
         {
-            if (!await isMaxTimeslotReached(appointment.VeterinarianAccountId, appointment.AppointmentDate, appointment.TimeSlotId, false))
+            if (await MaxTimeslotCheck.isMaxTimeslotReached(this, appointment.VeterinarianAccountId, appointment.AppointmentDate, appointment.TimeSlotId, isUpdateDate))
             {
                 throw new Exception("Can't update appointment because that timeslot is full");
             }
@@ -441,6 +413,11 @@ namespace PetHealthcare.Server.Services
 
             }
             return appointmentForStaffDTOs;
+        }
+
+        public async Task<IEnumerable<Appointment>> GetAll()
+        {
+            return await _appointmentRepository.GetAll();
         }
     }
 }

@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using PetHealthcare.Server.Core.Constant;
 using PetHealthcare.Server.Core.DTOS;
 using PetHealthcare.Server.Core.DTOS.AppointmentDTOs;
+using PetHealthcare.Server.Core.Helpers;
 using PetHealthcare.Server.Models;
 using PetHealthcare.Server.Services;
 using PetHealthcare.Server.Services.Interfaces;
 using System.Diagnostics;
 using System.Text.Json;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
@@ -31,9 +33,14 @@ namespace PetHealthcare.Server.APIs.Controllers
         private readonly IVnPayService _vnPayService;
         // GET: VNPayController
         [HttpPost]
-        public ActionResult<VNPayResponseUrl> CreatePaymentUrl([FromBody] CreateAppointmentDTO model)
+        public async  Task<ActionResult<VNPayResponseUrl>> CreatePaymentUrl([FromBody] CreateAppointmentDTO model)
         {
             CreateAppointmentDTO appointmentDTO = model;
+            //string vetId, DateOnly appDate, int timeslotId, bool isCreate
+            if (await MaxTimeslotCheck.isMaxTimeslotReached(_appointmentService,model.VeterinarianAccountId, model.AppointmentDate, model.TimeSlotId, true))
+            {
+                return BadRequest("Timeslot full please choose another timeslot");
+            }
             TempData["AppointmentDTO"] = JsonSerializer.Serialize(appointmentDTO);
             var url = _vnPayService.CreatePaymentUrl(model, HttpContext);
 

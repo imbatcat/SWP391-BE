@@ -14,6 +14,7 @@ namespace PetHealthcare.Server.Repositories
         {
             this.context = context;
         }
+        public AppointmentRepository() { }
         public async Task Create(Appointment entity)
         {
             await context.Appointments.AddAsync(entity);
