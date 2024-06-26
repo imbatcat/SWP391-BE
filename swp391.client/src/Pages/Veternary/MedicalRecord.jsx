@@ -69,8 +69,8 @@ function MedicalRecord() {
                 console.log(data);
 
             } catch (error) {
-                setError(error);
-                toast.error('Theres something wrong');
+                console.log(error);
+    
             }
         }
         getMedicalRecord();
@@ -272,50 +272,75 @@ function MedicalRecord() {
                         <MDBCardBody>
                             <MDBCardTitle>Special title treatment</MDBCardTitle>
                             <MDBCardText>
-                                <form onSubmit={handleSubmit} style={{ maxWidth: '600px', margin: 'auto' }}>
-                                    {console.log(formData)}
-                                    <div>
-                                        <MDBInputGroup className='mb-3' textBefore='Pet Weight' textAfter='kg'>
-                                            <input className='form-control' style={{ width: '5vw', textAlign: 'center' }} type="number"
-                                                min="0" name="petWeight" value={formData.petWeight} onChange={handleChange} required />
-                                        </MDBInputGroup>
-                                    </div>
-                                    <div>
-                                        <MDBInputGroup className='mb-3' textBefore='Symptoms' >
-                                            <input className='form-control' type="text" name="symptoms" value={formData.symptoms} onChange={handleChange} required />
-                                        </MDBInputGroup>
-                                    </div>
-                                    <div>
-                                        <MDBInputGroup className='mb-3' textBefore='Allergies' >
-                                            <input className='form-control' type="text" name="allergies" value={formData.allergies} onChange={handleChange} required />
-                                        </MDBInputGroup>
-                                    </div>
-                                    <div>
-                                        <MDBInputGroup className='mb-3' textBefore='Diagnosis' >
-                                            <input className='form-control' type="text" name="diagnosis" value={formData.diagnosis} onChange={handleChange} required />
-                                        </MDBInputGroup>
-                                    </div>
-                                    <div>
-                                        <MDBInputGroup className='mb-3' textBefore='Additional Notes' >
-                                            <input className='form-control' type="text" name="additionalNotes" value={formData.additionalNotes} onChange={handleChange} required />
-                                        </MDBInputGroup>
-                                    </div>
-                                    <div>
-                                        <MDBInputGroup className='mb-3' textBefore='Follow-Up Appointment Date' >
-                                            <input className='form-control' type="date" name="followUpAppointmentDate" value={formData.followUpAppointmentDate} onChange={handleChange} required />
-                                        </MDBInputGroup>
-                                    </div>
-                                    <div>
-                                        <MDBInputGroup className='mb-3' textBefore='Follow-Up Appointment Notes' >
-                                            <input className='form-control' type="text" name="followUpAppointmentNotes" value={formData.followUpAppointmentNotes} onChange={handleChange} required />
-                                        </MDBInputGroup>
-                                    </div>
-                                    <div>
-                                        <MDBInputGroup className='mb-3' textBefore='Drug Prescriptions' >
-                                            <input type="text" name="drugPrescriptions" value={formData.drugPrescriptions} onChange={handleChange} required />
-                                        </MDBInputGroup>
-                                    </div>
-                                </form>
+                            <form onSubmit={handleSubmit} style={{ maxWidth: '600px', margin: 'auto' }}>
+    {console.log(formData)}
+    
+    <MDBRow>
+        <MDBCol>
+            <MDBInputGroup className='mb-3' textBefore='Pet Weight' textAfter='kg'>
+                <input className='form-control' style={{ width: '5vw', textAlign: 'center' }} type="number"
+                    min="0" name="petWeight" value={formData.petWeight} onChange={handleChange} required />
+            </MDBInputGroup>
+        </MDBCol>
+    </MDBRow>
+
+    <MDBRow>
+        <MDBCol>
+            <MDBInputGroup className='mb-3' textBefore='Symptoms' >
+                <input className='form-control' type="text" name="symptoms" value={formData.symptoms} onChange={handleChange} required />
+            </MDBInputGroup>
+        </MDBCol>
+    </MDBRow>
+
+    <MDBRow>
+        <MDBCol>
+            <MDBInputGroup className='mb-3' textBefore='Allergies' >
+                <input className='form-control' type="text" name="allergies" value={formData.allergies} onChange={handleChange} required />
+            </MDBInputGroup>
+        </MDBCol>
+    </MDBRow>
+
+    <MDBRow>
+        <MDBCol>
+            <MDBInputGroup className='mb-3' textBefore='Diagnosis' >
+                <input className='form-control' type="text" name="diagnosis" value={formData.diagnosis} onChange={handleChange} required />
+            </MDBInputGroup>
+        </MDBCol>
+    </MDBRow>
+
+    <MDBRow>
+        <MDBCol>
+            <MDBInputGroup className='mb-3' textBefore='Additional Notes' >
+                <input className='form-control' type="text" name="additionalNotes" value={formData.additionalNotes} onChange={handleChange} required />
+            </MDBInputGroup>
+        </MDBCol>
+    </MDBRow>
+
+    <MDBRow>
+        <MDBCol>
+            <MDBInputGroup className='mb-3' textBefore='Follow-Up Appointment Date' >
+                <input className='form-control' type="date" name="followUpAppointmentDate" value={formData.followUpAppointmentDate} onChange={handleChange} required />
+            </MDBInputGroup>
+        </MDBCol>
+    </MDBRow>
+
+    <MDBRow>
+        <MDBCol>
+            <MDBInputGroup className='mb-3' textBefore='Follow-Up Appointment Notes' >
+                <input className='form-control' type="text" name="followUpAppointmentNotes" value={formData.followUpAppointmentNotes} onChange={handleChange} required />
+            </MDBInputGroup>
+        </MDBCol>
+    </MDBRow>
+
+    <MDBRow>
+        <MDBCol>
+            <MDBInputGroup className='mb-3' textBefore='Drug Prescriptions' >
+                <input className='form-control' type="text" name="drugPrescriptions" value={formData.drugPrescriptions} onChange={handleChange} required />
+            </MDBInputGroup>
+        </MDBCol>
+    </MDBRow>
+</form>
+
                             </MDBCardText>
                             <MDBBtn type="submit" onClick={handleSubmit}>Submit</MDBBtn>
                             <MDBBtn type="button" >Assign service</MDBBtn>
