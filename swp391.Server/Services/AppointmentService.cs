@@ -84,9 +84,6 @@ namespace PetHealthcare.Server.Services
         {
             _appointmentRepository.Delete(appointment);
         }
-
-
-
         public async Task<IEnumerable<GetAllAppointmentForAdminDTO>> GetAllAppointment(string vetId)
         {
             IEnumerable<Appointment> appList = await _appointmentRepository.GetAll();

@@ -18,6 +18,6 @@ namespace PetHealthcare.Server.Services.Interfaces
         Task<bool> ConfirmPetIdentity(string AccountId, PetDTO newPet);
         Task<IEnumerable<AdmissionRecord>> GetAdmissionRecordsByPet(string petId);
         Task<IEnumerable<MedicalRecord>> GetMedicalRecordsByPet(string petId);
-        Task<AdmissionRecord?> GetPetByName(Expression<Func<Pet, bool>> expression);
+        Task<AdmissionRecord?> GetPetByName(Expression<Func<Pet, bool>> expression);        
     }
 }

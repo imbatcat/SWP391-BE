@@ -25,7 +25,7 @@ namespace PetHealthcare.Server.Repositories
         }
 
         public async Task<IEnumerable<MedicalRecord>> GetAll()
-        {
+        {            
             return await _medRec.MedicalRecords.ToListAsync();
         }
 
@@ -36,7 +36,7 @@ namespace PetHealthcare.Server.Repositories
 
         public async Task<IEnumerable<MedicalRecordVetDTO>> GetMedicalRecordsByAppointmentId(string appointmentId)
         {
-            if (!_medRec.MedicalRecords.Any(m => m.AppointmentId == appointmentId))
+            if (Any(m => m.AppointmentId == appointmentId))
             {
                 return null;
             }
@@ -81,6 +81,10 @@ namespace PetHealthcare.Server.Repositories
                 medicalRecord.DrugPrescriptions = entity.DrugPrescriptions;
             }
             await SaveChanges();
+        }
+        public bool Any(Expression<Func<MedicalRecord,bool>> predicate)
+        {
+            return _medRec.MedicalRecords.Any(predicate);
         }
     }
 }
