@@ -34,7 +34,7 @@ namespace PetHealthcare.Server.Repositories
             return await _medRec.MedicalRecords.FirstOrDefaultAsync(expression);
         }
 
-        public async Task<IEnumerable<MedicalRecordVetDTO>> GetMedicalRecordsByAppointmentId(string appointmentId)
+        public async Task<MedicalRecordVetDTO> GetMedicalRecordsByAppointmentId(string appointmentId)
         {
             if (!_medRec.MedicalRecords.Any(m => m.AppointmentId == appointmentId))
             {
@@ -44,10 +44,12 @@ namespace PetHealthcare.Server.Repositories
             List<MedicalRecordVetDTO> records = new List<MedicalRecordVetDTO>();
             foreach (var record in list)
             {
-                if(record.AppointmentId == appointmentId)
+                if (record.AppointmentId == appointmentId)
                 {
                     var medRecByAppointId = new MedicalRecordVetDTO
                     {
+                        AppointmentId = record.AppointmentId,
+                        PetId = record.PetId,
                         AdditionalNotes = record.AdditionalNotes,
                         Allergies = record.Allergies,
                         Diagnosis = record.Diagnosis,
@@ -57,10 +59,10 @@ namespace PetHealthcare.Server.Repositories
                         PetWeight = record.PetWeight,
                         Symptoms = record.Symptoms,
                     };
-                    records.Add(medRecByAppointId);
+                    return medRecByAppointId;
                 }
             }
-            return records;
+            return null;
         }
 
         public async Task SaveChanges()

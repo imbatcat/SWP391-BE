@@ -13,6 +13,7 @@ import FormatDateForAPI from '../../Helpers/formatDateForAPI';
 import DatePicker from "react-datepicker";
 import { toast } from 'react-toastify';
 import "react-datepicker/dist/react-datepicker.css";
+import refreshPage from '../../Helpers/RefreshPage';
 
 export default function AppointmentCheckin() {
     const [appointmentList, setAppointmentList] = useState([]);
@@ -95,6 +96,7 @@ export default function AppointmentCheckin() {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
+            refreshPage();
             return response.json();
         }
 

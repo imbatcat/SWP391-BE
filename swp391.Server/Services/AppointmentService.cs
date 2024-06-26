@@ -93,7 +93,7 @@ namespace PetHealthcare.Server.Services
             List<GetAllAppointmentForAdminDTO> CAList = new List<GetAllAppointmentForAdminDTO>();
             foreach (Appointment app in appList)
             {
-                if(app.VeterinarianAccountId == vetId)
+                if (app.VeterinarianAccountId == vetId)
                 {
                     GetAllAppointmentForAdminDTO appointmentDTO = new GetAllAppointmentForAdminDTO
                     {
@@ -104,7 +104,7 @@ namespace PetHealthcare.Server.Services
                         PetName = app.Pet.PetName,
                         BookingPrice = app.BookingPrice,
                         AppointmentType = app.AppointmentType,
-                        TimeSlot = app.TimeSlot.StartTime.ToString("h:mm") + " - " + app.TimeSlot.EndTime.ToString("h:mm"),
+                        TimeSlot = app.TimeSlot.StartTime.ToString("H\\:mm") + " - " + app.TimeSlot.EndTime.ToString("H\\:mm"),
                         IsCancel = app.IsCancel,
                         IsCheckIn = app.IsCheckIn,
                         IsCheckUp = app.IsCheckUp,
@@ -117,7 +117,7 @@ namespace PetHealthcare.Server.Services
                     };
                     CAList.Add(appointmentDTO);
                 }
-                
+
             }
             return CAList;
         }

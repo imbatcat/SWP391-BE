@@ -59,7 +59,7 @@ function WorkSchedule() {
         setSelectedDisplayDates(displayDates);
         setSelectedAPIDates(apiDates);
         fetchData(user.id);  // Fetch data for the new week
-        
+
     }, []);
     async function fetchData(vetId) {
         try {
@@ -81,7 +81,7 @@ function WorkSchedule() {
             console.error(error.message);
         }
     }
-    
+
 
     useEffect(() => {
         if (user) {
@@ -135,7 +135,7 @@ function WorkSchedule() {
                     </tr>
                 </MDBTableHead>
                 <MDBTableBody>
-                {['7:00 - 8:30', '8:30 - 10:00', '10:00 - 11:30', '13:00 - 14:30', '14:30 - 16:00'].map((timeSlot, timeIndex) => (
+                    {['7:00 - 8:30', '8:30 - 10:00', '10:00 - 11:30', '13:00 - 14:30', '14:30 - 16:00', '16:00 - 17:30'].map((timeSlot, timeIndex) => (
                         <tr key={timeIndex} style={{ textAlign: 'center' }}>
                             <th scope='row'>{timeSlot}</th>
                             {selectedAPIDates.map((date, dateIndex) => {
@@ -157,95 +157,99 @@ function WorkSchedule() {
                     ))}
                 </MDBTableBody>
             </MDBTable>
-            <MDBModal open={modal.isOpen} onClose={() => setModal({ ...modal, isOpen: false })} tabIndex='-1'>
-                <MDBModalDialog scrollable>
-                    <MDBModalContent style={{width:'60vw'}} >
-                        <MDBModalHeader>
-                            <MDBModalTitle>
-                            <p>Appointments for {modal.date} </p>
-                            <p>{modal.timeSlot}</p>
-                            </MDBModalTitle>
-                            <MDBBtn
-                                className='btn-close'
-                                color='none'
-                                onClick={() => setModal({ ...modal, isOpen: false })}
-                            ></MDBBtn>
-                        </MDBModalHeader>
-                        <MDBModalBody>
-                            <MDBTable align='middle'>
-                                <MDBTableHead>
-                                    <tr style={{ textAlign: 'center' }}>
-                                        <th scope='col' width='20%'>Customer Name & Phone Number</th>
-                                        <th scope='col'>Pet Name</th>
-                                        <th scope='col'>Date & Timeslot</th>
-                                        <th scope='col'>Veterinarian</th>
-                                        <th scope='col'>Status</th>
-                                        <th scope='col'>Booking Price</th>
-                                        <th scope='col'>Note</th>
-                                        <th scope='col'></th>
-                                    </tr>
-                                </MDBTableHead>
-                                <MDBTableBody style={{ textAlign: 'center' }}>
-                                    {modal.appointments.map((app) => (
-                                        <tr key={app.id}>
-                                        
-                                            <td>
-                                                <div className='d-flex align-items-center'>
-                                                    <img
-                                                        src='https://mdbootstrap.com/img/new/avatars/8.jpg'
-                                                        alt=''
-                                                        style={{ width: '45px', height: '45px' }}
-                                                        className='rounded-circle'
-                                                    />
-                                                    
-                                                    <div className='ms-3'>
-                                                        <p className='fw-bold mb-1'>{app.accountId}</p>
-                                                        <p className='text-muted mb-0'>{app.ownerNumber}</p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <p className='fw-normal mb-1'>{app.petName}</p>
-                                            </td>
-                                            <td>
-                                                <p className='fw-bold mb-1'>{app.appointmentDate}</p>
-                                                <p className='text-muted mb-0'>{app.timeSlot}</p>
-                                            </td>
-                                            <td>
-                                                <p className='fw-normal mb-1'>{app.veterinarianName}</p>
-                                            </td>
-                                            <td>
-                                                <MDBBadge color={app.isCancel ? 'danger' : app.isCheckUp ? 'success' : app.isCheckIn ? 'warning' : 'secondary'} pill>
-                                                    {app.isCancel ? "Cancelled" : app.isCheckUp ? "Checked Up" : app.isCheckIn ? "Checked In" : "Active"}
-                                                </MDBBadge>
-                                            </td>
-                                            <td>
-                                                <p className='fw-bold mb-1'>{app.bookingPrice}</p>
-                                                <p className='text-muted mb-0'>{app.petId}</p>
-                                            </td>
-                                            <td>
-                                                <p className='fw-normal mb-1'>{app.appointmentNotes}</p>
-                                            </td>
-                                            <td>
-                                                <Link to='/vet/MedicalRecord'                                                   
-                                                    state={app}>
-                                                    <MDBBtn color='danger'>View Detal</MDBBtn>
-                                                </Link>
-                                            </td>
+
+            <>
+
+                <MDBModal open={modal.isOpen} onClose={() => setModal({ ...modal, isOpen: false })} tabIndex='-1'>
+                    <MDBModalDialog scrollable style={{ minWidth: 'fit-content' }}>
+                        <MDBModalContent >
+                            <MDBModalHeader>
+                                <MDBModalTitle>
+                                    <p>Appointments for {modal.date} </p>
+                                    <p>{modal.timeSlot}</p>
+                                </MDBModalTitle>
+                                <MDBBtn
+                                    className='btn-close'
+                                    color='none'
+                                    onClick={() => setModal({ ...modal, isOpen: false })}
+                                ></MDBBtn>
+                            </MDBModalHeader>
+                            <MDBModalBody  >
+                                <MDBTable align='middle'>
+                                    <MDBTableHead>
+                                        <tr style={{ textAlign: 'center' }}>
+                                            <th scope='col' width='20%'>Customer Name & Phone Number</th>
+                                            <th scope='col'>Pet Name</th>
+                                            <th scope='col'>Date & Timeslot</th>
+                                            <th scope='col'>Veterinarian</th>
+                                            <th scope='col'>Status</th>
+                                            <th scope='col'>Booking Price</th>
+                                            <th scope='col'>Note</th>
+                                            <th scope='col'></th>
                                         </tr>
-                                    ))}
-                                </MDBTableBody>  
+                                    </MDBTableHead>
+                                    <MDBTableBody style={{ textAlign: 'center' }}>
+                                        {modal.appointments.map((app) => (
+                                            <tr key={app.id}>
+
+                                                <td>
+                                                    <div className='d-flex align-items-center'>
+                                                        <img
+                                                            src='https://mdbootstrap.com/img/new/avatars/8.jpg'
+                                                            alt=''
+                                                            style={{ width: '45px', height: '45px' }}
+                                                            className='rounded-circle'
+                                                        />
+
+                                                        <div className='ms-3'>
+                                                            <p className='fw-bold mb-1'>{app.ownerName}</p>
+                                                            <p className='text-muted mb-0'>{app.ownerNumber}</p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <p className='fw-normal mb-1'>{app.petName}</p>
+                                                </td>
+                                                <td>
+                                                    <p className='fw-bold mb-1'>{app.appointmentDate}</p>
+                                                    <p className='text-muted mb-0'>{app.timeSlot}</p>
+                                                </td>
+                                                <td>
+                                                    <p className='fw-normal mb-1'>{app.veterinarianName}</p>
+                                                </td>
+                                                <td>
+                                                    <MDBBadge color={app.isCancel ? 'danger' : app.isCheckUp ? 'success' : app.isCheckIn ? 'warning' : 'secondary'} pill>
+                                                        {app.isCancel ? "Cancelled" : app.isCheckUp ? "Checked Up" : app.isCheckIn ? "Checked In" : "Active"}
+                                                    </MDBBadge>
+                                                </td>
+                                                <td>
+                                                    <p className='fw-bold mb-1'>{app.bookingPrice}</p>
+                                                    <p className='text-muted mb-0'>{app.petId}</p>
+                                                </td>
+                                                <td>
+                                                    <p className='fw-normal mb-1'>{app.appointmentNotes}</p>
+                                                </td>
+                                                <td>
+                                                    <Link to='/vet/MedicalRecord'
+                                                        state={app}>
+                                                        <MDBBtn color='danger'>View Detail</MDBBtn>
+                                                    </Link>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </MDBTableBody>
                                 </MDBTable>
-                        </MDBModalBody>
-                        <MDBModalFooter>
-                            <MDBBtn color='secondary' onClick={() => setModal({ ...modal, isOpen: false })}>
-                                Close
-                            </MDBBtn>
-                        </MDBModalFooter>
-                    </MDBModalContent>
-                </MDBModalDialog>
-            </MDBModal>
-            </div>
+                            </MDBModalBody>
+                            <MDBModalFooter>
+                                <MDBBtn color='secondary' onClick={() => setModal({ ...modal, isOpen: false })}>
+                                    Close
+                                </MDBBtn>
+                            </MDBModalFooter>
+                        </MDBModalContent>
+                    </MDBModalDialog>
+                </MDBModal>
+            </>
+        </div >
     );
 }
 

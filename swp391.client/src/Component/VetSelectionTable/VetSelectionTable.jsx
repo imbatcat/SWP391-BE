@@ -5,6 +5,7 @@ const VetSelectionTable = ({ vetList, formData, handleChange }) => {
     const [selectedVet, setSelectedVet] = useState(formData.veterinarianAccountId || '');
 
     const handleVetSelect = (vetAccountId) => {
+        console.log(vetAccountId);
         setSelectedVet(vetAccountId);
         handleChange({ target: { name: 'veterinarianAccountId', value: vetAccountId } });
     };
