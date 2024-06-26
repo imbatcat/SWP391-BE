@@ -18,7 +18,7 @@ export const SideNavData = [
     },
     {
         title: 'Medical Record',
-        path: '/vet/MedicalRecord',
+        path: '/vet/MedicalRecordList',
         icon: <IoIcons.IoIosPaper />,
         cName: 'nav-text'
     },

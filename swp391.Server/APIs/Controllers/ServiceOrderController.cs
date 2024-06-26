@@ -7,7 +7,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin,Vet")]
+    [Authorize(Roles = "Admin,Vet, Staff")]
     public class ServiceOrderController : ControllerBase
     {
         private readonly IServiceOrderService _serviceOrderService;
@@ -21,7 +21,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         //----------------------------------------------
         [HttpGet("Staff")]
         [Authorize(Roles = "Staff, Admin")]
-        public async Task<IEnumerable<GetAllServiceOrderForStaff>> getServiceOrderListForStaff(DateOnly date,bool isUnPaidList = true) //staff using isUnpaidList = true
+        public async Task<IEnumerable<GetAllServiceOrderForStaff>> getServiceOrderListForStaff(DateOnly date, bool isUnPaidList = true) //staff using isUnpaidList = true
         {
             return await _serviceOrderService.getServiceOrderListForStaff(date, isUnPaidList);
         }
@@ -33,6 +33,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         {
             return await _serviceOrderService.getAllServiceOrderForStaff();
         }
+
         //----------------------------------------------
         [HttpGet("Staff/ServiceOrderInfor/{serviceOrderId}")]
         [Authorize(Roles = "Staff, Admin")]
