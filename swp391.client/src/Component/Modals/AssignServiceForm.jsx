@@ -90,6 +90,8 @@ function AssignServiceForm({ petData, ownerData, vetData, toggleOpen }) {
                     @media print {
                         body {
                             margin: 0;
+                        .no-print {
+                            display: none !important;
                         }
                         .print-container {
                             width: 100vw;
@@ -167,7 +169,7 @@ function AssignServiceForm({ petData, ownerData, vetData, toggleOpen }) {
                                     <MDBCol sm='9'>
                                         Medical Service Information
                                     </MDBCol>
-                                    <MDBCol sm='3'>
+                                    <MDBCol sm='3' className='no-print' >
                                         <MDBBtn style={{ fontSize: '0.5vw' }} onClick={toggleModal}>Add Services</MDBBtn>
                                     </MDBCol>
                                 </MDBRow>
@@ -199,7 +201,7 @@ function AssignServiceForm({ petData, ownerData, vetData, toggleOpen }) {
                                         </MDBTableBody>
                                     </MDBTable>
                                 </MDBCardText>
-                                <MDBBtn type="submit">Submit</MDBBtn>
+                                <MDBBtn className='no-print' type="submit">Submit</MDBBtn>
                             </MDBCardBody>
                         </MDBCard>
                     </MDBRow>
@@ -207,10 +209,10 @@ function AssignServiceForm({ petData, ownerData, vetData, toggleOpen }) {
                 <MDBCardFooter>
                     <ReactToPrint
                         trigger={()=>{
-                            return <MDBBtn>Print</MDBBtn>
+                            return <MDBBtn className='no-print'>Print</MDBBtn>
                         }}
                         content={()=>componentRef.current}
-                        documentTitle='new doc'
+                        documentTitle='Pet-ternary'
                         pageStyle="@media print { body { margin: 0; } .print-container { width: 100vw; height: 100vh; } }"
                     />
                 </MDBCardFooter>
@@ -267,7 +269,7 @@ function AssignServiceForm({ petData, ownerData, vetData, toggleOpen }) {
                             </MDBTable>
                         </MDBModalBody>
                         <MDBModalFooter>
-                            <MDBBtn color='secondary' onClick={toggleModal}>
+                            <MDBBtn color='secondary' onClick={toggleModal} >
                                 Close
                             </MDBBtn>
                         </MDBModalFooter>

@@ -56,10 +56,12 @@ function MedicalRecord() {
     const appointment = location.state;
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [existingRecord, setExistingRecord] = useState(null);
     useEffect(() => {
         async function getMedicalRecord() {
             try {
-                const response = await fetch(`https://localhost:7206/api/medicalRecordByAppointmentId/${appointment.appointmentId}`, {
+                const response = await fetch(`https://localhost:7206/api/medicalRecordByAppointmentId/${appointment.appointmentId}`, 
+                {
                     method: 'GET',
                     credentials: 'include',
                     headers: {
@@ -67,8 +69,11 @@ function MedicalRecord() {
                     },
                 });
                 const data = await response.json();
-                if (data) setFormData(data);
-
+                
+                if (data){
+                    setFormData(data);
+                    setExistingRecord(data);
+                }
             } catch (error) {
                 console.log(error);
     
@@ -347,8 +352,12 @@ function MedicalRecord() {
 
             </form>
                 </MDBCardText>
-                            <MDBBtn type="submit" onClick={handleSubmit}>Submit</MDBBtn>
-                            <MDBBtn type="button" onClick={toggleAssignServiceOpen} >Assign service</MDBBtn>
+                <div >
+                <MDBBtn type="submit" onClick={handleSubmit} disabled={existingRecord !== null}>Submit</MDBBtn>
+
+                    <MDBBtn style={{marginLeft:'15px'}} type="button" onClick={toggleAssignServiceOpen} >Assign service</MDBBtn>
+                </div>
+                            
                         </MDBCardBody>
                     </MDBCard>
                 </MDBRow>
