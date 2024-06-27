@@ -8,7 +8,7 @@ namespace PetHealthcare.Server.Repositories
 {
     public class AdmissionRecordRepository : IAdmissionRecordRepository
     {
-        private readonly PetHealthcareDbContext _context;        
+        private readonly PetHealthcareDbContext _context;
         public AdmissionRecordRepository(PetHealthcareDbContext context)
         {
             _context = context;
@@ -63,7 +63,7 @@ namespace PetHealthcare.Server.Repositories
                     _context.Entry(admissionRecord).State = EntityState.Modified;
                     admissionRecord.IsDischarged = true;
                     admissionRecord.PetCurrentCondition = "Is discharged";
-                    admissionRecord.DischargeDate = DateOnly.FromDateTime(DateTime.Now);                    
+                    admissionRecord.DischargeDate = DateOnly.FromDateTime(DateTime.Now);
                     await SaveChanges();
                 }
             }
@@ -77,7 +77,7 @@ namespace PetHealthcare.Server.Repositories
                 if (admissionRecord.IsDischarged == false)
                 {
                     _context.Entry(admissionRecord).State = EntityState.Modified;
-                    admissionRecord.PetCurrentCondition=updatePetConditionDTO.PetCurrentCondition;
+                    admissionRecord.PetCurrentCondition = updatePetConditionDTO.PetCurrentCondition;
                     await SaveChanges();
                 }
             }
