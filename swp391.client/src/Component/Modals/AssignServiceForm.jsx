@@ -80,7 +80,7 @@ function AssignServiceForm({ petData, ownerData, vetData, toggleOpen }) {
     };
 
     const isServiceSelected = (serviceId) => {
-        return selectedServices.some(service => service.id === serviceId);
+        return selectedServices.some(service => service.serviceId === serviceId);
     };
 
     return (
@@ -107,7 +107,7 @@ function AssignServiceForm({ petData, ownerData, vetData, toggleOpen }) {
                     }
                 `}
             </style>
-            <MDBCard className="print-container" style={{ minHeight: '60vw',minWidth:'100%' ,maxWidth: '100vw', margin: 'auto' }}>
+            <MDBCard className="print-container" style={{ minHeight: '60vw', minWidth: '100%', maxWidth: '100vw', margin: 'auto' }}>
                 <MDBCardHeader style={{ textAlign: 'center', fontSize: '3vw' }}>Medical Service</MDBCardHeader>
                 <MDBCardBody style={{ height: '5' }} scrollable >
                     <MDBRow style={{ marginLeft: '15px', marginRight: '15px' }}>
@@ -185,7 +185,7 @@ function AssignServiceForm({ petData, ownerData, vetData, toggleOpen }) {
                                             </tr>
                                         </MDBTableHead>
                                         <MDBTableBody>
-                                        {selectedServices.map((ser, index) => (
+                                            {selectedServices.map((ser, index) => (
                                                 <tr key={ser.id}>
                                                     <td>{index + 1}</td>
                                                     <td>
@@ -252,15 +252,15 @@ function AssignServiceForm({ petData, ownerData, vetData, toggleOpen }) {
                                                 <p className='fw-normal mb-1'>{ser.servicePrice}</p>
                                             </td>
                                             <td>
-                                            <MDBBtn
+                                                <MDBBtn
                                                     color='primary'
                                                     style={{ color: 'black' }}
                                                     rounded
                                                     size='sm'
                                                     onClick={() => handleAddService(ser)}
-                                                    disabled={isServiceSelected(ser.id)}
+                                                    disabled={isServiceSelected(ser.serviceId)}
                                                 >
-                                                    {isServiceSelected(ser.id) ? 'Added' : 'Add'}
+                                                    {isServiceSelected(ser.serviceId) ? 'Added' : 'Add'}
                                                 </MDBBtn>
                                             </td>
                                         </tr>
