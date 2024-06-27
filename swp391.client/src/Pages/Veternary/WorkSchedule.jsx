@@ -224,7 +224,6 @@ function WorkSchedule() {
                                                 </td>
                                                 <td>
                                                     <p className='fw-bold mb-1'>{app.bookingPrice}</p>
-                                                    <p className='text-muted mb-0'>{app.petId}</p>
                                                 </td>
                                                 <td>
                                                     <p className='fw-normal mb-1'>{app.appointmentNotes}</p>
