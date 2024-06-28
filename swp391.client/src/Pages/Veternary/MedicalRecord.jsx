@@ -68,7 +68,7 @@ function MedicalRecord() {
                     },
                 });
                 const data = await response.json();
-
+                console.log(data);
                 if (data) {
                     setFormData(data);
                     setExistingRecord(data);
