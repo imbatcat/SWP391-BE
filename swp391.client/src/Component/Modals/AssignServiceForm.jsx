@@ -24,7 +24,7 @@ import { useEffect, useState, useRef } from 'react';
 import { toast } from 'react-toastify';
 import ReactToPrint from 'react-to-print';
 
-function AssignServiceForm({ petData, ownerData, vetData, toggleOpen }) {
+function AssignServiceForm({ mRecId, petData, ownerData, vetData, toggleOpen }) {
     const [services, setServices] = useState([]);
     const [selectedServices, setSelectedServices] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
@@ -79,8 +79,44 @@ function AssignServiceForm({ petData, ownerData, vetData, toggleOpen }) {
         }
     };
     const handleRemoveService = (serviceId) => {
-        setSelectedServices((prevServices) => prevServices.filter(service => service.id !== serviceId));
+        setSelectedServices((prevServices) => prevServices.filter(service => service.serviceId !== serviceId));
     };
+    const handleSubmitService = async () => {
+        let serviceIdList = selectedServices.map(item => item.serviceId);
+        const reqBody = {
+            'serviceId': serviceIdList,
+            'medicalRecordId': mRecId
+        };
+        console.log(JSON.stringify(reqBody));
+        const fetchPromise = fetch('https://localhost:7206/api/ServiceOrder', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify(reqBody)
+        });
+
+        toast.promise(
+            fetchPromise,
+            {
+                pending: 'Submitting your request...',
+                success: 'Request submitted successfully!',
+                error: {
+                    render({ data }) {
+                        // data is the error object
+                        return `Error: ${data.message}`;
+                    }
+                }
+            }
+        );
+        try {
+            await fetchPromise;
+        } catch (error) {
+            console.error(error); // log error for debugging purposes
+        }
+    };
+
 
     const isServiceSelected = (serviceId) => {
         return selectedServices.some(service => service.serviceId === serviceId);
@@ -133,7 +169,7 @@ function AssignServiceForm({ petData, ownerData, vetData, toggleOpen }) {
                                     <MDBCardText>
                                         <div style={{ textAlign: 'center' }}>
                                             <p className='fw-bold mb-1'>{vetData.fullName}</p>
-                                            <p className='text-muted mb-0' style={{ fontSize: '1vw' }}>{vetData.position}</p>
+                                            <p className='text-muted mb-0' style={{ fontSize: '1rem' }}>{vetData.position}</p>
                                         </div>
                                     </MDBCardText>
                                 </MDBCardBody>
@@ -173,7 +209,7 @@ function AssignServiceForm({ petData, ownerData, vetData, toggleOpen }) {
                                         Medical Service Information
                                     </MDBCol>
                                     <MDBCol sm='3' className='no-print' >
-                                        <MDBBtn style={{ fontSize: '0.5vw' }} onClick={toggleModal}>Add Services</MDBBtn>
+                                        <MDBBtn style={{ fontSize: '0.65rem' }} onClick={toggleModal}>Add Services</MDBBtn>
                                     </MDBCol>
                                 </MDBRow>
                             </MDBCardHeader>
@@ -189,7 +225,7 @@ function AssignServiceForm({ petData, ownerData, vetData, toggleOpen }) {
                                         </MDBTableHead>
                                         <MDBTableBody>
                                             {selectedServices.map((ser, index) => (
-                                                <tr key={ser.id}>
+                                                <tr key={ser.serviceId}>
                                                     <td>{index + 1}</td>
                                                     <td>
                                                         <div className='ms-3'>
@@ -200,7 +236,7 @@ function AssignServiceForm({ petData, ownerData, vetData, toggleOpen }) {
                                                         <p className='fw-normal mb-1'>{ser.servicePrice}</p>
                                                     </td>
                                                     <td>
-                                                        <MDBBtn color='danger' onClick={() => handleRemoveService(ser.id)}>x</MDBBtn>
+                                                        <MDBBtn color='danger' onClick={() => handleRemoveService(ser.serviceId)}>x</MDBBtn>
                                                     </td>
                                                 </tr>
 
@@ -208,17 +244,17 @@ function AssignServiceForm({ petData, ownerData, vetData, toggleOpen }) {
                                         </MDBTableBody>
                                     </MDBTable>
                                 </MDBCardText>
-                                <MDBBtn className='no-print' type="submit">Submit</MDBBtn>
+                                <MDBBtn className='no-print' type="submit" onClick={() => handleSubmitService()}>Submit</MDBBtn>
                             </MDBCardBody>
                         </MDBCard>
                     </MDBRow>
                 </MDBCardBody>
                 <MDBCardFooter>
                     <ReactToPrint
-                        trigger={()=>{
-                            return <MDBBtn className='no-print'>Print</MDBBtn>
+                        trigger={() => {
+                            return <MDBBtn className='no-print'>Print</MDBBtn>;
                         }}
-                        content={()=>componentRef.current}
+                        content={() => componentRef.current}
                         documentTitle='Pet-ternary'
                         pageStyle="@media print { body { margin: 0; } .print-container { width: 100vw; height: 100vh; } }"
                     />

@@ -69,7 +69,7 @@ function MedicalRecord() {
                     },
                 });
                 const data = await response.json();
-                
+
                 if (data) {
                     console.log(data);
                     setFormData(data);
@@ -164,7 +164,7 @@ function MedicalRecord() {
         });
     };
 
-    console.log(existingRecord.medicalRecordId);
+    //console.log(existingRecord.medicalRecordId);
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(existingRecord);
@@ -209,9 +209,9 @@ function MedicalRecord() {
 
 
     return (
-        
+
         <div>
-        
+
             <MDBCard style={{ minHeight: '60vw', maxWidth: '50vw', margin: 'auto', marginTop: '50px' }}>
                 <MDBCardHeader style={{ textAlign: 'center', fontSize: '3vw' }}>Medical Record</MDBCardHeader>
                 <MDBCardBody style={{ height: '5' }} scrollable>
@@ -306,7 +306,7 @@ function MedicalRecord() {
 
                                 <MDBCardText>
                                     <form onSubmit={handleSubmit} style={{ maxWidth: '600px', margin: 'auto' }}>
-                
+
                                         <MDBRow>
                                             <MDBCol>
                                                 <MDBInputGroup className='mb-3' textBefore='Pet Weight' textAfter='kg'>
@@ -336,7 +336,7 @@ function MedicalRecord() {
                                             <MDBCol>
                                                 <MDBInputGroup className='mb-3' textBefore='Diagnosis' >
                                                     <input className='form-control' type="text" name="diagnosis" value={formData.diagnosis} onChange={handleChange} required />
-                                                    
+
                                                 </MDBInputGroup>
                                             </MDBCol>
                                         </MDBRow>
@@ -387,8 +387,8 @@ function MedicalRecord() {
             </MDBCard>
 
             <div>
-                <MDBModal open={assignModal} onClose={() => setAssignModal(false)} tabIndex='-1'>
-                    <AssignServiceModal petData={petData} ownerData={ownerData} vetData={vetData} toggleOpen={toggleAssignServiceOpen} />
+                <MDBModal open={assignServiceModal} onClose={() => setAssignModal(false)} tabIndex='-1'>
+                    <AssignServiceModal mRecId={existingRecord.medicalRecordId} petData={petData} ownerData={ownerData} vetData={vetData} toggleOpen={toggleAssignServiceOpen} />
                 </MDBModal>
             </div>
         </div>
