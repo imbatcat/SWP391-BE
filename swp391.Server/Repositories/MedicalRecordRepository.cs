@@ -48,6 +48,7 @@ namespace PetHealthcare.Server.Repositories
                 {
                     var medRecByAppointId = new MedicalRecordVetDTO
                     {
+                        MedicalRecordId = record.MedicalRecordId,
                         AdditionalNotes = record.AdditionalNotes,
                         Allergies = record.Allergies,
                         Diagnosis = record.Diagnosis,

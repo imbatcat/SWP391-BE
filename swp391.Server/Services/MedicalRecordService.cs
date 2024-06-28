@@ -77,6 +77,7 @@ namespace PetHealthcare.Server.Services
             {
                 var medRecord = new MedicalRecordVetDTO
                 {
+                    MedicalRecordId=record.MedicalRecordId,
                     AdditionalNotes = record.AdditionalNotes,
                     Allergies = record.Allergies,
                     Diagnosis = record.Diagnosis,
