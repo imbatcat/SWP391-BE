@@ -10,9 +10,11 @@ namespace PetHealthcare.Server.Services
     public class MedicalRecordService : IMedicalRecordService
     {
         public readonly IMedicalRecordRepository medRecService;
-        public MedicalRecordService(IMedicalRecordRepository medicalRecordService)
+        public readonly IAppointmentRepository appointmentService;
+        public MedicalRecordService(IMedicalRecordRepository medicalRecordService, IAppointmentRepository appointmentRepository)
         {
             medRecService = medicalRecordService;
+            appointmentService = appointmentRepository;
         }
         public async Task CreateMedicalRecord(MedicalRecorResDTO medicalRecord)
         {
@@ -60,7 +62,34 @@ namespace PetHealthcare.Server.Services
         {
             return await medRecService.GetMedicalRecordsByAppointmentId(appointmentId);
         }
-
+        public async Task<IEnumerable<MedicalRecordVetDTO>> GetMedicalRecordsByVetId(string vetId)
+        {
+            var joinList = from s in await medRecService.GetAll() join r in await appointmentService.GetAll()
+                           on s.AppointmentId equals r.AppointmentId
+                           where r.VeterinarianAccountId == vetId
+                           select s;
+            //var listAppointment= await appointmentService.GetAll();
+            //listAppointment.Where(a=>a.VeterinarianAccountId==vetId).ToList();
+            //var list =await medRecService.GetAll();
+            
+            List<MedicalRecordVetDTO> recordVetDTOs=new List<MedicalRecordVetDTO>();
+            foreach (var record in joinList)
+            {
+                var medRecord = new MedicalRecordVetDTO
+                {
+                    AdditionalNotes = record.AdditionalNotes,
+                    Allergies = record.Allergies,
+                    Diagnosis = record.Diagnosis,
+                    DrugPrescriptions = record.DrugPrescriptions,
+                    FollowUpAppointmentDate = record.FollowUpAppointmentDate,
+                    FollowUpAppointmentNotes = record.FollowUpAppointmentNotes,
+                    PetWeight = record.PetWeight,
+                    Symptoms = record.Symptoms,
+                };
+                recordVetDTOs.Add(medRecord);
+            }
+            return recordVetDTOs;
+        }
         public async Task UpdateMedicalRecord(string id, MedicalRecordDTO medicalRecord)
         {
             var medicalRec = new MedicalRecord

@@ -52,10 +52,17 @@ namespace PetHealthcare.Server.APIs.Controllers
             return await _petService.GetMedicalRecordsByPet(petId);
         }
         [HttpGet("/api/medicalRecordByAppointmentId/{appointmentId}")]
-        [Authorize(Roles="Vet")]
-        public async Task<MedicalRecordVetDTO> GetMedicalRecordsByAppointmentId([FromRoute]string appointmentId)
+        [Authorize(Roles = "Vet")]
+        public async Task<IEnumerable<MedicalRecordVetDTO>> GetMedicalRecordsByAppointmentId([FromRoute] string appointmentId)
         {
             return await _context.GetMedicalRecordsByAppointmentId(appointmentId);
+        }
+        //GET: get all medical Records of a veterinarian from VetId
+        [HttpGet("/api/medicalRecordsByVetId/{VetId}")]
+        [Authorize(Roles = "Vet")]
+        public async Task<IEnumerable<MedicalRecordVetDTO>> GetMedicalRecordByVetId([FromRoute] string VetId)
+        {
+            return await _context.GetMedicalRecordsByVetId(VetId);
         }
         //PUT: api/MedicalRecords/5
         //To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

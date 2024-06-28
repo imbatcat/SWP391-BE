@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using NanoidDotNet;
 using PetHealthcare.Server.Core.DTOS;
 using PetHealthcare.Server.Core.DTOS.AppointmentDTOs;
+using PetHealthcare.Server.Core.Helpers;
 using PetHealthcare.Server.Models;
+using PetHealthcare.Server.Services;
 using PetHealthcare.Server.Services.Interfaces;
 
 namespace PetHealthcare.Server.APIs.Controllers
@@ -227,7 +229,14 @@ namespace PetHealthcare.Server.APIs.Controllers
                 {
                     return BadRequest(new { message = "Invalid foreign key VetId" });
                 }
-                await _appointment.UpdateAppointment(id, toUpdateAppointment);
+                
+                if(appointemnt.AppointmentDate.CompareTo(toUpdateAppointment.AppointmentDate) == 0) //check if the appointment update the date, if they dont update appointment date and timeslot is full, it still allow to update another field
+                {
+                    await _appointment.UpdateAppointment(id, toUpdateAppointment, false);
+                } else
+                {
+                    await _appointment.UpdateAppointment(id, toUpdateAppointment, true);
+                }
             }
             catch (Exception ex)
             {

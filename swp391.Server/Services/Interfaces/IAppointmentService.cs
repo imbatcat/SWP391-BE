@@ -10,7 +10,7 @@ namespace PetHealthcare.Server.Services.Interfaces
         Task<IEnumerable<GetAllAppointmentForAdminDTO>> GetAllAppointment(string vetId);
         Task<Appointment?> GetAppointmentByCondition(Expression<Func<Appointment, bool>> expression);
         Task CreateAppointment(CreateAppointmentDTO appointment, string id);
-        Task UpdateAppointment(string id, CustomerAppointmentDTO appointment);
+        Task UpdateAppointment(string id, CustomerAppointmentDTO appointment, bool isUpdateDate);
         void DeleteAppointment(Appointment appointment);
 
         Task<IEnumerable<GetAllAppointmentForAdminDTO>> GetAllAppointmentByAccountId(string acId);
@@ -29,5 +29,7 @@ namespace PetHealthcare.Server.Services.Interfaces
         Task<IEnumerable<AppointmentForStaffDTO>> GetAllAppointmentForStaff(DateOnly date, int timeslot);
 
         Task<IEnumerable<AppointmentForStaffDTO>> GetStaffHistoryAppointment();
+
+        Task<IEnumerable<Appointment>> GetAll();
     }
 }
