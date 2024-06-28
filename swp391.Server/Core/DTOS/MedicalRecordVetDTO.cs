@@ -2,10 +2,7 @@
 {
     public class MedicalRecordVetDTO
     {
-        public string AppointmentId { get; set; }
-
-        public string PetId { get; set; }
-
+        public string MedicalRecordId {  get; set; }
         public int PetWeight { get; set; }
 
         public string? Symptoms { get; set; }
