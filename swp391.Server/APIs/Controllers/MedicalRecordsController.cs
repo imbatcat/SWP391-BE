@@ -78,7 +78,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Authorize(Roles = "Vet, Staff, Customer, Admin")]
-        public async Task<ActionResult<MedicalRecorResDTO>> PostMedicalRecord([FromBody] MedicalRecorResDTO medicalRecordDTO)
+        public async Task<ActionResult<MedicalRecordResDTO>> PostMedicalRecord([FromBody] MedicalRecordResDTO medicalRecordDTO)
         {
             await _context.CreateMedicalRecord(medicalRecordDTO);
             //try

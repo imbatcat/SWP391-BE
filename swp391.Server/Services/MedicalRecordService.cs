@@ -16,20 +16,20 @@ namespace PetHealthcare.Server.Services
             medRecService = medicalRecordService;
             appointmentService = appointmentRepository;
         }
-        public async Task CreateMedicalRecord(MedicalRecordDTO medicalRecord)
+        public async Task CreateMedicalRecord(MedicalRecordResDTO medicalRecord)
         {
             var medicalRec = new MedicalRecord
             {
                 MedicalRecordId = GenerateID(),
-                DateCreated = medicalRecord.DataCreated,
+                DateCreated = DateOnly.FromDateTime(DateTime.Now),
                 PetWeight = medicalRecord.PetWeight,
                 Symptoms = medicalRecord.Symptoms,
                 Allergies = medicalRecord.Allergies,
                 Diagnosis = medicalRecord.Diagnosis,
-                AdditionalNotes = medicalRecord.AdditionallNotes,
-                FollowUpAppointmentDate = DateOnly.FromDateTime(medicalRecord.FollowUpAppointmentDate ?? DateTime.Now),
+                AdditionalNotes = medicalRecord.AdditionalNotes,
+                FollowUpAppointmentDate = medicalRecord.FollowUpAppointmentDate,
                 FollowUpAppointmentNotes = medicalRecord.FollowUpAppointmentNotes,
-                DrugPrescriptions = medicalRecord.DrugPrescription,
+                DrugPrescriptions = medicalRecord.DrugPrescriptions,
                 AppointmentId = medicalRecord.AppointmentId,
                 PetId = medicalRecord.PetId
             };
@@ -78,7 +78,7 @@ namespace PetHealthcare.Server.Services
             {
                 var medRecord = new MedicalRecordVetDTO
                 {
-                    MedicalRecordId=record.MedicalRecordId,
+                    MedicalRecordId = record.MedicalRecordId,
                     AdditionalNotes = record.AdditionalNotes,
                     Allergies = record.Allergies,
                     Diagnosis = record.Diagnosis,

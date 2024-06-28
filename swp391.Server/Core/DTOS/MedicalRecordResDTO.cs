@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace PetHealthcare.Server.Core.DTOS
 {
-    public class MedicalRecorResDTO
+    public class MedicalRecordResDTO
     {
         public string PetId { get; set; }
 
