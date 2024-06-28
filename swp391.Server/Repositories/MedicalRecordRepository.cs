@@ -34,7 +34,7 @@ namespace PetHealthcare.Server.Repositories
             return await _medRec.MedicalRecords.FirstOrDefaultAsync(expression);
         }
 
-        public async Task<IEnumerable<MedicalRecordVetDTO>> GetMedicalRecordsByAppointmentId(string appointmentId)
+        public async Task<MedicalRecordVetDTO> GetMedicalRecordsByAppointmentId(string appointmentId)
         {
             if (!Any(m => m.AppointmentId == appointmentId))
             {
@@ -59,9 +59,10 @@ namespace PetHealthcare.Server.Repositories
                         Symptoms = record.Symptoms,
                     };
                     records.Add(medRecByAppointId);
+                    return medRecByAppointId;
                 }
             }
-            return records;
+            return null;
         }
 
         public async Task SaveChanges()

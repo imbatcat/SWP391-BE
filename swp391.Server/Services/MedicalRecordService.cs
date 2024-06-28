@@ -58,7 +58,7 @@ namespace PetHealthcare.Server.Services
             return await medRecService.GetByCondition(expression);
         }
 
-        public async Task<IEnumerable<MedicalRecordVetDTO>> GetMedicalRecordsByAppointmentId(string appointmentId)
+        public async Task<MedicalRecordVetDTO> GetMedicalRecordsByAppointmentId(string appointmentId)
         {
             return await medRecService.GetMedicalRecordsByAppointmentId(appointmentId);
         }
