@@ -36,7 +36,7 @@ namespace PetHealthcare.Server.Repositories
 
         public async Task<IEnumerable<MedicalRecordVetDTO>> GetMedicalRecordsByAppointmentId(string appointmentId)
         {
-            if (Any(m => m.AppointmentId == appointmentId))
+            if (!Any(m => m.AppointmentId == appointmentId))
             {
                 return null;
             }

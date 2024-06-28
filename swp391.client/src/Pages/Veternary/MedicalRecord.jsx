@@ -59,6 +59,7 @@ function MedicalRecord() {
     const [existingRecord, setExistingRecord] = useState(null);
     useEffect(() => {
         async function getMedicalRecord() {
+            console.log(appointment);
             try {
                 const response = await fetch(`https://localhost:7206/api/medicalRecordByAppointmentId/${appointment.appointmentId}`, {
                     method: 'GET',
@@ -164,7 +165,7 @@ function MedicalRecord() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-console.log(existingRecord);
+        console.log(existingRecord);
         // Validation
         const emptyFields = Object.keys(formData).filter(key => !formData[key]);
         if (emptyFields.length > 0) {
@@ -173,8 +174,8 @@ console.log(existingRecord);
         }
 
         const url = existingRecord && existingRecord.diagnosis !== ''
-        ? `https://localhost:7206/api/MedicalRecords/${existingRecord.id}`
-        : 'https://localhost:7206/api/MedicalRecords';
+            ? `https://localhost:7206/api/MedicalRecords/${existingRecord.id}`
+            : 'https://localhost:7206/api/MedicalRecords';
         const method = existingRecord && existingRecord.diagnosis !== '' ? 'PUT' : 'POST';
 
 
@@ -202,7 +203,7 @@ console.log(existingRecord);
         }
     };
 
-    
+
 
 
     return (
