@@ -30,7 +30,6 @@ function AssignCageForm({ mRecId, petData, ownerData, vetData, toggleOpen }) {
     const [modalOpen, setModalOpen] = useState(false);
     const toggleModal = () => setModalOpen(!modalOpen);
     const componentRef = useRef();
-
     useEffect(() => {
         async function fetchData() {
             try {
@@ -81,12 +80,13 @@ function AssignCageForm({ mRecId, petData, ownerData, vetData, toggleOpen }) {
     const handleRemoveCage = (cageId) => {
         setSelectedCages((prevCage) => prevCage.filter(cage => cage.cageId !== cageId));
     };
+    console.log(selectedCages[0].cageNumber);
     const handleSubmitService = async () => {
         const reqBody = {
-            'cageNumber': selectedCages.cageNumber
+            'cageNumber': selectedCages[0].cageNumber
         };
         console.log(JSON.stringify(reqBody));
-        const fetchPromise = fetch('https://localhost:7206/api/Cages/${selectedCages.cageId}', {
+        const fetchPromise = fetch(`https://localhost:7206/api/Cages/${selectedCages[0].cageId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'

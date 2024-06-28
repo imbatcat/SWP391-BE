@@ -10,11 +10,9 @@ namespace PetHealthcare.Server.Services
     public class MedicalRecordService : IMedicalRecordService
     {
         public readonly IMedicalRecordRepository medRecService;
-        public readonly IServiceOrderService serviceOrderService;
         public readonly IAppointmentRepository appointmentService;
-        public MedicalRecordService(IServiceOrderService _serviceOrderService, IMedicalRecordRepository medicalRecordService, IAppointmentRepository appointmentRepository)
+        public MedicalRecordService(IMedicalRecordRepository medicalRecordService, IAppointmentRepository appointmentRepository)
         {
-            serviceOrderService = _serviceOrderService;
             medRecService = medicalRecordService;
             appointmentService = appointmentRepository;
         }
@@ -94,12 +92,6 @@ namespace PetHealthcare.Server.Services
             }
             return recordVetDTOs;
         }
-
-        public Task SaveAssignedServices(IEnumerable<ServiceDTO> serviceDTOs)
-        {
-
-        }
-
         public async Task UpdateMedicalRecord(string id, MedicalRecordDTO medicalRecord)
         {
             var medicalRec = new MedicalRecord
