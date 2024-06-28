@@ -25,7 +25,7 @@ namespace PetHealthcare.Server.Repositories
         }
 
         public async Task<IEnumerable<MedicalRecord>> GetAll()
-        {            
+        {
             return await _medRec.MedicalRecords.ToListAsync();
         }
 
@@ -34,7 +34,7 @@ namespace PetHealthcare.Server.Repositories
             return await _medRec.MedicalRecords.FirstOrDefaultAsync(expression);
         }
 
-        public async Task<MedicalRecordVetDTO> GetMedicalRecordsByAppointmentId(string appointmentId)
+        public async Task<IEnumerable<MedicalRecordVetDTO>> GetMedicalRecordsByAppointmentId(string appointmentId)
         {
             if (Any(m => m.AppointmentId == appointmentId))
             {
@@ -48,8 +48,7 @@ namespace PetHealthcare.Server.Repositories
                 {
                     var medRecByAppointId = new MedicalRecordVetDTO
                     {
-                        AppointmentId = record.AppointmentId,
-                        PetId = record.PetId,
+                        MedicalRecordId = record.MedicalRecordId,
                         AdditionalNotes = record.AdditionalNotes,
                         Allergies = record.Allergies,
                         Diagnosis = record.Diagnosis,
@@ -59,10 +58,10 @@ namespace PetHealthcare.Server.Repositories
                         PetWeight = record.PetWeight,
                         Symptoms = record.Symptoms,
                     };
-                    return medRecByAppointId;
+                    records.Add(medRecByAppointId);
                 }
             }
-            return null;
+            return records;
         }
 
         public async Task SaveChanges()
@@ -84,7 +83,7 @@ namespace PetHealthcare.Server.Repositories
             }
             await SaveChanges();
         }
-        public bool Any(Expression<Func<MedicalRecord,bool>> predicate)
+        public bool Any(Expression<Func<MedicalRecord, bool>> predicate)
         {
             return _medRec.MedicalRecords.Any(predicate);
         }
