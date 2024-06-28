@@ -15,6 +15,7 @@ import {
 } from 'mdb-react-ui-kit';
 import { toast } from 'react-toastify';
 import AssignServiceModal from '../../Component/Modals/AssignServiceModal';
+import AssignCageModal from '../../Component/Modals/AssignCageModal';
 
 async function fetchOwnerAndPetData(accountId, petId, vetId) {
     try {
@@ -85,7 +86,9 @@ function MedicalRecord() {
 
     const [ownerData, setOwnerData] = useState(null);
     const [assignServiceModal, setAssignServiceModal] = useState(false);
+    const [assignCageModal, setAssignCageModal] = useState(false);
     const toggleAssignServiceOpen = () => setAssignServiceModal(!assignServiceModal);
+    const toggleAssignCageOpen = () => setAssignCageModal(!assignCageModal);
     const [assignModal, setAssignModal] = useState(false);
     const [petData, setPetData] = useState(null);
     const [vetData, setVetData] = useState(null);
@@ -378,6 +381,8 @@ function MedicalRecord() {
                                     <MDBBtn type="submit" onClick={handleSubmit}>Submit</MDBBtn>
 
                                     <MDBBtn style={{ marginLeft: '15px' }} type="button" onClick={toggleAssignServiceOpen} >Assign service</MDBBtn>
+
+                                    <MDBBtn style={{ marginLeft: '15px' }} type="button" onClick={toggleAssignCageOpen} >Assign Cage</MDBBtn>
                                 </div>
 
                             </MDBCardBody>
@@ -389,6 +394,11 @@ function MedicalRecord() {
             <div>
                 <MDBModal open={assignServiceModal} onClose={() => setAssignModal(false)} tabIndex='-1'>
                     <AssignServiceModal mRecId={existingRecord.medicalRecordId} petData={petData} ownerData={ownerData} vetData={vetData} toggleOpen={toggleAssignServiceOpen} />
+                </MDBModal>
+            </div>
+            <div>
+                <MDBModal open={assignCageModal} onClose={() => setAssignCageModal(false)} tabIndex='-1'>
+                    <AssignCageModal mRecId={existingRecord.medicalRecordId} petData={petData} ownerData={ownerData} vetData={vetData} toggleOpen={toggleAssignServiceOpen} />
                 </MDBModal>
             </div>
         </div>
