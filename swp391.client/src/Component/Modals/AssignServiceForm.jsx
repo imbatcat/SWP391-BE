@@ -78,6 +78,9 @@ function AssignServiceForm({ petData, ownerData, vetData, toggleOpen }) {
             setSelectedServices((prevServices) => [...prevServices, service]);
         }
     };
+    const handleRemoveService = (serviceId) => {
+        setSelectedServices((prevServices) => prevServices.filter(service => service.id !== serviceId));
+    };
 
     const isServiceSelected = (serviceId) => {
         return selectedServices.some(service => service.serviceId === serviceId);
@@ -196,7 +199,11 @@ function AssignServiceForm({ petData, ownerData, vetData, toggleOpen }) {
                                                     <td>
                                                         <p className='fw-normal mb-1'>{ser.servicePrice}</p>
                                                     </td>
+                                                    <td>
+                                                        <MDBBtn color='danger' onClick={() => handleRemoveService(ser.id)}>x</MDBBtn>
+                                                    </td>
                                                 </tr>
+
                                             ))}
                                         </MDBTableBody>
                                     </MDBTable>
