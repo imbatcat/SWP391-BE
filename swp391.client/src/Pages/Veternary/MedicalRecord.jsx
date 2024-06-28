@@ -69,8 +69,9 @@ function MedicalRecord() {
                     },
                 });
                 const data = await response.json();
-                console.log(data);
+                
                 if (data) {
+                    console.log(data);
                     setFormData(data);
                     setExistingRecord(data);
                 }
@@ -120,6 +121,7 @@ function MedicalRecord() {
         }
     }, [appointment]);
 
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -162,7 +164,7 @@ function MedicalRecord() {
         });
     };
 
-
+    console.log(existingRecord.medicalRecordId);
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(existingRecord);
@@ -174,7 +176,7 @@ function MedicalRecord() {
         }
 
         const url = existingRecord && existingRecord.diagnosis !== ''
-            ? `https://localhost:7206/api/MedicalRecords/${existingRecord.id}`
+            ? `https://localhost:7206/api/MedicalRecords/${existingRecord.medicalRecordId}`
             : 'https://localhost:7206/api/MedicalRecords';
         const method = existingRecord && existingRecord.diagnosis !== '' ? 'PUT' : 'POST';
 
@@ -203,11 +205,13 @@ function MedicalRecord() {
         }
     };
 
-
+    console.log(formData);
 
 
     return (
+        
         <div>
+        
             <MDBCard style={{ minHeight: '60vw', maxWidth: '50vw', margin: 'auto', marginTop: '50px' }}>
                 <MDBCardHeader style={{ textAlign: 'center', fontSize: '3vw' }}>Medical Record</MDBCardHeader>
                 <MDBCardBody style={{ height: '5' }} scrollable>
@@ -302,6 +306,7 @@ function MedicalRecord() {
 
                                 <MDBCardText>
                                     <form onSubmit={handleSubmit} style={{ maxWidth: '600px', margin: 'auto' }}>
+                
                                         <MDBRow>
                                             <MDBCol>
                                                 <MDBInputGroup className='mb-3' textBefore='Pet Weight' textAfter='kg'>
@@ -331,6 +336,7 @@ function MedicalRecord() {
                                             <MDBCol>
                                                 <MDBInputGroup className='mb-3' textBefore='Diagnosis' >
                                                     <input className='form-control' type="text" name="diagnosis" value={formData.diagnosis} onChange={handleChange} required />
+                                                    
                                                 </MDBInputGroup>
                                             </MDBCol>
                                         </MDBRow>
