@@ -17,7 +17,7 @@ function Home() {
                 body: params.toString()
             });
             const data = await response.json();
-            if (data) toast.success('Your appointment has been successfully booked!');
+            if (data && data !== "") toast.success('Your appointment has been successfully booked!');
 
         };
 

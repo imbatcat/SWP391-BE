@@ -25,7 +25,7 @@ namespace PetHealthcare.Server.Repositories
         }
 
         public async Task<IEnumerable<MedicalRecord>> GetAll()
-        {            
+        {
             return await _medRec.MedicalRecords.ToListAsync();
         }
 
@@ -34,9 +34,9 @@ namespace PetHealthcare.Server.Repositories
             return await _medRec.MedicalRecords.FirstOrDefaultAsync(expression);
         }
 
-        public async Task<IEnumerable<MedicalRecordVetDTO>> GetMedicalRecordsByAppointmentId(string appointmentId)
+        public async Task<MedicalRecordVetDTO> GetMedicalRecordsByAppointmentId(string appointmentId)
         {
-            if (Any(m => m.AppointmentId == appointmentId))
+            if (!Any(m => m.AppointmentId == appointmentId))
             {
                 return null;
             }
@@ -44,10 +44,11 @@ namespace PetHealthcare.Server.Repositories
             List<MedicalRecordVetDTO> records = new List<MedicalRecordVetDTO>();
             foreach (var record in list)
             {
-                if(record.AppointmentId == appointmentId)
+                if (record.AppointmentId == appointmentId)
                 {
                     var medRecByAppointId = new MedicalRecordVetDTO
                     {
+                        MedicalRecordId = record.MedicalRecordId,
                         AdditionalNotes = record.AdditionalNotes,
                         Allergies = record.Allergies,
                         Diagnosis = record.Diagnosis,
@@ -58,9 +59,10 @@ namespace PetHealthcare.Server.Repositories
                         Symptoms = record.Symptoms,
                     };
                     records.Add(medRecByAppointId);
+                    return medRecByAppointId;
                 }
             }
-            return records;
+            return null;
         }
 
         public async Task SaveChanges()
@@ -82,7 +84,7 @@ namespace PetHealthcare.Server.Repositories
             }
             await SaveChanges();
         }
-        public bool Any(Expression<Func<MedicalRecord,bool>> predicate)
+        public bool Any(Expression<Func<MedicalRecord, bool>> predicate)
         {
             return _medRec.MedicalRecords.Any(predicate);
         }

@@ -8,10 +8,10 @@ namespace PetHealthcare.Server.Services.Interfaces
     {
         Task<IEnumerable<MedicalRecord>> GetAllMedicalRecord();
         Task<MedicalRecord?> GetMedicalRecordByCondition(Expression<Func<MedicalRecord, bool>> expression);
-        Task CreateMedicalRecord(MedicalRecordDTO medicalRecord);
+        Task CreateMedicalRecord(MedicalRecordResDTO medicalRecord);
         Task UpdateMedicalRecord(string id, MedicalRecordDTO medicalRecord);
         void DeleteMedicalRecord(MedicalRecord medicalRecord);
-        Task<IEnumerable<MedicalRecordVetDTO>> GetMedicalRecordsByAppointmentId(string appointmentId);
+        Task<MedicalRecordVetDTO> GetMedicalRecordsByAppointmentId(string appointmentId);
         Task<IEnumerable<MedicalRecordVetDTO>> GetMedicalRecordsByVetId(string VetId);
         string GenerateID();
     }

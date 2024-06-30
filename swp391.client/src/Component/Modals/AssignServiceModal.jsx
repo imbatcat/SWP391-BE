@@ -6,24 +6,24 @@ import {
     MDBModalHeader,
     MDBModalTitle
 } from 'mdb-react-ui-kit';
-import CreateModalForm from './CreateModalForm';
+import AssignServiceForm from './AssignServiceForm';
 
-function CreateModal({ toggleOpen }) {
+function AssignServiceModal({ petData, ownerData, vetData, toggleOpen }) {
 
     return (
         <>
-            <MDBModalDialog >
-                <MDBModalContent style={{width:'35vw'}}>
+            <MDBModalDialog style={{ minWidth: 'fit-content' }}>
+                <MDBModalContent>
                     <MDBModalHeader >
-                        <MDBModalTitle>User Information</MDBModalTitle>
+                        <MDBModalTitle>Assign Medical Service Form</MDBModalTitle>
                         <MDBBtn className='btn-close' color='none' onClick={toggleOpen}></MDBBtn>
                     </MDBModalHeader>
                     <MDBModalBody>
-                        <CreateModalForm/>
+                        <AssignServiceForm petData={petData} ownerData={ownerData} vetData={vetData} toggleOpen={toggleOpen} />
                     </MDBModalBody>
                 </MDBModalContent>
             </MDBModalDialog>
         </>
     );
 }
-export default CreateModal;
+export default AssignServiceModal;

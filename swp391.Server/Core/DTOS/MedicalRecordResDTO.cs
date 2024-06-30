@@ -1,8 +1,14 @@
-﻿namespace PetHealthcare.Server.Core.DTOS
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
+
+namespace PetHealthcare.Server.Core.DTOS
 {
-    public class MedicalRecordVetDTO
+    public class MedicalRecordResDTO
     {
-        public string MedicalRecordId {  get; set; }
+        public string PetId { get; set; }
+
+        public string AppointmentId { get; set; }
+
         public int PetWeight { get; set; }
 
         public string? Symptoms { get; set; }
@@ -13,6 +19,7 @@
 
         public string? AdditionalNotes { get; set; }
 
+        [DataType(DataType.Date)]
         public DateOnly? FollowUpAppointmentDate { get; set; }
 
         public string? FollowUpAppointmentNotes { get; set; }

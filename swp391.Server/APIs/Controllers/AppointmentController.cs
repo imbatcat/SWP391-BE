@@ -89,7 +89,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         [HttpGet("AppointmentList/{accountId}&{listType}")]
-        [Authorize(Roles = "Customer,Admin")]
+        [Authorize(Roles = "Customer,Admin, Vet")]
         public async Task<ActionResult<IEnumerable<ResAppListForCustomer>>> GetCustomerAppointmentList([FromRoute] string accountId, [FromRoute] string listType)
         {
             IEnumerable<ResAppListForCustomer> appointmentList = new List<ResAppListForCustomer>();

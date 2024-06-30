@@ -16,20 +16,20 @@ namespace PetHealthcare.Server.Services
             medRecService = medicalRecordService;
             appointmentService = appointmentRepository;
         }
-        public async Task CreateMedicalRecord(MedicalRecordDTO medicalRecord)
+        public async Task CreateMedicalRecord(MedicalRecordResDTO medicalRecord)
         {
             var medicalRec = new MedicalRecord
             {
                 MedicalRecordId = GenerateID(),
-                DateCreated = medicalRecord.DataCreated,
+                DateCreated = DateOnly.FromDateTime(DateTime.Now),
                 PetWeight = medicalRecord.PetWeight,
                 Symptoms = medicalRecord.Symptoms,
                 Allergies = medicalRecord.Allergies,
                 Diagnosis = medicalRecord.Diagnosis,
-                AdditionalNotes = medicalRecord.AdditionallNotes,
-                FollowUpAppointmentDate = DateOnly.FromDateTime(medicalRecord.FollowUpAppointmentDate ?? DateTime.Now),
+                AdditionalNotes = medicalRecord.AdditionalNotes,
+                FollowUpAppointmentDate = medicalRecord.FollowUpAppointmentDate,
                 FollowUpAppointmentNotes = medicalRecord.FollowUpAppointmentNotes,
-                DrugPrescriptions = medicalRecord.DrugPrescription,
+                DrugPrescriptions = medicalRecord.DrugPrescriptions,
                 AppointmentId = medicalRecord.AppointmentId,
                 PetId = medicalRecord.PetId
             };
@@ -58,25 +58,27 @@ namespace PetHealthcare.Server.Services
             return await medRecService.GetByCondition(expression);
         }
 
-        public async Task<IEnumerable<MedicalRecordVetDTO>> GetMedicalRecordsByAppointmentId(string appointmentId)
+        public async Task<MedicalRecordVetDTO> GetMedicalRecordsByAppointmentId(string appointmentId)
         {
             return await medRecService.GetMedicalRecordsByAppointmentId(appointmentId);
         }
         public async Task<IEnumerable<MedicalRecordVetDTO>> GetMedicalRecordsByVetId(string vetId)
         {
-            var joinList = from s in await medRecService.GetAll() join r in await appointmentService.GetAll()
+            var joinList = from s in await medRecService.GetAll()
+                           join r in await appointmentService.GetAll()
                            on s.AppointmentId equals r.AppointmentId
                            where r.VeterinarianAccountId == vetId
                            select s;
             //var listAppointment= await appointmentService.GetAll();
             //listAppointment.Where(a=>a.VeterinarianAccountId==vetId).ToList();
             //var list =await medRecService.GetAll();
-            
-            List<MedicalRecordVetDTO> recordVetDTOs=new List<MedicalRecordVetDTO>();
+
+            List<MedicalRecordVetDTO> recordVetDTOs = new List<MedicalRecordVetDTO>();
             foreach (var record in joinList)
             {
                 var medRecord = new MedicalRecordVetDTO
                 {
+                    MedicalRecordId = record.MedicalRecordId,
                     AdditionalNotes = record.AdditionalNotes,
                     Allergies = record.Allergies,
                     Diagnosis = record.Diagnosis,

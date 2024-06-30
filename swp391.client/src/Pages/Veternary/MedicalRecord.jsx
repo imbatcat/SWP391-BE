@@ -1,118 +1,396 @@
-import { useState, useEffect } from 'react';
-import { 
-  MDBBadge, MDBBtn, MDBTable, MDBTableBody, MDBTableHead
-} 
-  from 'mdb-react-ui-kit';
-import SideNavForVet from '../../Component/SideNavForVet/SideNavForVet';
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import {
+    MDBCard,
+    MDBCardBody,
+    MDBCardTitle,
+    MDBCardText,
+    MDBRow,
+    MDBCol,
+    MDBBtn,
+    MDBCardHeader,
+    MDBBadge,
+    MDBInputGroup,
+    MDBModal
+} from 'mdb-react-ui-kit';
+import { toast } from 'react-toastify';
+import AssignServiceModal from '../../Component/Modals/AssignServiceModal';
 
+async function fetchOwnerAndPetData(accountId, petId, vetId) {
+    try {
+        const [accountResponse, petResponse, vetResponse] = await Promise.all([
+            fetch(`https://localhost:7206/api/Accounts/${accountId}`, {
+                method: 'GET',
+                credentials: 'include',
+            }),
+            fetch(`https://localhost:7206/api/Pets/${petId}`, {
+                method: 'GET',
+                credentials: 'include',
+            }),
+            fetch(`https://localhost:7206/api/Accounts/${vetId}`, {
+                method: 'GET',
+                credentials: 'include',
+            })
+        ]);
+
+        if (!accountResponse.ok) {
+            throw new Error("Error fetching account data");
+        }
+        if (!petResponse.ok) {
+            throw new Error("Error fetching pet data");
+        }
+
+        const accountData = await accountResponse.json();
+        const petData = await petResponse.json();
+        const vetData = await vetResponse.json();
+
+        return { accountData, petData, vetData };
+    } catch (error) {
+        console.error(error.message);
+        return { accountData: null, petData: null, vetData: null };
+    }
+}
 
 function MedicalRecord() {
-    const [medicalRecords, setMedicalRecords] = useState([]);
-    const [searchInput, setSearchInput] = useState('');
-    const [filteredMedicalRecords, setFilteredMedicalRecords] = useState([]);
-
+    const location = useLocation();
+    const appointment = location.state;
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [existingRecord, setExistingRecord] = useState(null);
     useEffect(() => {
-        async function fetchData() {
+        async function getMedicalRecord() {
+            console.log(appointment);
             try {
-                const response = await fetch('https://localhost:7206/api/MedicalRecords', {
+                const response = await fetch(`https://localhost:7206/api/medicalRecordByAppointmentId/${appointment.appointmentId}`, {
                     method: 'GET',
                     credentials: 'include',
                     headers: {
-                        'Content-Type': 'application/json',
-                    }
+                        'Content-Type': 'application/json'
+                    },
                 });
-                if (!response.ok) {
-                    throw new Error("Error fetching data");
-                }
                 const data = await response.json();
-                setMedicalRecords(data);
-                setFilteredMedicalRecords(data);
-                console.log(data);
+                
+                if (data) {
+                    console.log(data);
+                    setFormData(data);
+                    setExistingRecord(data);
+                }
             } catch (error) {
-                console.error(error.message);
+                console.log(error);
+
             }
         }
+        getMedicalRecord();
+    }, [appointment.appointmentId]);
 
-        fetchData();
-    }, []);
+    const [ownerData, setOwnerData] = useState(null);
+    const [assignServiceModal, setAssignServiceModal] = useState(false);
+    const toggleAssignServiceOpen = () => setAssignServiceModal(!assignServiceModal);
+    const [assignModal, setAssignModal] = useState(false);
+    const [petData, setPetData] = useState(null);
+    const [vetData, setVetData] = useState(null);
+    const [formData, setFormData] = useState({
+        petId: appointment.petId,
+        appointmentId: appointment.appointmentId,
+        petWeight: '',
+        symptoms: '',
+        allergies: '',
+        diagnosis: '',
+        additionalNotes: '',
+        followUpAppointmentDate: '',
+        followUpAppointmentNotes: '',
+        drugPrescriptions: ''
+    });
 
-    const handleSearchInputChange = (e) => {
-        const value = e.target.value.toLowerCase();
-        setSearchInput(value);
-        if (value === '') {
-            setFilteredMedicalRecords(medicalRecords);
+    useEffect(() => {
+        if (appointment) {
+            fetchOwnerAndPetData(appointment.accountId, appointment.petId, appointment.veterinarianId)
+                .then(({ accountData, petData, vetData }) => {
+                    setOwnerData(accountData);
+                    setPetData(petData);
+                    setVetData(vetData);
+                    setLoading(false);
+                })
+                .catch((error) => {
+                    setError(error.message);
+                    setLoading(false);
+                });
         } else {
-            setFilteredMedicalRecords(filteredMedicalRecords.filter(mc =>
-                mc.dateCreated.toLowerCase().includes(value) 
-                // mc.username.toLowerCase().includes(value) ||
-                // mc.fullName.toLowerCase().includes(value) ||
-                // mc.username.toLowerCase().includes(value)
-            ));
+            setError("No appointment data provided");
+            setLoading(false);
         }
+    }, [appointment]);
+
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
+
+    if (!ownerData || !petData) {
+        return <div>No data available</div>;
+    }
+
+    const calculatePetAge = (petDOB) => {
+        const birthDate = new Date(petDOB);
+        const today = new Date();
+
+        let years = today.getFullYear() - birthDate.getFullYear();
+        let months = today.getMonth() - birthDate.getMonth();
+        let days = today.getDate() - birthDate.getDate();
+
+        if (days < 0) {
+            months--;
+            days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+        }
+
+        if (months < 0) {
+            years--;
+            months += 12;
+        }
+
+        return `${years} Year${years !== 1 ? 's' : ''} ${months} Month${months !== 1 ? 's' : ''} and ${days} Day${days !== 1 ? 's' : ''}`;
     };
 
 
-    return (
-        <div>
-            <SideNavForVet searchInput={searchInput} handleSearchInputChange={handleSearchInputChange} />
-            <MDBTable align='middle'>
-                <MDBTableHead>
-                    <tr>
-                        <th scope='col'>Name</th>
-                        <th scope='col'>Email</th>
-                        <th scope='col'>Phone Number</th>
-                        <th scope='col'>Date of Birth</th>
-                        <th scope='col'>Gender</th>
-                        <th scope='col'>Status</th>
-                        <th scope='col'>Actions</th>
-                    </tr>
-                </MDBTableHead>
-                <MDBTableBody>
-                    {filteredMedicalRecords.map((mc) => (
-                        <tr key={mc.id}>
-                            <td>
-                                <div className='d-flex align-items-center'>
-                                    <img
-                                        src='https://mdbootstrap.com/img/new/avatars/8.jpg'
-                                        alt=''
-                                        style={{ width: '45px', height: '45px' }}
-                                        className='rounded-circle'
-                                    />
-                                    <div className='ms-3'>
-                                        <p className='fw-bold mb-1'>{mc.dateCreated}</p>
-                                        <p className='text-muted mb-0'>{mc.username}</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <p className='fw-normal mb-1'>{mc.email}</p>
-                            </td>
-                            <td>
-                                <p className='fw-normal mb-1'>{mc.phoneNumber}</p>
-                            </td>                     <td>
-                                <p className='fw-normal mb-1'>{mc.dateOfBirth}</p>
-                            </td>
-                            <td>
-                                <p className='fw-normal mb-1'>{mc.isMale ? "Male" : "Female"}</p>
-                            </td>
-                            <td>
-                                <MDBBadge color={mc.isDisabled ? 'danger' : 'success'} pill>
-                                    {mc.isDisabled ? "Disabled" : "Active"}
-                                </MDBBadge>
-                            </td>
-                            <td>
-                                <MDBBtn color='link' rounded size='sm' onClick={() => toggleOpen(acc)}>
-                                    Edit
-                                </MDBBtn>
-                                <MDBBtn color='danger' style={{color:'black'}} rounded size='sm' onClick={() => toggleOpen(acc)}>
-                                    X
-                                </MDBBtn>
-                            </td>
-                        </tr>
-                    ))}
-                </MDBTableBody>
-            </MDBTable>
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value
+        });
+    };
 
+    console.log(existingRecord.medicalRecordId);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log(existingRecord);
+        // Validation
+        const emptyFields = Object.keys(formData).filter(key => !formData[key]);
+        if (emptyFields.length > 0) {
+            toast.error('Please fill in all fields');
+            return;
+        }
+
+        const url = existingRecord && existingRecord.diagnosis !== ''
+            ? `https://localhost:7206/api/MedicalRecords/${existingRecord.medicalRecordId}`
+            : 'https://localhost:7206/api/MedicalRecords';
+        const method = existingRecord && existingRecord.diagnosis !== '' ? 'PUT' : 'POST';
+
+
+        try {
+            const response = await fetch(url, {
+                method: method,
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+
+            const responseData = await response.json();
+            console.log('Success:', responseData);
+            toast.success(`Medical Record ${existingRecord && existingRecord.diagnosis !== '' ? 'Updated' : 'Submitted'} Successfully`);
+            window.location.reload();
+        } catch (error) {
+            console.error('Error:', error);
+            toast.error(`Error: ${error.message}`);
+        }
+    };
+
+    console.log(formData);
+
+
+    return (
+        
+        <div>
+        
+            <MDBCard style={{ minHeight: '60vw', maxWidth: '50vw', margin: 'auto', marginTop: '50px' }}>
+                <MDBCardHeader style={{ textAlign: 'center', fontSize: '3vw' }}>Medical Record</MDBCardHeader>
+                <MDBCardBody style={{ height: '5' }} scrollable>
+                    <MDBRow style={{ marginLeft: '15px', marginRight: '15px' }}>
+                        <MDBCol sm='6'>
+                            <MDBCard>
+                                <MDBCardBody>
+                                    <MDBCardTitle style={{ textAlign: 'center' }}>Owner Information</MDBCardTitle>
+                                    <MDBCardText>
+                                        <div className='d-flex' style={{ justifyContent: 'center' }}>
+                                            <img
+                                                src='https://mdbootstrap.com/img/new/avatars/8.jpg'
+                                                alt=''
+                                                style={{ width: '45px', height: '45px' }}
+                                                className='rounded-circle'
+                                            />
+                                        </div>
+                                        <div style={{ textAlign: 'center' }}>
+                                            <p className='fw-bold mb-1'>{ownerData.fullName}</p>
+                                            <p className='text-muted mb-0'>{ownerData.phoneNumber}</p>
+                                            <p className='text-muted mb-0' style={{ fontSize: '0.9vw' }}>{ownerData.email}</p>
+                                        </div>
+                                    </MDBCardText>
+                                </MDBCardBody>
+                            </MDBCard>
+                            <br />
+                            <MDBCard>
+                                <MDBCardBody>
+                                    <MDBCardTitle style={{ textAlign: 'center' }}>Veterinarian</MDBCardTitle>
+                                    <MDBCardText>
+                                        <div className='d-flex' style={{ justifyContent: 'center' }}>
+                                            <img
+                                                src='https://mdbootstrap.com/img/new/avatars/8.jpg'
+                                                alt=''
+                                                style={{ width: '45px', height: '45px' }}
+                                                className='rounded-circle'
+                                            />
+                                        </div>
+                                        <div style={{ textAlign: 'center' }}>
+                                            <p className='fw-bold mb-1'>{vetData.fullName}</p>
+                                            <p className='text-muted mb-0' style={{ fontSize: '1vw' }}>{vetData.position}</p>
+                                            <br />
+
+                                        </div>
+                                    </MDBCardText>
+                                </MDBCardBody>
+                            </MDBCard>
+                        </MDBCol>
+                        <MDBCol sm='6'>
+                            <MDBCard>
+                                <MDBCardBody>
+                                    <MDBCardTitle style={{ textAlign: 'center' }}>Pet Information</MDBCardTitle>
+                                    <MDBCardText>
+                                        <div className='d-flex' style={{ justifyContent: 'center' }}>
+                                            <img
+                                                src={petData.imgUrl}
+                                                alt='petimg'
+                                                style={{ width: '45px', height: '45px' }}
+                                                className='rounded-circle'
+                                            />
+                                        </div>
+
+                                        <div style={{ textAlign: 'center' }}>
+                                            <p className='fw-bold mb-1'>{petData.petName}</p>
+                                            <p className='text-muted mb-0'>{petData.petAge}</p>
+                                        </div>
+
+                                        <div style={{ textAlign: 'center' }}>
+                                            <MDBBadge color={petData.isCat ? 'warning' : 'primary'} pill>
+                                                {petData.isCat ? "Cat" : "Dog"}
+                                            </MDBBadge>
+                                            <MDBBadge color={petData.isMale ? 'primary' : 'danger'} pill>
+                                                {petData.isMale ? "Male" : "Female"}
+                                            </MDBBadge>
+                                        </div>
+                                        <p className='text-muted mb-0'>- Pet Age: {calculatePetAge(petData.petAge)} </p>
+                                        <p className='text-muted mb-0'>- Pet Breed: {petData.petBreed} </p>
+                                        <p className='text-muted mb-0'>- Vaccination: {petData.vaccinationHistory} </p>
+                                        <p className='text-muted mb-0'>"{petData.description}" </p>
+                                    </MDBCardText>
+                                </MDBCardBody>
+                            </MDBCard>
+                        </MDBCol>
+                    </MDBRow>
+                    <br />
+
+                    <MDBRow style={{ marginLeft: '15px', marginRight: '15px' }}>
+                        <MDBCard>
+                            <MDBCardHeader>Medical Record Information</MDBCardHeader>
+                            <MDBCardBody>
+                                <MDBCardTitle>Special title treatment</MDBCardTitle>
+
+                                <MDBCardText>
+                                    <form onSubmit={handleSubmit} style={{ maxWidth: '600px', margin: 'auto' }}>
+                
+                                        <MDBRow>
+                                            <MDBCol>
+                                                <MDBInputGroup className='mb-3' textBefore='Pet Weight' textAfter='kg'>
+                                                    <input className='form-control' style={{ width: '5vw', textAlign: 'center' }} type="number"
+                                                        min="0" name="petWeight" value={formData.petWeight} onChange={handleChange} required />
+                                                </MDBInputGroup>
+                                            </MDBCol>
+                                        </MDBRow>
+
+                                        <MDBRow>
+                                            <MDBCol>
+                                                <MDBInputGroup className='mb-3' textBefore='Symptoms' >
+                                                    <input className='form-control' type="text" name="symptoms" value={formData.symptoms} onChange={handleChange} required />
+                                                </MDBInputGroup>
+                                            </MDBCol>
+                                        </MDBRow>
+
+                                        <MDBRow>
+                                            <MDBCol>
+                                                <MDBInputGroup className='mb-3' textBefore='Allergies' >
+                                                    <input className='form-control' type="text" name="allergies" value={formData.allergies} onChange={handleChange} required />
+                                                </MDBInputGroup>
+                                            </MDBCol>
+                                        </MDBRow>
+
+                                        <MDBRow>
+                                            <MDBCol>
+                                                <MDBInputGroup className='mb-3' textBefore='Diagnosis' >
+                                                    <input className='form-control' type="text" name="diagnosis" value={formData.diagnosis} onChange={handleChange} required />
+                                                    
+                                                </MDBInputGroup>
+                                            </MDBCol>
+                                        </MDBRow>
+
+                                        <MDBRow>
+                                            <MDBCol>
+                                                <MDBInputGroup className='mb-3' textBefore='Additional Notes' >
+                                                    <input className='form-control' type="text" name="additionalNotes" value={formData.additionalNotes} onChange={handleChange} required />
+                                                </MDBInputGroup>
+                                            </MDBCol>
+                                        </MDBRow>
+
+                                        <MDBRow>
+                                            <MDBCol>
+                                                <MDBInputGroup className='mb-3' textBefore='Follow-Up Appointment Date' >
+                                                    <input className='form-control' type="date" name="followUpAppointmentDate" value={formData.followUpAppointmentDate} onChange={handleChange} required />
+                                                </MDBInputGroup>
+                                            </MDBCol>
+                                        </MDBRow>
+
+                                        <MDBRow>
+                                            <MDBCol>
+                                                <MDBInputGroup className='mb-3' textBefore='Follow-Up Appointment Notes' >
+                                                    <input className='form-control' type="text" name="followUpAppointmentNotes" value={formData.followUpAppointmentNotes} onChange={handleChange} required />
+                                                </MDBInputGroup>
+                                            </MDBCol>
+                                        </MDBRow>
+
+                                        <MDBRow>
+                                            <MDBCol>
+                                                <MDBInputGroup className='mb-3' textBefore='Drug Prescriptions' >
+                                                    <input className='form-control' type="text" name="drugPrescriptions" value={formData.drugPrescriptions} onChange={handleChange} required />
+                                                </MDBInputGroup>
+                                            </MDBCol>
+                                        </MDBRow>
+                                    </form>
+                                </MDBCardText>
+                                <div >
+                                    <MDBBtn type="submit" onClick={handleSubmit}>Submit</MDBBtn>
+
+                                    <MDBBtn style={{ marginLeft: '15px' }} type="button" onClick={toggleAssignServiceOpen} >Assign service</MDBBtn>
+                                </div>
+
+                            </MDBCardBody>
+                        </MDBCard>
+                    </MDBRow>
+                </MDBCardBody>
+            </MDBCard>
+
+            <div>
+                <MDBModal open={assignModal} onClose={() => setAssignModal(false)} tabIndex='-1'>
+                    <AssignServiceModal petData={petData} ownerData={ownerData} vetData={vetData} toggleOpen={toggleAssignServiceOpen} />
+                </MDBModal>
+            </div>
         </div>
     );
 }

@@ -33,6 +33,8 @@ import UserPets from './Pages/Profile/UserPets';
 import UserAppointments from './Pages/Profile/UserAppointments';
 import MedicalRecord from './Pages/Veternary/MedicalRecord';
 import AppointmentCheckin from './Pages/Staff/AppointmentCheckin';
+import MedicalRecordList from './Pages/Veternary/MedicalRecordList';
+import ServiceBills from './Pages/Staff/ServiceBills';
 import AppointmentQRCode from './Pages/Appointment/AppointmentQRCode';
 
 
@@ -167,6 +169,15 @@ const router = createBrowserRouter([
         errorElement: <div>404 Not Found</div>,
     },
     {
+        path: '/vet/MedicalRecordList',
+        element: (
+            <CheckAuth>
+                <MedicalRecordList />
+            </CheckAuth>
+        ),
+        errorElement: <div>404 Not Found</div>,
+    },
+    {
         path: '/vet/MedicalRecord',
         element: (
             <CheckAuth>
@@ -194,6 +205,15 @@ const router = createBrowserRouter([
         errorElement: <div>404 Not Found</div>,
     },
     {
+        path: '/staff/service-bill-list',
+        element: (
+            <CheckAuth>
+                <ServiceBills></ServiceBills>
+            </CheckAuth>
+        ),
+        errorElement: <div>404 Not Found</div>,
+    },
+    {
         path: '/appointment/qrcode',
         element: <AppointmentQRCode />,
         errorElement: <div>404 Not Found</div>,
@@ -205,19 +225,19 @@ root.render(
         <AuthProvider>
             <UserProvider>
                 {/*<React.StrictMode>*/}
-                    <RouterProvider router={router}>
-                    </RouterProvider>
-                    <ToastContainer
-                        position="top-center"
-                        autoClose={1000}
-                        hideProgressBar={true}
-                        newestOnTop={false}
-                        closeOnClick
-                        rtl={false}
-                        draggable
-                        theme="light"
-                        transition: Flip
-                    />
+                <RouterProvider router={router}>
+                </RouterProvider>
+                <ToastContainer
+                    position="top-center"
+                    autoClose={1000}
+                    hideProgressBar={true}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    draggable
+                    theme="light"
+                    transition: Flip
+                />
                 {/*</React.StrictMode>*/}
             </UserProvider>
         </AuthProvider>

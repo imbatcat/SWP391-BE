@@ -18,6 +18,7 @@ import {
     import img from '../../assets/images/dogandcatlogin.png'
 import { useState } from 'react';
 import AppointmentForm from '../Modals/AppointmentModalForm';
+import SelectModal from '../Modals/SelectModal';
 function HomeContent() {
     const [basicModal, setBasicModal] = useState(false);
 
@@ -48,7 +49,7 @@ function HomeContent() {
                 <MDBCol col='6'>
                     <MDBCardBody style={{maxHeight:'38vw'}} className='d-flex flex-column'>
 
-                        <h5 className="fw-bold my-3" style={{  letterSpacing: '1px', textAlign: 'center', fontSize: '4vw' }}>What's Next </h5>
+                        <h5 className="fw-bold my-5" style={{  letterSpacing: '1px', textAlign: 'center', fontSize: '4vw' }}>What's Next </h5>
                         <div className="WN-Content">1. Call us or schedule an appointment online.</div>
                         <div className="WN-Content">2. Meet with a doctor for an initial exam.</div>
                         <div className="WN-Content">3. Put a plan together for your pet.</div>
@@ -57,19 +58,8 @@ function HomeContent() {
                                 Make an Appointment
                             </MDBBtn>
                             <MDBModal open={basicModal} onClose={() => setBasicModal(false)} tabIndex='-1'>
-                                <MDBModalDialog>
-                                    <MDBModalContent>
-                                        <MDBModalHeader >
-                                            <MDBModalTitle>Appointment Information</MDBModalTitle>
-                                            <MDBBtn className='btn-close' color='none' onClick={toggleOpen}></MDBBtn>
-                                        </MDBModalHeader>
-                                        <MDBModalBody>
-                                            <AppointmentForm></AppointmentForm>
-                                        </MDBModalBody>
-                                    </MDBModalContent>
-                                </MDBModalDialog>
+                                <SelectModal toggleOpen={toggleOpen}/> 
                             </MDBModal>
-
                         </div>
 
 

@@ -10,11 +10,16 @@ import {
     MDBModalTitle,
     MDBModalBody,
     MDBModalFooter,
+    MDBCardBody,
+    MDBCard,
+    MDBCardHeader,
 } from 'mdb-react-ui-kit';
 import { useState } from 'react';
 import PetModal from './PetModal';
 import AppointmentModal from './AppointmentModal';
 import CheckAuth from '../../Helpers/CheckAuth';
+import img3 from '../../assets/images/hero3.png';
+import img2 from '../../assets/images/appointment1.jpg';
 
 function SelectModal({ toggleOpen }) {
     const [isPetModal, setIsPetModal] = useState(false);
@@ -44,14 +49,30 @@ function SelectModal({ toggleOpen }) {
                         <MDBContainer>
                             <MDBRow>
                                 <MDBCol className='mb-5'>
-                                    <MDBBtn onClick={choosePet} color='none'>
-                                        PET
-                                    </MDBBtn>
+                                    <MDBCard alignment='center'>
+                                        <MDBCardHeader>Create New Pet</MDBCardHeader>
+                                        <MDBCardBody>
+                                            <img src={img3} className='w-100' alt='...' />
+                                            <MDBBtn onClick={choosePet} color='danger'>
+                                                PET
+                                            </MDBBtn>
+                                        </MDBCardBody>
+
+                                    </MDBCard>
+
                                 </MDBCol>
-                                <MDBCol className='mb-5'>
-                                    <MDBBtn onClick={chooseApp} color='none'>
-                                        APPOINTMENT
-                                    </MDBBtn>
+                                <MDBCol className='mb-5 col-6'>
+                                    <MDBCard alignment='center'>
+                                        <MDBCardHeader>Book an appointment</MDBCardHeader>
+                                        <MDBCardBody>
+                                            <img src={img2} className='w-100' alt='...' />
+                                            <MDBBtn onClick={chooseApp} color='danger'>
+                                                APPOINTMENT
+                                            </MDBBtn>
+                                        </MDBCardBody>
+
+                                    </MDBCard>
+
                                 </MDBCol>
                             </MDBRow>
                         </MDBContainer>

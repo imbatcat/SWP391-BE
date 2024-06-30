@@ -16,6 +16,22 @@ export default function AppointmentCheckin() {
     const handleOnPaidClick = () => {
         setIsPaidClicked(false);
     };
+
+    useEffect(() => {
+        async function fetchData() {
+            const response = await fetch(`https://localhost:7206/api/ServiceOrder/Staff/getAll`, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            const data = await response.json();
+            console.log(data);
+        }
+
+        fetchData();
+    }, []);
     useEffect(() => {
         if (isPaidClicked) {
             setIsPaidClicked(true);
