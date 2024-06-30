@@ -33,6 +33,7 @@ namespace PetHealthcare.Server.Services
         
         public async Task CreateAppointment(CreateAppointmentDTO appointment, string id)
         {
+            string CheckinQRCode = QRCodeGeneratorHelper.GenerateQRCode(id);
             Appointment toCreateAppointment = new Appointment
             {
                 AppointmentType = appointment.AppointmentType,
@@ -47,7 +48,7 @@ namespace PetHealthcare.Server.Services
                 IsCancel = false,
                 IsCheckIn = false,
                 IsCheckUp = false,
-
+                QRCodeImageUrl = CheckinQRCode
             };
             await _appointmentRepository.Create(toCreateAppointment);
         }
@@ -415,6 +416,11 @@ namespace PetHealthcare.Server.Services
         public async Task<IEnumerable<Appointment>> GetAll()
         {
             return await _appointmentRepository.GetAll();
+        }
+
+        public string GetQRCodeByAppointmentId(string appointmentId)
+        {
+            return _appointmentRepository.GetQRCodeByAppointmentId(appointmentId);
         }
     }
 }

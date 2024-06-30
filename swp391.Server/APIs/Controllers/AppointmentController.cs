@@ -122,6 +122,13 @@ namespace PetHealthcare.Server.APIs.Controllers
             return Ok(appointmentList);
         }
 
+        [HttpGet("QRCode")]
+        [AllowAnonymous]
+        public string getQRCodeByAppointmentId(string appointmentId)
+        {
+            return _appointment.GetQRCodeByAppointmentId(appointmentId);
+        }
+
         //[HttpGet("AppointmentList/{accountId}&{typeOfSorting}&{orderBy}")]
         //[Authorize(Roles = "Customer,Admin")]
         //public async Task<ActionResult<IEnumerable<ResAppListForCustomer>>> GetSortedListByDate(string accountId, string typeOfSorting, string orderBy = "asc")

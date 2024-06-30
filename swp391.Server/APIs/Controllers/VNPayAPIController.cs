@@ -68,6 +68,7 @@ namespace PetHealthcare.Server.APIs.Controllers
                 if (response.VnPayResponseCode.Equals("00"))
                 {
                     string appointmentId = _appointmentService.GenerateId();
+
                     await _appointmentService.CreateAppointment(appointmentDTO, appointmentId);
                     Debug.WriteLine(appointmentId);
                     if (context.Appointments.Find(appointmentId) != null)

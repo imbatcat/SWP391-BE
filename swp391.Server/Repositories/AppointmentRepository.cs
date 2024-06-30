@@ -111,5 +111,10 @@ namespace PetHealthcare.Server.Repositories
             Debug.WriteLine(appList.Count());
             return appList;
         }
+
+        public string GetQRCodeByAppointmentId(string appointmentId)
+        {
+            return context.Appointments.Find(appointmentId).QRCodeImageUrl;
+        }
     }
 }
