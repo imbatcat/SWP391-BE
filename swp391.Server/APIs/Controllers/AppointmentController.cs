@@ -123,7 +123,6 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         [HttpGet("QRCode")]
-        [AllowAnonymous]
         public string getQRCodeByAppointmentId(string appointmentId)
         {
             return _appointment.GetQRCodeByAppointmentId(appointmentId);
