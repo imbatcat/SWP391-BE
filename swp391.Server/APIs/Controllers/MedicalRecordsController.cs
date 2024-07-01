@@ -6,7 +6,7 @@ using PetHealthcare.Server.Services.Interfaces;
 
 namespace PetHealthcare.Server.APIs.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/medical-record-controller")]
     [Authorize(Roles = "Admin, Vet, Customer, Staff")]
     [ApiController]
     public class MedicalRecordsController : ControllerBase
@@ -21,7 +21,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         // GET: api/MedicalRecords
-        [HttpGet("")]
+        [HttpGet("get-medical-records")]
         [Authorize(Roles = "Admin, Vet")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<MedicalRecord>))]
         public async Task<IEnumerable<MedicalRecord>> GetMedicalRecords()
@@ -30,7 +30,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         // GET: api/MedicalRecords/5
-        [HttpGet("{id}")]
+        [HttpGet("get-medical-record/{id}")]
         [Authorize(Roles = "Admin, Vet")]
         public async Task<ActionResult<MedicalRecord>> GetMedicalRecord(string id)
         {
@@ -45,20 +45,20 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         //Get all medical Records of a Pet from Pet Id
-        [HttpGet("/api/medRecByPet/{petId}")]
+        [HttpGet("get-medical-records-by-pet/{petId}")]
         [Authorize(Roles = "Vet, Admin, Customer")]
         public async Task<IEnumerable<MedicalRecord>> GetMedicalRecordsByPet([FromRoute] string petId)
         {
             return await _petService.GetMedicalRecordsByPet(petId);
         }
-        [HttpGet("/api/medicalRecordByAppointmentId/{appointmentId}")]
+        [HttpGet("get-medical-records-by-appointment-id/{appointmentId}")]
         [Authorize(Roles = "Vet")]
         public async Task<MedicalRecordVetDTO> GetMedicalRecordsByAppointmentId([FromRoute] string appointmentId)
         {
             return await _context.GetMedicalRecordsByAppointmentId(appointmentId);
         }
         //GET: get all medical Records of a veterinarian from VetId
-        [HttpGet("/api/medicalRecordsByVetId/{VetId}")]
+        [HttpGet("get-medical-record-by-vet-id/{VetId}")]
         [Authorize(Roles = "Vet")]
         public async Task<IEnumerable<MedicalRecordVetDTO>> GetMedicalRecordByVetId([FromRoute] string VetId)
         {
@@ -66,7 +66,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
         //PUT: api/MedicalRecords/5
         //To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("put-medical-record/{id}")]
         [Authorize(Roles = "Vet, Staff, Admin")]
         public async Task<IActionResult> PutMedicalRecord(string id, MedicalRecordDTO medicalRecord)
         {
@@ -76,7 +76,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // POST: api/MedicalRecords
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost("post-medical-record")]
         [Authorize(Roles = "Vet, Staff, Customer, Admin")]
         public async Task<ActionResult<MedicalRecordResDTO>> PostMedicalRecord([FromBody] MedicalRecordResDTO medicalRecordDTO)
         {

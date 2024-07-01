@@ -13,7 +13,7 @@ using System.Text;
 
 [Authorize]
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/application-auth-controller")]
 public class ApplicationAuthController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
@@ -199,7 +199,7 @@ public class ApplicationAuthController : ControllerBase
         return Ok();
     }
     [AllowAnonymous]
-    [HttpGet("setrole")]
+    [HttpGet("set-role")]
     public async Task<IActionResult> SetRole([FromQuery] string userName, [FromQuery] string role)
     {
         try
@@ -217,7 +217,7 @@ public class ApplicationAuthController : ControllerBase
     }
 
     [AllowAnonymous]
-    [HttpPost("signinGoogle")]
+    [HttpPost("sign-in-google")]
     public async Task<ActionResult<ResponseUserDTO>> GoogleLogin([FromBody] GoogleLoginModel model)
     {
         var httpClient = new HttpClient();

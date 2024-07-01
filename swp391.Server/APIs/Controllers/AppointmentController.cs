@@ -10,7 +10,7 @@ using PetHealthcare.Server.Services.Interfaces;
 
 namespace PetHealthcare.Server.APIs.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("apia/appointment-controller")]
     [ApiController]
     [Authorize(Roles = "Staff,Admin,Customer,Vet")]
 
@@ -24,7 +24,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
 
         // GET: api/Services
-        [HttpGet("GetAll/{vetId}")]
+        [HttpGet("get-all-appointment/{vetId}")]
         public async Task<IEnumerable<GetAllAppointmentForAdminDTO>> GetAllAppointment([FromRoute] string vetId)
         {
             return await _appointment.GetAllAppointment(vetId);
@@ -35,7 +35,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         //{
         //    return await _appointment.GetStaffHistoryAppointment();
         //}
-        [HttpGet("Staff/AppointmentList/")]
+        [HttpGet("get-all-appointment-for-staff-with-condition")]
         [Authorize(Roles = "Staff, Admin")]
         public async Task<ActionResult<IEnumerable<AppointmentForStaffDTO>>> GetAllAppointmentForStaffWithCondition(DateOnly date, int timeslot, bool isGetAllTimeSlot = true)
         {
@@ -56,7 +56,7 @@ namespace PetHealthcare.Server.APIs.Controllers
         }
         // GET: api/Services/5
         [Authorize(Roles = "Customer")]
-        [HttpGet("{id}")]
+        [HttpGet("get-appointment-by-condition/{id}")]
         public async Task<ActionResult<Appointment>> GetAppointmentByCondition(string id)
         {
             var appointment = await _appointment.GetAppointmentByCondition(a => a.AppointmentId.Equals(id));
@@ -68,7 +68,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
             return appointment;
         }
-        [HttpGet("admin/{accountId}")]
+        [HttpGet("get-all-appointment-for-admin-by-account-id/{accountId}")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<GetAllAppointmentForAdminDTO>>> GetAllAppointmentForAdminByAccountId([FromRoute] string accountId)
         {
@@ -88,7 +88,7 @@ namespace PetHealthcare.Server.APIs.Controllers
             return Ok(appointmentList);
         }
 
-        [HttpGet("AppointmentList/{accountId}&{listType}")]
+        [HttpGet("get-customer-aapointment-list/{accountId}/{listType}")]
         [Authorize(Roles = "Customer,Admin, Vet")]
         public async Task<ActionResult<IEnumerable<ResAppListForCustomer>>> GetCustomerAppointmentList([FromRoute] string accountId, [FromRoute] string listType)
         {
@@ -122,7 +122,7 @@ namespace PetHealthcare.Server.APIs.Controllers
             return Ok(appointmentList);
         }
 
-        [HttpGet("QRCode")]
+        [HttpGet("qr-code")]
         public string getQRCodeByAppointmentId(string appointmentId)
         {
             return _appointment.GetQRCodeByAppointmentId(appointmentId);
@@ -204,7 +204,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
 
         // PUT: api/Services/5
-        [HttpPut("{id}")]
+        [HttpPut("update-appointment/{id}")]
         //Update TimeSlot, Appointment
         public async Task<IActionResult> UpdateAppointment([FromRoute] string id, [FromBody] CustomerAppointmentDTO toUpdateAppointment)
         {
@@ -254,7 +254,7 @@ namespace PetHealthcare.Server.APIs.Controllers
 
         // POST: api/Services
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost("create-appointment")]
         [Authorize(Roles = "Customer,Staff,Admin")]
         public async Task<ActionResult<CreateAppointmentDTO>> CreateAppointment([FromBody] CreateAppointmentDTO toCreateAppointment)
         {
@@ -270,7 +270,7 @@ namespace PetHealthcare.Server.APIs.Controllers
             return Ok(toCreateAppointment);
         }
 
-        [HttpPost("Checkin/{appointmentId}")]
+        [HttpPost("check-in/{appointmentId}")]
         public async Task<IActionResult> CheckInCustomer(string appointmentId) //api for customer to checkin for the customer
         {
             bool appointmentStatus = await _appointment.UpdateCheckinStatus(appointmentId);
@@ -281,7 +281,7 @@ namespace PetHealthcare.Server.APIs.Controllers
             return Ok(new { message = "Checkin successfully" });
         }
         // DELETE: api/Services/5
-        [HttpDelete("{id}")]
+        [HttpDelete("delete-appointment/{id}")]
         public async Task<IActionResult> DeleteApppointment([FromRoute] string id)
         {
             var appointment = await _appointment.GetAppointmentByCondition(a => a.AppointmentId.Equals(id));
